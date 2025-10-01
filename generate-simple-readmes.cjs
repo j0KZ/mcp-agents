@@ -149,18 +149,38 @@ const template = (pkg) => `# @j0kz/${pkg.name}
 [![npm version](https://img.shields.io/npm/v/@j0kz/${pkg.name})](https://www.npmjs.com/package/@j0kz/${pkg.name})
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 🚀 Quick Start (30 seconds)
+## 🚀 Quick Start
 
-### One-Time Setup
+### ⭐ Option 1: Install ALL 8 Tools (Recommended)
 
-Pick your editor and run **ONE** command:
+Get the complete suite with ONE command:
+
+**Claude Code:**
+\`\`\`bash
+# Mac/Linux
+curl -fsSL https://raw.githubusercontent.com/j0kz/mcp-agents/main/install-all.sh | bash
+
+# Windows (PowerShell)
+irm https://raw.githubusercontent.com/j0kz/mcp-agents/main/install-all.ps1 | iex
+\`\`\`
+
+**Cursor/Windsurf:**
+\`\`\`bash
+# Download complete config
+curl -o ~/.cursor/mcp_config.json https://raw.githubusercontent.com/j0kz/mcp-agents/main/mcp_config_all.json
+
+# Or for Windsurf
+curl -o ~/.windsurf/mcp_config.json https://raw.githubusercontent.com/j0kz/mcp-agents/main/mcp_config_all.json
+\`\`\`
+
+### Option 2: Install Only This Tool
 
 **Claude Code:**
 \`\`\`bash
 claude mcp add ${pkg.name.replace('-mcp', '')} "npx @j0kz/${pkg.name}" --scope user
 \`\`\`
 
-**Cursor:** Add to \`~/.cursor/mcp_config.json\`
+**Cursor/Windsurf:** Add to \`mcp_config.json\`:
 \`\`\`json
 {
   "mcpServers": {
@@ -171,8 +191,6 @@ claude mcp add ${pkg.name.replace('-mcp', '')} "npx @j0kz/${pkg.name}" --scope u
   }
 }
 \`\`\`
-
-**Windsurf / Roo Code / Continue:** Similar config - [see full guide](https://github.com/j0kz/mcp-agents#editor-setup)
 
 ### Start Using Immediately
 
