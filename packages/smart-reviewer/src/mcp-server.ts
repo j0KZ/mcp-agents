@@ -112,6 +112,15 @@ class SmartReviewerServer {
         switch (name) {
           case 'review_file': {
             const { filePath, config } = args as { filePath: string; config?: ReviewConfig };
+
+            // Validate file exists
+            const { access } = await import('fs/promises');
+            try {
+              await access(filePath);
+            } catch {
+              throw new Error(`File not found or not accessible: ${filePath}`);
+            }
+
             const result = await this.analyzer.analyzeFile(filePath);
 
             return {
@@ -126,6 +135,12 @@ class SmartReviewerServer {
 
           case 'batch_review': {
             const { filePaths, config } = args as { filePaths: string[]; config?: ReviewConfig };
+
+            // Validate input
+            if (!Array.isArray(filePaths) || filePaths.length === 0) {
+              throw new Error('filePaths must be a non-empty array');
+            }
+
             const results = await Promise.all(
               filePaths.map(fp => this.analyzer.analyzeFile(fp))
             );
@@ -151,7 +166,14 @@ class SmartReviewerServer {
 
           case 'apply_fixes': {
             const { filePath } = args as { filePath: string };
-            const { readFile, writeFile } = await import('fs/promises');
+
+            // Validate file exists and is writable
+            const { readFile, writeFile, access } = await import('fs/promises');
+            try {
+              await access(filePath);
+            } catch {
+              throw new Error(`File not found or not accessible: ${filePath}`);
+            }
 
             const content = await readFile(filePath, 'utf-8');
             const result = await this.analyzer.analyzeFile(filePath);

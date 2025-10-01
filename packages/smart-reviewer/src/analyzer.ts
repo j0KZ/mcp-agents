@@ -283,27 +283,29 @@ export class CodeAnalyzer {
    * Apply automatic fixes to code
    */
   async applyFixes(content: string, issues: CodeIssue[]): Promise<string> {
-    let fixedContent = content;
-    const lines = fixedContent.split('\n');
+    const lines = content.split('\n');
 
-    // Sort issues by line number in reverse to preserve line numbers during fixes
-    const fixableIssues = issues
-      .filter(issue => issue.fix)
-      .sort((a, b) => b.line - a.line);
+    // Build a map of line number -> new content to avoid line number shifting
+    const lineChanges = new Map<number, string | null>();
 
-    for (const issue of fixableIssues) {
+    for (const issue of issues) {
       if (issue.fix && issue.line > 0 && issue.line <= lines.length) {
-        const lineIndex = issue.line - 1;
-        if (issue.fix.newCode === '') {
-          // Remove line
-          lines.splice(lineIndex, 1);
-        } else {
-          // Replace line
-          lines[lineIndex] = issue.fix.newCode;
-        }
+        // null means delete the line, empty string or content means replace
+        lineChanges.set(issue.line, issue.fix.newCode === '' ? null : issue.fix.newCode);
       }
     }
 
-    return lines.join('\n');
+    // Apply all changes at once
+    const result = lines
+      .map((line, idx) => {
+        const lineNum = idx + 1;
+        if (lineChanges.has(lineNum)) {
+          return lineChanges.get(lineNum); // Returns null for deletions, new content for replacements
+        }
+        return line;
+      })
+      .filter(line => line !== null); // Remove deleted lines
+
+    return result.join('\n');
   }
 }
