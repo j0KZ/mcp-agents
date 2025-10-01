@@ -1,279 +1,313 @@
-# @j0kz MCP Agents
+# @j0kz MCP Development Toolkit
 
-**Professional Model Context Protocol (MCP) agents for AI-powered development.**
+> **8 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
-[![NPM](https://img.shields.io/badge/npm-%40j0kz-CB3837?logo=npm)](https://www.npmjs.com/~j0kz)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
+[![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 
-**8 Production-Ready MCP Agents** - Works with **Claude Code**, **Cursor**, **Windsurf**, **Roo Code**, **Continue**, and any MCP-compatible editor.
+## 🚀 Install All 8 Tools (One Command)
 
----
+### Claude Code
 
-## 🤖 Complete Agent Suite
+**Mac/Linux:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/j0kz/mcp-agents/main/install-all.sh | bash
+```
 
-### 1. Smart Code Reviewer 🔍
-**Package**: `@j0kz/smart-reviewer-mcp`
+**Windows (PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/j0kz/mcp-agents/main/install-all.ps1 | iex
+```
 
-AI-powered code review with learning capabilities:
-- Detects anti-patterns and code smells
-- Suggests fixes with diffs
-- Tracks code quality metrics
-- Learns your team's coding style
-
-### 2. Test Intelligence Generator 🧪
-**Package**: `@j0kz/test-generator-mcp`
-
-Automated comprehensive test generation:
-- Generates unit and integration tests
-- Creates edge case scenarios
-- Estimates coverage
-- Supports Jest, Vitest, Mocha, AVA
-
-### 3. Architecture Analyzer 🏗️
-**Package**: `@j0kz/architecture-analyzer-mcp`
-
-Architecture analysis and visualization:
-- Detects circular dependencies
-- Identifies layer violations
-- Generates dependency graphs (Mermaid)
-- Suggests refactoring opportunities
-
-### 4. Documentation Generator 📄
-**Package**: `@j0kz/doc-generator-mcp`
-
-Auto-generate comprehensive documentation:
-- Generate JSDoc/TSDoc comments
-- Create README.md from code
-- Build API documentation
-- Generate changelogs from git
-
-### 5. Security Scanner 🔒
-**Package**: `@j0kz/security-scanner-mcp`
-
-Find vulnerabilities and security issues:
-- Detect hardcoded secrets (AWS keys, passwords)
-- Find SQL injection & XSS vulnerabilities
-- OWASP Top 10 checks
-- Scan dependencies for CVEs
-
-### 6. Refactoring Assistant 🔧
-**Package**: `@j0kz/refactor-assistant-mcp`
-
-Automated code refactoring:
-- Extract functions intelligently
-- Convert callbacks to async/await
-- Simplify complex conditionals
-- Apply 10 design patterns
-
-### 7. API Designer 🌐
-**Package**: `@j0kz/api-designer-mcp`
-
-Design and document APIs:
-- Generate OpenAPI/Swagger specs
-- Design REST endpoints
-- Create GraphQL schemas
-- Generate API client code
-
-### 8. Database Schema Designer 🗄️
-**Package**: `@j0kz/db-schema-mcp`
-
-Design and optimize database schemas:
-- Design schemas (Postgres/MySQL/MongoDB)
-- Generate migrations
-- Create ER diagrams
-- Optimize indexes and suggest normalizations
-
----
-
-## 🚀 Quick Start
-
-### Install All (Claude Code)
+### Cursor / Windsurf
 
 ```bash
-# Core Development Tools
+# Cursor
+curl -o ~/.cursor/mcp_config.json https://raw.githubusercontent.com/j0kz/mcp-agents/main/mcp_config_all.json
+
+# Windsurf
+curl -o ~/.windsurf/mcp_config.json https://raw.githubusercontent.com/j0kz/mcp-agents/main/mcp_config_all.json
+```
+
+**Then restart your editor!**
+
+---
+
+## 📦 The 8 Tools
+
+### 🎯 Code Quality Suite
+
+#### [@j0kz/smart-reviewer-mcp](https://www.npmjs.com/package/@j0kz/smart-reviewer-mcp)
+AI-powered code review with quality metrics and automated fixes
+
+**Example:**
+```
+💬 "Review the auth.js file"
+🤖 Found 3 issues: unused variable on line 42, missing error handling,
+   inconsistent formatting. Here are the fixes...
+```
+
+#### [@j0kz/test-generator-mcp](https://www.npmjs.com/package/@j0kz/test-generator-mcp)
+Generate comprehensive test suites with edge cases and mocks
+
+**Example:**
+```
+💬 "Generate tests for calculatePrice function"
+🤖 Generated 15 tests covering: happy path, edge cases (negative prices,
+   zero), error handling, boundary conditions...
+```
+
+#### [@j0kz/refactor-assistant-mcp](https://www.npmjs.com/package/@j0kz/refactor-assistant-mcp)
+Intelligent code refactoring with pattern detection
+
+**Example:**
+```
+💬 "Refactor this function to be more readable"
+🤖 Suggestions: Extract 3 methods, rename variables (x→userId),
+   remove nested ifs, add early returns...
+```
+
+---
+
+### 🏗️ Architecture & Design
+
+#### [@j0kz/architecture-analyzer-mcp](https://www.npmjs.com/package/@j0kz/architecture-analyzer-mcp)
+Detect circular dependencies, layer violations, and generate dependency graphs
+
+**Example:**
+```
+💬 "Analyze project architecture"
+🤖 Found: 2 circular dependencies (auth ↔ user),
+   3 layer violations (UI calls Database directly)...
+```
+
+#### [@j0kz/api-designer-mcp](https://www.npmjs.com/package/@j0kz/api-designer-mcp)
+Design REST and GraphQL APIs with OpenAPI generation
+
+**Example:**
+```
+💬 "Design a REST API for user management"
+🤖 Created design: GET/POST /users, GET/PUT/DELETE /users/:id,
+   POST /users/:id/verify. Includes auth, validation...
+```
+
+#### [@j0kz/db-schema-mcp](https://www.npmjs.com/package/@j0kz/db-schema-mcp)
+Database schema design with migrations and relationship analysis
+
+**Example:**
+```
+💬 "Design a schema for an e-commerce app"
+🤖 Created schema: users, products, orders, order_items
+   with relationships, indexes, constraints...
+```
+
+---
+
+### 📚 Documentation & Security
+
+#### [@j0kz/doc-generator-mcp](https://www.npmjs.com/package/@j0kz/doc-generator-mcp)
+Auto-generate JSDoc, README, and API documentation from code
+
+**Example:**
+```
+💬 "Document the API endpoints in server.js"
+🤖 Generated OpenAPI spec with 12 endpoints, parameters,
+   responses, and examples...
+```
+
+#### [@j0kz/security-scanner-mcp](https://www.npmjs.com/package/@j0kz/security-scanner-mcp)
+Scan for vulnerabilities, OWASP issues, and security best practices
+
+**Example:**
+```
+💬 "Scan for security vulnerabilities"
+🤖 Found: SQL injection risk in query builder, XSS in template,
+   hardcoded API key, outdated dependency...
+```
+
+---
+
+## 🎯 How It Works
+
+1. **Run the install command** (one line, see above)
+2. **Restart your editor**
+3. **Chat naturally** - Just ask your AI assistant
+4. **Get results** - The tools work behind the scenes
+
+No API keys, no complex config, no accounts needed!
+
+---
+
+## 💡 Usage Examples
+
+After installation, just chat naturally:
+
+```bash
+# Code Review
+"Review my code for issues"
+"What code smells are in this file?"
+"Check code quality metrics"
+
+# Testing
+"Generate tests for this function"
+"What test cases am I missing?"
+"Create integration tests"
+
+# Architecture
+"Analyze project architecture"
+"Find circular dependencies"
+"Generate dependency graph"
+
+# Documentation
+"Generate API documentation"
+"Add JSDoc comments"
+"Create README"
+
+# Security
+"Scan for security issues"
+"Check OWASP Top 10 compliance"
+"Find hardcoded secrets"
+
+# Refactoring
+"Refactor this code"
+"Extract reusable patterns"
+"Improve class design"
+
+# API Design
+"Design a REST API for..."
+"Generate OpenAPI spec"
+"Review API best practices"
+
+# Database
+"Design database schema"
+"Generate migrations"
+"Optimize this schema"
+```
+
+---
+
+## 🔧 Editor Support
+
+| Editor | Status | Installation Method |
+|--------|--------|---------------------|
+| **Claude Code** | ✅ Full support | Use install script (recommended) |
+| **Cursor** | ✅ Full support | Download mcp_config_all.json |
+| **Windsurf** | ✅ Full support | Download mcp_config_all.json |
+| **Roo Code** | ✅ Full support | MCP-compatible config |
+| **Continue** | ✅ Full support | MCP plugin support |
+| **Zed** | ✅ Full support | Native MCP support |
+
+**Any MCP-compatible editor works!**
+
+---
+
+## 📥 Individual Installation
+
+Want just one tool? Install individually:
+
+```bash
+# Claude Code
 claude mcp add smart-reviewer "npx @j0kz/smart-reviewer-mcp" --scope user
 claude mcp add test-generator "npx @j0kz/test-generator-mcp" --scope user
 claude mcp add architecture-analyzer "npx @j0kz/architecture-analyzer-mcp" --scope user
-
-# Documentation & Security
 claude mcp add doc-generator "npx @j0kz/doc-generator-mcp" --scope user
 claude mcp add security-scanner "npx @j0kz/security-scanner-mcp" --scope user
-
-# Refactoring & Design
 claude mcp add refactor-assistant "npx @j0kz/refactor-assistant-mcp" --scope user
 claude mcp add api-designer "npx @j0kz/api-designer-mcp" --scope user
 claude mcp add db-schema "npx @j0kz/db-schema-mcp" --scope user
 ```
 
-### Install Individual Package
+For Cursor/Windsurf, add individual entries to `mcp_config.json` - [see config template](mcp_config_all.json).
 
-```bash
-# Just one MCP
-npx @j0kz/doc-generator-mcp
-npx @j0kz/security-scanner-mcp
-# ... etc
-```
+---
 
-### Verify Installation
+## ✅ Verify Installation
 
+**Claude Code:**
 ```bash
 claude mcp list
 ```
 
-Expected output:
-```
-✓ smart-reviewer - Connected
-✓ test-generator - Connected
-✓ architecture-analyzer - Connected
-✓ doc-generator - Connected
-✓ security-scanner - Connected
-✓ refactor-assistant - Connected
-✓ api-designer - Connected
-✓ db-schema - Connected
-```
+You should see all 8 tools marked as "✓ Connected"
+
+**Cursor/Windsurf:**
+Check your editor's MCP settings panel
 
 ---
 
-## 🎯 Usage Examples
+## ❓ Troubleshooting
 
-### Code Quality Workflow
+### MCPs not showing up?
+1. **Restart your editor** after installation
+2. **Check Node.js** is installed: `node --version`
+3. **Verify installation**: `claude mcp list` (Claude Code)
 
-```bash
-# 1. Review code quality
-"Review this file for issues"
+### Commands not working?
+1. Make sure you restarted the editor
+2. Try asking more specific questions
+3. Check MCP connection status
 
-# 2. Check security
-"Scan for security vulnerabilities"
-
-# 3. Analyze architecture
-"Check for circular dependencies"
-
-# 4. Generate tests
-"Generate tests with 90% coverage"
-```
-
-### Documentation Workflow
-
-```bash
-# 1. Generate JSDoc
-"Add JSDoc comments to this file"
-
-# 2. Create README
-"Generate README for this project"
-
-# 3. API documentation
-"Generate API docs"
-
-# 4. Changelog
-"Create changelog from git history"
-```
-
-### Refactoring Workflow
-
-```bash
-# 1. Get suggestions
-"Suggest refactorings for this code"
-
-# 2. Extract function
-"Extract this logic to a separate function"
-
-# 3. Convert to async
-"Convert these callbacks to async/await"
-
-# 4. Apply patterns
-"Apply factory pattern to this class"
-```
-
-### API Development Workflow
-
-```bash
-# 1. Design API
-"Design REST API for user management"
-
-# 2. Generate OpenAPI spec
-"Generate OpenAPI specification"
-
-# 3. Design database
-"Design database schema for this API"
-
-# 4. Generate migrations
-"Create migration files"
-```
+### Still stuck?
+- [Open an issue](https://github.com/j0kz/mcp-agents/issues)
+- Check individual package READMEs for detailed docs
 
 ---
 
-## 📦 Editor Compatibility
+## 🏗️ Project Structure
 
-| Editor | Status | Installation |
-|--------|--------|--------------|
-| **Claude Code** | ✅ Native | `claude mcp add` |
-| **Cursor** | ✅ Supported | Config file |
-| **Windsurf** | ✅ Supported | Settings |
-| **Roo Code** | ✅ Supported | CLI command |
-| **Continue** | ✅ Supported | VS Code extension |
-| **Zed** | 🔄 Planned | TBD |
+```
+mcp-agents/
+├── packages/
+│   ├── smart-reviewer/       # Code review & quality
+│   ├── test-generator/       # Test suite generation
+│   ├── architecture-analyzer/# Dependency analysis
+│   ├── doc-generator/        # Documentation tools
+│   ├── security-scanner/     # Security scanning
+│   ├── refactor-assistant/   # Refactoring tools
+│   ├── api-designer/         # API design
+│   └── db-schema/            # Database design
+├── install-all.sh            # Mac/Linux installer
+├── install-all.ps1           # Windows installer
+└── mcp_config_all.json       # Complete MCP config
+```
 
-See [EDITOR_COMPATIBILITY.md](EDITOR_COMPATIBILITY.md) for detailed setup instructions for all editors.
-
----
-
-## 🛠️ Package Links
-
-| Package | NPM | Features |
-|---------|-----|----------|
-| Smart Reviewer | [@j0kz/smart-reviewer-mcp](https://www.npmjs.com/package/@j0kz/smart-reviewer-mcp) | Code review, quality metrics |
-| Test Generator | [@j0kz/test-generator-mcp](https://www.npmjs.com/package/@j0kz/test-generator-mcp) | Test generation, coverage |
-| Architecture Analyzer | [@j0kz/architecture-analyzer-mcp](https://www.npmjs.com/package/@j0kz/architecture-analyzer-mcp) | Dependency analysis, graphs |
-| Doc Generator | [@j0kz/doc-generator-mcp](https://www.npmjs.com/package/@j0kz/doc-generator-mcp) | JSDoc, README, API docs |
-| Security Scanner | [@j0kz/security-scanner-mcp](https://www.npmjs.com/package/@j0kz/security-scanner-mcp) | Vulnerability scanning |
-| Refactor Assistant | [@j0kz/refactor-assistant-mcp](https://www.npmjs.com/package/@j0kz/refactor-assistant-mcp) | Code refactoring |
-| API Designer | [@j0kz/api-designer-mcp](https://www.npmjs.com/package/@j0kz/api-designer-mcp) | API design, OpenAPI |
-| DB Schema Designer | [@j0kz/db-schema-mcp](https://www.npmjs.com/package/@j0kz/db-schema-mcp) | Database schema design |
-
----
-
-## 📚 Documentation
-
-- [Editor Compatibility Guide](EDITOR_COMPATIBILITY.md) - Setup for all editors
-- [Publishing Guide](PUBLISH_ALL_8.md) - How to publish to NPM
-- [NPM Publishing Guide](NPM_PUBLISH_GUIDE.md) - For maintainers
-- [Installation Guide](INSTALLATION.md) - Detailed setup
-- [Distribution Options](docs/DISTRIBUTION.md) - Sharing options
-
----
-
-## 🌟 Features
-
-- ✅ **Universal MCP Support** - Works with any MCP-compatible editor
-- ✅ **TypeScript** - Full type safety
-- ✅ **Modular Design** - Use all or pick individual agents
-- ✅ **Easy Installation** - One command via `npx`
-- ✅ **Production Ready** - Comprehensive error handling
-- ✅ **Well Documented** - Extensive READMEs and examples
-- ✅ **MIT Licensed** - Free for commercial use
+Each package is independently published to npm under the `@j0kz` scope.
 
 ---
 
 ## 🤝 Contributing
 
-Contributions welcome! Please visit the [GitHub repository](https://github.com/j0kz/mcp-agents).
+Contributions welcome! Please:
+
+1. Fork the repo
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
 ---
 
-## 📝 License
+## 📄 License
 
-MIT © [j0kz](https://www.npmjs.com/~j0kz)
+MIT © [j0kz](https://github.com/j0kz)
+
+Each package is independently licensed under MIT.
 
 ---
 
 ## 🔗 Links
 
-- **NPM Profile**: https://www.npmjs.com/~j0kz
-- **GitHub**: https://github.com/j0kz/mcp-agents
-- **Issues**: https://github.com/j0kz/mcp-agents/issues
-- **MCP Specification**: https://modelcontextprotocol.io/
+- **npm:** [@j0kz](https://www.npmjs.com/~j0kz)
+- **GitHub:** [j0kz/mcp-agents](https://github.com/j0kz/mcp-agents)
+- **Issues:** [Report a bug](https://github.com/j0kz/mcp-agents/issues)
+- **MCP Protocol:** [modelcontextprotocol.io](https://modelcontextprotocol.io/)
 
 ---
 
-**Made with ❤️ for the AI coding community**
+## 🌟 Star This Repo
+
+If you find these tools useful, please star the repo to help others discover it!
+
+---
+
+**Made with ❤️ for the AI developer community**
