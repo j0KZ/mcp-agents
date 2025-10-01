@@ -1,0 +1,55 @@
+{
+  "name": "@j0kz/smart-reviewer-mcp",
+  "version": "1.0.1",
+  "description": "Smart Code Reviewer MCP - AI-powered code review with learning capabilities. Works with Claude Code, Cursor, Windsurf, Roo Code, and any MCP-compatible editor.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "smart-reviewer-mcp": "./dist/mcp-server.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "start": "node dist/mcp-server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.0",
+    "@modelcontextprotocol/sdk": "^0.5.0",
+    "typescript": "^5.3.3"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "code-review",
+    "ai",
+    "claude",
+    "claude-code",
+    "cursor",
+    "windsurf",
+    "roo-code",
+    "code-quality",
+    "static-analysis",
+    "linter"
+  ],
+  "author": "j0kz (https://www.npmjs.com/~j0kz)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/j0kz/mcp-agents.git",
+    "directory": "packages/smart-reviewer"
+  },
+  "bugs": {
+    "url": "https://github.com/j0kz/mcp-agents/issues"
+  },
+  "homepage": "https://github.com/j0kz/mcp-agents/tree/main/packages/smart-reviewer#readme",
+  "publishConfig": {
+    "access": "public"
+  }
+}

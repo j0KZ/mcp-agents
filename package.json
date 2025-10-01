@@ -1,0 +1,57 @@
+{
+  "name": "@j0kz/mcp-agents",
+  "version": "1.0.0",
+  "description": "Professional MCP agents for AI code editors - Smart Reviewer, Test Generator, Architecture Analyzer. Works with Claude Code, Roo Code, Windsurf, Cursor, and any MCP-compatible editor.",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "build:reviewer": "npm run build -w packages/smart-reviewer",
+    "build:test-gen": "npm run build -w packages/test-generator",
+    "build:arch": "npm run build -w packages/architecture-analyzer",
+    "dev": "npm run dev --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "install-all": "node scripts/install-all.js",
+    "publish-all": "npm run build && npm publish --workspaces --access public"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "tsx": "^4.7.0",
+    "vitest": "^1.2.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.0",
+    "@modelcontextprotocol/sdk": "^0.5.0"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "claude-code",
+    "cursor",
+    "windsurf",
+    "roo-code",
+    "ai-agents",
+    "code-review",
+    "testing",
+    "architecture",
+    "ai-tools",
+    "code-quality"
+  ],
+  "author": "j0kz (https://www.npmjs.com/~j0kz)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/j0kz/mcp-agents.git"
+  },
+  "bugs": {
+    "url": "https://github.com/j0kz/mcp-agents/issues"
+  },
+  "homepage": "https://github.com/j0kz/mcp-agents#readme",
+  "publishConfig": {
+    "access": "public"
+  }
+}
