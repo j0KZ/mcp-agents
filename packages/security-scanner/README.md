@@ -1,407 +1,119 @@
-# Security Scanner MCP
+# @j0kz/security-scanner-mcp
 
-Production-ready security vulnerability scanner with Model Context Protocol (MCP) server integration. Detect secrets, SQL injection, XSS, and OWASP Top 10 vulnerabilities in your codebase.
+> Scan for vulnerabilities, OWASP issues, and security best practices
 
-## Features
+[![npm version](https://img.shields.io/npm/v/@j0kz/security-scanner-mcp)](https://www.npmjs.com/package/@j0kz/security-scanner-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-- **Secret Detection**: Find hardcoded API keys, passwords, tokens, and credentials
-- **SQL Injection Scanning**: Detect SQL injection vulnerabilities in database queries
-- **XSS Detection**: Identify Cross-Site Scripting (XSS) vulnerabilities
-- **OWASP Top 10 Checks**: Comprehensive security checks based on OWASP guidelines
-- **Dependency Scanning**: Check for vulnerable dependencies in package.json
-- **MCP Integration**: Full Model Context Protocol server for AI assistant integration
-- **Detailed Reports**: Generate comprehensive security reports in markdown format
-- **TypeScript Support**: Full TypeScript type definitions included
+## 🚀 Quick Start (30 seconds)
 
-## Installation
+### One-Time Setup
 
+Pick your editor and run **ONE** command:
+
+**Claude Code:**
 ```bash
-npm install @my-claude-agents/security-scanner
+claude mcp add security-scanner "npx @j0kz/security-scanner-mcp" --scope user
 ```
 
-## Usage
-
-### As a Library
-
-```typescript
-import { scanFile, scanProject, ScanConfig } from '@my-claude-agents/security-scanner';
-
-// Scan a single file
-const findings = await scanFile('/path/to/file.js');
-console.log(`Found ${findings.length} vulnerabilities`);
-
-// Scan entire project
-const config: ScanConfig = {
-  scanSecrets: true,
-  scanSQLInjection: true,
-  scanXSS: true,
-  scanOWASP: true,
-  scanDependencies: true,
-  minSeverity: 'medium',
-  excludePatterns: ['node_modules', '.git', 'dist']
-};
-
-const results = await scanProject('/path/to/project', config);
-console.log(`Security Score: ${results.securityScore}/100`);
-console.log(`Found ${results.totalFindings} issues`);
-```
-
-### As an MCP Server
-
-Add to your Claude desktop configuration:
-
+**Cursor:** Add to `~/.cursor/mcp_config.json`
 ```json
 {
   "mcpServers": {
     "security-scanner": {
       "command": "npx",
-      "args": ["-y", "@my-claude-agents/security-scanner"]
+      "args": ["@j0kz/security-scanner-mcp"]
     }
   }
 }
 ```
 
-Or run directly:
+**Windsurf / Roo Code / Continue:** Similar config - [see full guide](https://github.com/j0kz/mcp-agents#editor-setup)
+
+### Start Using Immediately
+
+After setup, just chat naturally with your AI:
+
+```
+💬 You: "Scan for security vulnerabilities"
+🤖 AI: *Analyzing code* Found: SQL injection risk in query builder, XSS in template, hardcoded API key, outdated dependency...
+
+💬 You: "Check OWASP Top 10 compliance"
+🤖 AI: Issues: A03:Injection (2 cases), A05:Security Misconfiguration (JWT secret in code), A06:Outdated Components...
+
+💬 You: "What security issues are critical?"
+🤖 AI: CRITICAL: SQL injection in /api/users. HIGH: Hardcoded credentials in config.js. MEDIUM: Missing rate limiting...
+```
+
+## ✨ Features
+
+🛡️ **Vulnerability Detection** - SQL injection, XSS, CSRF, and more
+📋 **OWASP Top 10** - Check compliance with security standards
+🔒 **Secrets Detection** - Find hardcoded credentials and API keys
+🔍 **Dependency Scanning** - Detect vulnerable packages
+
+## 📦 Complete @j0kz MCP Suite
+
+Get all 8 professional development tools - install individually or all at once:
 
 ```bash
-npx @my-claude-agents/security-scanner
+# 🎯 Code Quality Suite
+npx @j0kz/smart-reviewer-mcp      # AI code review
+npx @j0kz/test-generator-mcp      # Auto-generate tests
+npx @j0kz/refactor-assistant-mcp  # Refactoring help
+
+# 🏗️ Architecture & Design
+npx @j0kz/architecture-analyzer-mcp  # Architecture analysis
+npx @j0kz/api-designer-mcp           # API design
+npx @j0kz/db-schema-mcp              # Database schemas
+
+# 📚 Documentation & Security
+npx @j0kz/doc-generator-mcp       # Auto-generate docs
+npx @j0kz/security-scanner-mcp    # Security scanning
 ```
 
-## MCP Tools
+**👉 [View complete collection on GitHub](https://github.com/j0kz/mcp-agents)**
 
-### scan_file
+## 🎯 How It Works
 
-Scan a single file for security vulnerabilities.
+1. **Install once** - Run the setup command for your editor
+2. **Restart editor** - Reload to activate the MCP
+3. **Chat naturally** - Just ask your AI assistant to help
+4. **Get results** - The MCP tools work behind the scenes
 
-```typescript
-{
-  "filePath": "/absolute/path/to/file.js",
-  "config": {
-    "scanSecrets": true,
-    "scanSQLInjection": true,
-    "scanXSS": true,
-    "minSeverity": "medium"
-  }
-}
-```
+No configuration files, no complex setup, no API keys needed!
 
-### scan_project
+## 🔧 Editor Support
 
-Recursively scan an entire project directory.
+| Editor | Status | Notes |
+|--------|--------|-------|
+| **Claude Code** | ✅ Full support | Recommended |
+| **Cursor** | ✅ Full support | Native MCP |
+| **Windsurf** | ✅ Full support | Built-in MCP |
+| **Roo Code** | ✅ Full support | MCP compatible |
+| **Continue** | ✅ Full support | MCP plugin |
+| **Zed** | ✅ Full support | MCP support |
 
-```typescript
-{
-  "projectPath": "/absolute/path/to/project",
-  "config": {
-    "scanSecrets": true,
-    "scanSQLInjection": true,
-    "scanXSS": true,
-    "scanOWASP": true,
-    "scanDependencies": true,
-    "excludePatterns": ["node_modules", ".git"],
-    "maxFileSize": 1048576,
-    "minSeverity": "low",
-    "verbose": false
-  }
-}
-```
+Any MCP-compatible editor works!
 
-### scan_secrets
+## ❓ Troubleshooting
 
-Specifically scan for hardcoded secrets and credentials.
+**MCP not showing up?**
+- Restart your editor after installation
+- Check: `claude mcp list` (Claude Code) to verify connection
 
-```typescript
-{
-  "targetPath": "/path/to/scan",
-  "customPatterns": [
-    {
-      "name": "Custom API Key",
-      "pattern": "CUSTOM_KEY_[A-Z0-9]{32}",
-      "severity": "critical",
-      "description": "Custom API key pattern"
-    }
-  ]
-}
-```
+**Commands not working?**
+- Make sure Node.js is installed (`node --version`)
+- Try reinstalling: Remove and re-add the MCP
 
-### scan_vulnerabilities
+**Still stuck?**
+- [Open an issue](https://github.com/j0kz/mcp-agents/issues)
+- [Check full documentation](https://github.com/j0kz/mcp-agents)
 
-Scan for specific vulnerability types.
+## 📄 License
 
-```typescript
-{
-  "targetPath": "/path/to/scan",
-  "vulnerabilityTypes": ["sql_injection", "xss", "weak_crypto"]
-}
-```
-
-### generate_security_report
-
-Generate a comprehensive security report in markdown format.
-
-```typescript
-{
-  "projectPath": "/path/to/project",
-  "outputPath": "/path/to/security-report.md",
-  "config": {
-    "scanSecrets": true,
-    "scanSQLInjection": true,
-    "scanXSS": true,
-    "scanOWASP": true,
-    "scanDependencies": true
-  }
-}
-```
-
-## Detected Vulnerabilities
-
-### Secrets & Credentials
-
-- AWS Access Keys & Secret Keys
-- GitHub Personal Access Tokens
-- Generic API Keys
-- Private Cryptographic Keys (RSA, DSA, EC, OpenSSH)
-- Hardcoded Passwords
-- JWT Tokens
-- Slack Tokens
-- Database Connection Strings
-- Custom secret patterns via configuration
-
-### Code Vulnerabilities
-
-- **SQL Injection**: String interpolation/concatenation in SQL queries
-- **XSS**: innerHTML assignments, document.write, eval(), dangerouslySetInnerHTML
-- **Weak Cryptography**: MD5, SHA1, DES, RC4 usage
-- **Insecure Deserialization**: pickle.loads, yaml.load, unserialize
-- **Path Traversal**: Unsafe file path operations
-- **Command Injection**: Unsafe command execution
-- **CSRF**: Missing CSRF protection
-- **SSRF**: Server-Side Request Forgery vulnerabilities
-
-### Dependencies
-
-- Vulnerable npm packages
-- CVE-listed vulnerabilities
-- Outdated dependencies with security patches
-
-## Security Best Practices
-
-### 1. Secret Management
-
-**Never hardcode secrets in source code.**
-
-```javascript
-// const apiKey = "sk_live_abc123xyz789";
-const dbPassword = "mypassword123";
-
-// ✅ GOOD
-const apiKey = process.env.API_KEY;
-const dbPassword = process.env.DB_PASSWORD;
-```
-
-**Use secret management services:**
-- AWS Secrets Manager
-- HashiCorp Vault
-- Azure Key Vault
-- Google Secret Manager
-
-### 2. SQL Injection Prevention
-
-**Always use parameterized queries.**
-
-```javascript
-// const query = `SELECT * FROM users WHERE id = ${userId}`;
-db.query(query);
-
-// ✅ GOOD
-const query = 'SELECT * FROM users WHERE id = ?';
-db.query(query, [userId]);
-
-// ✅ GOOD (with ORM)
-await User.findByPk(userId);
-```
-
-### 3. XSS Prevention
-
-**Sanitize user input and use safe DOM APIs.**
-
-```javascript
-// element.innerHTML = userInput;
-document.write(userInput);
-
-// ✅ GOOD
-element.textContent = userInput;
-element.innerText = userInput;
-
-// ✅ GOOD (with sanitization)
-import DOMPurify from 'dompurify';
-element.innerHTML = DOMPurify.sanitize(userInput);
-```
-
-### 4. Cryptography
-
-**Use strong, modern cryptographic algorithms.**
-
-```javascript
-// const hash = crypto.createHash('md5').update(password).digest('hex');
-const cipher = crypto.createCipher('des', key);
-
-// ✅ GOOD
-const hash = await bcrypt.hash(password, 10);
-const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
-```
-
-### 5. Dependency Management
-
-**Keep dependencies updated and scan regularly.**
-
-```bash
-# Check for vulnerabilities
-npm audit
-
-# Update dependencies
-npm update
-
-# Use automated tools
-npm install -g npm-check-updates
-ncu -u
-npm install
-```
-
-### 6. CI/CD Integration
-
-**Automate security scanning in your pipeline.**
-
-```yaml
-# GitHub Actions example
-name: Security Scan
-
-on: [push, pull_request]
-
-jobs:
-  security:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Security Scan
-        run: npx @my-claude-agents/security-scanner scan-project .
-      - name: Upload Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: security-report
-          path: security-report.md
-```
-
-## Configuration Options
-
-```typescript
-interface ScanConfig {
-  // Enable/disable specific scans
-  scanSecrets?: boolean;          // Default: true
-  scanSQLInjection?: boolean;     // Default: true
-  scanXSS?: boolean;              // Default: true
-  scanOWASP?: boolean;            // Default: true
-  scanDependencies?: boolean;     // Default: true
-
-  // Custom secret patterns
-  customPatterns?: SecretPattern[];
-
-  // Exclusion patterns
-  excludePatterns?: string[];     // Default: ['node_modules', '.git', ...]
-
-  // File size limit
-  maxFileSize?: number;           // In bytes
-
-  // Minimum severity to report
-  minSeverity?: 'critical' | 'high' | 'medium' | 'low' | 'info';
-
-  // Enable verbose logging
-  verbose?: boolean;              // Default: false
-}
-```
-
-## Severity Levels
-
-- **CRITICAL**: Immediate action required (e.g., exposed AWS keys)
-- **HIGH**: Should be fixed in next sprint (e.g., SQL injection)
-- **MEDIUM**: Should be addressed (e.g., weak crypto)
-- **LOW**: Nice to fix (e.g., minor security improvements)
-- **INFO**: Informational findings
-
-## Security Score
-
-The security score (0-100) is calculated based on findings:
-
-- Critical findings: -10 points each
-- High findings: -5 points each
-- Medium findings: -2 points each
-- Low findings: -1 point each
-
-A score of 90+ is excellent, 70-89 is good, 50-69 needs improvement, below 50 requires immediate attention.
-
-## OWASP Top 10 Coverage
-
-This scanner covers the OWASP Top 10 2021:
-
-1. **A01:2021 – Broken Access Control**: Path traversal detection
-2. **A02:2021 – Cryptographic Failures**: Weak crypto, secret exposure
-3. **A03:2021 – Injection**: SQL injection, XSS, command injection
-4. **A04:2021 – Insecure Design**: Design pattern analysis
-5. **A05:2021 – Security Misconfiguration**: Configuration checks
-6. **A06:2021 – Vulnerable Components**: Dependency scanning
-7. **A07:2021 – Authentication Failures**: Auth pattern analysis
-8. **A08:2021 – Data Integrity Failures**: Deserialization issues
-9. **A09:2021 – Logging Failures**: Logging pattern checks
-10. **A10:2021 – SSRF**: Server-side request forgery detection
-
-## API Reference
-
-### Functions
-
-#### scanFile(filePath: string, config?: ScanConfig): Promise<SecurityFinding[]>
-
-Scan a single file for vulnerabilities.
-
-#### scanProject(projectPath: string, config?: ScanConfig): Promise<ScanResult>
-
-Recursively scan a project directory.
-
-#### scanForSecrets(context: FileScanContext, customPatterns?: SecretPattern[]): Promise<SecurityFinding[]>
-
-Scan specifically for hardcoded secrets.
-
-#### scanForSQLInjection(context: FileScanContext): Promise<SecurityFinding[]>
-
-Scan for SQL injection vulnerabilities.
-
-#### scanForXSS(context: FileScanContext): Promise<SecurityFinding[]>
-
-Scan for XSS vulnerabilities.
-
-#### scanOWASP(context: FileScanContext): Promise<SecurityFinding[]>
-
-Perform OWASP Top 10 security checks.
-
-#### scanDependencies(projectPath: string): Promise<DependencyVulnerability[]>
-
-Scan package.json for vulnerable dependencies.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit issues or pull requests.
-
-## License
-
-MIT License - see LICENSE file for details.
-
-## Support
-
-For issues and questions, please open an issue on the GitHub repository.
-
-## Security Disclosure
-
-If you discover a security vulnerability in this scanner, please email security@example.com. Do not open a public issue.
+MIT © [j0kz](https://github.com/j0kz)
 
 ---
 
-**Remember**: Security scanning is just one layer of defense. Always follow secure coding practices, conduct code reviews, and keep dependencies updated.
+**Explore more tools:** [github.com/j0kz/mcp-agents](https://github.com/j0kz/mcp-agents) | **npm:** [@j0kz](https://www.npmjs.com/~j0kz)

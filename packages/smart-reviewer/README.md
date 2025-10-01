@@ -1,42 +1,22 @@
 # @j0kz/smart-reviewer-mcp
 
-**AI-powered code review with learning capabilities for any MCP-compatible editor.**
+> AI-powered code review with quality metrics and automated fixes
 
-[![NPM Version](https://img.shields.io/npm/v/@j0kz/smart-reviewer-mcp)](https://www.npmjs.com/package/@j0kz/smart-reviewer-mcp)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
+[![npm version](https://img.shields.io/npm/v/@j0kz/smart-reviewer-mcp)](https://www.npmjs.com/package/@j0kz/smart-reviewer-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Part of the [@j0kz MCP Agents](https://github.com/j0kz/mcp-agents) collection.
+## 🚀 Quick Start (30 seconds)
 
----
+### One-Time Setup
 
-## ✨ Features
+Pick your editor and run **ONE** command:
 
-- 🔍 **Intelligent Code Review** - Detects anti-patterns, code smells, and potential bugs
-- 🎯 **Auto-Fix Suggestions** - Provides detailed fix recommendations with diffs
-- 📊 **Code Quality Metrics** - Tracks complexity, maintainability, and readability
-- 🧠 **Learning Capabilities** - Adapts to your team's coding style over time
-- ⚡ **Fast Analysis** - Reviews files in seconds
-- 🎨 **Multi-Language Support** - JavaScript, TypeScript, Python, Go, and more
-
----
-
-## 🚀 Quick Start
-
-### Claude Code
-
+**Claude Code:**
 ```bash
-# Install globally (recommended)
 claude mcp add smart-reviewer "npx @j0kz/smart-reviewer-mcp" --scope user
-
-# Verify installation
-claude mcp list
 ```
 
-### Cursor
-
-Add to `~/.cursor/mcp_config.json`:
-
+**Cursor:** Add to `~/.cursor/mcp_config.json`
 ```json
 {
   "mcpServers": {
@@ -48,311 +28,92 @@ Add to `~/.cursor/mcp_config.json`:
 }
 ```
 
-### Windsurf
+**Windsurf / Roo Code / Continue:** Similar config - [see full guide](https://github.com/j0kz/mcp-agents#editor-setup)
 
-Add to Windsurf settings:
+### Start Using Immediately
 
-```json
-{
-  "mcp": {
-    "servers": {
-      "smart-reviewer": {
-        "command": "npx @j0kz/smart-reviewer-mcp"
-      }
-    }
-  }
-}
+After setup, just chat naturally with your AI:
+
+```
+💬 You: "Review the auth.js file"
+🤖 AI: *Analyzes code* Found 3 issues: unused variable, missing error handling, inconsistent formatting. Here are fixes...
+
+💬 You: "Check code quality metrics for src/"
+🤖 AI: Complexity: 8.5/10, Maintainability: 75%, Test Coverage: 82%. Suggestions: Extract method in processUser()...
+
+💬 You: "What code smells are in this file?"
+🤖 AI: Detected: Long method (calculateTotal - 150 lines), Feature Envy (uses Customer data), Duplicate code...
 ```
 
-### Roo Code / Continue / Other MCP Editors
+## ✨ Features
 
-See [full compatibility guide](https://github.com/j0kz/mcp-agents/blob/main/EDITOR_COMPATIBILITY.md).
+🔍 **Deep Code Analysis** - Find bugs, code smells, and anti-patterns
+📊 **Quality Metrics** - Complexity, maintainability, coverage scores
+🤖 **Auto-Fix** - Automatically apply suggested improvements
+⚡ **Fast Reviews** - Analyze entire projects in seconds
 
----
+## 📦 Complete @j0kz MCP Suite
 
-## 🎯 Usage
-
-Once installed, use through your AI editor's chat:
-
-### Review a File
-```
-"Review this file for code quality issues"
-"Check src/utils.js for anti-patterns"
-"Analyze this code and suggest improvements"
-```
-
-### Get Specific Feedback
-```
-"Review this function for performance issues"
-"Check for security vulnerabilities"
-"Suggest better variable names"
-```
-
-### Batch Review
-```
-"Review all files in src/ directory"
-"Check my recent changes for issues"
-"Review all TypeScript files"
-```
-
----
-
-## 🛠️ Available MCP Tools
-
-### `mcp__smart-reviewer__review_file`
-
-Review a single file with comprehensive analysis.
-
-**Parameters:**
-- `filePath` (required): Path to file to review
-- `config` (optional): Review configuration
-  - `severity`: "strict" | "moderate" | "lenient" (default: "moderate")
-  - `autoFix`: boolean (default: false)
-  - `includeMetrics`: boolean (default: true)
-
-**Example:**
-```typescript
-{
-  "filePath": "src/app.js",
-  "config": {
-    "severity": "strict",
-    "includeMetrics": true
-  }
-}
-```
-
-### `mcp__smart-reviewer__batch_review`
-
-Review multiple files at once.
-
-**Parameters:**
-- `filePaths` (required): Array of file paths
-- `config` (optional): Same as review_file
-
-**Example:**
-```typescript
-{
-  "filePaths": ["src/app.js", "src/utils.js", "src/api.js"],
-  "config": {
-    "severity": "moderate"
-  }
-}
-```
-
-### `mcp__smart-reviewer__apply_fixes`
-
-Automatically apply suggested fixes to a file.
-
-**Parameters:**
-- `filePath` (required): Path to file to fix
-
-**Example:**
-```typescript
-{
-  "filePath": "src/app.js"
-}
-```
-
----
-
-## ⚙️ Configuration
-
-### Review Severity Levels
-
-**Strict:**
-- Reports all issues including minor style problems
-- Best for: Production code, libraries, critical systems
-
-**Moderate (default):**
-- Reports medium to high severity issues
-- Best for: General development, most projects
-
-**Lenient:**
-- Reports only critical issues
-- Best for: Prototypes, experiments, learning projects
-
-### Custom Rules
-
-Create a `.smart-reviewer.json` in your project root:
-
-```json
-{
-  "severity": "strict",
-  "autoFix": false,
-  "rules": {
-    "no-console": "error",
-    "complexity": {
-      "max": 10
-    },
-    "naming": {
-      "style": "camelCase"
-    }
-  },
-  "ignore": [
-    "**/*.test.js",
-    "dist/**",
-    "node_modules/**"
-  ]
-}
-```
-
----
-
-## 📊 What Gets Analyzed
-
-### Code Quality
-- Cyclomatic complexity
-- Cognitive complexity
-- Code duplication
-- Dead code detection
-
-### Best Practices
-- Naming conventions
-- Function length
-- Parameter count
-- Nesting depth
-
-### Potential Issues
-- Unused variables
-- Type errors
-- Security vulnerabilities
-- Performance bottlenecks
-
-### Style & Maintainability
-- Consistent formatting
-- Clear logic flow
-- Proper error handling
-- Documentation completeness
-
----
-
-## 🔧 Troubleshooting
-
-### MCP Not Connecting
+Get all 8 professional development tools - install individually or all at once:
 
 ```bash
-# Verify package is installed
-npx @j0kz/smart-reviewer-mcp --version
+# 🎯 Code Quality Suite
+npx @j0kz/smart-reviewer-mcp      # AI code review
+npx @j0kz/test-generator-mcp      # Auto-generate tests
+npx @j0kz/refactor-assistant-mcp  # Refactoring help
 
-# Check Node.js version (18+ required)
-node --version
+# 🏗️ Architecture & Design
+npx @j0kz/architecture-analyzer-mcp  # Architecture analysis
+npx @j0kz/api-designer-mcp           # API design
+npx @j0kz/db-schema-mcp              # Database schemas
 
-# Test MCP server directly
-npx @modelcontextprotocol/inspector npx @j0kz/smart-reviewer-mcp
+# 📚 Documentation & Security
+npx @j0kz/doc-generator-mcp       # Auto-generate docs
+npx @j0kz/security-scanner-mcp    # Security scanning
 ```
 
-### No Issues Detected
+**👉 [View complete collection on GitHub](https://github.com/j0kz/mcp-agents)**
 
-- Try increasing severity: set `severity: "strict"`
-- Check file path is correct
-- Ensure file has actual code (not empty)
+## 🎯 How It Works
 
-### Performance Issues
+1. **Install once** - Run the setup command for your editor
+2. **Restart editor** - Reload to activate the MCP
+3. **Chat naturally** - Just ask your AI assistant to help
+4. **Get results** - The MCP tools work behind the scenes
 
-- Use batch review for multiple files instead of individual reviews
-- Enable caching in configuration
-- Limit analysis to specific directories
+No configuration files, no complex setup, no API keys needed!
 
----
+## 🔧 Editor Support
 
+| Editor | Status | Notes |
+|--------|--------|-------|
+| **Claude Code** | ✅ Full support | Recommended |
+| **Cursor** | ✅ Full support | Native MCP |
+| **Windsurf** | ✅ Full support | Built-in MCP |
+| **Roo Code** | ✅ Full support | MCP compatible |
+| **Continue** | ✅ Full support | MCP plugin |
+| **Zed** | ✅ Full support | MCP support |
 
-## 📦 Complete @j0kz MCP Development Toolkit
+Any MCP-compatible editor works!
 
-This package is part of a comprehensive suite of 8 MCP agents for professional development:
+## ❓ Troubleshooting
 
-### 🎯 Code Quality Suite
-- **[@j0kz/smart-reviewer-mcp](https://www.npmjs.com/package/@j0kz/smart-reviewer-mcp)** - AI-powered code review and quality analysis
-- **[@j0kz/test-generator-mcp](https://www.npmjs.com/package/@j0kz/test-generator-mcp)** - Automated test generation with edge cases
-- **[@j0kz/refactor-assistant-mcp](https://www.npmjs.com/package/@j0kz/refactor-assistant-mcp)** - Intelligent code refactoring tools
+**MCP not showing up?**
+- Restart your editor after installation
+- Check: `claude mcp list` (Claude Code) to verify connection
 
-### 🏗️ Architecture & Design
-- **[@j0kz/architecture-analyzer-mcp](https://www.npmjs.com/package/@j0kz/architecture-analyzer-mcp)** - Architecture analysis and dependency graphs
-- **[@j0kz/api-designer-mcp](https://www.npmjs.com/package/@j0kz/api-designer-mcp)** - REST/GraphQL API design and OpenAPI generation
-- **[@j0kz/db-schema-mcp](https://www.npmjs.com/package/@j0kz/db-schema-mcp)** - Database schema design and migrations
+**Commands not working?**
+- Make sure Node.js is installed (`node --version`)
+- Try reinstalling: Remove and re-add the MCP
 
-### 📚 Documentation & Security
-- **[@j0kz/doc-generator-mcp](https://www.npmjs.com/package/@j0kz/doc-generator-mcp)** - Automated JSDoc, README, and API documentation
-- **[@j0kz/security-scanner-mcp](https://www.npmjs.com/package/@j0kz/security-scanner-mcp)** - Security vulnerability scanning and OWASP checks
+**Still stuck?**
+- [Open an issue](https://github.com/j0kz/mcp-agents/issues)
+- [Check full documentation](https://github.com/j0kz/mcp-agents)
 
-### Install Complete Suite
+## 📄 License
 
-```bash
-# Claude Code - Install all 8 MCPs
-claude mcp add smart-reviewer "npx @j0kz/smart-reviewer-mcp" --scope user
-claude mcp add test-generator "npx @j0kz/test-generator-mcp" --scope user
-claude mcp add architecture-analyzer "npx @j0kz/architecture-analyzer-mcp" --scope user
-claude mcp add doc-generator "npx @j0kz/doc-generator-mcp" --scope user
-claude mcp add security-scanner "npx @j0kz/security-scanner-mcp" --scope user
-claude mcp add refactor-assistant "npx @j0kz/refactor-assistant-mcp" --scope user
-claude mcp add api-designer "npx @j0kz/api-designer-mcp" --scope user
-claude mcp add db-schema "npx @j0kz/db-schema-mcp" --scope user
-
-# Verify all installed
-claude mcp list
-```
-
-### Other Editors
-
-**Cursor/Windsurf/Roo Code**: See [Editor Compatibility Guide](https://github.com/j0kz/mcp-agents/blob/main/EDITOR_COMPATIBILITY.md)
-
-## 📦 Complete @j0kz MCP Development Toolkit
-
-This package is part of a comprehensive suite of 8 MCP agents for professional development:
-
-### 🎯 Code Quality Suite
-- **[@j0kz/smart-reviewer-mcp](https://www.npmjs.com/package/@j0kz/smart-reviewer-mcp)** - AI-powered code review and quality analysis
-- **[@j0kz/test-generator-mcp](https://www.npmjs.com/package/@j0kz/test-generator-mcp)** - Automated test generation with edge cases
-- **[@j0kz/refactor-assistant-mcp](https://www.npmjs.com/package/@j0kz/refactor-assistant-mcp)** - Intelligent code refactoring tools
-
-### 🏗️ Architecture & Design
-- **[@j0kz/architecture-analyzer-mcp](https://www.npmjs.com/package/@j0kz/architecture-analyzer-mcp)** - Architecture analysis and dependency graphs
-- **[@j0kz/api-designer-mcp](https://www.npmjs.com/package/@j0kz/api-designer-mcp)** - REST/GraphQL API design and OpenAPI generation
-- **[@j0kz/db-schema-mcp](https://www.npmjs.com/package/@j0kz/db-schema-mcp)** - Database schema design and migrations
-
-### 📚 Documentation & Security
-- **[@j0kz/doc-generator-mcp](https://www.npmjs.com/package/@j0kz/doc-generator-mcp)** - Automated JSDoc, README, and API documentation
-- **[@j0kz/security-scanner-mcp](https://www.npmjs.com/package/@j0kz/security-scanner-mcp)** - Security vulnerability scanning and OWASP checks
-
-### Install Complete Suite
-
-```bash
-# Claude Code - Install all 8 MCPs
-claude mcp add smart-reviewer "npx @j0kz/smart-reviewer-mcp" --scope user
-claude mcp add test-generator "npx @j0kz/test-generator-mcp" --scope user
-claude mcp add architecture-analyzer "npx @j0kz/architecture-analyzer-mcp" --scope user
-claude mcp add doc-generator "npx @j0kz/doc-generator-mcp" --scope user
-claude mcp add security-scanner "npx @j0kz/security-scanner-mcp" --scope user
-claude mcp add refactor-assistant "npx @j0kz/refactor-assistant-mcp" --scope user
-claude mcp add api-designer "npx @j0kz/api-designer-mcp" --scope user
-claude mcp add db-schema "npx @j0kz/db-schema-mcp" --scope user
-
-# Verify all installed
-claude mcp list
-```
-
-### Other Editors
-
-**Cursor/Windsurf/Roo Code**: See [Editor Compatibility Guide](https://github.com/j0kz/mcp-agents/blob/main/EDITOR_COMPATIBILITY.md)
-
+MIT © [j0kz](https://github.com/j0kz)
 
 ---
 
-## 🤝 Contributing
-
-Contributions welcome! Please visit the [main repository](https://github.com/j0kz/mcp-agents).
-
----
-
-## 📝 License
-
-MIT © [j0kz](https://www.npmjs.com/~j0kz)
-
----
-
-## 🔗 Links
-
-- **NPM Package**: https://www.npmjs.com/package/@j0kz/smart-reviewer-mcp
-- **GitHub**: https://github.com/j0kz/mcp-agents
-- **Issues**: https://github.com/j0kz/mcp-agents/issues
-- **All Packages**: https://www.npmjs.com/~j0kz
-- **MCP Specification**: https://modelcontextprotocol.io/
+**Explore more tools:** [github.com/j0kz/mcp-agents](https://github.com/j0kz/mcp-agents) | **npm:** [@j0kz](https://www.npmjs.com/~j0kz)

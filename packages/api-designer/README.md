@@ -1,535 +1,119 @@
-# API Designer MCP
+# @j0kz/api-designer-mcp
 
-> Comprehensive API design, generation, and validation toolkit for Model Context Protocol
+> Design REST and GraphQL APIs with OpenAPI generation
 
-Design, document, and generate production-ready APIs with OpenAPI, GraphQL, REST best practices, client code generation, and mock servers.
+[![npm version](https://img.shields.io/npm/v/@j0kz/api-designer-mcp)](https://www.npmjs.com/package/@j0kz/api-designer-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## Features
+## 🚀 Quick Start (30 seconds)
 
-- **OpenAPI 3.0 Generation**: Generate complete OpenAPI specifications with schemas, security, and documentation
-- **REST API Design**: Automatically design RESTful endpoints following best practices
-- **GraphQL Schema Creation**: Create GraphQL schemas with types, queries, mutations, and subscriptions
-- **Client Code Generation**: Generate API clients in TypeScript, Python, and more
-- **API Validation**: Validate designs against industry best practices and standards
-- **Mock Server Generation**: Create runnable mock servers for testing and development
+### One-Time Setup
 
-## Installation
+Pick your editor and run **ONE** command:
 
+**Claude Code:**
 ```bash
-npm install @my-claude-agents/api-designer
+claude mcp add api-designer "npx @j0kz/api-designer-mcp" --scope user
 ```
 
-Or use directly with npx:
-
-```bash
-npx @my-claude-agents/api-designer
-```
-
-## MCP Configuration
-
-Add to your Claude MCP settings:
-
+**Cursor:** Add to `~/.cursor/mcp_config.json`
 ```json
 {
   "mcpServers": {
     "api-designer": {
       "command": "npx",
-      "args": ["@my-claude-agents/api-designer"]
+      "args": ["@j0kz/api-designer-mcp"]
     }
   }
 }
 ```
 
-## Available MCP Tools
+**Windsurf / Roo Code / Continue:** Similar config - [see full guide](https://github.com/j0kz/mcp-agents#editor-setup)
 
-### 1. generate_openapi
+### Start Using Immediately
 
-Generate OpenAPI 3.0 specification from configuration.
+After setup, just chat naturally with your AI:
 
-**Input:**
-```typescript
-{
-  config: {
-    name: "User Management API",
-    version: "1.0.0",
-    description: "API for managing users and authentication",
-    baseUrl: "https://api.example.com/v1",
-    style: "REST",
-    auth: {
-      type: "bearer"
-    },
-    resources: ["users", "roles", "permissions"],
-    conventions: {
-      namingCase: "camelCase",
-      versioning: "url",
-      pagination: "offset"
-    }
-  }
-}
+```
+💬 You: "Design a REST API for user management"
+🤖 AI: *Creates design* Endpoints: GET/POST /users, GET/PUT/DELETE /users/:id, POST /users/:id/verify. Includes auth, validation...
+
+💬 You: "Generate OpenAPI spec for my Express app"
+🤖 AI: *Analyzes routes* Created openapi.yaml with: 15 endpoints, request/response schemas, authentication, error codes...
+
+💬 You: "Review API design best practices"
+🤖 AI: Issues: Missing versioning (/v1/), inconsistent naming (getUser vs fetch_order), no rate limiting, missing HATEOAS links...
 ```
 
-**Output:**
-```json
-{
-  "success": true,
-  "data": {
-    "openapi": "3.0.3",
-    "info": {
-      "title": "User Management API",
-      "version": "1.0.0"
-    },
-    "paths": {
-      "/users": { ... },
-      "/users/{id}": { ... }
-    },
-    "components": {
-      "schemas": { ... },
-      "securitySchemes": { ... }
-    }
-  },
-  "metadata": {
-    "endpointCount": 15,
-    "resourceCount": 3
-  }
-}
+## ✨ Features
+
+🎨 **API Design** - Create REST and GraphQL APIs from requirements
+📄 **OpenAPI Generation** - Auto-generate Swagger/OpenAPI specs
+✅ **Best Practices** - RESTful conventions, versioning, error handling
+🔍 **Design Review** - Check API consistency and completeness
+
+## 📦 Complete @j0kz MCP Suite
+
+Get all 8 professional development tools - install individually or all at once:
+
+```bash
+# 🎯 Code Quality Suite
+npx @j0kz/smart-reviewer-mcp      # AI code review
+npx @j0kz/test-generator-mcp      # Auto-generate tests
+npx @j0kz/refactor-assistant-mcp  # Refactoring help
+
+# 🏗️ Architecture & Design
+npx @j0kz/architecture-analyzer-mcp  # Architecture analysis
+npx @j0kz/api-designer-mcp           # API design
+npx @j0kz/db-schema-mcp              # Database schemas
+
+# 📚 Documentation & Security
+npx @j0kz/doc-generator-mcp       # Auto-generate docs
+npx @j0kz/security-scanner-mcp    # Security scanning
 ```
 
-### 2. design_rest_api
+**👉 [View complete collection on GitHub](https://github.com/j0kz/mcp-agents)**
 
-Design RESTful API endpoints with CRUD operations.
+## 🎯 How It Works
 
-**Input:**
-```typescript
-{
-  resources: ["products", "categories", "orders"],
-  config: {
-    name: "E-commerce API",
-    version: "2.0.0",
-    style: "REST",
-    conventions: {
-      namingCase: "snake_case",
-      pagination: "cursor"
-    }
-  }
-}
-```
+1. **Install once** - Run the setup command for your editor
+2. **Restart editor** - Reload to activate the MCP
+3. **Chat naturally** - Just ask your AI assistant to help
+4. **Get results** - The MCP tools work behind the scenes
 
-**Output:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "path": "/products",
-      "method": "GET",
-      "summary": "List all products",
-      "parameters": [...],
-      "responses": { ... }
-    },
-    {
-      "path": "/products/{id}",
-      "method": "GET",
-      "summary": "Get product by ID",
-      "parameters": [...],
-      "responses": { ... }
-    }
-  ],
-  "metadata": {
-    "endpointCount": 15,
-    "resourceCount": 3
-  }
-}
-```
+No configuration files, no complex setup, no API keys needed!
 
-### 3. create_graphql_schema
+## 🔧 Editor Support
 
-Create GraphQL schema with types and operations.
+| Editor | Status | Notes |
+|--------|--------|-------|
+| **Claude Code** | ✅ Full support | Recommended |
+| **Cursor** | ✅ Full support | Native MCP |
+| **Windsurf** | ✅ Full support | Built-in MCP |
+| **Roo Code** | ✅ Full support | MCP compatible |
+| **Continue** | ✅ Full support | MCP plugin |
+| **Zed** | ✅ Full support | MCP support |
 
-**Input:**
-```typescript
-{
-  config: {
-    name: "Blog GraphQL API",
-    version: "1.0.0",
-    style: "GraphQL",
-    resources: ["User", "Post", "Comment"]
-  },
-  customTypes: [
-    {
-      name: "Post",
-      kind: "object",
-      fields: [
-        { name: "id", type: "ID!" },
-        { name: "title", type: "String!" },
-        { name: "content", type: "String!" },
-        { name: "author", type: "User!" }
-      ]
-    }
-  ]
-}
-```
+Any MCP-compatible editor works!
 
-**Output:**
-```json
-{
-  "success": true,
-  "data": {
-    "schema": {
-      "types": [...],
-      "queries": [...],
-      "mutations": [...]
-    },
-    "sdl": "type User { ... }\ntype Post { ... }\ntype Query { ... }"
-  },
-  "metadata": {
-    "schemaCount": 8,
-    "resourceCount": 3
-  }
-}
-```
+## ❓ Troubleshooting
 
-### 4. generate_client
+**MCP not showing up?**
+- Restart your editor after installation
+- Check: `claude mcp list` (Claude Code) to verify connection
 
-Generate API client code in various languages.
+**Commands not working?**
+- Make sure Node.js is installed (`node --version`)
+- Try reinstalling: Remove and re-add the MCP
 
-**Input:**
-```typescript
-{
-  spec: { /* OpenAPI spec */ },
-  options: {
-    language: "typescript",
-    outputFormat: "axios",
-    includeTypes: true,
-    includeTests: false,
-    asyncStyle: "async-await"
-  }
-}
-```
+**Still stuck?**
+- [Open an issue](https://github.com/j0kz/mcp-agents/issues)
+- [Check full documentation](https://github.com/j0kz/mcp-agents)
 
-**Output:**
-```json
-{
-  "success": true,
-  "data": {
-    "code": "import axios from 'axios';\n\nexport interface User { ... }\n\nexport class UserManagementAPIClient { ... }",
-    "language": "typescript",
-    "format": "axios"
-  }
-}
-```
+## 📄 License
 
-### 5. validate_api
-
-Validate API design against best practices.
-
-**Input:**
-```typescript
-{
-  spec: { /* OpenAPI or GraphQL schema */ }
-}
-```
-
-**Output:**
-```json
-{
-  "valid": false,
-  "errors": [
-    {
-      "path": "security",
-      "message": "No security scheme defined",
-      "severity": "error",
-      "code": "NO_SECURITY",
-      "suggestion": "Add authentication to protect your API"
-    }
-  ],
-  "warnings": [
-    {
-      "path": "servers",
-      "message": "Server URLs do not include version numbers",
-      "severity": "warning",
-      "code": "NO_VERSIONING",
-      "suggestion": "Include version in URL (e.g., /v1/)"
-    }
-  ]
-}
-```
-
-### 6. generate_mock_server
-
-Generate mock server code for testing.
-
-**Input:**
-```typescript
-{
-  spec: { /* OpenAPI spec */ },
-  config: {
-    port: 3000,
-    framework: "express",
-    responseDelay: 100,
-    includeCORS: true,
-    includeLogging: true,
-    dataGeneration: "faker"
-  }
-}
-```
-
-**Output:**
-```json
-{
-  "success": true,
-  "data": {
-    "code": "import express from 'express';\nimport cors from 'cors';\n\nconst app = express();\n...",
-    "framework": "express",
-    "port": 3000
-  },
-  "metadata": {
-    "endpointCount": 15
-  }
-}
-```
-
-## Programmatic Usage
-
-```typescript
-import {
-  generateOpenAPI,
-  designRESTEndpoints,
-  createGraphQLSchema,
-  generateAPIClient,
-  validateAPIDesign,
-  generateMockServer
-} from '@my-claude-agents/api-designer';
-
-// Generate OpenAPI spec
-const openApiResult = generateOpenAPI({
-  name: 'My API',
-  version: '1.0.0',
-  style: 'REST',
-  resources: ['users', 'posts'],
-  auth: { type: 'bearer' }
-});
-
-console.log(openApiResult.data); // OpenAPI spec
-
-// Design REST endpoints
-const endpointsResult = designRESTEndpoints(['products', 'orders'], {
-  name: 'Shop API',
-  version: '1.0.0',
-  style: 'REST'
-});
-
-console.log(endpointsResult.data); // Array of endpoints
-
-// Create GraphQL schema
-const graphqlResult = createGraphQLSchema({
-  name: 'Blog API',
-  version: '1.0.0',
-  style: 'GraphQL',
-  resources: ['User', 'Post', 'Comment']
-});
-
-console.log(graphqlResult.data.sdl); // GraphQL SDL
-
-// Generate client
-const clientResult = generateAPIClient(openApiResult.data, {
-  language: 'typescript',
-  outputFormat: 'axios',
-  includeTypes: true
-});
-
-console.log(clientResult.data.code); // TypeScript client code
-
-// Validate API
-const validationResult = validateAPIDesign(openApiResult.data);
-console.log(validationResult.valid, validationResult.errors);
-
-// Generate mock server
-const mockResult = generateMockServer(openApiResult.data, {
-  framework: 'express',
-  port: 3000,
-  includeCORS: true
-});
-
-console.log(mockResult.data.code); // Express server code
-```
-
-## Use Cases
-
-### 1. Design a New API
-
-```typescript
-// Start by designing REST endpoints
-const endpoints = designRESTEndpoints(['users', 'products', 'orders'], {
-  name: 'E-commerce API',
-  version: '1.0.0',
-  style: 'REST',
-  auth: { type: 'bearer' },
-  conventions: {
-    namingCase: 'camelCase',
-    versioning: 'url',
-    pagination: 'cursor'
-  }
-});
-
-// Generate OpenAPI spec
-const spec = generateOpenAPI({
-  name: 'E-commerce API',
-  version: '1.0.0',
-  style: 'REST',
-  resources: ['users', 'products', 'orders'],
-  auth: { type: 'bearer' }
-}, endpoints.data);
-
-// Validate the design
-const validation = validateAPIDesign(spec.data);
-if (!validation.valid) {
-  console.error('API design issues:', validation.errors);
-}
-```
-
-### 2. Generate Client SDK
-
-```typescript
-// Generate TypeScript client
-const client = generateAPIClient(spec.data, {
-  language: 'typescript',
-  outputFormat: 'axios',
-  includeTypes: true,
-  asyncStyle: 'async-await'
-});
-
-// Save to file
-import fs from 'fs/promises';
-await fs.writeFile('src/api-client.ts', client.data.code);
-```
-
-### 3. Create Mock Server for Testing
-
-```typescript
-// Generate mock server
-const mockServer = generateMockServer(spec.data, {
-  framework: 'express',
-  port: 3001,
-  includeCORS: true,
-  includeLogging: true,
-  responseDelay: 200
-});
-
-// Save and run
-await fs.writeFile('mock-server.js', mockServer.data.code);
-// Run: node mock-server.js
-```
-
-### 4. Design GraphQL API
-
-```typescript
-// Create GraphQL schema
-const schema = createGraphQLSchema({
-  name: 'Social Media API',
-  version: '1.0.0',
-  style: 'GraphQL',
-  resources: ['User', 'Post', 'Comment', 'Like']
-}, [
-  {
-    name: 'Post',
-    kind: 'object',
-    fields: [
-      { name: 'id', type: 'ID!' },
-      { name: 'title', type: 'String!' },
-      { name: 'content', type: 'String!' },
-      { name: 'author', type: 'User!' },
-      { name: 'comments', type: '[Comment!]!' },
-      { name: 'likes', type: '[Like!]!' }
-    ]
-  }
-]);
-
-console.log(schema.data.sdl); // GraphQL schema definition
-```
-
-## Best Practices
-
-### API Design Principles
-
-1. **Versioning**: Always include version in URLs (`/v1/`, `/v2/`)
-2. **Authentication**: Use bearer tokens or OAuth2 for secure APIs
-3. **Pagination**: Implement cursor-based pagination for large datasets
-4. **Error Handling**: Return consistent error formats (RFC 7807)
-5. **Documentation**: Generate comprehensive OpenAPI specs
-6. **Naming Conventions**: Be consistent (camelCase vs snake_case)
-
-### REST API Guidelines
-
-- Use plural nouns for resources (`/users`, `/products`)
-- Use HTTP methods correctly (GET, POST, PUT, DELETE)
-- Return appropriate status codes (200, 201, 400, 404, etc.)
-- Implement HATEOAS for discoverability
-- Support filtering, sorting, and searching
-
-### GraphQL Guidelines
-
-- Use meaningful type names (PascalCase)
-- Implement proper error handling
-- Use input types for mutations
-- Support pagination with connections
-- Add descriptions to all fields
-
-## TypeScript Types
-
-```typescript
-import {
-  APIDesignConfig,
-  OpenAPISpec,
-  RESTEndpoint,
-  GraphQLSchema,
-  ClientGenerationOptions,
-  MockServerConfig,
-  ValidationResult
-} from '@my-claude-agents/api-designer';
-```
-
-## Error Handling
-
-All functions return a consistent result format:
-
-```typescript
-interface APIDesignResult {
-  success: boolean;
-  data?: any;
-  errors?: string[];
-  warnings?: string[];
-  metadata?: {
-    endpointCount?: number;
-    resourceCount?: number;
-    schemaCount?: number;
-    generatedAt?: string;
-  };
-}
-```
-
-## Examples
-
-See the [examples](./examples) directory for complete examples:
-
-- REST API design
-- GraphQL schema creation
-- Client generation
-- Mock server setup
-- API validation
-
-## Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](../../CONTRIBUTING.md) for guidelines.
-
-## License
-
-MIT © j0kz
-
-## Support
-
-- Issues: [GitHub Issues](https://github.com/your-username/my-claude-agents/issues)
-- Documentation: [Full API Docs](https://your-docs-url.com)
+MIT © [j0kz](https://github.com/j0kz)
 
 ---
 
-Built with ❤️ for the MCP ecosystem
+**Explore more tools:** [github.com/j0kz/mcp-agents](https://github.com/j0kz/mcp-agents) | **npm:** [@j0kz](https://www.npmjs.com/~j0kz)

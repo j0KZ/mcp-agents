@@ -1,42 +1,22 @@
 # @j0kz/test-generator-mcp
 
-**Automated comprehensive test generation with edge cases and coverage analysis.**
+> Generate comprehensive test suites with edge cases and mocks
 
-[![NPM Version](https://img.shields.io/npm/v/@j0kz/test-generator-mcp)](https://www.npmjs.com/package/@j0kz/test-generator-mcp)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
+[![npm version](https://img.shields.io/npm/v/@j0kz/test-generator-mcp)](https://www.npmjs.com/package/@j0kz/test-generator-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Part of the [@j0kz MCP Agents](https://github.com/j0kz/mcp-agents) collection.
+## 🚀 Quick Start (30 seconds)
 
----
+### One-Time Setup
 
-## ✨ Features
+Pick your editor and run **ONE** command:
 
-- 🧪 **Comprehensive Test Generation** - Unit, integration, and end-to-end tests
-- 🎯 **Edge Case Detection** - Automatically identifies and tests boundary conditions
-- 📊 **Coverage Analysis** - Estimates test coverage before running tests
-- 🔧 **Multi-Framework Support** - Jest, Vitest, Mocha, AVA
-- ⚡ **Smart Mocking** - Generates appropriate mocks and stubs
-- 🎨 **Custom Test Patterns** - Learns your testing style
-
----
-
-## 🚀 Quick Start
-
-### Claude Code
-
+**Claude Code:**
 ```bash
-# Install globally (recommended)
 claude mcp add test-generator "npx @j0kz/test-generator-mcp" --scope user
-
-# Verify installation
-claude mcp list
 ```
 
-### Cursor
-
-Add to `~/.cursor/mcp_config.json`:
-
+**Cursor:** Add to `~/.cursor/mcp_config.json`
 ```json
 {
   "mcpServers": {
@@ -48,383 +28,92 @@ Add to `~/.cursor/mcp_config.json`:
 }
 ```
 
-### Windsurf
+**Windsurf / Roo Code / Continue:** Similar config - [see full guide](https://github.com/j0kz/mcp-agents#editor-setup)
 
-Add to Windsurf settings:
+### Start Using Immediately
 
-```json
-{
-  "mcp": {
-    "servers": {
-      "test-generator": {
-        "command": "npx @j0kz/test-generator-mcp"
-      }
-    }
-  }
-}
+After setup, just chat naturally with your AI:
+
+```
+💬 You: "Generate tests for calculatePrice function"
+🤖 AI: *Creates test file* Generated 15 tests covering: happy path, edge cases (negative prices, zero), error handling, boundary conditions...
+
+💬 You: "Add tests for the UserService class"
+🤖 AI: Created UserService.test.js with: 8 unit tests, 4 integration tests, mocked dependencies, 95% coverage...
+
+💬 You: "What test cases am I missing for login.js?"
+🤖 AI: Missing: Invalid email format, expired tokens, rate limiting, concurrent sessions, SQL injection attempts...
 ```
 
-### Roo Code / Continue / Other MCP Editors
+## ✨ Features
 
-See [full compatibility guide](https://github.com/j0kz/mcp-agents/blob/main/EDITOR_COMPATIBILITY.md).
+✨ **Smart Test Generation** - Creates complete test suites automatically
+🎯 **Edge Case Detection** - Finds boundary conditions you might miss
+🔧 **Mock Generation** - Auto-creates mocks for dependencies
+📈 **Coverage Optimization** - Targets high coverage with minimal tests
 
----
+## 📦 Complete @j0kz MCP Suite
 
-## 🎯 Usage
-
-Once installed, use through your AI editor's chat:
-
-### Generate Tests for a File
-```
-"Generate unit tests for src/utils.js"
-"Create test cases for this function"
-"Generate tests with edge cases for the auth module"
-```
-
-### Framework-Specific
-```
-"Generate Jest tests for src/api.js"
-"Create Vitest tests with 90% coverage"
-"Generate Mocha tests for the database layer"
-```
-
-### Advanced Generation
-```
-"Generate integration tests for the entire auth flow"
-"Create tests for all edge cases and error scenarios"
-"Generate E2E tests for the checkout process"
-```
-
----
-
-## 🛠️ Available MCP Tools
-
-### `mcp__test-generator__generate_tests`
-
-Generate comprehensive test suite for a source file.
-
-**Parameters:**
-- `sourceFile` (required): Path to source file
-- `config` (optional): Test generation configuration
-  - `framework`: "jest" | "mocha" | "vitest" | "ava" (default: "jest")
-  - `coverage`: Target coverage percentage (default: 80)
-  - `includeEdgeCases`: boolean (default: true)
-  - `includeErrorCases`: boolean (default: true)
-
-**Example:**
-```typescript
-{
-  "sourceFile": "src/utils.js",
-  "config": {
-    "framework": "jest",
-    "coverage": 90,
-    "includeEdgeCases": true
-  }
-}
-```
-
-### `mcp__test-generator__write_test_file`
-
-Generate tests and write directly to a test file.
-
-**Parameters:**
-- `sourceFile` (required): Path to source file
-- `testFile` (optional): Output path (auto-generated if not provided)
-- `config` (optional): Same as generate_tests
-
-**Example:**
-```typescript
-{
-  "sourceFile": "src/api.js",
-  "testFile": "tests/api.test.js",
-  "config": {
-    "framework": "vitest",
-    "coverage": 95
-  }
-}
-```
-
-### `mcp__test-generator__batch_generate`
-
-Generate tests for multiple files at once.
-
-**Parameters:**
-- `sourceFiles` (required): Array of source file paths
-- `config` (optional): Same as generate_tests
-
-**Example:**
-```typescript
-{
-  "sourceFiles": [
-    "src/utils.js",
-    "src/api.js",
-    "src/auth.js"
-  ],
-  "config": {
-    "framework": "jest",
-    "includeEdgeCases": true
-  }
-}
-```
-
----
-
-## ⚙️ Configuration
-
-### Test Frameworks
-
-**Jest (default):**
-```json
-{
-  "framework": "jest",
-  "coverage": 80
-}
-```
-
-**Vitest:**
-```json
-{
-  "framework": "vitest",
-  "coverage": 90
-}
-```
-
-**Mocha:**
-```json
-{
-  "framework": "mocha",
-  "coverage": 85
-}
-```
-
-**AVA:**
-```json
-{
-  "framework": "ava",
-  "coverage": 80
-}
-```
-
-### Custom Configuration
-
-Create `.test-generator.json` in your project root:
-
-```json
-{
-  "framework": "jest",
-  "coverage": 90,
-  "includeEdgeCases": true,
-  "includeErrorCases": true,
-  "testPattern": "**/*.test.js",
-  "mockStrategy": "auto",
-  "assertions": {
-    "style": "expect",
-    "strict": true
-  },
-  "timeout": 5000,
-  "exclude": [
-    "**/*.spec.js",
-    "dist/**",
-    "node_modules/**"
-  ]
-}
-```
-
----
-
-## 📊 What Gets Generated
-
-### Unit Tests
-- Function behavior validation
-- Input/output verification
-- Type checking
-- Return value assertions
-
-### Edge Cases
-- Boundary conditions (0, 1, max values)
-- Null/undefined handling
-- Empty arrays/objects
-- Special characters
-- Large datasets
-
-### Error Cases
-- Invalid inputs
-- Type errors
-- Async failures
-- Exception handling
-- Timeout scenarios
-
-### Integration Tests
-- Module interactions
-- API calls
-- Database operations
-- External dependencies
-
-### Test Structure
-```javascript
-describe('Component/Function Name', () => {
-  describe('Happy Path', () => {
-    it('should handle normal input correctly', () => {
-      // test implementation
-    });
-  });
-
-  describe('Edge Cases', () => {
-    it('should handle empty input', () => {});
-    it('should handle null/undefined', () => {});
-    it('should handle boundary values', () => {});
-  });
-
-  describe('Error Cases', () => {
-    it('should throw error for invalid input', () => {});
-    it('should handle async errors', () => {});
-  });
-});
-```
-
----
-
-## 🎯 Coverage Targets
-
-- **80%** - Good baseline for most projects
-- **90%** - High quality, recommended for libraries
-- **95%+** - Critical systems, production code
-
-The tool estimates coverage based on:
-- Lines covered by generated tests
-- Branches tested
-- Functions exercised
-- Edge cases handled
-
----
-
-## 🔧 Troubleshooting
-
-### Tests Not Generated
+Get all 8 professional development tools - install individually or all at once:
 
 ```bash
-# Verify package is working
-npx @j0kz/test-generator-mcp --version
+# 🎯 Code Quality Suite
+npx @j0kz/smart-reviewer-mcp      # AI code review
+npx @j0kz/test-generator-mcp      # Auto-generate tests
+npx @j0kz/refactor-assistant-mcp  # Refactoring help
 
-# Check Node.js version
-node --version
+# 🏗️ Architecture & Design
+npx @j0kz/architecture-analyzer-mcp  # Architecture analysis
+npx @j0kz/api-designer-mcp           # API design
+npx @j0kz/db-schema-mcp              # Database schemas
 
-# Test directly
-npx @modelcontextprotocol/inspector npx @j0kz/test-generator-mcp
+# 📚 Documentation & Security
+npx @j0kz/doc-generator-mcp       # Auto-generate docs
+npx @j0kz/security-scanner-mcp    # Security scanning
 ```
 
-### Framework Not Detected
+**👉 [View complete collection on GitHub](https://github.com/j0kz/mcp-agents)**
 
-- Specify framework explicitly in config
-- Ensure framework is installed in your project
-- Check package.json for test script
+## 🎯 How It Works
 
-### Coverage Too Low
+1. **Install once** - Run the setup command for your editor
+2. **Restart editor** - Reload to activate the MCP
+3. **Chat naturally** - Just ask your AI assistant to help
+4. **Get results** - The MCP tools work behind the scenes
 
-- Increase `coverage` setting
-- Enable `includeEdgeCases` and `includeErrorCases`
-- Generate additional integration tests
+No configuration files, no complex setup, no API keys needed!
 
----
+## 🔧 Editor Support
 
+| Editor | Status | Notes |
+|--------|--------|-------|
+| **Claude Code** | ✅ Full support | Recommended |
+| **Cursor** | ✅ Full support | Native MCP |
+| **Windsurf** | ✅ Full support | Built-in MCP |
+| **Roo Code** | ✅ Full support | MCP compatible |
+| **Continue** | ✅ Full support | MCP plugin |
+| **Zed** | ✅ Full support | MCP support |
 
-## 📦 Complete @j0kz MCP Development Toolkit
+Any MCP-compatible editor works!
 
-This package is part of a comprehensive suite of 8 MCP agents for professional development:
+## ❓ Troubleshooting
 
-### 🎯 Code Quality Suite
-- **[@j0kz/smart-reviewer-mcp](https://www.npmjs.com/package/@j0kz/smart-reviewer-mcp)** - AI-powered code review and quality analysis
-- **[@j0kz/test-generator-mcp](https://www.npmjs.com/package/@j0kz/test-generator-mcp)** - Automated test generation with edge cases
-- **[@j0kz/refactor-assistant-mcp](https://www.npmjs.com/package/@j0kz/refactor-assistant-mcp)** - Intelligent code refactoring tools
+**MCP not showing up?**
+- Restart your editor after installation
+- Check: `claude mcp list` (Claude Code) to verify connection
 
-### 🏗️ Architecture & Design
-- **[@j0kz/architecture-analyzer-mcp](https://www.npmjs.com/package/@j0kz/architecture-analyzer-mcp)** - Architecture analysis and dependency graphs
-- **[@j0kz/api-designer-mcp](https://www.npmjs.com/package/@j0kz/api-designer-mcp)** - REST/GraphQL API design and OpenAPI generation
-- **[@j0kz/db-schema-mcp](https://www.npmjs.com/package/@j0kz/db-schema-mcp)** - Database schema design and migrations
+**Commands not working?**
+- Make sure Node.js is installed (`node --version`)
+- Try reinstalling: Remove and re-add the MCP
 
-### 📚 Documentation & Security
-- **[@j0kz/doc-generator-mcp](https://www.npmjs.com/package/@j0kz/doc-generator-mcp)** - Automated JSDoc, README, and API documentation
-- **[@j0kz/security-scanner-mcp](https://www.npmjs.com/package/@j0kz/security-scanner-mcp)** - Security vulnerability scanning and OWASP checks
+**Still stuck?**
+- [Open an issue](https://github.com/j0kz/mcp-agents/issues)
+- [Check full documentation](https://github.com/j0kz/mcp-agents)
 
-### Install Complete Suite
+## 📄 License
 
-```bash
-# Claude Code - Install all 8 MCPs
-claude mcp add smart-reviewer "npx @j0kz/smart-reviewer-mcp" --scope user
-claude mcp add test-generator "npx @j0kz/test-generator-mcp" --scope user
-claude mcp add architecture-analyzer "npx @j0kz/architecture-analyzer-mcp" --scope user
-claude mcp add doc-generator "npx @j0kz/doc-generator-mcp" --scope user
-claude mcp add security-scanner "npx @j0kz/security-scanner-mcp" --scope user
-claude mcp add refactor-assistant "npx @j0kz/refactor-assistant-mcp" --scope user
-claude mcp add api-designer "npx @j0kz/api-designer-mcp" --scope user
-claude mcp add db-schema "npx @j0kz/db-schema-mcp" --scope user
-
-# Verify all installed
-claude mcp list
-```
-
-### Other Editors
-
-**Cursor/Windsurf/Roo Code**: See [Editor Compatibility Guide](https://github.com/j0kz/mcp-agents/blob/main/EDITOR_COMPATIBILITY.md)
-
-## 📦 Complete @j0kz MCP Development Toolkit
-
-This package is part of a comprehensive suite of 8 MCP agents for professional development:
-
-### 🎯 Code Quality Suite
-- **[@j0kz/smart-reviewer-mcp](https://www.npmjs.com/package/@j0kz/smart-reviewer-mcp)** - AI-powered code review and quality analysis
-- **[@j0kz/test-generator-mcp](https://www.npmjs.com/package/@j0kz/test-generator-mcp)** - Automated test generation with edge cases
-- **[@j0kz/refactor-assistant-mcp](https://www.npmjs.com/package/@j0kz/refactor-assistant-mcp)** - Intelligent code refactoring tools
-
-### 🏗️ Architecture & Design
-- **[@j0kz/architecture-analyzer-mcp](https://www.npmjs.com/package/@j0kz/architecture-analyzer-mcp)** - Architecture analysis and dependency graphs
-- **[@j0kz/api-designer-mcp](https://www.npmjs.com/package/@j0kz/api-designer-mcp)** - REST/GraphQL API design and OpenAPI generation
-- **[@j0kz/db-schema-mcp](https://www.npmjs.com/package/@j0kz/db-schema-mcp)** - Database schema design and migrations
-
-### 📚 Documentation & Security
-- **[@j0kz/doc-generator-mcp](https://www.npmjs.com/package/@j0kz/doc-generator-mcp)** - Automated JSDoc, README, and API documentation
-- **[@j0kz/security-scanner-mcp](https://www.npmjs.com/package/@j0kz/security-scanner-mcp)** - Security vulnerability scanning and OWASP checks
-
-### Install Complete Suite
-
-```bash
-# Claude Code - Install all 8 MCPs
-claude mcp add smart-reviewer "npx @j0kz/smart-reviewer-mcp" --scope user
-claude mcp add test-generator "npx @j0kz/test-generator-mcp" --scope user
-claude mcp add architecture-analyzer "npx @j0kz/architecture-analyzer-mcp" --scope user
-claude mcp add doc-generator "npx @j0kz/doc-generator-mcp" --scope user
-claude mcp add security-scanner "npx @j0kz/security-scanner-mcp" --scope user
-claude mcp add refactor-assistant "npx @j0kz/refactor-assistant-mcp" --scope user
-claude mcp add api-designer "npx @j0kz/api-designer-mcp" --scope user
-claude mcp add db-schema "npx @j0kz/db-schema-mcp" --scope user
-
-# Verify all installed
-claude mcp list
-```
-
-### Other Editors
-
-**Cursor/Windsurf/Roo Code**: See [Editor Compatibility Guide](https://github.com/j0kz/mcp-agents/blob/main/EDITOR_COMPATIBILITY.md)
-
+MIT © [j0kz](https://github.com/j0kz)
 
 ---
 
-## 🤝 Contributing
-
-Contributions welcome! Please visit the [main repository](https://github.com/j0kz/mcp-agents).
-
----
-
-## 📝 License
-
-MIT © [j0kz](https://www.npmjs.com/~j0kz)
-
----
-
-## 🔗 Links
-
-- **NPM Package**: https://www.npmjs.com/package/@j0kz/test-generator-mcp
-- **GitHub**: https://github.com/j0kz/mcp-agents
-- **Issues**: https://github.com/j0kz/mcp-agents/issues
-- **All Packages**: https://www.npmjs.com/~j0kz
-- **MCP Specification**: https://modelcontextprotocol.io/
+**Explore more tools:** [github.com/j0kz/mcp-agents](https://github.com/j0kz/mcp-agents) | **npm:** [@j0kz](https://www.npmjs.com/~j0kz)
