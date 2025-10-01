@@ -6,11 +6,11 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 
-Works with **Claude Code**, **Cursor**, **Windsurf**, **Roo Code**, **Continue**, and any MCP-compatible editor.
+**8 Production-Ready MCP Agents** - Works with **Claude Code**, **Cursor**, **Windsurf**, **Roo Code**, **Continue**, and any MCP-compatible editor.
 
 ---
 
-## 🤖 Agents Included
+## 🤖 Complete Agent Suite
 
 ### 1. Smart Code Reviewer 🔍
 **Package**: `@j0kz/smart-reviewer-mcp`
@@ -39,6 +39,51 @@ Architecture analysis and visualization:
 - Generates dependency graphs (Mermaid)
 - Suggests refactoring opportunities
 
+### 4. Documentation Generator 📄
+**Package**: `@j0kz/doc-generator-mcp`
+
+Auto-generate comprehensive documentation:
+- Generate JSDoc/TSDoc comments
+- Create README.md from code
+- Build API documentation
+- Generate changelogs from git
+
+### 5. Security Scanner 🔒
+**Package**: `@j0kz/security-scanner-mcp`
+
+Find vulnerabilities and security issues:
+- Detect hardcoded secrets (AWS keys, passwords)
+- Find SQL injection & XSS vulnerabilities
+- OWASP Top 10 checks
+- Scan dependencies for CVEs
+
+### 6. Refactoring Assistant 🔧
+**Package**: `@j0kz/refactor-assistant-mcp`
+
+Automated code refactoring:
+- Extract functions intelligently
+- Convert callbacks to async/await
+- Simplify complex conditionals
+- Apply 10 design patterns
+
+### 7. API Designer 🌐
+**Package**: `@j0kz/api-designer-mcp`
+
+Design and document APIs:
+- Generate OpenAPI/Swagger specs
+- Design REST endpoints
+- Create GraphQL schemas
+- Generate API client code
+
+### 8. Database Schema Designer 🗄️
+**Package**: `@j0kz/db-schema-mcp`
+
+Design and optimize database schemas:
+- Design schemas (Postgres/MySQL/MongoDB)
+- Generate migrations
+- Create ER diagrams
+- Optimize indexes and suggest normalizations
+
 ---
 
 ## 🚀 Quick Start
@@ -46,22 +91,28 @@ Architecture analysis and visualization:
 ### Install All (Claude Code)
 
 ```bash
+# Core Development Tools
 claude mcp add smart-reviewer "npx @j0kz/smart-reviewer-mcp" --scope user
 claude mcp add test-generator "npx @j0kz/test-generator-mcp" --scope user
 claude mcp add architecture-analyzer "npx @j0kz/architecture-analyzer-mcp" --scope user
+
+# Documentation & Security
+claude mcp add doc-generator "npx @j0kz/doc-generator-mcp" --scope user
+claude mcp add security-scanner "npx @j0kz/security-scanner-mcp" --scope user
+
+# Refactoring & Design
+claude mcp add refactor-assistant "npx @j0kz/refactor-assistant-mcp" --scope user
+claude mcp add api-designer "npx @j0kz/api-designer-mcp" --scope user
+claude mcp add db-schema "npx @j0kz/db-schema-mcp" --scope user
 ```
 
 ### Install Individual Package
 
 ```bash
-# Just the code reviewer
-npx @j0kz/smart-reviewer-mcp
-
-# Just the test generator
-npx @j0kz/test-generator-mcp
-
-# Just the architecture analyzer
-npx @j0kz/architecture-analyzer-mcp
+# Just one MCP
+npx @j0kz/doc-generator-mcp
+npx @j0kz/security-scanner-mcp
+# ... etc
 ```
 
 ### Verify Installation
@@ -75,37 +126,79 @@ Expected output:
 ✓ smart-reviewer - Connected
 ✓ test-generator - Connected
 ✓ architecture-analyzer - Connected
+✓ doc-generator - Connected
+✓ security-scanner - Connected
+✓ refactor-assistant - Connected
+✓ api-designer - Connected
+✓ db-schema - Connected
 ```
 
 ---
 
 ## 🎯 Usage Examples
 
-### In Claude Code
+### Code Quality Workflow
 
 ```bash
-# Review code
-claude> "Review this file for issues"
+# 1. Review code quality
+"Review this file for issues"
 
-# Generate tests
-claude> "Generate tests for src/utils.js with edge cases"
+# 2. Check security
+"Scan for security vulnerabilities"
 
-# Analyze architecture
-claude> "Check for circular dependencies in my project"
+# 3. Analyze architecture
+"Check for circular dependencies"
+
+# 4. Generate tests
+"Generate tests with 90% coverage"
 ```
 
-### In Cursor/Windsurf/Roo Code
+### Documentation Workflow
 
-Simply chat with the AI:
+```bash
+# 1. Generate JSDoc
+"Add JSDoc comments to this file"
+
+# 2. Create README
+"Generate README for this project"
+
+# 3. API documentation
+"Generate API docs"
+
+# 4. Changelog
+"Create changelog from git history"
 ```
-User: "Review my recent changes"
-AI: [Uses smart-reviewer MCP to analyze code]
 
-User: "Generate tests for the auth module"
-AI: [Uses test-generator MCP to create tests]
+### Refactoring Workflow
 
-User: "Is my architecture clean?"
-AI: [Uses architecture-analyzer MCP to check]
+```bash
+# 1. Get suggestions
+"Suggest refactorings for this code"
+
+# 2. Extract function
+"Extract this logic to a separate function"
+
+# 3. Convert to async
+"Convert these callbacks to async/await"
+
+# 4. Apply patterns
+"Apply factory pattern to this class"
+```
+
+### API Development Workflow
+
+```bash
+# 1. Design API
+"Design REST API for user management"
+
+# 2. Generate OpenAPI spec
+"Generate OpenAPI specification"
+
+# 3. Design database
+"Design database schema for this API"
+
+# 4. Generate migrations
+"Create migration files"
 ```
 
 ---
@@ -121,82 +214,29 @@ AI: [Uses architecture-analyzer MCP to check]
 | **Continue** | ✅ Supported | VS Code extension |
 | **Zed** | 🔄 Planned | TBD |
 
-See [EDITOR_COMPATIBILITY.md](EDITOR_COMPATIBILITY.md) for detailed setup instructions.
+See [EDITOR_COMPATIBILITY.md](EDITOR_COMPATIBILITY.md) for detailed setup instructions for all editors.
 
 ---
 
-## 🛠️ Configuration
+## 🛠️ Package Links
 
-### Smart Reviewer Config
-
-```json
-{
-  "smart-reviewer": {
-    "severity": "strict",
-    "autoFix": true,
-    "customRules": "./my-rules.json"
-  }
-}
-```
-
-### Test Generator Config
-
-```json
-{
-  "test-generator": {
-    "framework": "jest",
-    "coverage": 90,
-    "includeEdgeCases": true
-  }
-}
-```
-
-### Architecture Analyzer Config
-
-```json
-{
-  "architecture-analyzer": {
-    "maxDepth": 3,
-    "excludePatterns": ["node_modules", "dist"],
-    "detectCircular": true,
-    "generateGraph": true
-  }
-}
-```
-
----
-
-## 🔧 For Developers
-
-### Build from Source
-
-```bash
-git clone https://github.com/j0kz/mcp-agents.git
-cd mcp-agents
-npm install
-npm run build
-```
-
-### Development
-
-```bash
-# Watch mode
-npm run dev
-
-# Run tests
-npm test
-
-# Build specific package
-npm run build:reviewer
-npm run build:test-gen
-npm run build:arch
-```
+| Package | NPM | Features |
+|---------|-----|----------|
+| Smart Reviewer | [@j0kz/smart-reviewer-mcp](https://www.npmjs.com/package/@j0kz/smart-reviewer-mcp) | Code review, quality metrics |
+| Test Generator | [@j0kz/test-generator-mcp](https://www.npmjs.com/package/@j0kz/test-generator-mcp) | Test generation, coverage |
+| Architecture Analyzer | [@j0kz/architecture-analyzer-mcp](https://www.npmjs.com/package/@j0kz/architecture-analyzer-mcp) | Dependency analysis, graphs |
+| Doc Generator | [@j0kz/doc-generator-mcp](https://www.npmjs.com/package/@j0kz/doc-generator-mcp) | JSDoc, README, API docs |
+| Security Scanner | [@j0kz/security-scanner-mcp](https://www.npmjs.com/package/@j0kz/security-scanner-mcp) | Vulnerability scanning |
+| Refactor Assistant | [@j0kz/refactor-assistant-mcp](https://www.npmjs.com/package/@j0kz/refactor-assistant-mcp) | Code refactoring |
+| API Designer | [@j0kz/api-designer-mcp](https://www.npmjs.com/package/@j0kz/api-designer-mcp) | API design, OpenAPI |
+| DB Schema Designer | [@j0kz/db-schema-mcp](https://www.npmjs.com/package/@j0kz/db-schema-mcp) | Database schema design |
 
 ---
 
 ## 📚 Documentation
 
 - [Editor Compatibility Guide](EDITOR_COMPATIBILITY.md) - Setup for all editors
+- [Publishing Guide](PUBLISH_ALL_8.md) - How to publish to NPM
 - [NPM Publishing Guide](NPM_PUBLISH_GUIDE.md) - For maintainers
 - [Installation Guide](INSTALLATION.md) - Detailed setup
 - [Distribution Options](docs/DISTRIBUTION.md) - Sharing options
@@ -209,19 +249,15 @@ npm run build:arch
 - ✅ **TypeScript** - Full type safety
 - ✅ **Modular Design** - Use all or pick individual agents
 - ✅ **Easy Installation** - One command via `npx`
-- ✅ **Actively Maintained** - Regular updates
+- ✅ **Production Ready** - Comprehensive error handling
+- ✅ **Well Documented** - Extensive READMEs and examples
 - ✅ **MIT Licensed** - Free for commercial use
 
 ---
 
 ## 🤝 Contributing
 
-Contributions welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+Contributions welcome! Please visit the [GitHub repository](https://github.com/j0kz/mcp-agents).
 
 ---
 
@@ -237,17 +273,6 @@ MIT © [j0kz](https://www.npmjs.com/~j0kz)
 - **GitHub**: https://github.com/j0kz/mcp-agents
 - **Issues**: https://github.com/j0kz/mcp-agents/issues
 - **MCP Specification**: https://modelcontextprotocol.io/
-
----
-
-## 📊 Stats
-
-<!-- Will auto-update after publishing -->
-```
-npm: @j0kz/smart-reviewer-mcp
-npm: @j0kz/test-generator-mcp
-npm: @j0kz/architecture-analyzer-mcp
-```
 
 ---
 

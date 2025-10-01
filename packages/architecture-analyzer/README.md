@@ -270,7 +270,6 @@ graph TD
 
 ### Circular Dependencies Report
 ```
-❌ Circular Dependency Detected:
   src/auth/login.js
   → src/services/auth.js
   → src/auth/session.js
@@ -281,7 +280,6 @@ graph TD
 
 ### Layer Violations Report
 ```
-❌ Layer Violation Detected:
   data/repository.js imports from presentation/controller.js
 
 💡 Suggestion: Move shared logic to business layer
@@ -367,22 +365,45 @@ Ensure this is set in config.
 
 ---
 
-## 📦 Related Packages
 
-Part of the @j0kz MCP Agents suite:
+## 📦 Complete @j0kz MCP Development Toolkit
 
-- **[@j0kz/smart-reviewer-mcp](https://www.npmjs.com/package/@j0kz/smart-reviewer-mcp)** - AI-powered code review
-- **[@j0kz/test-generator-mcp](https://www.npmjs.com/package/@j0kz/test-generator-mcp)** - Automated test generation
+This package is part of a comprehensive suite of 8 MCP agents for professional development:
 
-Install all at once:
+### 🎯 Code Quality Suite
+- **[@j0kz/smart-reviewer-mcp](https://www.npmjs.com/package/@j0kz/smart-reviewer-mcp)** - AI-powered code review and quality analysis
+- **[@j0kz/test-generator-mcp](https://www.npmjs.com/package/@j0kz/test-generator-mcp)** - Automated test generation with edge cases
+- **[@j0kz/refactor-assistant-mcp](https://www.npmjs.com/package/@j0kz/refactor-assistant-mcp)** - Intelligent code refactoring tools
+
+### 🏗️ Architecture & Design
+- **[@j0kz/architecture-analyzer-mcp](https://www.npmjs.com/package/@j0kz/architecture-analyzer-mcp)** - Architecture analysis and dependency graphs
+- **[@j0kz/api-designer-mcp](https://www.npmjs.com/package/@j0kz/api-designer-mcp)** - REST/GraphQL API design and OpenAPI generation
+- **[@j0kz/db-schema-mcp](https://www.npmjs.com/package/@j0kz/db-schema-mcp)** - Database schema design and migrations
+
+### 📚 Documentation & Security
+- **[@j0kz/doc-generator-mcp](https://www.npmjs.com/package/@j0kz/doc-generator-mcp)** - Automated JSDoc, README, and API documentation
+- **[@j0kz/security-scanner-mcp](https://www.npmjs.com/package/@j0kz/security-scanner-mcp)** - Security vulnerability scanning and OWASP checks
+
+### Install Complete Suite
+
 ```bash
+# Claude Code - Install all 8 MCPs
 claude mcp add smart-reviewer "npx @j0kz/smart-reviewer-mcp" --scope user
 claude mcp add test-generator "npx @j0kz/test-generator-mcp" --scope user
 claude mcp add architecture-analyzer "npx @j0kz/architecture-analyzer-mcp" --scope user
+claude mcp add doc-generator "npx @j0kz/doc-generator-mcp" --scope user
+claude mcp add security-scanner "npx @j0kz/security-scanner-mcp" --scope user
+claude mcp add refactor-assistant "npx @j0kz/refactor-assistant-mcp" --scope user
+claude mcp add api-designer "npx @j0kz/api-designer-mcp" --scope user
+claude mcp add db-schema "npx @j0kz/db-schema-mcp" --scope user
+
+# Verify all installed
+claude mcp list
 ```
 
----
+### Other Editors
 
+**Cursor/Windsurf/Roo Code**: See [Editor Compatibility Guide](https://github.com/j0kz/mcp-agents/blob/main/EDITOR_COMPATIBILITY.md)
 ## 🤝 Contributing
 
 Contributions welcome! Please visit the [main repository](https://github.com/j0kz/mcp-agents).

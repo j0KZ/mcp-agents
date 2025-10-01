@@ -1,12 +1,12 @@
 {
-  "name": "@j0kz/smart-reviewer-mcp",
+  "name": "@j0kz/security-scanner-mcp",
   "version": "1.0.3",
-  "description": "Smart Code Reviewer MCP - AI-powered code review with learning capabilities. Works with Claude Code, Cursor, Windsurf, Roo Code, and any MCP-compatible editor.",
+  "description": "Security Scanner MCP - Detect vulnerabilities, hardcoded secrets, SQL injection, XSS, and OWASP Top 10 issues. Works with Claude Code, Cursor, Windsurf, Roo Code, and any MCP-compatible editor.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "smart-reviewer-mcp": "./dist/mcp-server.js"
+    "security-scanner-mcp": "./dist/mcp-server.js"
   },
   "files": [
     "dist",
@@ -27,28 +27,30 @@
   "keywords": [
     "mcp",
     "model-context-protocol",
-    "code-review",
+    "security",
+    "vulnerability",
+    "owasp",
+    "sql-injection",
+    "xss",
+    "security-audit",
     "ai",
     "claude",
     "claude-code",
     "cursor",
     "windsurf",
-    "roo-code",
-    "code-quality",
-    "static-analysis",
-    "linter"
+    "roo-code"
   ],
   "author": "j0kz (https://www.npmjs.com/~j0kz)",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/j0kz/mcp-agents.git",
-    "directory": "packages/smart-reviewer"
+    "directory": "packages/security-scanner"
   },
   "bugs": {
     "url": "https://github.com/j0kz/mcp-agents/issues"
   },
-  "homepage": "https://github.com/j0kz/mcp-agents/tree/main/packages/smart-reviewer#readme",
+  "homepage": "https://github.com/j0kz/mcp-agents/tree/main/packages/security-scanner#readme",
   "publishConfig": {
     "access": "public"
   }
