@@ -26,6 +26,10 @@ export interface ReviewResult {
   suggestions: string[];
   overallScore: number; // 0-100
   timestamp: string;
+  performance?: {
+    duration: number;
+    memoryUsed: number;
+  };
 }
 
 export interface ReviewConfig {

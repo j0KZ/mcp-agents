@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/refactor-assistant-mcp",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Refactoring Assistant MCP - Extract functions, convert callbacks to async/await, simplify conditionals, and apply design patterns. Works with Claude Code, Cursor, Windsurf, Roo Code, and any MCP-compatible editor.",
   "type": "module",
   "main": "./dist/index.js",
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0",
+    "@mcp-tools/shared": "file:../shared",
     "@modelcontextprotocol/sdk": "^0.5.0",
     "typescript": "^5.3.3"
   },

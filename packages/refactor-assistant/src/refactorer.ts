@@ -903,7 +903,7 @@ function applyProxyPattern(code: string, _options: any): string {
 
 class RealSubject implements Subject {
   request(): void {
-    console.log('RealSubject: Handling request');
+    // Handle request logic here
   }
 }
 
@@ -920,11 +920,11 @@ class Proxy implements Subject {
   }
 
   private preRequest(): void {
-    console.log('Proxy: Pre-processing');
+    // Pre-processing logic here
   }
 
   private postRequest(): void {
-    console.log('Proxy: Post-processing');
+    // Post-processing logic here
   }
 }
 
@@ -950,7 +950,7 @@ class ConcreteCommand implements Command {
 
 class Receiver {
   action(): void {
-    console.log('Receiver: Performing action');
+    // Perform action logic here
   }
 }
 

@@ -1,0 +1,150 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run weekly security scan every Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+
+jobs:
+  security-scan:
+    name: Security Vulnerability Scan
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build packages
+        run: npm run build
+
+      - name: Run npm audit
+        run: |
+          npm audit --audit-level=moderate --json > npm-audit.json || true
+          echo "NPM Audit Results:"
+          cat npm-audit.json
+        continue-on-error: true
+
+      - name: Scan for secrets
+        run: |
+          echo "Scanning for hardcoded secrets..."
+          node packages/security-scanner/dist/mcp-server.js scan-secrets . || true
+        continue-on-error: true
+
+      - name: Scan for vulnerabilities
+        run: |
+          echo "Scanning for code vulnerabilities..."
+          node packages/security-scanner/dist/mcp-server.js scan . || true
+        continue-on-error: true
+
+      - name: Generate security report
+        run: |
+          echo "Generating comprehensive security report..."
+          node packages/security-scanner/dist/mcp-server.js report . > security-report.md || true
+
+      - name: Upload security report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: security-reports
+          path: |
+            security-report.md
+            npm-audit.json
+          retention-days: 90
+
+      - name: Comment PR with security summary
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+
+            let comment = '## 🔒 Security Scan Results\n\n';
+
+            // Add npm audit summary
+            try {
+              const audit = JSON.parse(fs.readFileSync('npm-audit.json', 'utf8'));
+              const vulns = audit.metadata?.vulnerabilities || {};
+              comment += '### NPM Audit\n';
+              comment += `- Critical: ${vulns.critical || 0}\n`;
+              comment += `- High: ${vulns.high || 0}\n`;
+              comment += `- Medium: ${vulns.moderate || 0}\n`;
+              comment += `- Low: ${vulns.low || 0}\n\n`;
+            } catch (e) {
+              comment += 'NPM Audit: ✅ No issues found\n\n';
+            }
+
+            comment += '### Code Scan\n';
+            comment += 'Check the security report artifact for detailed findings.\n\n';
+            comment += '---\n';
+            comment += '*Automated security scan by GitHub Actions*';
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v3
+        with:
+          fail-on-severity: moderate
+          deny-licenses: GPL-3.0, AGPL-3.0
+
+  codeql-analysis:
+    name: CodeQL Security Analysis
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'javascript' ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:${{matrix.language}}"

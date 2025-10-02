@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/smart-reviewer-mcp",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Smart Code Reviewer MCP - AI-powered code review with learning capabilities. Works with Claude Code, Cursor, Windsurf, Roo Code, and any MCP-compatible editor.",
   "type": "module",
   "main": "./dist/index.js",
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0",
+    "@mcp-tools/shared": "file:../shared",
     "@modelcontextprotocol/sdk": "^0.5.0",
     "typescript": "^5.3.3"
   },

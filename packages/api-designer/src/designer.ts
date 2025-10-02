@@ -1009,6 +1009,7 @@ function generateExpressMockServer(spec: OpenAPISpec, config: MockServerConfig):
   // Add logging middleware
   if (config.includeLogging) {
     lines.push('app.use((req, res, next) => {');
+    lines.push('  // TODO: Replace with proper logger (e.g., winston, pino)');
     lines.push('  console.log(`${req.method} ${req.path}`);');
     lines.push('  next();');
     lines.push('});');
@@ -1051,6 +1052,7 @@ function generateExpressMockServer(spec: OpenAPISpec, config: MockServerConfig):
 
   // Start server
   lines.push(`app.listen(${port}, () => {`);
+  lines.push(`  // TODO: Replace with proper logger (e.g., winston, pino)`);
   lines.push(`  console.log('Mock server running on port ${port}');`);
   lines.push('});');
 

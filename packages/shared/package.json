@@ -1,0 +1,33 @@
+{
+  "name": "@mcp-tools/shared",
+  "version": "1.0.0",
+  "description": "Shared utilities and types for MCP tools - enables modularity and integration",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "test": "jest",
+    "lint": "eslint src --ext .ts"
+  },
+  "keywords": [
+    "mcp",
+    "shared",
+    "utilities",
+    "modular",
+    "integration"
+  ],
+  "author": "MCP Tools",
+  "license": "MIT",
+  "dependencies": {
+    "fast-glob": "^3.3.2",
+    "lru-cache": "^10.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0",
+    "jest": "^29.7.0",
+    "@jest/globals": "^29.7.0"
+  }
+}

@@ -1,26 +1,64 @@
-import { readFile } from 'fs/promises';
 import { CodeIssue, CodeMetrics, ReviewResult } from './types.js';
+import {
+  FileSystemManager,
+  AnalysisCache,
+  PerformanceMonitor,
+  generateHash,
+  REGEX,
+  QUALITY_THRESHOLDS,
+} from '@mcp-tools/shared';
 
 export class CodeAnalyzer {
+  private fsManager: FileSystemManager;
+  private analysisCache: AnalysisCache;
+  private performanceMonitor: PerformanceMonitor;
+
+  constructor() {
+    this.fsManager = new FileSystemManager(500); // Cache up to 500 files
+    this.analysisCache = new AnalysisCache(200, 1800000); // 200 analyses, 30min TTL
+    this.performanceMonitor = new PerformanceMonitor();
+  }
+
   /**
    * Analyze code file and return review results
    */
   async analyzeFile(filePath: string): Promise<ReviewResult> {
-    const content = await readFile(filePath, 'utf-8');
+    this.performanceMonitor.start();
+
+    // Read file with caching
+    const content = await this.fsManager.readFile(filePath, true);
+    const fileHash = generateHash(content);
+
+    // Check cache
+    const cached = this.analysisCache.get(filePath, 'code-review', fileHash);
+    if (cached) {
+      return cached;
+    }
 
     const issues = await this.detectIssues(content, filePath);
     const metrics = this.calculateMetrics(content);
     const suggestions = this.generateSuggestions(content, issues, metrics);
     const overallScore = this.calculateScore(issues, metrics);
 
-    return {
+    const performanceMetrics = this.performanceMonitor.stop();
+
+    const result: ReviewResult = {
       file: filePath,
       issues,
       metrics,
       suggestions,
       overallScore,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      performance: {
+        duration: performanceMetrics.duration,
+        memoryUsed: performanceMetrics.memoryUsed,
+      },
     };
+
+    // Cache the result
+    this.analysisCache.set(filePath, 'code-review', fileHash, result);
+
+    return result;
   }
 
   /**
@@ -64,8 +102,8 @@ export class CodeAnalyzer {
         });
       }
 
-      // Check for TODO comments
-      if (line.includes('TODO') || line.includes('FIXME')) {
+      // Check for TODO comments using shared regex
+      if (REGEX.TODO_COMMENT.test(line)) {
         issues.push({
           line: lineNum,
           severity: 'info',
@@ -74,8 +112,8 @@ export class CodeAnalyzer {
         });
       }
 
-      // Check for long lines
-      if (line.length > 120) {
+      // Check for long lines using shared threshold
+      if (line.length > QUALITY_THRESHOLDS.MAX_LINE_LENGTH) {
         issues.push({
           line: lineNum,
           severity: 'info',
@@ -181,6 +219,9 @@ export class CodeAnalyzer {
       }
     }
 
+    // Mark checkpoint for complexity calculation
+    this.performanceMonitor.mark('complexity-calculated');
+
     // Maintainability index (simplified formula)
     const volume = nonEmptyLines.length * Math.log2(nonEmptyLines.length || 1);
     const maintainability = Math.max(0, Math.min(100,
@@ -277,6 +318,67 @@ export class CodeAnalyzer {
     score -= metrics.duplicateBlocks * 2;
 
     return Math.max(0, Math.min(100, Math.round(score)));
+  }
+
+  /**
+   * Analyze multiple files in batch with parallel processing
+   */
+  async analyzeFiles(filePaths: string[], concurrency: number = 5): Promise<Map<string, ReviewResult>> {
+    const results = new Map<string, ReviewResult>();
+
+    // Use shared batch processing utility
+    const { batchProcess } = await import('@mcp-tools/shared');
+
+    const reviews = await batchProcess(
+      filePaths,
+      async (filePath) => {
+        try {
+          return await this.analyzeFile(filePath);
+        } catch (error) {
+          console.error(`Failed to analyze ${filePath}:`, error);
+          return null;
+        }
+      },
+      {
+        concurrency,
+        onProgress: (completed, total) => {
+          console.log(`Progress: ${completed}/${total} files analyzed`);
+        },
+      }
+    );
+
+    filePaths.forEach((filePath, index) => {
+      if (reviews[index]) {
+        results.set(filePath, reviews[index]!);
+      }
+    });
+
+    return results;
+  }
+
+  /**
+   * Get cache statistics
+   */
+  getCacheStats() {
+    return {
+      fileCache: this.fsManager.getCacheStats(),
+      analysisCache: this.analysisCache.getStats(),
+    };
+  }
+
+  /**
+   * Clear all caches
+   */
+  clearCache(): void {
+    this.fsManager.clearCache();
+    this.analysisCache.clear();
+  }
+
+  /**
+   * Invalidate cache for specific file
+   */
+  invalidateCache(filePath: string): void {
+    this.analysisCache.invalidate(filePath);
   }
 
   /**
