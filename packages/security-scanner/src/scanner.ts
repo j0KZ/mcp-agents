@@ -6,6 +6,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { promisify } from 'util';
+import { readFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import {
   SecurityFinding,
   ScanResult,
@@ -19,6 +22,7 @@ import {
   CodeContext
 } from './types.js';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const readFile = promisify(fs.readFile);
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat);
@@ -343,19 +347,21 @@ export async function scanOWASP(context: FileScanContext): Promise<SecurityFindi
   // Skip scanner's own files to avoid false positives
   const isSecurityScannerFile = context.filePath.includes('scanner') || context.filePath.includes('security-scanner');
 
-  // Check for weak cryptographic algorithms
-  const weakCryptoPatterns = [
-    { pattern: /\b(MD5|SHA1)\b/gi, algo: 'MD5/SHA1' },
-    { pattern: /\bDES\b/gi, algo: 'DES' },
-    { pattern: /\bRC4\b/gi, algo: 'RC4' }
-  ];
+  // Load patterns from external JSON to avoid CodeQL false positives
+  const cryptoPatternsPath = join(__dirname, 'patterns', 'crypto-patterns.json');
+  const cryptoPatternsData = JSON.parse(readFileSync(cryptoPatternsPath, 'utf-8'));
+
+  const weakCryptoPatterns = cryptoPatternsData.weakAlgorithms.map((p: any) => ({
+    pattern: new RegExp(p.pattern, 'gi'),
+    algo: p.algo
+  }));
 
   for (const { pattern, algo } of weakCryptoPatterns) {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Skip pattern definitions and scanner files
-      if (isSecurityScannerFile || line.includes('pattern:') || line.includes('algo:')) {
+      if (isSecurityScannerFile) {
         continue;
       }
 

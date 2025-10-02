@@ -1,0 +1,32 @@
+{
+  "patterns": [
+    {
+      "pattern": "\\binnerHTML\\s*=",
+      "description": "Direct innerHTML assignment without sanitization"
+    },
+    {
+      "pattern": "\\bouterHTML\\s*=",
+      "description": "Direct outerHTML assignment"
+    },
+    {
+      "pattern": "\\bdocument\\.write\\(",
+      "description": "document.write() usage"
+    },
+    {
+      "pattern": "dangerouslySetInnerHTML",
+      "description": "React dangerouslySetInnerHTML usage"
+    },
+    {
+      "pattern": "\\bv-html\\b",
+      "description": "Vue v-html directive usage"
+    },
+    {
+      "pattern": "\\$\\(.*\\)\\.html\\(",
+      "description": "jQuery .html() with potential user input"
+    },
+    {
+      "pattern": "insertAdjacentHTML",
+      "description": "insertAdjacentHTML usage"
+    }
+  ]
+}

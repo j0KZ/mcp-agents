@@ -1,0 +1,32 @@
+{
+  "patterns": [
+    {
+      "pattern": "\\bSELECT\\s+.*\\s+FROM\\s+.*\\s*\\+",
+      "description": "SQL query with string concatenation"
+    },
+    {
+      "pattern": "\\bINSERT\\s+INTO\\s+.*\\s*\\+",
+      "description": "INSERT query with string concatenation"
+    },
+    {
+      "pattern": "\\bUPDATE\\s+.*\\s+SET\\s+.*\\s*\\+",
+      "description": "UPDATE query with string concatenation"
+    },
+    {
+      "pattern": "\\bDELETE\\s+FROM\\s+.*\\s*\\+",
+      "description": "DELETE query with string concatenation"
+    },
+    {
+      "pattern": "execute\\(.*\\$\\{",
+      "description": "SQL execution with template literals"
+    },
+    {
+      "pattern": "query\\(.*\\$\\{",
+      "description": "SQL query with template literals"
+    },
+    {
+      "pattern": "raw\\(.*\\$\\{",
+      "description": "Raw SQL query with template literals"
+    }
+  ]
+}

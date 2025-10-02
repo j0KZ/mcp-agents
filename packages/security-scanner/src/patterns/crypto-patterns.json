@@ -1,0 +1,20 @@
+{
+  "weakAlgorithms": [
+    {
+      "pattern": "createHash\\(['\"]md5['\"]\\)",
+      "algo": "MD5"
+    },
+    {
+      "pattern": "createHash\\(['\"]sha1['\"]\\)",
+      "algo": "SHA1"
+    },
+    {
+      "pattern": "createCipheriv\\(['\"]des",
+      "algo": "DES"
+    },
+    {
+      "pattern": "createCipheriv\\(['\"]rc4",
+      "algo": "RC4"
+    }
+  ]
+}
