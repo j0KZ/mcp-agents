@@ -21,6 +21,8 @@ import {
   FileScanContext,
   CodeContext
 } from './types.js';
+import { scanForXSS as scanXSS } from './scanners/xss-scanner.js';
+import { scanForSQLInjection as scanSQL } from './scanners/sql-injection-scanner.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const readFile = promisify(fs.readFile);
@@ -84,54 +86,6 @@ const DEFAULT_SECRET_PATTERNS: SecretPattern[] = [
     pattern: /(mongodb|mysql|postgresql):\/\/[^\s]+/gi,
     severity: SeverityLevel.HIGH,
     description: 'Database connection string detected'
-  }
-];
-
-/**
- * SQL injection detection patterns
- */
-const SQL_INJECTION_PATTERNS = [
-  {
-    pattern: /(?:execute|exec|query|sql)\s*\(\s*['""`].*?\$\{.*?\}.*?['""`]\s*\)/gi,
-    description: 'String interpolation in SQL query'
-  },
-  {
-    pattern: /(?:execute|exec|query|sql)\s*\(\s*.*?\+.*?\)/gi,
-    description: 'String concatenation in SQL query'
-  },
-  {
-    pattern: /SELECT\s+.*?\s+FROM\s+.*?\s+WHERE\s+.*?\+/gi,
-    description: 'Direct SQL concatenation detected'
-  },
-  {
-    pattern: /(?:mysql_query|pg_query|sqlite_query)\s*\(\s*['""].*?\$.*?['"\"]\s*\)/gi,
-    description: 'Direct variable interpolation in database query'
-  }
-];
-
-/**
- * XSS vulnerability patterns
- */
-const XSS_PATTERNS = [
-  {
-    pattern: /innerHTML\s*=\s*(?!['"""])/gi,
-    description: 'Direct innerHTML assignment without sanitization'
-  },
-  {
-    pattern: /document\.write\s*\(/gi,
-    description: 'document.write usage (potential XSS vector)'
-  },
-  {
-    pattern: /eval\s*\(/gi,
-    description: 'eval() usage (potential code injection)'
-  },
-  {
-    pattern: /dangerouslySetInnerHTML/gi,
-    description: 'React dangerouslySetInnerHTML usage'
-  },
-  {
-    pattern: /v-html\s*=/gi,
-    description: 'Vue v-html directive usage'
   }
 ];
 
@@ -242,99 +196,18 @@ export async function scanForSecrets(
 
 /**
  * Scan for SQL injection vulnerabilities
+ * Delegates to the SQL injection scanner module
  */
 export async function scanForSQLInjection(context: FileScanContext): Promise<SecurityFinding[]> {
-  const findings: SecurityFinding[] = [];
-  const lines = context.content.split('\n');
-
-  for (const { pattern, description } of SQL_INJECTION_PATTERNS) {
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      const matches = line.matchAll(pattern);
-
-      for (const match of matches) {
-        const codeContext = extractCodeContext(context.content, i + 1);
-
-        findings.push({
-          id: generateFindingId(context.filePath, i + 1, VulnerabilityType.SQL_INJECTION),
-          type: VulnerabilityType.SQL_INJECTION,
-          severity: SeverityLevel.CRITICAL,
-          title: 'Potential SQL Injection Vulnerability',
-          description: `${description}. This pattern is vulnerable to SQL injection attacks.`,
-          filePath: context.filePath,
-          line: i + 1,
-          column: match.index,
-          codeSnippet: codeContext.issueLine,
-          recommendation: 'Use parameterized queries or prepared statements instead of string concatenation. Example: db.query("SELECT * FROM users WHERE id = ?", [userId])',
-          owaspCategory: OWASPCategory.A03_INJECTION,
-          cweId: 'CWE-89',
-          cvssScore: 9.8,
-          metadata: {
-            detectedPattern: description
-          }
-        });
-      }
-    }
-  }
-
-  return findings;
+  return await scanSQL(context);
 }
 
 /**
  * Scan for Cross-Site Scripting (XSS) vulnerabilities
+ * Delegates to the XSS scanner module
  */
 export async function scanForXSS(context: FileScanContext): Promise<SecurityFinding[]> {
-  const findings: SecurityFinding[] = [];
-  const lines = context.content.split('\n');
-
-  // Skip scanner's own files to avoid false positives
-  if (context.filePath.includes('scanner') || context.filePath.includes('security-scanner')) {
-    return findings;
-  }
-
-  for (const { pattern, description } of XSS_PATTERNS) {
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-
-      // Skip pattern definitions, comments, and test strings
-      if (
-        line.includes('pattern:') ||
-        line.includes('description:') ||
-        line.trim().startsWith('//') ||
-        line.trim().startsWith('*') ||
-        line.includes('const dangerousCode')
-      ) {
-        continue;
-      }
-
-      const matches = line.matchAll(pattern);
-
-      for (const match of matches) {
-        const codeContext = extractCodeContext(context.content, i + 1);
-
-        findings.push({
-          id: generateFindingId(context.filePath, i + 1, VulnerabilityType.XSS),
-          type: VulnerabilityType.XSS,
-          severity: SeverityLevel.HIGH,
-          title: 'Potential Cross-Site Scripting (XSS) Vulnerability',
-          description: `${description}. This can allow attackers to inject malicious scripts.`,
-          filePath: context.filePath,
-          line: i + 1,
-          column: match.index,
-          codeSnippet: codeContext.issueLine,
-          recommendation: 'Sanitize user input before rendering. Use textContent instead of innerHTML, or use a sanitization library like DOMPurify.',
-          owaspCategory: OWASPCategory.A03_INJECTION,
-          cweId: 'CWE-79',
-          cvssScore: 7.5,
-          metadata: {
-            detectedPattern: description
-          }
-        });
-      }
-    }
-  }
-
-  return findings;
+  return await scanXSS(context);
 }
 
 /**

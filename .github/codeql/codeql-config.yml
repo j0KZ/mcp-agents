@@ -1,0 +1,40 @@
+name: "CodeQL Config"
+
+# Paths to exclude from scanning
+paths-ignore:
+  - '**/node_modules/**'
+  - '**/dist/**'
+  - '**/build/**'
+  - '**/*.test.ts'
+  - '**/*.test.js'
+  - '**/*.spec.ts'
+  - '**/*.spec.js'
+  - '**/patterns/**/*.json'
+  - '**/*.d.ts'
+  - '**/*.map'
+
+# Only scan source files
+paths:
+  - 'packages/*/src/**/*.ts'
+  - '!packages/*/src/**/*.test.ts'
+  - '!packages/*/src/patterns/**'
+
+# Disable specific queries that cause false positives in security tools
+disable-default-queries: false
+
+queries:
+  - uses: security-and-quality
+
+# Suppress false positives for pattern definition files
+query-filters:
+  - exclude:
+      id:
+        - js/hardcoded-credentials
+        - js/clear-text-logging
+        - js/weak-cryptographic-algorithm
+      paths:
+        - '**/patterns/**'
+        - '**/scanner.ts'
+        - '**/xss-scanner.ts'
+        - '**/sql-injection-scanner.ts'
+        - '**/secret-scanner.ts'

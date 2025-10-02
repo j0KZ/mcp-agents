@@ -24,6 +24,10 @@ export interface ReviewResult {
     suggestions: string[];
     overallScore: number;
     timestamp: string;
+    performance?: {
+        duration: number;
+        memoryUsed: number;
+    };
 }
 export interface ReviewConfig {
     severity?: 'strict' | 'moderate' | 'lenient';

@@ -1,5 +1,9 @@
 import { CodeIssue, ReviewResult } from './types.js';
 export declare class CodeAnalyzer {
+    private fsManager;
+    private analysisCache;
+    private performanceMonitor;
+    constructor();
     /**
      * Analyze code file and return review results
      */
@@ -20,6 +24,42 @@ export declare class CodeAnalyzer {
      * Calculate overall code quality score
      */
     private calculateScore;
+    /**
+     * Analyze multiple files in batch with parallel processing
+     */
+    analyzeFiles(filePaths: string[], concurrency?: number): Promise<Map<string, ReviewResult>>;
+    /**
+     * Get cache statistics
+     */
+    getCacheStats(): {
+        fileCache: {
+            fileCache: {
+                hits: number;
+                misses: number;
+                hitRate: number;
+                size: number;
+                maxSize: number;
+            };
+            statsCache: {
+                size: number;
+            };
+        };
+        analysisCache: {
+            hits: number;
+            misses: number;
+            hitRate: number;
+            size: number;
+            maxSize: number;
+        };
+    };
+    /**
+     * Clear all caches
+     */
+    clearCache(): void;
+    /**
+     * Invalidate cache for specific file
+     */
+    invalidateCache(filePath: string): void;
     /**
      * Apply automatic fixes to code
      */
