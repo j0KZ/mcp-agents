@@ -1,0 +1,38 @@
+# Source files
+src/
+tsconfig.json
+*.test.ts
+*.spec.ts
+
+# Development
+.github/
+.vscode/
+.idea/
+archived/
+wiki/
+docs/
+
+# Scripts
+scripts/
+*.sh
+*.ps1
+*.cjs
+
+# Config files
+.claude/
+.gitignore
+.npmignore
+
+# Documentation (except README)
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+MODULARITY_IMPLEMENTATION.md
+EDITOR_COMPATIBILITY.md
+
+# Config
+mcp_config_all.json
+
+# Build
+*.tsbuildinfo
+node_modules/

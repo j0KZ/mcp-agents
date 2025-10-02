@@ -664,8 +664,8 @@ This shared package is used by:
 
 ## 📞 Support
 
-- [GitHub Issues](https://github.com/j0kz/mcp-agents/issues)
-- [Documentation](https://github.com/j0kz/mcp-agents#readme)
+- [GitHub Issues](https://github.com/j0KZ/mcp-agents/issues)
+- [Documentation](https://github.com/j0KZ/mcp-agents#readme)
 
 ---
 

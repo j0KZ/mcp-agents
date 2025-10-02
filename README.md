@@ -14,22 +14,22 @@
 
 **Mac/Linux:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/j0kz/mcp-agents/main/install-all.sh | bash
+curl -fsSL https://raw.githubusercontent.com/j0KZ/mcp-agents/main/install-all.sh | bash
 ```
 
 **Windows (PowerShell):**
 ```powershell
-irm https://raw.githubusercontent.com/j0kz/mcp-agents/main/install-all.ps1 | iex
+irm https://raw.githubusercontent.com/j0KZ/mcp-agents/main/install-all.ps1 | iex
 ```
 
 ### Cursor / Windsurf
 
 ```bash
 # Cursor
-curl -o ~/.cursor/mcp_config.json https://raw.githubusercontent.com/j0kz/mcp-agents/main/mcp_config_all.json
+curl -o ~/.cursor/mcp_config.json https://raw.githubusercontent.com/j0KZ/mcp-agents/main/mcp_config_all.json
 
 # Windsurf
-curl -o ~/.windsurf/mcp_config.json https://raw.githubusercontent.com/j0kz/mcp-agents/main/mcp_config_all.json
+curl -o ~/.windsurf/mcp_config.json https://raw.githubusercontent.com/j0KZ/mcp-agents/main/mcp_config_all.json
 ```
 
 **Then restart your editor!**
@@ -282,7 +282,7 @@ Visit our [**Wiki**](https://github.com/j0KZ/mcp-agents/wiki) for complete docum
 3. Check MCP connection status
 
 ### Still stuck?
-- [Open an issue](https://github.com/j0kz/mcp-agents/issues)
+- [Open an issue](https://github.com/j0KZ/mcp-agents/issues)
 - Check individual package READMEs for detailed docs
 
 ---
@@ -322,7 +322,7 @@ Contributions welcome! Please:
 
 ## 📄 License
 
-MIT © [j0kz](https://github.com/j0kz)
+MIT © [j0KZ](https://github.com/j0KZ)
 
 Each package is independently licensed under MIT.
 
@@ -331,8 +331,8 @@ Each package is independently licensed under MIT.
 ## 🔗 Links
 
 - **npm:** [@j0kz](https://www.npmjs.com/~j0kz)
-- **GitHub:** [j0kz/mcp-agents](https://github.com/j0kz/mcp-agents)
-- **Issues:** [Report a bug](https://github.com/j0kz/mcp-agents/issues)
+- **GitHub:** [j0KZ/mcp-agents](https://github.com/j0KZ/mcp-agents)
+- **Issues:** [Report a bug](https://github.com/j0KZ/mcp-agents/issues)
 - **MCP Protocol:** [modelcontextprotocol.io](https://modelcontextprotocol.io/)
 
 ---

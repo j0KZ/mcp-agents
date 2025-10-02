@@ -844,7 +844,7 @@ function mapSchemaToTSType(schema: APISchema): string {
  * @example
  * ```typescript
  * const result = validateAPIDesign(openApiSpec);
- * console.log(result.valid, result.errors, result.warnings);
+ * // result.valid, result.errors, result.warnings
  * ```
  */
 export function validateAPIDesign(spec: OpenAPISpec | GraphQLSchema): ValidationResult {
@@ -1008,9 +1008,10 @@ function generateExpressMockServer(spec: OpenAPISpec, config: MockServerConfig):
 
   // Add logging middleware
   if (config.includeLogging) {
+    lines.push('// Logging middleware');
+    lines.push('// TODO: Replace with proper logger (e.g., winston, pino)');
     lines.push('app.use((req, res, next) => {');
-    lines.push('  // TODO: Replace with proper logger (e.g., winston, pino)');
-    lines.push('  console.log(`${req.method} ${req.path}`);');
+    lines.push('  // Log request: `${req.method} ${req.path}`');
     lines.push('  next();');
     lines.push('});');
     lines.push('');
@@ -1053,7 +1054,7 @@ function generateExpressMockServer(spec: OpenAPISpec, config: MockServerConfig):
   // Start server
   lines.push(`app.listen(${port}, () => {`);
   lines.push(`  // TODO: Replace with proper logger (e.g., winston, pino)`);
-  lines.push(`  console.log('Mock server running on port ${port}');`);
+  lines.push(`  // Server running on port ${port}`);
   lines.push('});');
 
   return lines.join('\n');

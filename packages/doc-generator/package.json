@@ -45,13 +45,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/j0kz/mcp-agents.git",
+    "url": "https://github.com/j0KZ/mcp-agents.git",
     "directory": "packages/doc-generator"
   },
   "bugs": {
-    "url": "https://github.com/j0kz/mcp-agents/issues"
+    "url": "https://github.com/j0KZ/mcp-agents/issues"
   },
-  "homepage": "https://github.com/j0kz/mcp-agents/tree/main/packages/doc-generator#readme",
+  "homepage": "https://github.com/j0KZ/mcp-agents/tree/main/packages/doc-generator#readme",
   "publishConfig": {
     "access": "public"
   }

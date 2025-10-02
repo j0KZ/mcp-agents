@@ -90,7 +90,7 @@ npx @j0kz/doc-generator-mcp       # Auto-generate docs
 npx @j0kz/security-scanner-mcp    # Security scanning
 ```
 
-**👉 [View complete collection on GitHub](https://github.com/j0kz/mcp-agents)**
+**👉 [View complete collection on GitHub](https://github.com/j0KZ/mcp-agents)**
 
 ## 🎯 How It Works
 
@@ -125,13 +125,13 @@ Any MCP-compatible editor works!
 - Try reinstalling: Remove and re-add the MCP
 
 **Still stuck?**
-- [Open an issue](https://github.com/j0kz/mcp-agents/issues)
-- [Check full documentation](https://github.com/j0kz/mcp-agents)
+- [Open an issue](https://github.com/j0KZ/mcp-agents/issues)
+- [Check full documentation](https://github.com/j0KZ/mcp-agents)
 
 ## 📄 License
 
-MIT © [j0kz](https://github.com/j0kz)
+MIT © [j0KZ](https://github.com/j0KZ)
 
 ---
 
-**Explore more tools:** [github.com/j0kz/mcp-agents](https://github.com/j0kz/mcp-agents) | **npm:** [@j0kz](https://www.npmjs.com/~j0kz)
+**Explore more tools:** [github.com/j0KZ/mcp-agents](https://github.com/j0KZ/mcp-agents) | **npm:** [@j0kz](https://www.npmjs.com/~j0kz)

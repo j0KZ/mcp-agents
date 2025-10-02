@@ -8,6 +8,15 @@ import { CacheEntry } from '../types/index.js';
 import { generateHash } from '../utils/index.js';
 import crypto from 'crypto';
 
+// Cache configuration constants
+const DEFAULT_MAX_CACHE_SIZE = 1000;
+const DEFAULT_TTL_MS = 3600000; // 1 hour
+const DEFAULT_FILE_CACHE_SIZE = 500;
+const DEFAULT_ANALYSIS_CACHE_SIZE = 200;
+const DEFAULT_ANALYSIS_TTL_MS = 1800000; // 30 minutes
+const PERCENTAGE_MULTIPLIER = 100;
+const CONTEXT_LINES_BEFORE_AFTER = 2;
+
 /**
  * Generic cache interface
  */
@@ -29,9 +38,12 @@ export class MemoryCache<T = any> implements ICache<T> {
   private misses: number = 0;
 
   constructor(options: { max?: number; ttl?: number } = {}) {
+    const maxSize = options.max ?? DEFAULT_MAX_CACHE_SIZE;
+    const ttl = options.ttl ?? DEFAULT_TTL_MS;
+
     this.cache = new LRUCache<string, CacheEntry<T>>({
-      max: options.max || 1000,
-      ttl: options.ttl || 3600000, // 1 hour default
+      max: maxSize,
+      ttl: ttl,
       updateAgeOnGet: true,
     });
   }
@@ -60,7 +72,7 @@ export class MemoryCache<T = any> implements ICache<T> {
       key,
       value,
       timestamp: Date.now(),
-      ttl: ttl || 3600000,
+      ttl: ttl || DEFAULT_TTL_MS,
       hits: 0,
     };
 
@@ -111,7 +123,7 @@ export class MemoryCache<T = any> implements ICache<T> {
     return {
       hits: this.hits,
       misses: this.misses,
-      hitRate: total > 0 ? (this.hits / total) * 100 : 0,
+      hitRate: total > 0 ? (this.hits / total) * PERCENTAGE_MULTIPLIER : 0,
       size: this.cache.size,
       maxSize: this.cache.max,
     };
@@ -138,7 +150,7 @@ export class MemoryCache<T = any> implements ICache<T> {
 export class FileCache {
   private cache: MemoryCache<{ content: string; hash: string }>;
 
-  constructor(maxSize: number = 500) {
+  constructor(maxSize: number = DEFAULT_FILE_CACHE_SIZE) {
     this.cache = new MemoryCache({ max: maxSize });
   }
 
@@ -204,8 +216,8 @@ export class FileCache {
 export class AnalysisCache {
   private cache: MemoryCache<any>;
 
-  constructor(maxSize: number = 200, ttl: number = 1800000) {
-    this.cache = new MemoryCache({ max: maxSize, ttl }); // 30 min default
+  constructor(maxSize: number = DEFAULT_ANALYSIS_CACHE_SIZE, ttl: number = DEFAULT_ANALYSIS_TTL_MS) {
+    this.cache = new MemoryCache({ max: maxSize, ttl });
   }
 
   /**
@@ -340,9 +352,12 @@ export function cached(options: { ttl?: number; keyGenerator?: (...args: any[]) 
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {
-      const key = options.keyGenerator
-        ? options.keyGenerator(...args)
-        : crypto.createHash('md5').update(JSON.stringify(args)).digest('hex');
+      let key: string;
+      if (options.keyGenerator) {
+        key = options.keyGenerator(...args);
+      } else {
+        key = crypto.createHash('sha256').update(JSON.stringify(args)).digest('hex');
+      }
 
       const cached = cache.get(key);
       if (cached !== undefined) {

@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/architecture-analyzer-mcp",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Architecture Analyzer MCP - Detect circular dependencies, layer violations, and generate dependency graphs. Works with Claude Code, Cursor, Windsurf, Roo Code, and any MCP-compatible editor.",
   "type": "module",
   "main": "./dist/index.js",
@@ -45,13 +45,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/j0kz/mcp-agents.git",
+    "url": "https://github.com/j0KZ/mcp-agents.git",
     "directory": "packages/architecture-analyzer"
   },
   "bugs": {
-    "url": "https://github.com/j0kz/mcp-agents/issues"
+    "url": "https://github.com/j0KZ/mcp-agents/issues"
   },
-  "homepage": "https://github.com/j0kz/mcp-agents/tree/main/packages/architecture-analyzer#readme",
+  "homepage": "https://github.com/j0KZ/mcp-agents/tree/main/packages/architecture-analyzer#readme",
   "publishConfig": {
     "access": "public"
   }

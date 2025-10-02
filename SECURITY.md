@@ -17,7 +17,10 @@ Please do not disclose security vulnerabilities through public GitHub issues, di
 
 ### 2. Report Privately
 
-Email security reports to: **[Your Email Here]**
+**Open a private security advisory** on GitHub:
+https://github.com/j0KZ/mcp-agents/security/advisories/new
+
+Or email: security@example.com (GitHub issues preferred)
 
 Include:
 - Description of the vulnerability

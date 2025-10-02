@@ -574,18 +574,26 @@ export async function generateChangelog(
     const commitLimit = config.commitLimit || 100;
     const gitLogFormat = '--pretty=format:%H|%h|%s|%b|%an|%ai';
 
-    let gitLogCmd = `git -C "${projectPath}" log ${gitLogFormat} -n ${commitLimit}`;
+    // Sanitize tag inputs to prevent command injection
+    const sanitizeGitRef = (ref: string): string => {
+      // Only allow alphanumeric, dots, hyphens, underscores, and slashes (valid git ref characters)
+      if (!/^[a-zA-Z0-9._\/-]+$/.test(ref)) {
+        throw new DocError('Invalid git reference', 'INVALID_GIT_REF', { ref });
+      }
+      return ref;
+    };
+
+    const gitArgs = ['-C', projectPath, 'log', gitLogFormat, '-n', commitLimit.toString()];
 
     if (config.fromTag) {
-      gitLogCmd += ` ${config.fromTag}..`;
-      if (config.toTag) {
-        gitLogCmd += config.toTag;
-      }
+      const fromTag = sanitizeGitRef(config.fromTag);
+      const toTag = config.toTag ? sanitizeGitRef(config.toTag) : '';
+      gitArgs.push(`${fromTag}..${toTag}`);
     }
 
     let gitOutput: string;
     try {
-      gitOutput = execSync(gitLogCmd, { encoding: 'utf-8' });
+      gitOutput = execSync(`git ${gitArgs.join(' ')}`, { encoding: 'utf-8' });
     } catch (error) {
       throw new DocError('Git command failed', 'GIT_ERROR', error);
     }

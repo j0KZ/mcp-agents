@@ -1,0 +1,78 @@
+/**
+ * Security Scanner Utility Functions
+ */
+
+import crypto from 'crypto';
+import { VulnerabilityType, CodeContext } from './types.js';
+
+const CONTEXT_LINES = 2;
+const MAX_SNIPPET_LENGTH = 200;
+
+/**
+ * Generate unique finding ID
+ */
+export function generateFindingId(filePath: string, line: number, type: VulnerabilityType): string {
+  const hash = crypto
+    .createHash('sha256')
+    .update(`${filePath}:${line}:${type}`)
+    .digest('base64')
+    .substring(0, 16)
+    .replace(/[+/=]/g, '');
+  return hash;
+}
+
+/**
+ * Extract code context around issue
+ */
+export function extractCodeContext(content: string, lineNumber: number): CodeContext {
+  const lines = content.split('\n');
+  const index = lineNumber - 1;
+
+  const beforeLines = lines.slice(Math.max(0, index - CONTEXT_LINES), index);
+  const issueLine = lines[index] || '';
+  const afterLines = lines.slice(index + 1, Math.min(lines.length, index + CONTEXT_LINES + 1));
+
+  return {
+    beforeLines: beforeLines,
+    issueLine: issueLine.substring(0, MAX_SNIPPET_LENGTH),
+    afterLines: afterLines,
+    lineNumber: lineNumber
+  };
+}
+
+/**
+ * Calculate Shannon entropy for string
+ */
+export function calculateEntropy(str: string): number {
+  if (!str || str.length === 0) return 0;
+
+  const frequencies: Record<string, number> = {};
+  for (const char of str) {
+    frequencies[char] = (frequencies[char] || 0) + 1;
+  }
+
+  let entropy = 0;
+  const len = str.length;
+
+  for (const freq of Object.values(frequencies)) {
+    const probability = freq / len;
+    entropy -= probability * Math.log2(probability);
+  }
+
+  return entropy;
+}
+
+/**
+ * Check if file should be scanned
+ */
+export function shouldScanFile(filePath: string, excludePatterns: string[]): boolean {
+  const normalizedPath = filePath.replace(/\\/g, '/');
+
+  for (const pattern of excludePatterns) {
+    if (normalizedPath.includes(pattern)) {
+      return false;
+    }
+  }
+
+  return true;
+}
