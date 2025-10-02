@@ -5,6 +5,8 @@
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
+[![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
+[![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
 
 ## 🚀 Install All 8 Tools (One Command)
 
@@ -236,12 +238,43 @@ Check your editor's MCP settings panel
 
 ---
 
+## 📚 Documentation
+
+### Comprehensive Wiki
+
+Visit our [**Wiki**](https://github.com/j0KZ/mcp-agents/wiki) for complete documentation:
+
+- **[Quick Start Guide](https://github.com/j0KZ/mcp-agents/wiki/Quick-Start)** - Get started in 5 minutes
+- **[Configuration](https://github.com/j0KZ/mcp-agents/wiki/Configuration)** - Editor setup for Claude Code, Cursor, Windsurf, Roo Code
+- **[Integration Patterns](https://github.com/j0KZ/mcp-agents/wiki/Integration-Patterns)** - Chain MCPs together for powerful workflows
+- **[Troubleshooting](https://github.com/j0KZ/mcp-agents/wiki/Troubleshooting)** - Common issues and solutions
+
+### Tool Documentation
+
+- [Smart Reviewer](https://github.com/j0KZ/mcp-agents/wiki/Smart-Reviewer) - Code review and quality analysis
+- [Architecture Analyzer](https://github.com/j0KZ/mcp-agents/wiki/Architecture-Analyzer) - Dependency and architecture analysis
+- [Test Generator](https://www.npmjs.com/package/@j0kz/test-generator-mcp) - Automated test generation
+- [Security Scanner](https://www.npmjs.com/package/@j0kz/security-scanner-mcp) - Security vulnerability scanning
+- [API Designer](https://www.npmjs.com/package/@j0kz/api-designer-mcp) - REST and GraphQL API design
+- [DB Schema](https://www.npmjs.com/package/@j0kz/db-schema-mcp) - Database schema design
+- [Doc Generator](https://www.npmjs.com/package/@j0kz/doc-generator-mcp) - Auto-generate documentation
+- [Refactor Assistant](https://www.npmjs.com/package/@j0kz/refactor-assistant-mcp) - Code refactoring
+
+### Additional Resources
+
+- **[Modularity Implementation](MODULARITY_IMPLEMENTATION.md)** - Technical details on shared utilities
+- **[Editor Compatibility](EDITOR_COMPATIBILITY.md)** - Full compatibility matrix
+- **[Security Policy](SECURITY.md)** - Security guidelines and reporting
+
+---
+
 ## ❓ Troubleshooting
 
 ### MCPs not showing up?
 1. **Restart your editor** after installation
 2. **Check Node.js** is installed: `node --version`
 3. **Verify installation**: `claude mcp list` (Claude Code)
+4. **See [Troubleshooting Guide](https://github.com/j0KZ/mcp-agents/wiki/Troubleshooting)** for detailed solutions
 
 ### Commands not working?
 1. Make sure you restarted the editor
