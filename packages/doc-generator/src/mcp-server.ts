@@ -28,6 +28,7 @@ import {
   DocError,
 } from './types.js';
 import * as fs from 'fs';
+import { validateFilePath, validateDirectoryPath } from '@mcp-tools/shared';
 
 /**
  * MCP Server instance
@@ -319,7 +320,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           config?: JSDocConfig;
         };
 
-        const result = await generateJSDoc(filePath, config);
+        // Validate file path to prevent path traversal
+        const validatedPath = validateFilePath(filePath);
+        const result = await generateJSDoc(validatedPath, config);
 
         return {
           content: [
@@ -337,7 +340,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           config?: ReadmeConfig;
         };
 
-        const result = await generateReadme(projectPath, config);
+        // Validate directory path to prevent path traversal
+        const validatedPath = validateDirectoryPath(projectPath);
+        const result = await generateReadme(validatedPath, config);
 
         return {
           content: [
@@ -355,7 +360,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           config?: ApiDocsConfig;
         };
 
-        const result = await generateApiDocs(projectPath, config);
+        // Validate directory path to prevent path traversal
+        const validatedPath = validateDirectoryPath(projectPath);
+        const result = await generateApiDocs(validatedPath, config);
 
         return {
           content: [
@@ -373,7 +380,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           config?: ChangelogConfig;
         };
 
-        const result = await generateChangelog(projectPath, config);
+        // Validate directory path to prevent path traversal
+        const validatedPath = validateDirectoryPath(projectPath);
+        const result = await generateChangelog(validatedPath, config);
 
         return {
           content: [
@@ -398,10 +407,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           };
         };
 
+        // Validate directory path to prevent path traversal
+        const validatedProjectPath = validateDirectoryPath(projectPath);
+
+        // Validate source files if provided (currently unused but validates input)
+        if (sourceFiles) {
+          sourceFiles.forEach(f => validateFilePath(f));
+        }
+
         const results: Record<string, any> = {};
 
         // Generate README
-        const readmeResult = await generateReadme(projectPath, {
+        const readmeResult = await generateReadme(validatedProjectPath, {
           projectName: config?.projectName,
           version: config?.version,
           author: config?.author,
@@ -410,12 +427,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         results.readme = readmeResult;
 
         // Generate API docs
-        const apiDocsResult = await generateApiDocs(projectPath);
+        const apiDocsResult = await generateApiDocs(validatedProjectPath);
         results.apiDocs = apiDocsResult;
 
         // Generate changelog
         try {
-          const changelogResult = await generateChangelog(projectPath);
+          const changelogResult = await generateChangelog(validatedProjectPath);
           results.changelog = changelogResult;
         } catch (error) {
           results.changelog = {
