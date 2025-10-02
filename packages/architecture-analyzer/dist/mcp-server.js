@@ -3,6 +3,7 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { CallToolRequestSchema, ListToolsRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
 import { ArchitectureAnalyzer } from './analyzer.js';
+import { validateDirectoryPath, validatePath } from '@mcp-tools/shared';
 class ArchitectureAnalyzerServer {
     server;
     analyzer;
@@ -104,7 +105,8 @@ class ArchitectureAnalyzerServer {
                 switch (name) {
                     case 'analyze_architecture': {
                         const { projectPath, config } = args;
-                        const result = await this.analyzer.analyzeArchitecture(projectPath, config);
+                        const validatedPath = validateDirectoryPath(projectPath);
+                        const result = await this.analyzer.analyzeArchitecture(validatedPath, config);
                         return {
                             content: [
                                 {
@@ -126,7 +128,9 @@ class ArchitectureAnalyzerServer {
                     }
                     case 'get_module_info': {
                         const { projectPath, modulePath } = args;
-                        const result = await this.analyzer.analyzeArchitecture(projectPath);
+                        const validatedProjectPath = validateDirectoryPath(projectPath);
+                        const validatedModulePath = validatePath(modulePath);
+                        const result = await this.analyzer.analyzeArchitecture(validatedProjectPath);
                         const module = result.modules.find(m => m.path === modulePath);
                         if (!module) {
                             throw new Error(`Module not found: ${modulePath}`);
@@ -153,7 +157,8 @@ class ArchitectureAnalyzerServer {
                     }
                     case 'find_circular_deps': {
                         const { projectPath } = args;
-                        const result = await this.analyzer.analyzeArchitecture(projectPath, {
+                        const validatedPath = validateDirectoryPath(projectPath);
+                        const result = await this.analyzer.analyzeArchitecture(validatedPath, {
                             detectCircular: true,
                             generateGraph: false,
                         });

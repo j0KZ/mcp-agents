@@ -8,6 +8,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { ArchitectureAnalyzer } from './analyzer.js';
 import { AnalysisConfig } from './types.js';
+import { validateDirectoryPath, validatePath } from '@mcp-tools/shared';
 
 class ArchitectureAnalyzerServer {
   private server: Server;
@@ -119,7 +120,8 @@ class ArchitectureAnalyzerServer {
         switch (name) {
           case 'analyze_architecture': {
             const { projectPath, config } = args as { projectPath: string; config?: AnalysisConfig };
-            const result = await this.analyzer.analyzeArchitecture(projectPath, config);
+            const validatedPath = validateDirectoryPath(projectPath);
+            const result = await this.analyzer.analyzeArchitecture(validatedPath, config);
 
             return {
               content: [
@@ -143,7 +145,9 @@ class ArchitectureAnalyzerServer {
 
           case 'get_module_info': {
             const { projectPath, modulePath } = args as { projectPath: string; modulePath: string };
-            const result = await this.analyzer.analyzeArchitecture(projectPath);
+            const validatedProjectPath = validateDirectoryPath(projectPath);
+            const validatedModulePath = validatePath(modulePath);
+            const result = await this.analyzer.analyzeArchitecture(validatedProjectPath);
             const module = result.modules.find(m => m.path === modulePath);
 
             if (!module) {
@@ -174,7 +178,8 @@ class ArchitectureAnalyzerServer {
 
           case 'find_circular_deps': {
             const { projectPath } = args as { projectPath: string };
-            const result = await this.analyzer.analyzeArchitecture(projectPath, {
+            const validatedPath = validateDirectoryPath(projectPath);
+            const result = await this.analyzer.analyzeArchitecture(validatedPath, {
               detectCircular: true,
               generateGraph: false,
             });

@@ -24,6 +24,7 @@ import {
 } from './index.js';
 import * as fs from 'fs';
 import * as path from 'path';
+import { validateFilePath, validateDirectoryPath, validatePath } from '@mcp-tools/shared';
 
 /**
  * Generate security report in markdown format
@@ -327,7 +328,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     switch (name) {
       case 'scan_file': {
         const { filePath, config } = args as { filePath: string; config?: ScanConfig };
-        const findings = await scanFile(filePath, config);
+        const validatedPath = validateFilePath(filePath);
+        const findings = await scanFile(validatedPath, config);
 
         return {
           content: [
@@ -346,7 +348,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'scan_project': {
         const { projectPath, config } = args as { projectPath: string; config?: ScanConfig };
-        const results = await scanProject(projectPath, config);
+        const validatedPath = validateDirectoryPath(projectPath);
+        const results = await scanProject(validatedPath, config);
 
         return {
           content: [
@@ -364,7 +367,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case 'scan_secrets': {
         const { targetPath, customPatterns } = args as { targetPath: string; customPatterns?: any[] };
 
-        const stats = fs.statSync(targetPath);
+        const validatedPath = validatePath(targetPath);
+        const stats = fs.statSync(validatedPath);
         let findings: SecurityFinding[] = [];
 
         if (stats.isFile()) {
@@ -375,7 +379,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             scanOWASP: false,
             scanDependencies: false
           };
-          findings = await scanFile(targetPath, config);
+          findings = await scanFile(validatedPath, config);
         } else {
           const config: ScanConfig = {
             scanSecrets: true,
@@ -385,7 +389,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             scanDependencies: false,
             customPatterns
           };
-          const results = await scanProject(targetPath, config);
+          const results = await scanProject(validatedPath, config);
           findings = results.findings;
         }
 
@@ -409,6 +413,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           vulnerabilityTypes: string[]
         };
 
+        const validatedPath = validatePath(targetPath);
+
         const config: ScanConfig = {
           scanSecrets: false,
           scanSQLInjection: vulnerabilityTypes.includes('sql_injection'),
@@ -419,13 +425,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           scanDependencies: false
         };
 
-        const stats = fs.statSync(targetPath);
+        const stats = fs.statSync(validatedPath);
         let findings: SecurityFinding[] = [];
 
         if (stats.isFile()) {
-          findings = await scanFile(targetPath, config);
+          findings = await scanFile(validatedPath, config);
         } else {
-          const results = await scanProject(targetPath, config);
+          const results = await scanProject(validatedPath, config);
           findings = results.findings;
         }
 
@@ -454,13 +460,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           config?: ScanConfig
         };
 
-        const results = await scanProject(projectPath, config);
+        const validatedProjectPath = validateDirectoryPath(projectPath);
+        const results = await scanProject(validatedProjectPath, config);
         const report = generateSecurityReport(results);
         const markdown = formatReportAsMarkdown(report);
 
         // Save to file if output path provided
         if (outputPath) {
-          fs.writeFileSync(outputPath, markdown, 'utf-8');
+          const validatedOutputPath = validatePath(outputPath);
+          fs.writeFileSync(validatedOutputPath, markdown, 'utf-8');
         }
 
         return {
