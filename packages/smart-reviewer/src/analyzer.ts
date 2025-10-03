@@ -7,20 +7,64 @@ import {
   REGEX,
   QUALITY_THRESHOLDS,
 } from '@mcp-tools/shared';
+import { DEFAULTS } from './constants.js';
 
+/**
+ * CodeAnalyzer performs static code analysis and quality checks
+ *
+ * Features:
+ * - File-level caching for performance optimization
+ * - Analysis result caching with 30-minute TTL
+ * - Performance monitoring and metrics
+ * - Issue detection with auto-fix suggestions
+ *
+ * @example
+ * ```typescript
+ * const analyzer = new CodeAnalyzer();
+ * const result = await analyzer.analyzeFile('src/index.ts');
+ * console.log(result.overallScore); // 85
+ * ```
+ */
 export class CodeAnalyzer {
   private fsManager: FileSystemManager;
   private analysisCache: AnalysisCache;
   private performanceMonitor: PerformanceMonitor;
 
+  /**
+   * Creates a new CodeAnalyzer instance
+   *
+   * Initializes caching and monitoring systems:
+   * - File cache: 500 files
+   * - Analysis cache: 200 results with 30-minute TTL
+   */
   constructor() {
-    this.fsManager = new FileSystemManager(500); // Cache up to 500 files
-    this.analysisCache = new AnalysisCache(200, 1800000); // 200 analyses, 30min TTL
+    this.fsManager = new FileSystemManager(DEFAULTS.FILE_CACHE_SIZE);
+    this.analysisCache = new AnalysisCache(DEFAULTS.ANALYSIS_CACHE_SIZE, DEFAULTS.CACHE_TTL_MS);
     this.performanceMonitor = new PerformanceMonitor();
   }
 
   /**
-   * Analyze code file and return review results
+   * Analyzes a code file and returns comprehensive review results
+   *
+   * This method performs multiple checks:
+   * - Code quality issues (var usage, console.log, etc.)
+   * - Complexity metrics (cyclomatic complexity, LOC)
+   * - Best practice suggestions
+   * - Performance analysis
+   *
+   * Results are cached based on file hash to improve performance
+   * on subsequent analyses of unchanged files.
+   *
+   * @param filePath - Absolute path to the file to analyze
+   * @returns Promise resolving to complete review results
+   * @throws Error if file cannot be read or is too large
+   *
+   * @example
+   * ```typescript
+   * const result = await analyzer.analyzeFile('/path/to/file.ts');
+   * console.log(`Found ${result.issues.length} issues`);
+   * console.log(`Overall score: ${result.overallScore}/100`);
+   * ```
    */
   async analyzeFile(filePath: string): Promise<ReviewResult> {
     this.performanceMonitor.start();
@@ -62,7 +106,20 @@ export class CodeAnalyzer {
   }
 
   /**
-   * Detect code issues and anti-patterns
+   * Detects code issues and anti-patterns in source code
+   *
+   * Checks performed:
+   * - 'var' usage (suggests const/let)
+   * - console.log statements (production warning)
+   * - TODO/FIXME comments
+   * - Magic numbers
+   * - Long functions (>50 lines)
+   * - Deep nesting (>4 levels)
+   *
+   * @param content - Source code content to analyze
+   * @param filePath - File path for context in error messages
+   * @returns Array of detected issues with severity and fix suggestions
+   * @private
    */
   private async detectIssues(content: string, filePath: string): Promise<CodeIssue[]> {
     const issues: CodeIssue[] = [];
@@ -342,7 +399,8 @@ export class CodeAnalyzer {
       {
         concurrency,
         onProgress: (completed, total) => {
-          console.log(`Progress: ${completed}/${total} files analyzed`);
+          // Progress callback - can be used by consumers for logging
+          // console.log(`Progress: ${completed}/${total} files analyzed`);
         },
       }
     );

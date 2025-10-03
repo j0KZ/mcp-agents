@@ -54,6 +54,9 @@ export const DEFAULTS = {
   AUTO_FIX: false,
   INCLUDE_METRICS: true,
   MAX_ISSUES: 100,
+  FILE_CACHE_SIZE: 500,
+  ANALYSIS_CACHE_SIZE: 200,
+  CACHE_TTL_MS: 1800000, // 30 minutes
 } as const;
 
 // Complexity Calculation Constants

@@ -272,11 +272,11 @@ export class MCPWorkflow {
     for (const step of this.steps) {
       // Check condition
       if (step.condition && !step.condition(results)) {
-        console.log(`Skipping step "${step.name}" - condition not met`);
+        // Step skipped - condition not met
         continue;
       }
 
-      console.log(`Executing step: ${step.name} (${step.tool}.${step.action})`);
+      // Executing workflow step
 
       const tool = integration.getTool(step.tool);
       if (!tool) {
