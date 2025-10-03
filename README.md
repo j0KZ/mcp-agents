@@ -39,9 +39,14 @@
 - Performance benchmarking infrastructure
 - Structured error codes
 
-## 🚀 Install All 8 Tools (One Command)
+## 🚀 Installation
 
-### Claude Code
+Choose your AI-powered code editor below and follow the simple installation steps:
+
+<details>
+<summary><b>🎨 Claude Code (Anthropic)</b> - Click to expand</summary>
+
+### Automatic Installation (Recommended)
 
 **Mac/Linux:**
 ```bash
@@ -53,17 +58,363 @@ curl -fsSL https://raw.githubusercontent.com/j0KZ/mcp-agents/main/install-all.sh
 irm https://raw.githubusercontent.com/j0KZ/mcp-agents/main/install-all.ps1 | iex
 ```
 
-### Cursor / Windsurf
+### Manual Installation
 
 ```bash
-# Cursor
-curl -o ~/.cursor/mcp_config.json https://raw.githubusercontent.com/j0KZ/mcp-agents/main/mcp_config_all.json
+# Install all 8 tools individually
+claude mcp add smart-reviewer "npx @j0kz/smart-reviewer-mcp" --scope user
+claude mcp add test-generator "npx @j0kz/test-generator-mcp" --scope user
+claude mcp add architecture-analyzer "npx @j0kz/architecture-analyzer-mcp" --scope user
+claude mcp add doc-generator "npx @j0kz/doc-generator-mcp" --scope user
+claude mcp add security-scanner "npx @j0kz/security-scanner-mcp" --scope user
+claude mcp add refactor-assistant "npx @j0kz/refactor-assistant-mcp" --scope user
+claude mcp add api-designer "npx @j0kz/api-designer-mcp" --scope user
+claude mcp add db-schema "npx @j0kz/db-schema-mcp" --scope user
+```
 
-# Windsurf
+**✅ Verify Installation:**
+```bash
+claude mcp list
+```
+
+You should see all 8 tools marked as "✓ Connected"
+
+</details>
+
+<details>
+<summary><b>⚡ Cursor (Anysphere)</b> - Click to expand</summary>
+
+### Option 1: Automatic Setup
+
+**Mac/Linux:**
+```bash
+curl -o ~/.cursor/mcp_config.json https://raw.githubusercontent.com/j0KZ/mcp-agents/main/mcp_config_all.json
+```
+
+**Windows (PowerShell):**
+```powershell
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/j0KZ/mcp-agents/main/mcp_config_all.json" -OutFile "$env:APPDATA\Cursor\User\mcp_config.json"
+```
+
+### Option 2: Manual Setup
+
+1. Open Cursor Settings (Ctrl/Cmd + ,)
+2. Search for "MCP" or "Model Context Protocol"
+3. Click "Edit in settings.json"
+4. Add this configuration:
+
+```json
+{
+  "mcpServers": {
+    "smart-reviewer": {
+      "command": "npx",
+      "args": ["@j0kz/smart-reviewer-mcp"]
+    },
+    "test-generator": {
+      "command": "npx",
+      "args": ["@j0kz/test-generator-mcp"]
+    },
+    "architecture-analyzer": {
+      "command": "npx",
+      "args": ["@j0kz/architecture-analyzer-mcp"]
+    },
+    "doc-generator": {
+      "command": "npx",
+      "args": ["@j0kz/doc-generator-mcp"]
+    },
+    "security-scanner": {
+      "command": "npx",
+      "args": ["@j0kz/security-scanner-mcp"]
+    },
+    "refactor-assistant": {
+      "command": "npx",
+      "args": ["@j0kz/refactor-assistant-mcp"]
+    },
+    "api-designer": {
+      "command": "npx",
+      "args": ["@j0kz/api-designer-mcp"]
+    },
+    "db-schema": {
+      "command": "npx",
+      "args": ["@j0kz/db-schema-mcp"]
+    }
+  }
+}
+```
+
+**Then restart Cursor!**
+
+</details>
+
+<details>
+<summary><b>🌊 Windsurf (Codeium)</b> - Click to expand</summary>
+
+### Option 1: Automatic Setup
+
+**Mac/Linux:**
+```bash
 curl -o ~/.windsurf/mcp_config.json https://raw.githubusercontent.com/j0KZ/mcp-agents/main/mcp_config_all.json
 ```
 
-**Then restart your editor!**
+**Windows (PowerShell):**
+```powershell
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/j0KZ/mcp-agents/main/mcp_config_all.json" -OutFile "$env:APPDATA\Windsurf\User\mcp_config.json"
+```
+
+### Option 2: Manual Setup
+
+1. Open Windsurf Settings
+2. Navigate to "Extensions" → "Model Context Protocol"
+3. Click "Edit MCP Settings"
+4. Add the same JSON configuration as shown in the Cursor section above
+
+**Then restart Windsurf!**
+
+</details>
+
+<details>
+<summary><b>🦘 Roo Code (Roo-Cline)</b> - Click to expand</summary>
+
+### Installation
+
+```bash
+# Install via Roo Code CLI
+roo mcp add smart-reviewer npx @j0kz/smart-reviewer-mcp
+roo mcp add test-generator npx @j0kz/test-generator-mcp
+roo mcp add architecture-analyzer npx @j0kz/architecture-analyzer-mcp
+roo mcp add doc-generator npx @j0kz/doc-generator-mcp
+roo mcp add security-scanner npx @j0kz/security-scanner-mcp
+roo mcp add refactor-assistant npx @j0kz/refactor-assistant-mcp
+roo mcp add api-designer npx @j0kz/api-designer-mcp
+roo mcp add db-schema npx @j0kz/db-schema-mcp
+```
+
+**Then restart Roo Code!**
+
+</details>
+
+<details>
+<summary><b>🔄 Continue.dev</b> - Click to expand</summary>
+
+### Installation
+
+1. Open VS Code
+2. Install the Continue extension from the marketplace
+3. Open Continue settings (click Continue icon → ⚙️)
+4. Edit `~/.continue/config.json` and add:
+
+```json
+{
+  "mcp": [
+    {
+      "name": "smart-reviewer",
+      "command": "npx",
+      "args": ["@j0kz/smart-reviewer-mcp"]
+    },
+    {
+      "name": "test-generator",
+      "command": "npx",
+      "args": ["@j0kz/test-generator-mcp"]
+    },
+    {
+      "name": "architecture-analyzer",
+      "command": "npx",
+      "args": ["@j0kz/architecture-analyzer-mcp"]
+    },
+    {
+      "name": "doc-generator",
+      "command": "npx",
+      "args": ["@j0kz/doc-generator-mcp"]
+    },
+    {
+      "name": "security-scanner",
+      "command": "npx",
+      "args": ["@j0kz/security-scanner-mcp"]
+    },
+    {
+      "name": "refactor-assistant",
+      "command": "npx",
+      "args": ["@j0kz/refactor-assistant-mcp"]
+    },
+    {
+      "name": "api-designer",
+      "command": "npx",
+      "args": ["@j0kz/api-designer-mcp"]
+    },
+    {
+      "name": "db-schema",
+      "command": "npx",
+      "args": ["@j0kz/db-schema-mcp"]
+    }
+  ]
+}
+```
+
+**Then restart VS Code!**
+
+</details>
+
+<details>
+<summary><b>⚡ Zed (Zed Industries)</b> - Click to expand</summary>
+
+### Installation
+
+1. Open Zed
+2. Press `Cmd/Ctrl + ,` to open Settings
+3. Navigate to "Language Models" → "Model Context Protocol"
+4. Add the MCP servers configuration:
+
+```json
+{
+  "context_servers": {
+    "smart-reviewer": {
+      "command": "npx",
+      "args": ["@j0kz/smart-reviewer-mcp"]
+    },
+    "test-generator": {
+      "command": "npx",
+      "args": ["@j0kz/test-generator-mcp"]
+    },
+    "architecture-analyzer": {
+      "command": "npx",
+      "args": ["@j0kz/architecture-analyzer-mcp"]
+    },
+    "doc-generator": {
+      "command": "npx",
+      "args": ["@j0kz/doc-generator-mcp"]
+    },
+    "security-scanner": {
+      "command": "npx",
+      "args": ["@j0kz/security-scanner-mcp"]
+    },
+    "refactor-assistant": {
+      "command": "npx",
+      "args": ["@j0kz/refactor-assistant-mcp"]
+    },
+    "api-designer": {
+      "command": "npx",
+      "args": ["@j0kz/api-designer-mcp"]
+    },
+    "db-schema": {
+      "command": "npx",
+      "args": ["@j0kz/db-schema-mcp"]
+    }
+  }
+}
+```
+
+**Then restart Zed!**
+
+</details>
+
+<details>
+<summary><b>🎯 Trae (AI Code Editor)</b> - Click to expand</summary>
+
+### Installation
+
+1. Open Trae
+2. Go to Settings → Extensions → Model Context Protocol
+3. Click "Add MCP Server"
+4. For each tool, add an entry:
+
+**Configuration Format:**
+```json
+{
+  "mcp_servers": {
+    "smart-reviewer": {
+      "command": "npx",
+      "args": ["@j0kz/smart-reviewer-mcp"]
+    },
+    "test-generator": {
+      "command": "npx",
+      "args": ["@j0kz/test-generator-mcp"]
+    },
+    "architecture-analyzer": {
+      "command": "npx",
+      "args": ["@j0kz/architecture-analyzer-mcp"]
+    },
+    "doc-generator": {
+      "command": "npx",
+      "args": ["@j0kz/doc-generator-mcp"]
+    },
+    "security-scanner": {
+      "command": "npx",
+      "args": ["@j0kz/security-scanner-mcp"]
+    },
+    "refactor-assistant": {
+      "command": "npx",
+      "args": ["@j0kz/refactor-assistant-mcp"]
+    },
+    "api-designer": {
+      "command": "npx",
+      "args": ["@j0kz/api-designer-mcp"]
+    },
+    "db-schema": {
+      "command": "npx",
+      "args": ["@j0kz/db-schema-mcp"]
+    }
+  }
+}
+```
+
+**Then restart Trae!**
+
+</details>
+
+<details>
+<summary><b>🔧 Any MCP-Compatible Editor</b> - Click to expand</summary>
+
+### Generic Installation
+
+If your editor supports MCP but isn't listed above:
+
+1. Find your editor's MCP configuration file location
+2. Add this configuration (adjust format as needed):
+
+```json
+{
+  "mcpServers": {
+    "smart-reviewer": {
+      "command": "npx",
+      "args": ["@j0kz/smart-reviewer-mcp"]
+    },
+    "test-generator": {
+      "command": "npx",
+      "args": ["@j0kz/test-generator-mcp"]
+    },
+    "architecture-analyzer": {
+      "command": "npx",
+      "args": ["@j0kz/architecture-analyzer-mcp"]
+    },
+    "doc-generator": {
+      "command": "npx",
+      "args": ["@j0kz/doc-generator-mcp"]
+    },
+    "security-scanner": {
+      "command": "npx",
+      "args": ["@j0kz/security-scanner-mcp"]
+    },
+    "refactor-assistant": {
+      "command": "npx",
+      "args": ["@j0kz/refactor-assistant-mcp"]
+    },
+    "api-designer": {
+      "command": "npx",
+      "args": ["@j0kz/api-designer-mcp"]
+    },
+    "db-schema": {
+      "command": "npx",
+      "args": ["@j0kz/db-schema-mcp"]
+    }
+  }
+}
+```
+
+3. Restart your editor
+
+**Need help?** [Open an issue](https://github.com/j0KZ/mcp-agents/issues) with your editor name!
+
+</details>
 
 ---
 
