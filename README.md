@@ -3,28 +3,32 @@
 > **8 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
-[![Version](https://img.shields.io/badge/version-1.0.18-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.19-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
 
-## 🎉 What's New in v1.0.18
+## 🎉 What's New in v1.0.19
 
-- **🔧 Critical Fix**: Published shared package to npm
-  - Resolved `ERR_MODULE_NOT_FOUND` error when installing via npx
-  - All packages now depend on `@j0kz/shared@^1.0.16`
-  - Works correctly with all MCP-compatible editors
-- **📦 Improved Modularity**: Shared utilities package
-  - Common functionality extracted to `@j0kz/shared`
-  - Better code reuse across all 8 tools
-  - Smaller bundle sizes for individual packages
+- **🔧 Critical Fix**: Rebuilt dist files with correct imports
+  - Fixed remaining `@mcp-tools/shared` imports in compiled JavaScript
+  - All packages now fully functional when installed via npx
+  - Verified working in all MCP-compatible editors
+- **✅ Complete Fix**: ERR_MODULE_NOT_FOUND resolved
+  - Published `@j0kz/shared@1.0.16` to npm
+  - All 8 tools now correctly import from published shared package
 
-[View Full Changelog](CHANGELOG.md#1018---2025-10-03)
+[View Full Changelog](CHANGELOG.md#1019---2025-10-03)
 
 ---
 
 ## 📜 Previous Releases
+
+### v1.0.18 - Shared Package Published
+- Published @j0kz/shared package to npm
+- Updated all package.json dependencies
+- Fixed ERR_MODULE_NOT_FOUND error
 
 ### v1.0.17 - Code Quality Improvements
 - Major complexity reduction in API Designer (67% reduction)
