@@ -16,7 +16,7 @@ export const DEFAULT_SECRET_PATTERNS: SecretPattern[] = [
   },
   {
     name: 'AWS Secret Key',
-    pattern: /aws_secret_access_key\s*=\s*['""]?([A-Za-z0-9/+=]{40})['""]?/gi,
+    pattern: /aws_secret_access_key\s*=\s*['"]?([A-Za-z0-9/+=]{40})['"]?/gi,
     severity: SeverityLevel.CRITICAL,
     description: 'AWS Secret Access Key detected'
   },
@@ -28,7 +28,7 @@ export const DEFAULT_SECRET_PATTERNS: SecretPattern[] = [
   },
   {
     name: 'Generic API Key',
-    pattern: /api[_-]?key\s*[:=]\s*['""]([a-zA-Z0-9_\-]{20,})['"\"]/gi,
+    pattern: /api[_-]?key\s*[:=]\s*['"]([a-zA-Z0-9_\-]{20,})['"]$/gi,
     severity: SeverityLevel.HIGH,
     description: 'Generic API key detected'
   },
@@ -40,7 +40,7 @@ export const DEFAULT_SECRET_PATTERNS: SecretPattern[] = [
   },
   {
     name: 'Password in Code',
-    pattern: /password\s*[:=]\s*['""]([^'""]{8,})['"\"]/gi,
+    pattern: /password\s*[:=]\s*['"]([^'"]{8,})['"]$/gi,
     severity: SeverityLevel.HIGH,
     description: 'Hardcoded password detected'
   },

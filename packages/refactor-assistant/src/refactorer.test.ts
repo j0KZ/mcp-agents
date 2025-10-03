@@ -25,7 +25,7 @@ describe('Refactor Assistant', () => {
         });
       }
     `;
-    const result = convertToAsync(code);
+    const result = convertToAsync({ code, useTryCatch: true });
     expect(result.success).toBe(true);
     expect(result.code).toContain('async');
   });
@@ -39,13 +39,13 @@ describe('Refactor Assistant', () => {
       }
       return false;
     `;
-    const result = simplifyConditionals(code);
+    const result = simplifyConditionals({ code, useGuardClauses: true, useTernary: true });
     expect(result.success).toBe(true);
   });
 
   it('should rename variable', () => {
     const code = 'const oldName = 5; console.log(oldName);';
-    const result = renameVariable(code, { oldName: 'oldName', newName: 'newName' });
+    const result = renameVariable({ code, oldName: 'oldName', newName: 'newName' });
     expect(result.success).toBe(true);
     expect(result.code).toContain('newName');
     expect(result.code).not.toContain('oldName');

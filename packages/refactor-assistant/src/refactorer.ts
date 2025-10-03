@@ -133,9 +133,6 @@ export function convertToAsync(options: ConvertToAsyncOptions): RefactoringResul
     const callbackPattern = /(\w+)\s*\(\s*([^,]+),\s*\(err,\s*(\w+)\)\s*=>\s*\{/g;
 
     if (callbackPattern.test(code)) {
-      // Extract function name for reference
-      code.match(/function\s+(\w+)/)?.[1] || 'handler';
-
       // Convert to async function
       refactoredCode = refactoredCode.replace(
         /function\s+(\w+)\s*\(/g,

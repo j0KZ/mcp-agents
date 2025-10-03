@@ -1,9 +1,10 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { generateTests } from './generator.js';
+import { TestGenerator } from './generator.js';
 import * as fs from 'fs';
 import * as path from 'path';
 import { tmpdir } from 'os';
 describe('Test Generator', () => {
+    const generator = new TestGenerator();
     const testFile = path.join(tmpdir(), 'test-source-' + Date.now() + '.ts');
     beforeAll(() => {
         fs.writeFileSync(testFile, `
@@ -18,12 +19,12 @@ describe('Test Generator', () => {
         }
     });
     it('should generate tests', async () => {
-        const result = await generateTests(testFile, {
+        const result = await generator.generateTests(testFile, {
             framework: 'vitest',
             includeEdgeCases: true
         });
-        expect(result.success).toBe(true);
-        expect(result.tests).toContain('describe');
+        expect(result.fullTestCode).toBeDefined();
+        expect(result.fullTestCode).toContain('describe');
     });
 });
 //# sourceMappingURL=generator.test.js.map

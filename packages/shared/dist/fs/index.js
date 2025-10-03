@@ -114,7 +114,7 @@ export class FileSystemManager {
                 const watcher = fs.watch(file);
                 watchers.set(file, watcher);
                 (async () => {
-                    for await (const event of watcher) {
+                    for await (const _event of watcher) {
                         // Invalidate caches
                         this.fileCache.invalidate(file);
                         this.statsCache.delete(file);

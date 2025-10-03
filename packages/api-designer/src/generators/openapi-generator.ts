@@ -56,15 +56,12 @@ export function generateOpenAPISpec(
 
     return {
       success: true,
-      spec,
-      message: 'OpenAPI specification generated successfully'
+      data: spec
     };
   } catch (error) {
     return {
       success: false,
-      spec: {} as OpenAPISpec,
-      error: error instanceof Error ? error.message : 'Unknown error',
-      message: 'Failed to generate OpenAPI specification'
+      errors: [error instanceof Error ? error.message : 'Unknown error']
     };
   }
 }
