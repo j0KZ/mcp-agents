@@ -3,21 +3,34 @@
 > **8 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
-[![Version](https://img.shields.io/badge/version-1.0.15-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.16-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
 
-## 🎉 What's New in v1.0.15
+## 🎉 What's New in v1.0.16
 
-- **🔒 Security Hardened**: All ReDoS vulnerabilities fixed with input validation
-- **📚 Comprehensive Examples**: 19 new example files and tutorials for all tools
-- **⚡ Performance Benchmarks**: New benchmarking infrastructure with Benchmark.js
-- **🎯 Better Error Messages**: Structured error codes with actionable suggestions
-- **✅ Production Ready**: All packages tested, built, and unified to v1.0.15
+- **🔄 Major Dependency Updates**: All packages updated to latest versions
+  - Anthropic SDK 0.27.3 → 0.65.0 (Claude Sonnet 4.5 & Opus 4.1 support)
+  - MCP SDK 0.5.0 → 1.19.1 (latest protocol)
+  - Vitest 1.6.1 → 3.2.4 (security fix)
+  - Node types 20.x → 24.x
+- **🔒 Zero Vulnerabilities**: All security issues resolved
+- **⚡ Enhanced Test Suite**: New vitest config with parallel execution & performance monitoring
+- **📚 Better Documentation**: Comprehensive JSDoc comments added
 
-[View Full Changelog](CHANGELOG.md#1015---2025-10-03)
+[View Full Changelog](CHANGELOG.md#1016---2025-10-03)
+
+---
+
+## 📜 Previous Release: v1.0.15
+
+- 🔒 Security Hardened: All ReDoS vulnerabilities fixed with input validation
+- 📚 Comprehensive Examples: 19 new example files and tutorials for all tools
+- ⚡ Performance Benchmarks: New benchmarking infrastructure with Benchmark.js
+- 🎯 Better Error Messages: Structured error codes with actionable suggestions
+- ✅ Production Ready: All packages tested, built, and unified
 
 ## 🚀 Install All 8 Tools (One Command)
 

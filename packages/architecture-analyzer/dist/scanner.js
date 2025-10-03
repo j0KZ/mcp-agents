@@ -153,7 +153,7 @@ export class ProjectScanner {
     /**
      * Get import type
      */
-    getImportType(importPath) {
+    getImportType(_importPath) {
         // This is a simplified heuristic
         return 'import';
     }
