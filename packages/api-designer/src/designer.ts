@@ -615,7 +615,8 @@ function convertSchemaToSDL(schema: GraphQLSchema): string {
       continue;
     }
 
-    lines.push(`${type.kind} ${type.name} {`);
+    const sdlKind = type.kind === 'object' ? 'type' : type.kind;
+    lines.push(`${sdlKind} ${type.name} {`);
     if (type.fields) {
       for (const field of type.fields) {
         const args = field.args
