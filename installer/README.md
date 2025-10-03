@@ -71,6 +71,23 @@ The tools will be available via the MCP protocol and can be used directly in you
 
 Found a bug? [Report it here](https://github.com/j0KZ/mcp-agents/issues)
 
+## 🧪 Testing
+
+See [TESTING.md](TESTING.md) for detailed test results and platform compatibility.
+
+**Run Tests:**
+```bash
+cd installer
+node test.js
+```
+
+**Test Results (v1.0.21):**
+- ✅ Help command - All 6 editors listed
+- ✅ List command - All 8 tools listed
+- ✅ Config paths - Windows validated
+- ✅ Version consistency - Matches across files
+- ✅ Error handling - Invalid editors handled gracefully
+
 ## 📄 License
 
 MIT © j0KZ
