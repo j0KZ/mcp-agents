@@ -68,23 +68,31 @@ export function calculateMetrics(content: string, performanceMonitor?: Performan
 export function generateSuggestions(content: string, issues: CodeIssue[], metrics: CodeMetrics): string[] {
   const suggestions: string[] = [];
 
-  // Complexity suggestions
-  if (metrics.complexity > 15) {
+  // Adjusted complexity thresholds (more realistic for production code)
+  // 1-20: Simple, 21-50: Moderate, 51-100: Complex, 100+: Very Complex
+  if (metrics.complexity > 100) {
+    suggestions.push(`Very high complexity (${metrics.complexity}). Urgently refactor into smaller functions.`);
+  } else if (metrics.complexity > 50) {
     suggestions.push(`High complexity (${metrics.complexity}). Consider breaking down into smaller functions.`);
+  } else if (metrics.complexity > 20) {
+    suggestions.push(`Moderate complexity (${metrics.complexity}). Monitor for future refactoring opportunities.`);
   }
 
-  // Maintainability suggestions
-  if (metrics.maintainability < 65) {
+  // Adjusted maintainability thresholds
+  // 85-100: Excellent, 65-84: Good, 40-64: Fair, 0-39: Poor
+  if (metrics.maintainability < 40) {
     suggestions.push(`Low maintainability score (${metrics.maintainability}/100). Refactor for better readability.`);
+  } else if (metrics.maintainability < 65) {
+    suggestions.push(`Fair maintainability score (${metrics.maintainability}/100). Consider minor improvements.`);
   }
 
-  // Comment density suggestions
-  if (metrics.commentDensity < 10) {
+  // Comment density suggestions (adjusted for JSDoc/TypeScript)
+  if (metrics.commentDensity < 5) {
     suggestions.push('Low comment density. Add more documentation for complex logic.');
   }
 
-  // Duplicate code suggestions
-  if (metrics.duplicateBlocks > 5) {
+  // Duplicate code suggestions (higher threshold)
+  if (metrics.duplicateBlocks > 15) {
     suggestions.push(`Found ${metrics.duplicateBlocks} duplicate code blocks. Consider extracting to functions.`);
   }
 
@@ -96,20 +104,22 @@ export function generateSuggestions(content: string, issues: CodeIssue[], metric
     suggestions.push(`Fix ${errorCount} critical error${errorCount > 1 ? 's' : ''} immediately.`);
   }
 
-  if (warningCount > 5) {
+  if (warningCount > 10) {
     suggestions.push(`Address ${warningCount} warnings to improve code quality.`);
   }
 
-  // File size suggestion
-  if (metrics.linesOfCode > 500) {
-    suggestions.push(`File is large (${metrics.linesOfCode} LOC). Consider splitting into modules.`);
+  // File size suggestion (adjusted threshold)
+  if (metrics.linesOfCode > 800) {
+    suggestions.push(`File is very large (${metrics.linesOfCode} LOC). Consider splitting into modules.`);
+  } else if (metrics.linesOfCode > 500) {
+    suggestions.push(`File is large (${metrics.linesOfCode} LOC). Monitor size for future refactoring.`);
   }
 
   return suggestions;
 }
 
 /**
- * Calculate overall code quality score
+ * Calculate overall code quality score (context-aware)
  *
  * @param issues - Detected code issues
  * @param metrics - Calculated code metrics
@@ -118,20 +128,37 @@ export function generateSuggestions(content: string, issues: CodeIssue[], metric
 export function calculateScore(issues: CodeIssue[], metrics: CodeMetrics): number {
   let score = 100;
 
-  // Deduct for issues
+  // Deduct for issues (adjusted weights)
   const errors = issues.filter(i => i.severity === 'error').length;
   const warnings = issues.filter(i => i.severity === 'warning').length;
   const infos = issues.filter(i => i.severity === 'info').length;
 
-  score -= errors * 10;
-  score -= warnings * 3;
-  score -= infos * 1;
+  score -= errors * 15;      // Critical errors heavily penalized
+  score -= warnings * 2;     // Warnings moderately penalized
+  score -= infos * 0.5;      // Info items lightly penalized
 
-  // Factor in metrics
-  score -= Math.max(0, (metrics.complexity - 10) * 2);
-  score += (metrics.maintainability - 50) / 5;
-  score += metrics.commentDensity / 5;
-  score -= metrics.duplicateBlocks * 2;
+  // Factor in metrics (adjusted thresholds and weights)
+  // Complexity: penalize above 50 (not 10)
+  if (metrics.complexity > 100) {
+    score -= (metrics.complexity - 100) * 0.5;
+  } else if (metrics.complexity > 50) {
+    score -= (metrics.complexity - 50) * 0.3;
+  }
+
+  // Maintainability: reward good maintainability
+  if (metrics.maintainability >= 65) {
+    score += (metrics.maintainability - 65) / 5;
+  } else if (metrics.maintainability < 40) {
+    score -= (40 - metrics.maintainability) / 3;
+  }
+
+  // Comment density: slight bonus for documentation
+  score += Math.min(5, metrics.commentDensity / 3);
+
+  // Duplicates: penalize only if significant
+  if (metrics.duplicateBlocks > 15) {
+    score -= (metrics.duplicateBlocks - 15) * 0.5;
+  }
 
   return Math.max(0, Math.min(100, Math.round(score)));
 }

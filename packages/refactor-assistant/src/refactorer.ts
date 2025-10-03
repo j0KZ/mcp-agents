@@ -14,6 +14,8 @@ import {
   DesignPattern,
 } from './types.js';
 
+import { REFACTORING_LIMITS, REFACTORING_MESSAGES } from './constants.js';
+
 // Re-export from modular components
 export { extractFunction } from './core/extract-function.js';
 export { calculateMetrics, findDuplicateBlocks } from './analysis/metrics-calculator.js';
@@ -33,62 +35,44 @@ import {
   applyChainOfResponsibilityPattern,
 } from './patterns/index.js';
 
+import { applyGuardClauses, combineNestedConditions } from './transformations/conditional-helpers.js';
+import { removeUnusedImportsFromCode, escapeRegExp } from './transformations/import-helpers.js';
+import { analyzeFunctionLengths } from './transformations/analysis-helpers.js';
+
 /**
  * Convert callback-based code to async/await
- *
- * @param options - Conversion options including source code
- * @returns Refactoring result with async/await syntax
- *
- * @example
- * ```typescript
- * const result = convertToAsync({
- *   code: 'fs.readFile("file.txt", (err, data) => { ... })',
- *   useTryCatch: true
- * });
- * ```
  */
 export function convertToAsync(options: ConvertToAsyncOptions): RefactoringResult {
   try {
     const { code, useTryCatch = true } = options;
 
-    // Prevent ReDoS: limit input size
-    if (code.length > 100000) {
+    if (code.length > REFACTORING_LIMITS.MAX_CODE_SIZE) {
       return {
         code,
         changes: [],
         success: false,
-        error: 'Code too large for refactoring (max 100KB)',
+        error: REFACTORING_MESSAGES.CODE_TOO_LARGE,
       };
     }
 
     let refactoredCode = code;
     const changes: RefactoringChange[] = [];
 
-    // Pattern: callback(err, data) => async/await (safe pattern)
     const callbackPattern = /(\w+)\s?\(\s?\(err,\s?(\w+)\)\s?=>\s?\{/g;
 
     if (callbackPattern.test(code)) {
-      // Convert to async function
-      refactoredCode = refactoredCode.replace(
-        /function\s+(\w+)\s*\(/g,
-        'async function $1('
-      );
-
-      // Reset regex for replace (test() consumed it)
+      refactoredCode = refactoredCode.replace(/function\s+(\w+)\s*\(/g, 'async function $1(');
       callbackPattern.lastIndex = 0;
 
-      // Convert callbacks to await
       refactoredCode = refactoredCode.replace(
         callbackPattern,
         (_match, fn, dataVar) => {
-          if (useTryCatch) {
-            return `try {\n  const ${dataVar} = await ${fn}();\n`;
-          }
-          return `const ${dataVar} = await ${fn}();\n`;
+          return useTryCatch
+            ? `try {\n  const ${dataVar} = await ${fn}();\n`
+            : `const ${dataVar} = await ${fn}();\n`;
         }
       );
 
-      // Add error handling if needed
       if (useTryCatch) {
         refactoredCode = refactoredCode.replace(/}\s*\);?\s*$/, '} catch (err) {\n  // Handle error\n  throw err;\n}');
       }
@@ -101,13 +85,20 @@ export function convertToAsync(options: ConvertToAsyncOptions): RefactoringResul
       });
     }
 
-    // Convert Promise.then chains (safe pattern with limited quantifiers)
-    const thenPattern = /\.then\s?\(\s?(?:function\s?)?\(([^)]{1,100})\)\s?=>\s?\{/g;
-    if (thenPattern.test(code)) {
-      refactoredCode = convertThenChainToAsync(refactoredCode);
+    // Convert Promise.then chains
+    const promisePattern = /\.then\s?\(\s?\((\w+)\)\s?=>\s?\{([^}]{1,500})\}\s?\)/g;
+    if (promisePattern.test(refactoredCode)) {
+      promisePattern.lastIndex = 0;
+      refactoredCode = refactoredCode.replace(/function\s+(\w+)\s*\(/g, 'async function $1(');
+
+      refactoredCode = refactoredCode.replace(
+        promisePattern,
+        ';\n  const $1 = await promise;\n  $2'
+      );
+
       changes.push({
         type: 'convert-to-async',
-        description: 'Converted Promise.then() chain to async/await',
+        description: 'Converted Promise.then() to async/await',
       });
     }
 
@@ -115,7 +106,7 @@ export function convertToAsync(options: ConvertToAsyncOptions): RefactoringResul
       code: refactoredCode,
       changes,
       success: true,
-      warnings: changes.length === 0 ? ['No callback patterns found to convert'] : undefined,
+      warnings: changes.length === 0 ? ['No callbacks found to convert'] : undefined,
     };
   } catch (error) {
     return {
@@ -129,36 +120,23 @@ export function convertToAsync(options: ConvertToAsyncOptions): RefactoringResul
 
 /**
  * Simplify nested conditionals and complex if/else chains
- *
- * @param options - Simplification options
- * @returns Refactoring result with simplified conditionals
- *
- * @example
- * ```typescript
- * const result = simplifyConditionals({
- *   code: 'if (x) { if (y) { return z; } }',
- *   useGuardClauses: true
- * });
- * ```
  */
 export function simplifyConditionals(options: SimplifyConditionalsOptions): RefactoringResult {
   try {
     const { code, useGuardClauses = true, useTernary = true } = options;
 
-    // Prevent ReDoS: limit input size
-    if (code.length > 100000) {
+    if (code.length > REFACTORING_LIMITS.MAX_CODE_SIZE) {
       return {
         code,
         changes: [],
         success: false,
-        error: 'Code too large for refactoring (max 100KB)',
+        error: REFACTORING_MESSAGES.CODE_TOO_LARGE,
       };
     }
 
     let refactoredCode = code;
     const changes: RefactoringChange[] = [];
 
-    // Apply guard clauses for early returns
     if (useGuardClauses) {
       const guardClauseResult = applyGuardClauses(refactoredCode);
       if (guardClauseResult.changed) {
@@ -170,14 +148,10 @@ export function simplifyConditionals(options: SimplifyConditionalsOptions): Refa
       }
     }
 
-    // Convert simple if/else to ternary (safe pattern with length limits)
     if (useTernary) {
       const ternaryPattern = /if\s?\(([^)]{1,200})\)\s?\{\s?return\s+([^;]{1,200});\s?\}\s?else\s?\{\s?return\s+([^;]{1,200});\s?\}/g;
       const originalCode = refactoredCode;
-      refactoredCode = refactoredCode.replace(
-        ternaryPattern,
-        'return $1 ? $2 : $3;'
-      );
+      refactoredCode = refactoredCode.replace(ternaryPattern, 'return $1 ? $2 : $3;');
 
       if (refactoredCode !== originalCode) {
         changes.push({
@@ -187,7 +161,6 @@ export function simplifyConditionals(options: SimplifyConditionalsOptions): Refa
       }
     }
 
-    // Combine nested conditions
     const combinedResult = combineNestedConditions(refactoredCode);
     if (combinedResult.changed) {
       refactoredCode = combinedResult.code;
@@ -215,17 +188,6 @@ export function simplifyConditionals(options: SimplifyConditionalsOptions): Refa
 
 /**
  * Remove dead code including unused variables, unreachable code, and unused imports
- *
- * @param options - Dead code removal options
- * @returns Refactoring result with dead code removed
- *
- * @example
- * ```typescript
- * const result = removeDeadCode({
- *   code: sourceCode,
- *   removeUnusedImports: true
- * });
- * ```
  */
 export function removeDeadCode(options: RemoveDeadCodeOptions): RefactoringResult {
   try {
@@ -233,7 +195,6 @@ export function removeDeadCode(options: RemoveDeadCodeOptions): RefactoringResul
     let refactoredCode = code;
     const changes: RefactoringChange[] = [];
 
-    // Remove unreachable code after return statements
     if (removeUnreachable) {
       const lines = refactoredCode.split('\n');
       const cleanedLines: string[] = [];
@@ -254,7 +215,6 @@ export function removeDeadCode(options: RemoveDeadCodeOptions): RefactoringResul
         cleanedLines.push(line);
 
         if (trimmed.startsWith('return ') || trimmed === 'return;') {
-          // Check if there's code before the closing brace
           let hasCodeAfterReturn = false;
           for (let j = i + 1; j < lines.length; j++) {
             const nextLine = lines[j].trim();
@@ -278,14 +238,13 @@ export function removeDeadCode(options: RemoveDeadCodeOptions): RefactoringResul
       refactoredCode = cleanedLines.join('\n');
     }
 
-    // Remove unused imports (basic implementation)
     if (removeUnusedImports) {
       const importResult = removeUnusedImportsFromCode(refactoredCode);
       if (importResult.removed.length > 0) {
         refactoredCode = importResult.code;
         changes.push({
           type: 'remove-dead-code',
-          description: `Removed unused imports: ${importResult.removed.join(', ')}`,
+          description: `Removed ${importResult.removed.length} unused import(s): ${importResult.removed.join(', ')}`,
         });
       }
     }
@@ -307,24 +266,13 @@ export function removeDeadCode(options: RemoveDeadCodeOptions): RefactoringResul
 }
 
 /**
- * Apply a design pattern to existing code
- *
- * @param options - Pattern application options
- * @returns Refactoring result with design pattern applied
- *
- * @example
- * ```typescript
- * const result = applyDesignPattern({
- *   code: classCode,
- *   pattern: 'singleton'
- * });
- * ```
+ * Apply design patterns to code
  */
 export function applyDesignPattern(options: ApplyPatternOptions): RefactoringResult {
   try {
     const { code, pattern, patternOptions = {} } = options;
 
-    const patternImplementations: Record<DesignPattern, (code: string, opts: any) => string> = {
+    const patternMap: Record<DesignPattern, (code: string, options: any) => string> = {
       singleton: applySingletonPattern,
       factory: applyFactoryPattern,
       observer: applyObserverPattern,
@@ -337,28 +285,26 @@ export function applyDesignPattern(options: ApplyPatternOptions): RefactoringRes
       'chain-of-responsibility': applyChainOfResponsibilityPattern,
     };
 
-    const implementation = patternImplementations[pattern];
-    if (!implementation) {
+    const applyFunction = patternMap[pattern];
+    if (!applyFunction) {
       return {
         code,
         changes: [],
         success: false,
-        error: `Unknown design pattern: ${pattern}`,
+        error: REFACTORING_MESSAGES.INVALID_PATTERN,
       };
     }
 
-    const refactoredCode = implementation(code, patternOptions);
+    const refactoredCode = applyFunction(code, patternOptions);
 
     return {
       code: refactoredCode,
-      changes: [
-        {
-          type: 'apply-pattern',
-          description: `Applied ${pattern} design pattern`,
-          before: code,
-          after: refactoredCode,
-        },
-      ],
+      changes: [{
+        type: 'apply-pattern',
+        description: `Applied ${pattern} pattern`,
+        before: code,
+        after: refactoredCode,
+      }],
       success: true,
     };
   } catch (error) {
@@ -372,57 +318,62 @@ export function applyDesignPattern(options: ApplyPatternOptions): RefactoringRes
 }
 
 /**
- * Rename a variable consistently throughout the code
- *
- * @param options - Rename options including old and new names
- * @returns Refactoring result with renamed variable
- *
- * @example
- * ```typescript
- * const result = renameVariable({
- *   code: sourceCode,
- *   oldName: 'temp',
- *   newName: 'userTemperature'
- * });
- * ```
+ * Rename a variable consistently throughout code
  */
 export function renameVariable(options: RenameVariableOptions): RefactoringResult {
   try {
     const { code, oldName, newName, includeComments = false } = options;
 
-    // Validate variable names
-    const identifierPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/;
-    if (!identifierPattern.test(newName)) {
+    if (!oldName || !newName) {
       return {
         code,
         changes: [],
         success: false,
-        error: 'Invalid variable name',
+        error: 'Old name and new name are required',
       };
     }
 
-    // Create word boundary pattern to avoid partial matches
-    const pattern = new RegExp(`\\b${escapeRegExp(oldName)}\\b`, 'g');
-    let refactoredCode = code.replace(pattern, newName);
-
-    // Rename in comments if requested
-    if (includeComments) {
-      const commentPattern = new RegExp(`(//.*?)\\b${escapeRegExp(oldName)}\\b`, 'g');
-      refactoredCode = refactoredCode.replace(commentPattern, `$1${newName}`);
+    if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(newName)) {
+      return {
+        code,
+        changes: [],
+        success: false,
+        error: REFACTORING_MESSAGES.INVALID_VARIABLE_NAME,
+      };
     }
 
-    const occurrences = (code.match(pattern) || []).length;
+    const wordBoundary = `\\b${escapeRegExp(oldName)}\\b`;
+    const pattern = new RegExp(wordBoundary, 'g');
+
+    let refactoredCode = code;
+    const matches = (code.match(pattern) || []).length;
+
+    if (matches === 0) {
+      return {
+        code,
+        changes: [],
+        success: false,
+        error: REFACTORING_MESSAGES.VARIABLE_NOT_FOUND,
+      };
+    }
+
+    refactoredCode = refactoredCode.replace(pattern, newName);
+
+    if (includeComments) {
+      const commentPattern = new RegExp(`(//.*?|/\\*[\\s\\S]*?\\*/)`, 'g');
+      refactoredCode = refactoredCode.replace(commentPattern, (match) => {
+        return match.replace(new RegExp(oldName, 'g'), newName);
+      });
+    }
 
     return {
       code: refactoredCode,
-      changes: [
-        {
-          type: 'rename-variable',
-          description: `Renamed '${oldName}' to '${newName}' (${occurrences} occurrences)`,
-          before: oldName,
-          after: newName,
-        },
-      ],
+      changes: [{
+        type: 'rename-variable',
+        description: `Renamed '${oldName}' to '${newName}' (${matches} occurrence${matches > 1 ? 's' : ''})`,
+        before: code,
+        after: refactoredCode,
+      }],
       success: true,
     };
   } catch (error) {
@@ -436,16 +387,7 @@ export function renameVariable(options: RenameVariableOptions): RefactoringResul
 }
 
 /**
- * Analyze code and suggest refactorings
- *
- * @param code - Source code to analyze
- * @param filePath - Optional file path for context
- * @returns Array of refactoring suggestions
- *
- * @example
- * ```typescript
- * const suggestions = suggestRefactorings(sourceCode, 'src/utils.ts');
- * ```
+ * Suggest refactorings based on code analysis
  */
 export function suggestRefactorings(code: string, _filePath?: string): RefactoringSuggestion[] {
   const suggestions: RefactoringSuggestion[] = [];
@@ -454,7 +396,7 @@ export function suggestRefactorings(code: string, _filePath?: string): Refactori
   // Check for long functions
   const functionMetrics = analyzeFunctionLengths(code);
   functionMetrics.forEach(metric => {
-    if (metric.lineCount > 50) {
+    if (metric.lineCount > REFACTORING_LIMITS.MAX_FUNCTION_LENGTH) {
       suggestions.push({
         type: 'extract-function',
         severity: 'warning',
@@ -468,7 +410,7 @@ export function suggestRefactorings(code: string, _filePath?: string): Refactori
   // Check for nested conditionals
   lines.forEach((line, index) => {
     const nestingDepth = getNestingDepth(lines, index);
-    if (nestingDepth > 3) {
+    if (nestingDepth > REFACTORING_LIMITS.MAX_COMPLEXITY_THRESHOLD) {
       suggestions.push({
         type: 'simplify-conditionals',
         severity: 'warning',
@@ -511,128 +453,4 @@ export function suggestRefactorings(code: string, _filePath?: string): Refactori
   });
 
   return suggestions;
-}
-
-// Helper functions
-
-function convertThenChainToAsync(code: string): string {
-  // Basic conversion of .then() chains (safe pattern with limits)
-  return code
-    .replace(/\.then\s?\(\s?(?:function\s?)?\(([^)]{1,100})\)\s?=>\s?\{/g, '\nconst $1 = await ')
-    .replace(/}\s?\)/g, ';');
-}
-
-function applyGuardClauses(code: string): { code: string; changed: boolean } {
-  let changed = false;
-  let result = code;
-
-  // Pattern: if (condition) { main logic } else { return/throw } (safe with limits)
-  const guardPattern = /if\s?\(([^)]{1,200})\)\s?\{([^}]{1,500})\}\s?else\s?\{([^}]{1,200}(?:return|throw)[^}]{0,100})\}/g;
-
-  result = result.replace(guardPattern, (_match, condition, mainLogic, guardLogic) => {
-    changed = true;
-    return `if (!(${condition})) {${guardLogic}}\n${mainLogic}`;
-  });
-
-  return { code: result, changed };
-}
-
-function combineNestedConditions(code: string): { code: string; changed: boolean } {
-  let changed = false;
-
-  // Pattern: if (a) { if (b) { ... } } (safe with limits)
-  const nestedPattern = /if\s?\(([^)]{1,200})\)\s?\{\s?if\s?\(([^)]{1,200})\)\s?\{([^}]{1,500})\}\s?\}/g;
-
-  const result = code.replace(nestedPattern, (_match, cond1, cond2, body) => {
-    changed = true;
-    return `if (${cond1} && ${cond2}) {${body}}`;
-  });
-
-  return { code: result, changed };
-}
-
-function removeUnusedImportsFromCode(code: string): { code: string; removed: string[] } {
-  const removed: string[] = [];
-  const lines = code.split('\n');
-  const importLines: { line: string; index: number; imports: string[] }[] = [];
-
-  // Find all import statements
-  lines.forEach((line, index) => {
-    // Skip lines that are too long to prevent ReDoS
-    if (line.length > 1000) return;
-
-    const importMatch = line.match(/import\s+\{([^}]{1,500})\}\s+from\s+['"]([^'"]{1,200})['"]/);
-    if (importMatch) {
-      const imports = importMatch[1].split(',').map(i => i.trim());
-      importLines.push({ line, index, imports });
-    }
-  });
-
-  // Check which imports are actually used
-  const codeWithoutImports = lines
-    .filter((_, idx) => !importLines.some(il => il.index === idx))
-    .join('\n');
-
-  const filteredLines = lines.filter((_line, idx) => {
-    const importLine = importLines.find(il => il.index === idx);
-    if (!importLine) return true;
-
-    const usedImports = importLine.imports.filter(imp => {
-      const pattern = new RegExp(`\\b${escapeRegExp(imp)}\\b`);
-      return pattern.test(codeWithoutImports);
-    });
-
-    if (usedImports.length === 0) {
-      removed.push(...importLine.imports);
-      return false;
-    }
-
-    if (usedImports.length < importLine.imports.length) {
-      const unusedImports = importLine.imports.filter(i => !usedImports.includes(i));
-      removed.push(...unusedImports);
-    }
-
-    return true;
-  });
-
-  return { code: filteredLines.join('\n'), removed };
-}
-
-function analyzeFunctionLengths(code: string): Array<{ name: string; startLine: number; lineCount: number }> {
-  const functions: Array<{ name: string; startLine: number; lineCount: number }> = [];
-  const lines = code.split('\n');
-
-  for (let i = 0; i < lines.length; i++) {
-    const functionMatch = lines[i].match(/(?:function\s+(\w+)|const\s+(\w+)\s*=\s*(?:async\s*)?\([^)]*\)\s*=>)/);
-    if (functionMatch) {
-      const name = functionMatch[1] || functionMatch[2];
-      let braceCount = 0;
-      let started = false;
-      let lineCount = 0;
-
-      for (let j = i; j < lines.length; j++) {
-        const line = lines[j];
-        if (line.includes('{')) {
-          braceCount += (line.match(/\{/g) || []).length;
-          started = true;
-        }
-        if (line.includes('}')) {
-          braceCount -= (line.match(/\}/g) || []).length;
-        }
-
-        if (started) lineCount++;
-
-        if (started && braceCount === 0) {
-          functions.push({ name, startLine: i + 1, lineCount });
-          break;
-        }
-      }
-    }
-  }
-
-  return functions;
-}
-
-function escapeRegExp(string: string): string {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

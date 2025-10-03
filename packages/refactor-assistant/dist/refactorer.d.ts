@@ -6,91 +6,26 @@ export { extractFunction } from './core/extract-function.js';
 export { calculateMetrics, findDuplicateBlocks } from './analysis/metrics-calculator.js';
 /**
  * Convert callback-based code to async/await
- *
- * @param options - Conversion options including source code
- * @returns Refactoring result with async/await syntax
- *
- * @example
- * ```typescript
- * const result = convertToAsync({
- *   code: 'fs.readFile("file.txt", (err, data) => { ... })',
- *   useTryCatch: true
- * });
- * ```
  */
 export declare function convertToAsync(options: ConvertToAsyncOptions): RefactoringResult;
 /**
  * Simplify nested conditionals and complex if/else chains
- *
- * @param options - Simplification options
- * @returns Refactoring result with simplified conditionals
- *
- * @example
- * ```typescript
- * const result = simplifyConditionals({
- *   code: 'if (x) { if (y) { return z; } }',
- *   useGuardClauses: true
- * });
- * ```
  */
 export declare function simplifyConditionals(options: SimplifyConditionalsOptions): RefactoringResult;
 /**
  * Remove dead code including unused variables, unreachable code, and unused imports
- *
- * @param options - Dead code removal options
- * @returns Refactoring result with dead code removed
- *
- * @example
- * ```typescript
- * const result = removeDeadCode({
- *   code: sourceCode,
- *   removeUnusedImports: true
- * });
- * ```
  */
 export declare function removeDeadCode(options: RemoveDeadCodeOptions): RefactoringResult;
 /**
- * Apply a design pattern to existing code
- *
- * @param options - Pattern application options
- * @returns Refactoring result with design pattern applied
- *
- * @example
- * ```typescript
- * const result = applyDesignPattern({
- *   code: classCode,
- *   pattern: 'singleton'
- * });
- * ```
+ * Apply design patterns to code
  */
 export declare function applyDesignPattern(options: ApplyPatternOptions): RefactoringResult;
 /**
- * Rename a variable consistently throughout the code
- *
- * @param options - Rename options including old and new names
- * @returns Refactoring result with renamed variable
- *
- * @example
- * ```typescript
- * const result = renameVariable({
- *   code: sourceCode,
- *   oldName: 'temp',
- *   newName: 'userTemperature'
- * });
- * ```
+ * Rename a variable consistently throughout code
  */
 export declare function renameVariable(options: RenameVariableOptions): RefactoringResult;
 /**
- * Analyze code and suggest refactorings
- *
- * @param code - Source code to analyze
- * @param filePath - Optional file path for context
- * @returns Array of refactoring suggestions
- *
- * @example
- * ```typescript
- * const suggestions = suggestRefactorings(sourceCode, 'src/utils.ts');
- * ```
+ * Suggest refactorings based on code analysis
  */
 export declare function suggestRefactorings(code: string, _filePath?: string): RefactoringSuggestion[];
 //# sourceMappingURL=refactorer.d.ts.map

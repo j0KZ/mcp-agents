@@ -18,7 +18,7 @@ export declare function calculateMetrics(content: string, performanceMonitor?: P
  */
 export declare function generateSuggestions(content: string, issues: CodeIssue[], metrics: CodeMetrics): string[];
 /**
- * Calculate overall code quality score
+ * Calculate overall code quality score (context-aware)
  *
  * @param issues - Detected code issues
  * @param metrics - Calculated code metrics

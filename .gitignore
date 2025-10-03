@@ -1,8 +1,14 @@
 # Dependencies
 node_modules/
+jspm_packages/
+bower_components/
 
-# Build outputs - packages build their own dist/
+# Build outputs
+dist/
+build/
 *.tsbuildinfo
+.rollup.cache/
+.parcel-cache/
 
 # Logs
 logs/
@@ -12,6 +18,7 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
+pnpm-debug.log*
 
 # OS files
 .DS_Store
@@ -22,6 +29,7 @@ lerna-debug.log*
 ehthumbs.db
 Thumbs.db
 Desktop.ini
+$RECYCLE.BIN/
 
 # IDE
 .vscode/
@@ -29,20 +37,29 @@ Desktop.ini
 *.swp
 *.swo
 *.swn
+*.bak
 .project
 .classpath
 .settings/
+*.sublime-workspace
+*.sublime-project
 
 # Test coverage
 coverage/
 *.lcov
 .nyc_output/
+lib-cov/
+.coverage
+htmlcov/
 
 # Temporary files
 *.tmp
 .temp/
 tmp/
 temp/
+*.pid
+*.seed
+*.pid.lock
 
 # Environment
 .env
@@ -51,8 +68,17 @@ temp/
 .env.test
 .env.production
 
-# NPM
+# NPM & Package Managers
 .npm/
+.yarn/
+.pnp.*
+.yarn-integrity
+package-lock.json.bak
+
+# Runtime
+*.pid
+*.seed
+*.pid.lock
 
 # Archived files
 archived/
@@ -67,3 +93,42 @@ wiki/
 
 # Config (users create their own)
 .claude/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Stores VSCode versions used for testing
+.vscode-test
+
+# Backup files
+*.backup
+*.backup2
+*.bak
+*.ts.backup
+
+# Audit reports (generated)
+AUDIT_REPORT_*.md
+
+# Refactored files
+*-refactored.ts

@@ -145,10 +145,25 @@ export class ProjectScanner {
         if (this.isExternalDependency(importPath)) {
             return importPath;
         }
-        // Simple resolution (could be improved)
+        // Get current directory
         const currentDir = currentPath.split(sep).slice(0, -1).join(sep);
-        const resolved = join(currentDir, importPath);
-        return resolved.replace(/\\/g, '/');
+        let resolved = join(currentDir, importPath);
+        // Normalize path separators
+        resolved = resolved.replace(/\\/g, '/');
+        // Handle TypeScript imports with .js extension (ES modules convention)
+        // Try multiple extensions if no extension provided
+        const extensions = ['.ts', '.tsx', '.js', '.jsx'];
+        if (!resolved.match(/\.(ts|tsx|js|jsx|mjs|cjs)$/)) {
+            // Check if .js extension maps to .ts file
+            if (resolved.endsWith('.js')) {
+                resolved = resolved.replace(/\.js$/, '.ts');
+            }
+            else {
+                // Try with .ts first (TypeScript monorepo)
+                resolved = resolved + '.ts';
+            }
+        }
+        return resolved;
     }
     /**
      * Get import type

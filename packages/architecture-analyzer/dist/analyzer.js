@@ -172,26 +172,45 @@ export class ArchitectureAnalyzer {
         };
     }
     /**
-     * Calculate cohesion score
+     * Calculate cohesion score (0-100, higher is better)
+     * Measures how well modules work together within the same package
      */
     calculateCohesion(modules, dependencies) {
         if (modules.length === 0)
             return 0;
-        // Simplified: ratio of internal vs external dependencies
-        const internalDeps = dependencies.filter(d => modules.some(m => m.path === d.to)).length;
+        // Identify modules that are part of the same package/directory
+        const packageGroups = new Map();
+        modules.forEach(m => {
+            const packagePath = m.path.split('/').slice(0, -1).join('/');
+            if (!packageGroups.has(packagePath)) {
+                packageGroups.set(packagePath, []);
+            }
+            packageGroups.get(packagePath).push(m);
+        });
+        // Calculate cohesion: dependencies within same package vs cross-package
+        let intraPackageDeps = 0;
+        dependencies.forEach(d => {
+            const fromPackage = d.from.split('/').slice(0, -1).join('/');
+            const toPackage = d.to.split('/').slice(0, -1).join('/');
+            if (fromPackage === toPackage) {
+                intraPackageDeps++;
+            }
+        });
         const totalDeps = dependencies.length || 1;
-        return Math.round((internalDeps / totalDeps) * 100);
+        return Math.round((intraPackageDeps / totalDeps) * 100);
     }
     /**
-     * Calculate coupling score
+     * Calculate coupling score (0-100, lower is better)
+     * Measures interdependence between modules
      */
     calculateCoupling(modules, dependencies) {
         if (modules.length <= 1)
             return 0;
-        // Simplified: average dependencies per module normalized
+        // Average dependencies per module (normalized to 0-100 scale)
+        // Threshold: 5+ deps per module = high coupling (80+)
         const avgDeps = dependencies.length / modules.length;
-        const maxPossibleDeps = modules.length - 1;
-        return Math.min(100, Math.round((avgDeps / maxPossibleDeps) * 100));
+        const couplingScore = Math.min(100, (avgDeps / 5) * 80);
+        return Math.round(couplingScore);
     }
     /**
      * Generate improvement suggestions

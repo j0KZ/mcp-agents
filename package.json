@@ -1,8 +1,9 @@
 {
   "name": "@j0kz/mcp-agents",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "Professional MCP agents for AI code editors - Smart Reviewer, Test Generator, Architecture Analyzer. Works with Claude Code, Roo Code, Windsurf, Cursor, and any MCP-compatible editor.",
   "type": "module",
+  "private": true,
   "workspaces": [
     "packages/*"
   ],
@@ -16,7 +17,10 @@
     "test:ci": "npm run test:ci --workspaces --if-present",
     "test:coverage": "npm run test:coverage --workspaces --if-present",
     "install-all": "node scripts/install-all.js",
-    "publish-all": "npm run build && npm publish --workspaces --access public"
+    "publish-all": "npm run build && npm publish --workspaces --access public",
+    "clean": "npm run clean --workspaces --if-present && rm -rf node_modules",
+    "format": "prettier --write \"**/*.{js,ts,json,md}\"",
+    "lint": "eslint packages/*/src --ext .ts,.js"
   },
   "devDependencies": {
     "@types/node": "^24.6.2",
@@ -25,7 +29,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.64.0",
+    "@anthropic-ai/sdk": "^0.65.0",
     "@modelcontextprotocol/sdk": "^1.18.2"
   },
   "keywords": [
@@ -41,8 +45,17 @@
     "testing",
     "architecture",
     "ai-tools",
-    "code-quality"
+    "code-quality",
+    "refactoring",
+    "security-scanner",
+    "api-design",
+    "database-schema",
+    "documentation-generator"
   ],
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "author": "j0kz (https://www.npmjs.com/~j0kz)",
   "license": "MIT",
   "repository": {

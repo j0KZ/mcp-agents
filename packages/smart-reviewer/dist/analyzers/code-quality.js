@@ -20,8 +20,9 @@ export async function detectIssues(content, filePath) {
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         const lineNum = i + 1;
-        // Check for 'var' usage
-        if (line.includes('var ') && !line.trim().startsWith('//')) {
+        // Check for 'var' usage (skip comments and JSDoc)
+        const isComment = line.trim().startsWith('//') || line.trim().startsWith('*');
+        if (line.includes('var ') && !isComment) {
             issues.push({
                 line: lineNum,
                 severity: 'warning',
@@ -34,8 +35,10 @@ export async function detectIssues(content, filePath) {
                 }
             });
         }
-        // Check for console.log
-        if (line.includes('console.log') && !line.trim().startsWith('//')) {
+        // Check for console.log (skip comments, JSDoc, and string literals)
+        const hasConsoleLog = line.includes('console.log');
+        const isInString = line.match(/['"`].*console\.log.*['"`]/);
+        if (hasConsoleLog && !isComment && !isInString) {
             issues.push({
                 line: lineNum,
                 severity: 'info',
@@ -115,14 +118,20 @@ export async function detectIssues(content, filePath) {
                 rule: 'no-magic-numbers'
             });
         }
-        // Check for empty catch blocks
-        if (line.includes('catch') && i + 1 < lines.length && lines[i + 1].trim() === '}') {
-            issues.push({
-                line: lineNum,
-                severity: 'error',
-                message: 'Empty catch block. Handle errors properly.',
-                rule: 'no-empty-catch'
-            });
+        // Check for empty catch blocks (ignore string templates and comments)
+        const hasCatch = line.includes('catch');
+        const isInTemplate = line.match(/['"`].*catch.*['"`]/) || line.includes('${');
+        if (hasCatch && !isComment && !isInTemplate && i + 1 < lines.length) {
+            const nextLine = lines[i + 1].trim();
+            // Only flag if next line is closing brace with no content
+            if (nextLine === '}' || (nextLine.startsWith('}') && !nextLine.includes('//'))) {
+                issues.push({
+                    line: lineNum,
+                    severity: 'error',
+                    message: 'Empty catch block. Handle errors properly.',
+                    rule: 'no-empty-catch'
+                });
+            }
         }
         // Check for nested ternary operators
         const ternaryCount = (line.match(/\?/g) || []).length;
