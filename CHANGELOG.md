@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.12] - 2025-10-03
+
+### Security
+- **HIGH**: Fixed final ReDoS vulnerability in test-generator parser
+  - Removed optional whitespace quantifiers after `\w+` to prevent backtracking
+  - Affected patterns: function and method extraction (lines 25, 91)
+  - Location: `packages/test-generator/src/parser.ts`
+
+### Changed
+- test-generator updated to v1.0.12
+
 ## [1.0.11] - 2025-10-03
 
 ### Security
