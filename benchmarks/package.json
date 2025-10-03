@@ -1,0 +1,23 @@
+{
+  "name": "@mcp-agents/benchmarks",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Performance benchmarks for MCP tools",
+  "type": "module",
+  "scripts": {
+    "bench": "node --expose-gc run-benchmarks.js",
+    "bench:test-gen": "node test-generator/bench.js",
+    "bench:refactor": "node refactor-assistant/bench.js",
+    "bench:security": "node security-scanner/bench.js",
+    "bench:all": "npm run bench",
+    "report": "node generate-report.js"
+  },
+  "dependencies": {
+    "benchmark": "^2.1.4",
+    "chalk": "^5.3.0",
+    "table": "^6.8.1"
+  },
+  "devDependencies": {
+    "@types/benchmark": "^2.1.5"
+  }
+}
