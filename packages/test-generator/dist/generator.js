@@ -9,9 +9,43 @@ export class TestGenerator {
      * Generate comprehensive tests for a source file
      */
     async generateTests(filePath, config = {}) {
+        // Validate file path
+        if (!filePath || typeof filePath !== 'string') {
+            throw new Error('TEST_GEN_001: Invalid file path. Please provide a valid string path to the source file.');
+        }
+        // Validate framework
         const framework = config.framework || 'jest';
-        const content = await readFile(filePath, 'utf-8');
+        const validFrameworks = ['jest', 'vitest', 'mocha', 'ava'];
+        if (!validFrameworks.includes(framework)) {
+            throw new Error(`TEST_GEN_002: Unsupported framework '${framework}'. Supported frameworks: ${validFrameworks.join(', ')}`);
+        }
+        // Read file with better error handling
+        let content;
+        try {
+            content = await readFile(filePath, 'utf-8');
+        }
+        catch (error) {
+            if (error.code === 'ENOENT') {
+                throw new Error(`TEST_GEN_003: File not found: ${filePath}\nPlease check the file path and try again.`);
+            }
+            if (error.code === 'EACCES') {
+                throw new Error(`TEST_GEN_004: Permission denied: ${filePath}\nPlease check file permissions.`);
+            }
+            throw new Error(`TEST_GEN_005: Failed to read file: ${filePath}\nReason: ${error.message}`);
+        }
+        // Validate file content
+        if (!content || content.trim().length === 0) {
+            throw new Error(`TEST_GEN_006: File is empty: ${filePath}\nCannot generate tests for an empty file.`);
+        }
+        // Check file size
+        if (content.length > 1000000) { // 1MB limit
+            throw new Error(`TEST_GEN_007: File too large: ${filePath} (${(content.length / 1024).toFixed(2)} KB)\nMaximum supported file size is 1000 KB.`);
+        }
         const { functions, classes } = this.parser.parseCode(content);
+        // Validate that we found something to test
+        if (functions.length === 0 && classes.length === 0) {
+            throw new Error(`TEST_GEN_008: No testable code found in ${filePath}\nThe file must contain at least one function or class to generate tests.`);
+        }
         const suites = [];
         // Generate tests for functions
         for (const func of functions) {
