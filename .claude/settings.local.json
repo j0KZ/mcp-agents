@@ -16,7 +16,8 @@
       "Bash(for:*)",
       "Bash(do sed -i 's/What''''s New in v1\\.0\\.15/What''''s New in v1.0.19/g' \"$file\")",
       "Read(//d/Users/j0KZ/Downloads/**)",
-      "Bash(tail:*)"
+      "Bash(tail:*)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []

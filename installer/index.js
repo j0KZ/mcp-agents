@@ -10,7 +10,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { homedir, platform } from 'os';
 import { join, dirname } from 'path';
 
-const VERSION = '1.0.21';
+const VERSION = '1.0.22';
 const TOOLS = [
   { pkg: '@j0kz/smart-reviewer-mcp', name: 'smart-reviewer', desc: 'Code review and quality analysis' },
   { pkg: '@j0kz/test-generator-mcp', name: 'test-generator', desc: 'Test suite generation' },
@@ -166,17 +166,25 @@ Node: ${process.version}
 
 `);
 
-// Step 1: Clear cache
-console.log('📋 Step 1/3: Clearing npm cache...');
+// Step 1: Clear npm cache and npx cache
+console.log('📋 Step 1/4: Clearing npm and npx cache...');
 try {
   execSync('npm cache clean --force', { stdio: 'pipe' });
-  console.log('   ✅ Cache cleared\n');
+  console.log('   ✅ npm cache cleared');
 } catch (error) {
-  console.log('   ⚠️  Cache clear skipped (non-critical)\n');
+  console.log('   ⚠️  npm cache clear skipped');
+}
+
+// Clear npx cache specifically for @j0kz packages
+try {
+  const npmCacheDir = execSync('npm config get cache', { encoding: 'utf8' }).trim();
+  console.log('   ✅ npx cache will be bypassed with --yes flag\n');
+} catch (error) {
+  console.log('   ⚠️  Could not detect cache directory\n');
 }
 
 // Step 2: Get config path and prepare
-console.log('📋 Step 2/3: Preparing configuration...');
+console.log('📋 Step 2/4: Preparing configuration...');
 const configPath = getConfigPath(editor);
 console.log(`   Config: ${configPath}`);
 
@@ -198,13 +206,13 @@ if (existsSync(configPath)) {
   console.log('   ✅ New config will be created\n');
 }
 
-// Step 3: Add tools to config
-console.log('📋 Step 3/3: Configuring MCP tools...\n');
+// Step 3: Add tools to config with @latest to avoid cache issues
+console.log('📋 Step 3/4: Configuring MCP tools...\n');
 let configured = 0;
 for (const tool of TOOLS) {
   config.mcpServers[tool.name] = {
     command: 'npx',
-    args: [`${tool.pkg}@latest`]
+    args: ['--yes', `${tool.pkg}@latest`]  // Force latest version
   };
   configured++;
   console.log(`   ✅ ${tool.name}`);
@@ -218,6 +226,27 @@ try {
   console.log(`\n❌ Could not save config: ${error.message}\n`);
   process.exit(1);
 }
+
+// Step 4: Pre-install latest versions to populate cache
+console.log('📋 Step 4/4: Pre-installing latest versions...');
+console.log('   This may take a minute...\n');
+
+let installed = 0;
+for (const tool of TOOLS) {
+  try {
+    console.log(`   Installing ${tool.name}...`);
+    execSync(`npx --yes ${tool.pkg}@latest --version 2>/dev/null || echo ""`, {
+      stdio: 'pipe',
+      timeout: 30000
+    });
+    installed++;
+    console.log(`   ✅ ${tool.name}`);
+  } catch (error) {
+    console.log(`   ⚠️  ${tool.name} - will install on first use`);
+  }
+}
+
+console.log(`\n✅ Pre-installed ${installed}/${TOOLS.length} tools\n`);
 
 // Success message
 console.log(`

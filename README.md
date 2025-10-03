@@ -31,17 +31,23 @@ Install all 8 tools **instantly** with one command:
 
 ```bash
 # For Claude Code (default)
-npx @j0kz/mcp-agents
+npx @j0kz/mcp-agents@latest
 
 # For other editors
-npx @j0kz/mcp-agents cursor     # Cursor
-npx @j0kz/mcp-agents windsurf   # Windsurf
-npx @j0kz/mcp-agents vscode     # VS Code
-npx @j0kz/mcp-agents roo        # Roo Code
-npx @j0kz/mcp-agents trae       # Trae
+npx @j0kz/mcp-agents@latest cursor     # Cursor
+npx @j0kz/mcp-agents@latest windsurf   # Windsurf
+npx @j0kz/mcp-agents@latest vscode     # VS Code
+npx @j0kz/mcp-agents@latest roo        # Roo Code
+npx @j0kz/mcp-agents@latest trae       # Trae
 ```
 
-**That's it!** Restart your editor and all 8 MCP tools will be ready to use.
+**That's it!** The installer will:
+- ✅ Clear npm cache
+- ✅ Configure MCP settings with `@latest` versions
+- ✅ Pre-install all 8 tools
+- ✅ Bypass npx cache issues
+
+Restart your editor and all 8 MCP tools will be ready to use.
 
 <details>
 <summary>📖 More installation options</summary>
