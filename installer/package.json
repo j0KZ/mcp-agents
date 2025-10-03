@@ -1,0 +1,29 @@
+{
+  "name": "@j0kz/mcp-agents",
+  "version": "1.0.20",
+  "description": "One-command installer for all 8 MCP development tools",
+  "type": "module",
+  "bin": {
+    "mcp-agents": "./index.js"
+  },
+  "keywords": [
+    "mcp",
+    "claude",
+    "ai",
+    "tools",
+    "installer",
+    "code-review",
+    "testing",
+    "refactoring"
+  ],
+  "author": "j0KZ",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/j0KZ/mcp-agents.git"
+  },
+  "homepage": "https://github.com/j0KZ/mcp-agents",
+  "bugs": {
+    "url": "https://github.com/j0KZ/mcp-agents/issues"
+  }
+}

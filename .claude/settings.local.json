@@ -14,7 +14,9 @@
       "Bash(git log:*)",
       "Bash(git add:*)",
       "Bash(for:*)",
-      "Bash(do sed -i 's/What''''s New in v1\\.0\\.15/What''''s New in v1.0.19/g' \"$file\")"
+      "Bash(do sed -i 's/What''''s New in v1\\.0\\.15/What''''s New in v1.0.19/g' \"$file\")",
+      "Read(//d/Users/j0KZ/Downloads/**)",
+      "Bash(tail:*)"
     ],
     "deny": [],
     "ask": []

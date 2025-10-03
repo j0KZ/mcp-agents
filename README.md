@@ -23,6 +23,42 @@
 
 ---
 
+## ⚡ Quick Install
+
+Install all 8 tools **instantly** with one command:
+
+```bash
+# For Claude Code (default)
+npx @j0kz/mcp-agents
+
+# For Cursor
+npx @j0kz/mcp-agents cursor
+
+# For Windsurf
+npx @j0kz/mcp-agents windsurf
+```
+
+**That's it!** Restart your editor and all 8 MCP tools will be ready to use.
+
+<details>
+<summary>📖 More installation options</summary>
+
+```bash
+# List all available tools
+npx @j0kz/mcp-agents list
+
+# Clear cache if having issues
+npx @j0kz/mcp-agents clear-cache
+
+# Show help
+npx @j0kz/mcp-agents help
+```
+
+Or use the [manual installation guide](#-installation) below.
+</details>
+
+---
+
 ## 📜 Previous Releases
 
 ### v1.0.18 - Shared Package Published
