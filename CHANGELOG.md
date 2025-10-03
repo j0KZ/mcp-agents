@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.8] - 2025-10-03
+
+### Fixed
+- **api-designer (v1.0.8)**: Fixed GraphQL SDL generation to output 'type' instead of 'object' for object types
+- **api-designer (v1.0.8)**: Fixed test imports to use correct function names (designRESTEndpoints, generateOpenAPI)
+- **refactor-assistant (v1.0.8)**: Fixed convertToAsync regex pattern to properly match callback format
+- **refactor-assistant (v1.0.8)**: Fixed regex lastIndex reset issue after test()
+- All package tests now passing (100% test suite success)
+
+### Changed
+- Bumped api-designer from v1.0.7 to v1.0.8
+- Bumped refactor-assistant from v1.0.7 to v1.0.8
+
 ## [1.0.7] - 2025-10-02
 
 ### Security
