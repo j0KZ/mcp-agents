@@ -62,8 +62,8 @@ export function createMockServer(spec: OpenAPISpec, config: MockServerConfig) {
     app.use((req: Request, _res: Response, next: NextFunction) => {
       // Sanitize request data to prevent log injection
       const method = String(req.method).replace(/[\r\n]/g, '');
-      const path = String(req.path).replace(/[\r\n]/g, '').substring(0, 200);
-      console.log(`[${new Date().toISOString()}] ${method} ${path}`);
+      const safePath = String(req.path).replace(/[\r\n]/g, '').substring(0, 200);
+      console.log(`[${new Date().toISOString()}] ${method} ${safePath}`);
       next();
     });
   }

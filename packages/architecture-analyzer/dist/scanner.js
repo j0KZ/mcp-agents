@@ -151,8 +151,6 @@ export class ProjectScanner {
         // Normalize path separators
         resolved = resolved.replace(/\\/g, '/');
         // Handle TypeScript imports with .js extension (ES modules convention)
-        // Try multiple extensions if no extension provided
-        const extensions = ['.ts', '.tsx', '.js', '.jsx'];
         if (!resolved.match(/\.(ts|tsx|js|jsx|mjs|cjs)$/)) {
             // Check if .js extension maps to .ts file
             if (resolved.endsWith('.js')) {

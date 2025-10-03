@@ -166,8 +166,12 @@ export function extractEntities(requirements: string): string[] {
   const lines = requirements.toLowerCase().split('.');
 
   for (const line of lines) {
+    // Skip very long lines to prevent ReDoS
+    if (line.length > 500) continue;
+
     // Match patterns like "users have", "products contain", etc.
-    const entityMatch = line.match(/(\w+)\s+(have|has|contain|include|store)/);
+    // Limit word length to prevent polynomial regex
+    const entityMatch = line.match(/(\w{1,50})\s+(have|has|contain|include|store)/);
     if (entityMatch) {
       const entity = entityMatch[1].replace(/s$/, ''); // Singular
       if (!entities.includes(entity)) {
@@ -176,7 +180,7 @@ export function extractEntities(requirements: string): string[] {
     }
 
     // Match "X and Y" patterns
-    const multiMatch = line.match(/(\w+)\s+and\s+(\w+)/);
+    const multiMatch = line.match(/(\w{1,50})\s+and\s+(\w{1,50})/);
     if (multiMatch) {
       const entity1 = multiMatch[1].replace(/s$/, '');
       const entity2 = multiMatch[2].replace(/s$/, '');
@@ -193,8 +197,12 @@ export function extractRelationships(requirements: string, _entities: string[]):
   const lines = requirements.toLowerCase().split('.');
 
   for (const line of lines) {
+    // Skip very long lines to prevent ReDoS
+    if (line.length > 500) continue;
+
     // Pattern: "users have many orders"
-    const manyMatch = line.match(/(\w+)\s+have\s+many\s+(\w+)/);
+    // Limit word length to prevent polynomial regex
+    const manyMatch = line.match(/(\w{1,50})\s+have\s+many\s+(\w{1,50})/);
     if (manyMatch) {
       relationships.push({
         name: `${manyMatch[1]}_${manyMatch[2]}`,
@@ -205,7 +213,7 @@ export function extractRelationships(requirements: string, _entities: string[]):
     }
 
     // Pattern: "orders belong to users"
-    const belongsMatch = line.match(/(\w+)\s+belong\s+to\s+(\w+)/);
+    const belongsMatch = line.match(/(\w{1,50})\s+belong\s+to\s+(\w{1,50})/);
     if (belongsMatch) {
       relationships.push({
         name: `${belongsMatch[2]}_${belongsMatch[1]}`,
