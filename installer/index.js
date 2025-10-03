@@ -10,7 +10,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { homedir, platform } from 'os';
 import { join, dirname } from 'path';
 
-const VERSION = '1.0.22';
+const VERSION = '1.0.23';
 const TOOLS = [
   { pkg: '@j0kz/smart-reviewer-mcp', name: 'smart-reviewer', desc: 'Code review and quality analysis' },
   { pkg: '@j0kz/test-generator-mcp', name: 'test-generator', desc: 'Test suite generation' },
@@ -191,9 +191,36 @@ console.log(`   Config: ${configPath}`);
 let config = { mcpServers: {} };
 if (existsSync(configPath)) {
   try {
-    config = JSON.parse(readFileSync(configPath, 'utf8'));
-    if (!config.mcpServers) config.mcpServers = {};
-    console.log('   ✅ Existing config loaded\n');
+    const existingConfig = JSON.parse(readFileSync(configPath, 'utf8'));
+
+    // Fix malformed configs - move all root-level MCP servers into mcpServers
+    if (!existingConfig.mcpServers) {
+      existingConfig.mcpServers = {};
+    }
+
+    // Check for misplaced MCP servers at root level
+    let fixed = false;
+    for (const key of Object.keys(existingConfig)) {
+      if (key !== 'mcpServers' && typeof existingConfig[key] === 'object') {
+        // Move root-level server configs into mcpServers
+        const serverConfig = existingConfig[key];
+        // If it has a nested object with same name, unwrap it
+        if (Object.keys(serverConfig).length === 1 && serverConfig[key]) {
+          existingConfig.mcpServers[key] = serverConfig[key];
+        } else if (serverConfig.command) {
+          existingConfig.mcpServers[key] = serverConfig;
+        }
+        delete existingConfig[key];
+        fixed = true;
+      }
+    }
+
+    config = existingConfig;
+    if (fixed) {
+      console.log('   ⚠️  Fixed malformed config structure\n');
+    } else {
+      console.log('   ✅ Existing config loaded\n');
+    }
   } catch (error) {
     console.log('   ⚠️  Could not read config, creating new one\n');
   }

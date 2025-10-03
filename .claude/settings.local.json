@@ -17,7 +17,9 @@
       "Bash(do sed -i 's/What''''s New in v1\\.0\\.15/What''''s New in v1.0.19/g' \"$file\")",
       "Read(//d/Users/j0KZ/Downloads/**)",
       "Bash(tail:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Read(//c/Users/j0KZ/AppData/Roaming/Claude/logs//**)",
+      "Read(//c/Users/j0KZ/AppData/Roaming/Claude/**)"
     ],
     "deny": [],
     "ask": []

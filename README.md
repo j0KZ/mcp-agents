@@ -43,6 +43,7 @@ npx @j0kz/mcp-agents@latest trae       # Trae
 
 **That's it!** The installer will:
 - ✅ Clear npm cache
+- ✅ Fix malformed config files automatically
 - ✅ Configure MCP settings with `@latest` versions
 - ✅ Pre-install all 8 tools
 - ✅ Bypass npx cache issues
