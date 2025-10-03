@@ -1,4 +1,14 @@
-// Vulnerable code examples for security scanning
+/**
+ * ⚠️ INTENTIONALLY VULNERABLE CODE - FOR TESTING ONLY ⚠️
+ *
+ * This file contains deliberately vulnerable code patterns to demonstrate
+ * the security-scanner MCP tool's capabilities. DO NOT use this code in
+ * production or copy these patterns into real applications.
+ *
+ * Each vulnerability is a realistic example that the security-scanner should detect.
+ *
+ * @see https://github.com/j0KZ/mcp-agents/tree/main/examples/security-scanner
+ */
 
 // SQL Injection vulnerability
 function getUserByEmail(email) {
@@ -36,10 +46,11 @@ function readUserFile(filename) {
   return fs.readFileSync(path, 'utf8');
 }
 
-// Weak cryptography
+// Weak cryptography - CodeQL: js/insufficient-password-hash
+// This intentionally uses MD5 (insecure) instead of bcrypt/scrypt/PBKDF2/Argon2
 const crypto = require('crypto');
 function hashPassword(password) {
-  return crypto.createHash('md5').update(password).digest('hex');
+  return crypto.createHash('md5').update(password).digest('hex'); // Intentionally vulnerable
 }
 
 // No input validation
