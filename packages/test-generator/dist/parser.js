@@ -16,7 +16,7 @@ export class CodeParser {
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
             // Match function declarations (safe pattern with limits to prevent ReDoS)
-            const funcMatch = line.match(/(?:async\s)?(?:function\s|const\s|let\s|var\s)?(\w+)\s?[=:]?\s?(?:async\s)?\(([^)]{0,500})\)/);
+            const funcMatch = line.match(/(?:async\s)?(?:function\s|const\s|let\s|var\s)?(\w+)[=:]?(?:async\s)?\(([^)]{0,500})\)/);
             if (funcMatch) {
                 const isAsync = line.includes('async');
                 const name = funcMatch[1];
@@ -71,7 +71,7 @@ export class CodeParser {
                     }
                     if (inClass && braceCount > 0) {
                         // Extract methods (safe pattern with limits to prevent ReDoS)
-                        const methodMatch = currentLine.match(/(?:async\s)?(\w+)\s?\(([^)]{0,500})\)/);
+                        const methodMatch = currentLine.match(/(?:async\s)?(\w+)\(([^)]{0,500})\)/);
                         if (methodMatch) {
                             const methodName = methodMatch[1];
                             const paramsStr = methodMatch[2];
