@@ -12,6 +12,8 @@ import {
   MockServerConfig,
   ValidationResult,
   APIDesignResult,
+  GraphQLType,
+  APISchema,
 } from './types.js';
 
 /**
@@ -213,7 +215,6 @@ function generateRESTEndpointsFromResources(
   config: APIDesignConfig
 ): RESTEndpoint[] {
   const endpoints: RESTEndpoint[] = [];
-  const _namingCase = config.conventions?.namingCase || 'camelCase';
 
   for (const resource of resources) {
     const resourcePath = `/${resource}`;
@@ -783,7 +784,7 @@ function generateTypeScriptRestClient(spec: OpenAPISpec, options: ClientGenerati
  * Generate TypeScript GraphQL client
  * @private
  */
-function generateTypeScriptGraphQLClient(schema: GraphQLSchema, options: ClientGenerationOptions): string {
+function generateTypeScriptGraphQLClient(_schema: GraphQLSchema, _options: ClientGenerationOptions): string {
   const lines: string[] = [];
 
   lines.push("// GraphQL client");
@@ -816,7 +817,7 @@ function mapSchemaToTSType(schema: APISchema): string {
 
   switch (schema.type) {
     case 'string':
-      return schema.enum ? schema.enum.map(v => `'${v}'`).join(' | ') : 'string';
+      return schema.enum ? schema.enum.map((v: string) => `'${v}'`).join(' | ') : 'string';
     case 'number':
     case 'integer':
       return 'number';

@@ -272,7 +272,7 @@ export class TestGenerator {
   /**
    * Get test file path
    */
-  private getTestFilePath(sourceFile: string, framework: TestFramework): string {
+  private getTestFilePath(sourceFile: string, _framework: TestFramework): string {
     return sourceFile.replace(/\.(ts|js)$/, '.test.$1');
   }
 

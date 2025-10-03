@@ -32,7 +32,7 @@ export function designSchema(
   requirements: string,
   options: SchemaDesignOptions
 ): DatabaseSchema {
-  const { database, normalForm = '3NF', includeTimestamps = true, includeSoftDeletes = false, useUUIDs = false } = options;
+  const { database, normalForm: _normalForm = '3NF', includeTimestamps: _includeTimestamps = true, includeSoftDeletes: _includeSoftDeletes = false, useUUIDs: _useUUIDs = false } = options;
 
   // Parse requirements and extract entities
   const entities = extractEntities(requirements);
@@ -401,7 +401,7 @@ function extractEntities(requirements: string): string[] {
   return Array.from(entities);
 }
 
-function extractRelationships(requirements: string, entities: string[]): Relationship[] {
+function extractRelationships(requirements: string, _entities: string[]): Relationship[] {
   const relationships: Relationship[] = [];
 
   // Simple relationship extraction
@@ -689,7 +689,7 @@ function generateMermaidDiagram(schema: DatabaseSchema, options: ERDiagramOption
   return diagram;
 }
 
-function generateDBMLDiagram(schema: DatabaseSchema, options: ERDiagramOptions): string {
+function generateDBMLDiagram(schema: DatabaseSchema, _options: ERDiagramOptions): string {
   let dbml = '';
 
   for (const table of schema.tables || []) {
@@ -716,7 +716,7 @@ function generateDBMLDiagram(schema: DatabaseSchema, options: ERDiagramOptions):
   return dbml;
 }
 
-function generatePlantUMLDiagram(schema: DatabaseSchema, options: ERDiagramOptions): string {
+function generatePlantUMLDiagram(schema: DatabaseSchema, _options: ERDiagramOptions): string {
   let uml = '@startuml\n';
 
   for (const table of schema.tables || schema.collections || []) {
@@ -905,7 +905,7 @@ function validateSQLSchema(schema: DatabaseSchema, errors: ValidationError[], wa
   }
 }
 
-function validateMongoSchema(schema: DatabaseSchema, errors: ValidationError[], warnings: ValidationWarning[]) {
+function validateMongoSchema(schema: DatabaseSchema, _errors: ValidationError[], warnings: ValidationWarning[]) {
   for (const collection of schema.collections || []) {
     const hasId = collection.fields.some(f => f.name === '_id');
     if (!hasId) {
