@@ -5,7 +5,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import {
   JSDocConfig,
   ReadmeConfig,
@@ -593,7 +593,8 @@ export async function generateChangelog(
 
     let gitOutput: string;
     try {
-      gitOutput = execSync(`git ${gitArgs.join(' ')}`, { encoding: 'utf-8' });
+      // Use execFileSync for safer command execution (prevents shell injection)
+      gitOutput = execFileSync('git', gitArgs, { encoding: 'utf-8' });
     } catch (error) {
       throw new DocError('Git command failed', 'GIT_ERROR', error);
     }
