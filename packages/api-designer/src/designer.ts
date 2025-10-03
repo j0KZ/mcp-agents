@@ -12,10 +12,6 @@ import {
   MockServerConfig,
   ValidationResult,
   APIDesignResult,
-  APISchema,
-  HTTPMethod,
-  GraphQLType,
-  GraphQLField,
 } from './types.js';
 
 /**
@@ -217,7 +213,7 @@ function generateRESTEndpointsFromResources(
   config: APIDesignConfig
 ): RESTEndpoint[] {
   const endpoints: RESTEndpoint[] = [];
-  const namingCase = config.conventions?.namingCase || 'camelCase';
+  const _namingCase = config.conventions?.namingCase || 'camelCase';
 
   for (const resource of resources) {
     const resourcePath = `/${resource}`;
@@ -1036,7 +1032,7 @@ function generateExpressMockServer(spec: OpenAPISpec, config: MockServerConfig):
 
         lines.push(`app.${method}('${expressPath}', (req, res) => {`);
         if (successResponse) {
-          const [statusCode, response] = successResponse;
+          const [statusCode, _response] = successResponse;
           lines.push(`  // ${operation.summary || 'Mock endpoint'}`);
           lines.push(`  res.status(${statusCode}).json({`);
           lines.push(`    message: 'Mock response for ${operation.operationId || path}',`);

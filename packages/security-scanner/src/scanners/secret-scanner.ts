@@ -5,8 +5,6 @@
 import { SecurityFinding, FileScanContext, SeverityLevel, VulnerabilityType, OWASPCategory, SecretPattern } from '../types.js';
 import { generateFindingId, extractCodeContext, calculateEntropy } from '../utils.js';
 
-const ENTROPY_THRESHOLD = 4.5;
-
 export const DEFAULT_SECRET_PATTERNS: SecretPattern[] = [
   {
     name: 'AWS Access Key',
