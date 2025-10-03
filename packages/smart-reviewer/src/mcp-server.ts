@@ -130,7 +130,7 @@ class SmartReviewerServer {
           }
 
           case 'batch_review': {
-            const { filePaths, config } = args as { filePaths: string[]; config?: ReviewConfig };
+            const { filePaths, config: _config } = args as { filePaths: string[]; config?: ReviewConfig };
 
             // Validate input
             if (!Array.isArray(filePaths) || filePaths.length === 0) {
