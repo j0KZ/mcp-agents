@@ -4,7 +4,7 @@
  */
 import * as fs from 'fs';
 import * as path from 'path';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import { DocError, } from './types.js';
 /**
  * Parse TypeScript/JavaScript file to extract documentation information
@@ -486,7 +486,8 @@ export async function generateChangelog(projectPath, config = {}) {
         }
         let gitOutput;
         try {
-            gitOutput = execSync(`git ${gitArgs.join(' ')}`, { encoding: 'utf-8' });
+            // Use execFileSync for safer command execution (prevents shell injection)
+            gitOutput = execFileSync('git', gitArgs, { encoding: 'utf-8' });
         }
         catch (error) {
             throw new DocError('Git command failed', 'GIT_ERROR', error);

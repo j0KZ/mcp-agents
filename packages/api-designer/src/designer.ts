@@ -117,11 +117,21 @@ export function generateOpenAPI(
     // Add endpoints to paths
     if (endpoints) {
       for (const endpoint of endpoints) {
-        if (!spec.paths[endpoint.path]) {
+        // Prevent prototype pollution: reject dangerous keys
+        if (endpoint.path === '__proto__' || endpoint.path === 'constructor' || endpoint.path === 'prototype') {
+          continue;
+        }
+
+        if (!Object.prototype.hasOwnProperty.call(spec.paths, endpoint.path)) {
           spec.paths[endpoint.path] = {};
         }
 
         const method = endpoint.method.toLowerCase();
+        // Additional safety check for method
+        if (method === '__proto__' || method === 'constructor' || method === 'prototype') {
+          continue;
+        }
+
         spec.paths[endpoint.path][method] = {
           summary: endpoint.summary,
           description: endpoint.description,

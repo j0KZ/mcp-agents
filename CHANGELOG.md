@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.10] - 2025-10-03
+
+### Security
+- **CRITICAL**: Fixed ReDoS vulnerabilities in refactor-assistant (6 regex patterns)
+  - Added 100KB input size limits to prevent denial of service
+  - Replaced unbounded quantifiers with length-limited patterns
+  - Affected functions: convertToAsync, simplifyConditionals, helper functions
+- **HIGH**: Fixed shell command injection in doc-generator
+  - Changed from execSync to execFileSync for safe command execution
+  - Prevents arbitrary command injection via git parameters
+- **MEDIUM**: Fixed prototype pollution in api-designer
+  - Added checks for dangerous keys (__proto__, constructor, prototype)
+  - Safe property access using hasOwnProperty.call()
+
+### Changed
+- All packages updated to v1.0.10
+
 ## [1.0.9] - 2025-10-03
 
 ### Changed

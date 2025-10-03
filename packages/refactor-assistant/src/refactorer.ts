@@ -126,11 +126,22 @@ export function extractFunction(
 export function convertToAsync(options: ConvertToAsyncOptions): RefactoringResult {
   try {
     const { code, useTryCatch = true } = options;
+
+    // Prevent ReDoS: limit input size
+    if (code.length > 100000) {
+      return {
+        code,
+        changes: [],
+        success: false,
+        error: 'Code too large for refactoring (max 100KB)',
+      };
+    }
+
     let refactoredCode = code;
     const changes: RefactoringChange[] = [];
 
-    // Pattern: callback(err, data) => async/await
-    const callbackPattern = /(\w+)\s*\(\s*\(err,\s*(\w+)\)\s*=>\s*\{/g;
+    // Pattern: callback(err, data) => async/await (safe pattern)
+    const callbackPattern = /(\w+)\s?\(\s?\(err,\s?(\w+)\)\s?=>\s?\{/g;
 
     if (callbackPattern.test(code)) {
       // Convert to async function
@@ -166,8 +177,8 @@ export function convertToAsync(options: ConvertToAsyncOptions): RefactoringResul
       });
     }
 
-    // Convert Promise.then chains
-    const thenPattern = /\.then\s*\(\s*(?:function\s*)?\(([^)]+)\)\s*=>\s*\{/g;
+    // Convert Promise.then chains (safe pattern with limited quantifiers)
+    const thenPattern = /\.then\s?\(\s?(?:function\s?)?\(([^)]{1,100})\)\s?=>\s?\{/g;
     if (thenPattern.test(code)) {
       refactoredCode = convertThenChainToAsync(refactoredCode);
       changes.push({
@@ -209,6 +220,17 @@ export function convertToAsync(options: ConvertToAsyncOptions): RefactoringResul
 export function simplifyConditionals(options: SimplifyConditionalsOptions): RefactoringResult {
   try {
     const { code, useGuardClauses = true, useTernary = true } = options;
+
+    // Prevent ReDoS: limit input size
+    if (code.length > 100000) {
+      return {
+        code,
+        changes: [],
+        success: false,
+        error: 'Code too large for refactoring (max 100KB)',
+      };
+    }
+
     let refactoredCode = code;
     const changes: RefactoringChange[] = [];
 
@@ -224,9 +246,9 @@ export function simplifyConditionals(options: SimplifyConditionalsOptions): Refa
       }
     }
 
-    // Convert simple if/else to ternary
+    // Convert simple if/else to ternary (safe pattern with length limits)
     if (useTernary) {
-      const ternaryPattern = /if\s*\(([^)]+)\)\s*{\s*return\s+([^;]+);\s*}\s*else\s*{\s*return\s+([^;]+);\s*}/g;
+      const ternaryPattern = /if\s?\(([^)]{1,200})\)\s?\{\s?return\s+([^;]{1,200});\s?\}\s?else\s?\{\s?return\s+([^;]{1,200});\s?\}/g;
       const originalCode = refactoredCode;
       refactoredCode = refactoredCode.replace(
         ternaryPattern,
@@ -628,18 +650,18 @@ function getIndentation(line: string): string {
 }
 
 function convertThenChainToAsync(code: string): string {
-  // Basic conversion of .then() chains
+  // Basic conversion of .then() chains (safe pattern with limits)
   return code
-    .replace(/\.then\s*\(\s*(?:function\s*)?\(([^)]+)\)\s*=>\s*\{/g, '\nconst $1 = await ')
-    .replace(/}\s*\)/g, ';');
+    .replace(/\.then\s?\(\s?(?:function\s?)?\(([^)]{1,100})\)\s?=>\s?\{/g, '\nconst $1 = await ')
+    .replace(/}\s?\)/g, ';');
 }
 
 function applyGuardClauses(code: string): { code: string; changed: boolean } {
   let changed = false;
   let result = code;
 
-  // Pattern: if (condition) { main logic } else { return/throw }
-  const guardPattern = /if\s*\(([^)]+)\)\s*\{([^}]+)\}\s*else\s*\{([^}]*(?:return|throw)[^}]*)\}/g;
+  // Pattern: if (condition) { main logic } else { return/throw } (safe with limits)
+  const guardPattern = /if\s?\(([^)]{1,200})\)\s?\{([^}]{1,500})\}\s?else\s?\{([^}]{1,200}(?:return|throw)[^}]{0,100})\}/g;
 
   result = result.replace(guardPattern, (_match, condition, mainLogic, guardLogic) => {
     changed = true;
@@ -652,8 +674,8 @@ function applyGuardClauses(code: string): { code: string; changed: boolean } {
 function combineNestedConditions(code: string): { code: string; changed: boolean } {
   let changed = false;
 
-  // Pattern: if (a) { if (b) { ... } }
-  const nestedPattern = /if\s*\(([^)]+)\)\s*\{\s*if\s*\(([^)]+)\)\s*\{([^}]+)\}\s*\}/g;
+  // Pattern: if (a) { if (b) { ... } } (safe with limits)
+  const nestedPattern = /if\s?\(([^)]{1,200})\)\s?\{\s?if\s?\(([^)]{1,200})\)\s?\{([^}]{1,500})\}\s?\}/g;
 
   const result = code.replace(nestedPattern, (_match, cond1, cond2, body) => {
     changed = true;
