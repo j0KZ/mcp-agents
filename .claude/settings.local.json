@@ -12,7 +12,9 @@
       "Bash(do sed -i 's/\"\"version\"\": \"\"1.0.17\"\"/\"\"version\"\": \"\"1.0.18\"\"/g' \"$pkg\")",
       "Bash(done)",
       "Bash(git log:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(for:*)",
+      "Bash(do sed -i 's/What''''s New in v1\\.0\\.15/What''''s New in v1.0.19/g' \"$file\")"
     ],
     "deny": [],
     "ask": []

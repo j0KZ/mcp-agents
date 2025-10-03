@@ -3,10 +3,10 @@
 > Generate comprehensive test suites with edge cases and mocks
 
 [![npm version](https://img.shields.io/npm/v/@j0kz/test-generator-mcp)](https://www.npmjs.com/package/@j0kz/test-generator-mcp)
-[![Version](https://img.shields.io/badge/version-1.0.15-blue.svg)](https://github.com/j0KZ/mcp-agents/blob/main/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.19-blue.svg)](https://github.com/j0KZ/mcp-agents/blob/main/CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 🎉 What's New in v1.0.15
+## 🎉 What's New in v1.0.19
 
 - **🔒 Security Hardened**: Fixed ReDoS vulnerabilities with input validation
 - **📚 Comprehensive Examples**: New example files in [`examples/test-generator/`](../../examples/test-generator/)

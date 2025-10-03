@@ -3,10 +3,10 @@
 > AI-powered code review with quality metrics and automated fixes
 
 [![npm version](https://img.shields.io/npm/v/@j0kz/smart-reviewer-mcp)](https://www.npmjs.com/package/@j0kz/smart-reviewer-mcp)
-[![Version](https://img.shields.io/badge/version-1.0.15-blue.svg)](https://github.com/j0KZ/mcp-agents/blob/main/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.19-blue.svg)](https://github.com/j0KZ/mcp-agents/blob/main/CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 🎉 What's New in v1.0.15
+## 🎉 What's New in v1.0.19
 
 - **📚 Comprehensive Examples**: New example files in [`examples/smart-reviewer/`](../../examples/smart-reviewer/)
 - **🎯 Better Error Messages**: Improved validation and error handling
