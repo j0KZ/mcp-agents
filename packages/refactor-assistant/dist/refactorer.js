@@ -101,16 +101,18 @@ export function convertToAsync(options) {
         let refactoredCode = code;
         const changes = [];
         // Pattern: callback(err, data) => async/await
-        const callbackPattern = /(\w+)\s*\(\s*([^,]+),\s*\(err,\s*(\w+)\)\s*=>\s*\{/g;
+        const callbackPattern = /(\w+)\s*\(\s*\(err,\s*(\w+)\)\s*=>\s*\{/g;
         if (callbackPattern.test(code)) {
             // Convert to async function
             refactoredCode = refactoredCode.replace(/function\s+(\w+)\s*\(/g, 'async function $1(');
+            // Reset regex for replace (test() consumed it)
+            callbackPattern.lastIndex = 0;
             // Convert callbacks to await
-            refactoredCode = refactoredCode.replace(callbackPattern, (_match, fn, arg, dataVar) => {
+            refactoredCode = refactoredCode.replace(callbackPattern, (_match, fn, dataVar) => {
                 if (useTryCatch) {
-                    return `try {\n  const ${dataVar} = await ${fn}(${arg});\n`;
+                    return `try {\n  const ${dataVar} = await ${fn}();\n`;
                 }
-                return `const ${dataVar} = await ${fn}(${arg});\n`;
+                return `const ${dataVar} = await ${fn}();\n`;
             });
             // Add error handling if needed
             if (useTryCatch) {
