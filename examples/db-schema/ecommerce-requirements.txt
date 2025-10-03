@@ -1,0 +1,12 @@
+Design a database schema for an e-commerce platform
+
+Requirements:
+- Users can create accounts with email and password
+- Users have profiles with name, address, and phone
+- Products belong to categories
+- Products have name, description, price, and stock quantity
+- Customers can place orders containing multiple products
+- Orders have status (pending, paid, shipped, delivered)
+- Track order history and shipping addresses
+- Support product reviews and ratings
+- Maintain inventory levels
