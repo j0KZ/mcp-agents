@@ -17,7 +17,7 @@
 - **🎯 Better Error Messages**: Structured error codes with actionable suggestions
 - **✅ Production Ready**: All packages tested, built, and unified to v1.0.15
 
-[View Full Changelog](CHANGELOG.md#1015---2025-01-03)
+[View Full Changelog](CHANGELOG.md#1015---2025-10-03)
 
 ## 🚀 Install All 8 Tools (One Command)
 

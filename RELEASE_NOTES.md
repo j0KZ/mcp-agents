@@ -1,6 +1,6 @@
 # Release Notes - v1.0.15
 
-**Release Date:** January 3, 2025
+**Release Date:** October 3, 2025
 
 ## 🎉 Major Release Highlights
 
