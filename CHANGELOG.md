@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 
 ## [1.0.18] - 2025-10-03
+n## [1.0.19] - 2025-10-03
+
+### Fixed
+- **Critical**: Rebuilt all packages with correct compiled imports
+  - Compiled JavaScript files in `dist/` now correctly import `@j0kz/shared`
+  - Fixed remaining `@mcp-tools/shared` references in built files
+  - All packages now fully functional when installed via npx
+
+### Changed
+- **All packages updated to v1.0.19**
+  - api-designer: 1.0.18 → 1.0.19
+  - smart-reviewer: 1.0.18 → 1.0.19
+  - architecture-analyzer: 1.0.18 → 1.0.19
+  - refactor-assistant: 1.0.18 → 1.0.19
+  - db-schema: 1.0.18 → 1.0.19
+  - doc-generator: 1.0.18 → 1.0.19
+  - security-scanner: 1.0.18 → 1.0.19
+  - test-generator: 1.0.18 → 1.0.19
+
+---
+
 
 ### Fixed
 - **Critical**: Published `@j0kz/shared` package to npm
