@@ -6,156 +6,20 @@ import {
   RefactoringResult,
   RefactoringChange,
   RefactoringSuggestion,
-  ExtractFunctionOptions,
   ConvertToAsyncOptions,
   SimplifyConditionalsOptions,
   RemoveDeadCodeOptions,
   ApplyPatternOptions,
   RenameVariableOptions,
-  CodeMetrics,
   DesignPattern,
 } from './types.js';
 
-/**
- * Extract a code block into a separate function
- *
- * @param code - Source code containing the block to extract
- * @param options - Extraction options including function name and line range
- * @returns Refactoring result with extracted function
- *
- * @example
- * ```typescript
- * const result = extractFunction(sourceCode, {
- *   functionName: 'calculateTotal',
- *   startLine: 10,
- *   endLine: 15
- * });
- * ```
- */
-export function extractFunction(
-  code: string,
-  options: ExtractFunctionOptions
-): RefactoringResult {
-  try {
-    // Validate inputs
-    if (!code || typeof code !== 'string') {
-      return {
-        code: '',
-        changes: [],
-        success: false,
-        error: 'REFACTOR_001: Invalid code input. Code must be a non-empty string.',
-      };
-    }
+// Re-export from modular components
+export { extractFunction } from './core/extract-function.js';
+export { calculateMetrics, findDuplicateBlocks } from './analysis/metrics-calculator.js';
 
-    if (code.length > 100000) {
-      return {
-        code,
-        changes: [],
-        success: false,
-        error: `REFACTOR_002: Code too large (${(code.length / 1024).toFixed(2)} KB). Maximum size is 100 KB.`,
-      };
-    }
-
-    const { functionName, startLine, endLine, async = false, arrow = false } = options;
-
-    // Validate function name
-    if (!functionName || typeof functionName !== 'string') {
-      return {
-        code,
-        changes: [],
-        success: false,
-        error: 'REFACTOR_003: Invalid function name. Please provide a valid function name.',
-      };
-    }
-
-    if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(functionName)) {
-      return {
-        code,
-        changes: [],
-        success: false,
-        error: `REFACTOR_004: Invalid function name '${functionName}'. Function names must start with a letter, underscore, or $ and contain only alphanumeric characters.`,
-      };
-    }
-
-    const lines = code.split('\n');
-
-    // Validate line range
-    if (!startLine || !endLine || typeof startLine !== 'number' || typeof endLine !== 'number') {
-      return {
-        code,
-        changes: [],
-        success: false,
-        error: 'REFACTOR_005: Invalid line range. startLine and endLine must be numbers.',
-      };
-    }
-
-    if (startLine < 1 || endLine > lines.length || startLine > endLine) {
-      return {
-        code,
-        changes: [],
-        success: false,
-        error: `REFACTOR_006: Invalid line range (${startLine}-${endLine}). Valid range is 1-${lines.length}, and startLine must be <= endLine.`,
-      };
-    }
-
-    // Extract the code block (convert to 0-indexed)
-    const extractedLines = lines.slice(startLine - 1, endLine);
-    const extractedCode = extractedLines.join('\n');
-
-    // Analyze variables used in the extracted code
-    const { parameters, returnValue } = analyzeCodeBlock(extractedCode);
-
-    // Generate function signature
-    const asyncKeyword = async ? 'async ' : '';
-    const functionDeclaration = arrow
-      ? `const ${functionName} = ${asyncKeyword}(${parameters.join(', ')}) => {`
-      : `${asyncKeyword}function ${functionName}(${parameters.join(', ')}) {`;
-
-    // Build the extracted function
-    const indentation = getIndentation(lines[startLine - 1]);
-    const functionBody = extractedLines.map(line => indentation + line).join('\n');
-    const returnStatement = returnValue ? `\n${indentation}  return ${returnValue};` : '';
-    const extractedFunction =
-      `${indentation}${functionDeclaration}\n${functionBody}${returnStatement}\n${indentation}}`;
-
-    // Generate function call
-    const functionCall = returnValue
-      ? `${indentation}const result = ${async ? 'await ' : ''}${functionName}(${parameters.join(', ')});`
-      : `${indentation}${async ? 'await ' : ''}${functionName}(${parameters.join(', ')});`;
-
-    // Replace original code with function call
-    const newLines = [
-      ...lines.slice(0, startLine - 1),
-      functionCall,
-      ...lines.slice(endLine),
-      '',
-      extractedFunction,
-    ];
-
-    const changes: RefactoringChange[] = [
-      {
-        type: 'extract-function',
-        description: `Extracted function '${functionName}' from lines ${startLine}-${endLine}`,
-        lineRange: { start: startLine, end: endLine },
-        before: extractedCode,
-        after: extractedFunction,
-      },
-    ];
-
-    return {
-      code: newLines.join('\n'),
-      changes,
-      success: true,
-    };
-  } catch (error) {
-    return {
-      code,
-      changes: [],
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error during function extraction',
-    };
-  }
-}
+// Import for internal use
+import { findDuplicateBlocks, getNestingDepth } from './analysis/metrics-calculator.js';
 
 /**
  * Convert callback-based code to async/await
@@ -637,65 +501,7 @@ export function suggestRefactorings(code: string, _filePath?: string): Refactori
   return suggestions;
 }
 
-/**
- * Calculate code metrics for quality analysis
- *
- * @param code - Source code to analyze
- * @returns Code metrics object
- */
-export function calculateMetrics(code: string): CodeMetrics {
-  const lines = code.split('\n').filter(line => line.trim() && !line.trim().startsWith('//'));
-  const functionCount = (code.match(/function\s+\w+/g) || []).length +
-                        (code.match(/const\s+\w+\s*=\s*\([^)]*\)\s*=>/g) || []).length;
-
-  const complexity = calculateCyclomaticComplexity(code);
-  const maxNestingDepth = Math.max(...lines.map((_, idx) => getNestingDepth(lines, idx)));
-
-  return {
-    complexity,
-    linesOfCode: lines.length,
-    functionCount,
-    maxNestingDepth,
-    maintainabilityIndex: calculateMaintainabilityIndex(lines.length, complexity, functionCount),
-  };
-}
-
 // Helper functions
-
-function analyzeCodeBlock(code: string): { parameters: string[]; returnValue: string | null } {
-  const variables = new Set<string>();
-  const declarations = new Set<string>();
-
-  // Find variable usages
-  const usagePattern = /\b([a-zA-Z_$][a-zA-Z0-9_$]*)\b/g;
-  let match;
-  while ((match = usagePattern.exec(code)) !== null) {
-    const varName = match[1];
-    if (!['if', 'else', 'for', 'while', 'return', 'const', 'let', 'var'].includes(varName)) {
-      variables.add(varName);
-    }
-  }
-
-  // Find variable declarations
-  const declPattern = /(?:const|let|var)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)/g;
-  while ((match = declPattern.exec(code)) !== null) {
-    declarations.add(match[1]);
-  }
-
-  // Parameters are variables used but not declared
-  const parameters = Array.from(variables).filter(v => !declarations.has(v));
-
-  // Check for return value
-  const returnMatch = code.match(/return\s+([^;]+);?/);
-  const returnValue = returnMatch ? returnMatch[1].trim() : null;
-
-  return { parameters, returnValue };
-}
-
-function getIndentation(line: string): string {
-  const match = line.match(/^(\s*)/);
-  return match ? match[1] : '';
-}
 
 function convertThenChainToAsync(code: string): string {
   // Basic conversion of .then() chains (safe pattern with limits)
@@ -1113,67 +919,6 @@ function analyzeFunctionLengths(code: string): Array<{ name: string; startLine: 
   }
 
   return functions;
-}
-
-function getNestingDepth(lines: string[], index: number): number {
-  let depth = 0;
-  for (let i = 0; i <= index; i++) {
-    const line = lines[i];
-    depth += (line.match(/\{/g) || []).length;
-    depth -= (line.match(/\}/g) || []).length;
-  }
-  return Math.max(0, depth);
-}
-
-function findDuplicateBlocks(code: string): Array<{ line1: number; line2: number }> {
-  // Simplified duplicate detection
-  const lines = code.split('\n');
-  const duplicates: Array<{ line1: number; line2: number }> = [];
-  const minBlockSize = 3;
-
-  for (let i = 0; i < lines.length - minBlockSize; i++) {
-    const block1 = lines.slice(i, i + minBlockSize).join('\n').trim();
-    if (!block1) continue;
-
-    for (let j = i + minBlockSize; j < lines.length - minBlockSize; j++) {
-      const block2 = lines.slice(j, j + minBlockSize).join('\n').trim();
-      if (block1 === block2) {
-        duplicates.push({ line1: i + 1, line2: j + 1 });
-      }
-    }
-  }
-
-  return duplicates;
-}
-
-function calculateCyclomaticComplexity(code: string): number {
-  const decisionPoints = [
-    /\bif\b/g,
-    /\belse\b/g,
-    /\bfor\b/g,
-    /\bwhile\b/g,
-    /\bcase\b/g,
-    /\bcatch\b/g,
-    /\b&&\b/g,
-    /\b\|\|\b/g,
-    /\?/g,
-  ];
-
-  let complexity = 1; // Base complexity
-  decisionPoints.forEach(pattern => {
-    const matches = code.match(pattern);
-    complexity += matches ? matches.length : 0;
-  });
-
-  return complexity;
-}
-
-function calculateMaintainabilityIndex(loc: number, complexity: number, functionCount: number): number {
-  // Simplified maintainability index calculation
-  // Real formula: 171 - 5.2 * ln(Halstead Volume) - 0.23 * (Cyclomatic Complexity) - 16.2 * ln(Lines of Code)
-  const volume = loc * Math.log2(functionCount || 1);
-  const index = Math.max(0, Math.min(100, 171 - 5.2 * Math.log(volume) - 0.23 * complexity - 16.2 * Math.log(loc)));
-  return Math.round(index);
 }
 
 function escapeRegExp(string: string): string {
