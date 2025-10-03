@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/doc-generator-mcp",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "Documentation Generator MCP - Auto-generate JSDoc, README, API docs, and changelogs from code. Works with Claude Code, Cursor, Windsurf, Roo Code, and any MCP-compatible editor.",
   "type": "module",
   "main": "./dist/index.js",

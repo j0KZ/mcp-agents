@@ -341,7 +341,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           config: APIDesignConfig;
           customTypes?: GraphQLType[];
         };
-        const result = createGraphQLSchema(config, customTypes);
+        const result = createGraphQLSchema(customTypes || [], config);
         return {
           content: [
             {

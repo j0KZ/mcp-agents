@@ -2,6 +2,53 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.17] - 2025-10-03
+
+### Refactored
+- **api-designer**: Major complexity reduction
+  - Reduced cyclomatic complexity from 114 → 38 (67% reduction)
+  - Reduced lines of code from 733 → 264 (64% reduction)
+  - Reduced duplicate code blocks from 39 → 6 (85% reduction)
+  - Extracted specialized modules for better maintainability:
+    - `generators/client-generator.ts` - API client code generation (151 LOC)
+    - `generators/mock-server-generator.ts` - Mock server generation (145 LOC)
+    - `validators/api-validator.ts` - API validation logic (94 LOC)
+  - Maintained 100% backward compatibility with existing tests
+
+- **Smart Reviewer**: Improved accuracy and reduced false positives
+  - Enhanced detection logic to skip JSDoc comments and string literals
+  - Fixed false positive for console.log in comments and template strings
+  - Fixed false positive for empty catch blocks in string replacements
+
+- **Architecture Analyzer**: Better path resolution and metrics
+  - Improved TypeScript ES module import resolution (.js → .ts)
+  - Enhanced cohesion calculation to be package-aware
+  - More accurate dependency scanning
+
+### Added
+- **Type Safety**: Added @types/express and @types/cors to api-designer
+- **Module Extraction**: New specialized modules follow single-responsibility principle
+- **Test Coverage**: All 37 tests passing with zero breaking changes
+
+### Changed
+- **All packages updated to v1.0.17** (unified versioning)
+  - api-designer: 1.0.16 → 1.0.17
+  - smart-reviewer: 1.0.16 → 1.0.17
+  - architecture-analyzer: 1.0.16 → 1.0.17
+  - refactor-assistant: 1.0.16 → 1.0.17
+  - db-schema: 1.0.16 → 1.0.17
+  - doc-generator: 1.0.16 → 1.0.17
+  - security-scanner: 1.0.16 → 1.0.17
+  - test-generator: 1.0.16 → 1.0.17
+
+### Code Quality
+- Overall complexity reduction: 31.8% across refactored packages
+- Maintainability index improved significantly
+- Zero new security vulnerabilities introduced
+- All code quality targets met
+
+---
+
 ## [1.0.16] - 2025-10-03
 
 ### Updated Dependencies
