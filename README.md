@@ -314,13 +314,13 @@ roo mcp add db-schema npx @j0kz/db-schema-mcp
 
 1. Open Trae
 2. Go to Settings → Extensions → Model Context Protocol
-3. Click "Add MCP Server"
-4. For each tool, add an entry:
+3. Click "Add MCP Server" or edit the MCP configuration file
+4. Add this configuration:
 
 **Configuration Format:**
 ```json
 {
-  "mcp_servers": {
+  "mcpServers": {
     "smart-reviewer": {
       "command": "npx",
       "args": ["@j0kz/smart-reviewer-mcp"]
@@ -356,6 +356,8 @@ roo mcp add db-schema npx @j0kz/db-schema-mcp
   }
 }
 ```
+
+**Note:** The property name is `mcpServers` (camelCase), not `mcp_servers`.
 
 **Then restart Trae!**
 
