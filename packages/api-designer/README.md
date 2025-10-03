@@ -3,7 +3,14 @@
 > Design REST and GraphQL APIs with OpenAPI generation
 
 [![npm version](https://img.shields.io/npm/v/@j0kz/api-designer-mcp)](https://www.npmjs.com/package/@j0kz/api-designer-mcp)
+[![Version](https://img.shields.io/badge/version-1.0.15-blue.svg)](https://github.com/j0KZ/mcp-agents/blob/main/CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+## 🎉 What's New in v1.0.15
+
+- **📚 Comprehensive Examples**: New example files in [`examples/api-designer/`](../../examples/api-designer/)
+- **🎯 Better Error Messages**: Improved validation and error handling
+- **✅ Production Ready**: Enhanced OpenAPI generation and REST/GraphQL design
 
 ## 🚀 Quick Start
 

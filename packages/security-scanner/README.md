@@ -3,7 +3,15 @@
 > Scan for vulnerabilities, OWASP issues, and security best practices
 
 [![npm version](https://img.shields.io/npm/v/@j0kz/security-scanner-mcp)](https://www.npmjs.com/package/@j0kz/security-scanner-mcp)
+[![Version](https://img.shields.io/badge/version-1.0.15-blue.svg)](https://github.com/j0KZ/mcp-agents/blob/main/CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+## 🎉 What's New in v1.0.15
+
+- **🔒 Security Hardening**: Enhanced vulnerability detection and OWASP compliance checks
+- **📚 Comprehensive Examples**: New example files in [`examples/security-scanner/`](../../examples/security-scanner/)
+- **🎯 Better Error Messages**: Improved validation and error handling
+- **✅ Production Ready**: Enhanced secrets detection and dependency scanning
 
 ## 🚀 Quick Start
 
