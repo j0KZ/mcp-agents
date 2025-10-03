@@ -3,23 +3,25 @@
 > **8 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
-[![Version](https://img.shields.io/badge/version-1.0.19-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.20-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
 
-## 🎉 What's New in v1.0.19
+## 🎉 What's New in v1.0.20
 
-- **🔧 Critical Fix**: Rebuilt dist files with correct imports
-  - Fixed remaining `@mcp-tools/shared` imports in compiled JavaScript
-  - All packages now fully functional when installed via npx
-  - Verified working in all MCP-compatible editors
-- **✅ Complete Fix**: ERR_MODULE_NOT_FOUND resolved
-  - Published `@j0kz/shared@1.0.16` to npm
-  - All 8 tools now correctly import from published shared package
+- **🚀 One-Command Installer**: Install all 8 tools instantly
+  - New package: `@j0kz/mcp-agents`
+  - Run: `npx @j0kz/mcp-agents` and you're done!
+  - Auto-configures Claude Code, Cursor, or Windsurf
+  - Built-in troubleshooting with `clear-cache` command
+- **📦 Simplified Installation**: No more manual config editing
+  - Automatically updates MCP settings
+  - Works cross-platform (Windows, macOS, Linux)
+  - See [Quick Install](#-quick-install) below
 
-[View Full Changelog](CHANGELOG.md#1019---2025-10-03)
+[View Full Changelog](CHANGELOG.md#1020---2025-10-03)
 
 ---
 
@@ -60,6 +62,10 @@ Or use the [manual installation guide](#-installation) below.
 ---
 
 ## 📜 Previous Releases
+
+### v1.0.19 - Dist Rebuild
+- Rebuilt dist files with correct @j0kz/shared imports
+- Fixed ERR_MODULE_NOT_FOUND errors completely
 
 ### v1.0.18 - Shared Package Published
 - Published @j0kz/shared package to npm
