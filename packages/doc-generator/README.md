@@ -3,7 +3,14 @@
 > Auto-generate JSDoc, README, and API documentation from code
 
 [![npm version](https://img.shields.io/npm/v/@j0kz/doc-generator-mcp)](https://www.npmjs.com/package/@j0kz/doc-generator-mcp)
+[![Version](https://img.shields.io/badge/version-1.0.15-blue.svg)](https://github.com/j0KZ/mcp-agents/blob/main/CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+## 🎉 What's New in v1.0.15
+
+- **📚 Comprehensive Examples**: New example files in [`examples/doc-generator/`](../../examples/doc-generator/)
+- **🎯 Better Error Messages**: Improved validation and error handling
+- **✅ Production Ready**: Enhanced JSDoc generation and API documentation
 
 ## 🚀 Quick Start
 

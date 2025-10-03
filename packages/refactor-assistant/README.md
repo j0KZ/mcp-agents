@@ -3,7 +3,15 @@
 > Intelligent code refactoring with pattern detection and suggestions
 
 [![npm version](https://img.shields.io/npm/v/@j0kz/refactor-assistant-mcp)](https://www.npmjs.com/package/@j0kz/refactor-assistant-mcp)
+[![Version](https://img.shields.io/badge/version-1.0.15-blue.svg)](https://github.com/j0KZ/mcp-agents/blob/main/CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+## 🎉 What's New in v1.0.15
+
+- **🔒 Security Hardened**: Fixed ReDoS vulnerabilities with bounded quantifiers
+- **📚 Comprehensive Examples**: New example files in [`examples/refactor-assistant/`](../../examples/refactor-assistant/)
+- **🎯 Better Error Messages**: Structured error codes (REFACTOR_001-006) with actionable suggestions
+- **✅ Production Ready**: Enhanced validation for function names, line ranges, and code size limits
 
 ## 🚀 Quick Start
 

@@ -3,10 +3,21 @@
 > **8 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
+[![Version](https://img.shields.io/badge/version-1.0.15-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
+
+## 🎉 What's New in v1.0.15
+
+- **🔒 Security Hardened**: All ReDoS vulnerabilities fixed with input validation
+- **📚 Comprehensive Examples**: 19 new example files and tutorials for all tools
+- **⚡ Performance Benchmarks**: New benchmarking infrastructure with Benchmark.js
+- **🎯 Better Error Messages**: Structured error codes with actionable suggestions
+- **✅ Production Ready**: All packages tested, built, and unified to v1.0.15
+
+[View Full Changelog](CHANGELOG.md#1015---2025-01-03)
 
 ## 🚀 Install All 8 Tools (One Command)
 
@@ -186,6 +197,17 @@ After installation, just chat naturally:
 "Generate migrations"
 "Optimize this schema"
 ```
+
+### 📘 New Examples & Tutorials
+
+Check out the [`examples/`](examples/) directory for comprehensive guides:
+
+- **[Getting Started Tutorial](examples/tutorials/01-getting-started.md)** - Your first steps with the toolkit
+- **[Common Workflows](examples/tutorials/02-common-workflows.md)** - Real-world usage patterns
+- **[Advanced Usage](examples/tutorials/03-advanced-usage.md)** - Power user techniques
+- **[Best Practices](examples/tutorials/04-best-practices.md)** - Tips for optimal results
+
+Each tool has dedicated examples with sample code and expected outputs!
 
 ---
 
