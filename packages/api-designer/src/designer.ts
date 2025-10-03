@@ -73,8 +73,7 @@ export function createGraphQLSchema(
       config = optionalConfig;
     } else {
       // Old signature: config with resources
-      config = configOrTypes;
-      types = (config.resources || []).map(resource => ({
+      types = (configOrTypes.resources || []).map(resource => ({
         name: resource,
         kind: 'object' as const,
         fields: [
@@ -82,6 +81,7 @@ export function createGraphQLSchema(
           { name: 'name', type: 'String!' },
         ],
       }));
+      config = configOrTypes;
     }
 
     const queries: any[] = [];
