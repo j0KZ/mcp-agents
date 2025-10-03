@@ -8,7 +8,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { CodeAnalyzer } from './analyzer.js';
 import { ReviewConfig } from './types.js';
-import { validateFilePath } from '@mcp-tools/shared';
+import { validateFilePath } from '@j0kz/shared';
 
 class SmartReviewerServer {
   private server: Server;

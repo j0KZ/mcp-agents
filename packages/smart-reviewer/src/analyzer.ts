@@ -4,7 +4,7 @@ import {
   AnalysisCache,
   PerformanceMonitor,
   generateHash,
-} from '@mcp-tools/shared';
+} from '@j0kz/shared';
 import { DEFAULTS } from './constants.js';
 import {
   detectIssues,
@@ -118,7 +118,7 @@ export class CodeAnalyzer {
     const results = new Map<string, ReviewResult>();
 
     // Use shared batch processing utility
-    const { batchProcess } = await import('@mcp-tools/shared');
+    const { batchProcess } = await import('@j0kz/shared');
 
     const reviews = await batchProcess(
       filePaths,

@@ -3,7 +3,7 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { CallToolRequestSchema, ListToolsRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
 import { ArchitectureAnalyzer } from './analyzer.js';
-import { validateDirectoryPath, validatePath } from '@mcp-tools/shared';
+import { validateDirectoryPath, validatePath } from '@j0kz/shared';
 class ArchitectureAnalyzerServer {
     server;
     analyzer;

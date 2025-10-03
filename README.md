@@ -3,30 +3,34 @@
 > **8 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
-[![Version](https://img.shields.io/badge/version-1.0.17-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.18-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
 
-## 🎉 What's New in v1.0.17
+## 🎉 What's New in v1.0.18
 
-- **🔧 Major Code Quality Improvements**: Significant complexity reduction
-  - API Designer complexity reduced by 67% (114 → 38)
-  - Lines of code reduced by 64% (733 → 264)
-  - Duplicate code reduced by 85% (39 → 6 blocks)
-  - Modular architecture with specialized generators and validators
-- **🎯 Enhanced Accuracy**: Smart Reviewer false positives eliminated
-  - Smarter detection logic for JSDoc, comments, and string literals
-  - Context-aware analysis for better results
-- **✅ 100% Test Pass Rate**: All 37 tests passing with zero breaking changes
-- **📦 Better Maintainability**: Single-responsibility modules for easier contributions
+- **🔧 Critical Fix**: Published shared package to npm
+  - Resolved `ERR_MODULE_NOT_FOUND` error when installing via npx
+  - All packages now depend on `@j0kz/shared@^1.0.16`
+  - Works correctly with all MCP-compatible editors
+- **📦 Improved Modularity**: Shared utilities package
+  - Common functionality extracted to `@j0kz/shared`
+  - Better code reuse across all 8 tools
+  - Smaller bundle sizes for individual packages
 
-[View Full Changelog](CHANGELOG.md#1017---2025-10-03)
+[View Full Changelog](CHANGELOG.md#1018---2025-10-03)
 
 ---
 
 ## 📜 Previous Releases
+
+### v1.0.17 - Code Quality Improvements
+- Major complexity reduction in API Designer (67% reduction)
+- Enhanced accuracy in Smart Reviewer
+- All 37 tests passing with zero breaking changes
+- Better maintainability with modular architecture
 
 ### v1.0.16 - Dependency Updates
 - Major dependency updates (Anthropic SDK, MCP SDK, Vitest)

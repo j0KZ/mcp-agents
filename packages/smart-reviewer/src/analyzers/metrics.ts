@@ -1,5 +1,5 @@
 import { CodeMetrics, CodeIssue } from '../types.js';
-import { PerformanceMonitor } from '@mcp-tools/shared';
+import { PerformanceMonitor } from '@j0kz/shared';
 
 /**
  * Calculate code metrics including complexity, maintainability, and duplicates

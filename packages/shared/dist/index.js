@@ -1,5 +1,5 @@
 /**
- * @mcp-tools/shared
+ * @j0kz/shared
  * Shared utilities and types for all MCP tools
  * Enables modularity and integration between MCPs
  */
@@ -21,6 +21,6 @@ export * from './constants/index.js';
 export * from './security/path-validator.js';
 // Validation utilities
 export * from './validation.js';
-export const VERSION = '1.0.11';
-export const PACKAGE_NAME = '@mcp-tools/shared';
+export const VERSION = '1.0.16';
+export const PACKAGE_NAME = '@j0kz/shared';
 //# sourceMappingURL=index.js.map

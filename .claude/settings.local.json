@@ -1,7 +1,18 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(find:*)",
+      "Bash(xargs:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm publish:*)",
+      "Bash(npm install)",
+      "Bash(npm run publish-all:*)",
+      "Bash(for pkg in packages/*/package.json)",
+      "Bash(do sed -i 's/\"\"version\"\": \"\"1.0.17\"\"/\"\"version\"\": \"\"1.0.18\"\"/g' \"$pkg\")",
+      "Bash(done)",
+      "Bash(git log:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

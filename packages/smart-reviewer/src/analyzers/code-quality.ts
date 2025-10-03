@@ -1,5 +1,5 @@
 import { CodeIssue } from '../types.js';
-import { REGEX, QUALITY_THRESHOLDS } from '@mcp-tools/shared';
+import { REGEX, QUALITY_THRESHOLDS } from '@j0kz/shared';
 
 /**
  * Detects code issues and anti-patterns in source code

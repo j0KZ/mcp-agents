@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.18] - 2025-10-03
+
+### Fixed
+- **Critical**: Published `@j0kz/shared` package to npm
+  - Resolved `ERR_MODULE_NOT_FOUND` error when installing packages via npx
+  - Changed package name from `@mcp-tools/shared` → `@j0kz/shared`
+  - Removed `"private": true` to allow npm publishing
+  - All 8 MCP packages now correctly depend on `@j0kz/shared@^1.0.16`
+
+### Changed
+- **All packages updated to v1.0.18**
+  - api-designer: 1.0.17 → 1.0.18
+  - smart-reviewer: 1.0.17 → 1.0.18
+  - architecture-analyzer: 1.0.17 → 1.0.18
+  - refactor-assistant: 1.0.17 → 1.0.18
+  - db-schema: 1.0.17 → 1.0.18
+  - doc-generator: 1.0.17 → 1.0.18
+  - security-scanner: 1.0.17 → 1.0.18
+  - test-generator: 1.0.17 → 1.0.18
+
+### Added
+- **Published package**: `@j0kz/shared@1.0.16` now available on npm
+  - Contains shared utilities, caching, performance monitoring, and file system helpers
+  - Used by all 8 MCP tools for better code reuse
+  - Reduces bundle size for individual packages
+
+---
+
 ## [1.0.17] - 2025-10-03
 
 ### Refactored
