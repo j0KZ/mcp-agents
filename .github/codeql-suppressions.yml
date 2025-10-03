@@ -1,0 +1,22 @@
+# CodeQL Suppressions
+# This file documents intentional vulnerabilities in example/test files
+
+suppressions:
+  # Example files with intentional vulnerabilities
+  - paths:
+      - "examples/security-scanner/vulnerable-app.js"
+    rules:
+      - "js/insufficient-password-hash"
+      - "js/sql-injection"
+      - "js/xss"
+      - "js/hardcoded-credentials"
+      - "js/command-injection"
+      - "js/path-injection"
+    reason: "Intentionally vulnerable example code for demonstrating security-scanner MCP tool capabilities. Not used in production."
+
+  - paths:
+      - "examples/*/**.js"
+      - "benchmarks/*/**.js"
+    rules:
+      - "*"
+    reason: "Example and benchmark files - not production code"
