@@ -112,7 +112,7 @@ class SmartReviewerServer {
       try {
         switch (name) {
           case 'review_file': {
-            const { filePath, config } = args as { filePath: string; config?: ReviewConfig };
+            const { filePath, config: _config } = args as { filePath: string; config?: ReviewConfig };
 
             // Validate file path to prevent path traversal
             const validatedPath = validateFilePath(filePath);
