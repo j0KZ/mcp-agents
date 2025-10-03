@@ -13,6 +13,8 @@
     "build:arch": "npm run build -w packages/architecture-analyzer",
     "dev": "npm run dev --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
+    "test:ci": "npm run test:ci --workspaces --if-present",
+    "test:coverage": "npm run test:coverage --workspaces --if-present",
     "install-all": "node scripts/install-all.js",
     "publish-all": "npm run build && npm publish --workspaces --access public"
   },

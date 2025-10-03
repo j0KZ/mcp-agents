@@ -17,6 +17,8 @@
     "build": "tsc && node -e \"const fs=require('fs'); const path=require('path'); const src='src/patterns'; const dest='dist/patterns'; fs.mkdirSync(dest,{recursive:true}); fs.readdirSync(src).filter(f=>f.endsWith('.json')).forEach(f=>fs.copyFileSync(path.join(src,f),path.join(dest,f)))\"",
     "dev": "tsc --watch",
     "test": "vitest",
+    "test:ci": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "start": "node dist/mcp-server.js"
   },
   "dependencies": {
