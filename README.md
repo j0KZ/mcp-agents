@@ -3,21 +3,41 @@
 > **8 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
-[![Version](https://img.shields.io/badge/version-1.0.15-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.17-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
 
-## 🎉 What's New in v1.0.15
+## 🎉 What's New in v1.0.17
 
-- **🔒 Security Hardened**: All ReDoS vulnerabilities fixed with input validation
-- **📚 Comprehensive Examples**: 19 new example files and tutorials for all tools
-- **⚡ Performance Benchmarks**: New benchmarking infrastructure with Benchmark.js
-- **🎯 Better Error Messages**: Structured error codes with actionable suggestions
-- **✅ Production Ready**: All packages tested, built, and unified to v1.0.15
+- **🔧 Major Code Quality Improvements**: Significant complexity reduction
+  - API Designer complexity reduced by 67% (114 → 38)
+  - Lines of code reduced by 64% (733 → 264)
+  - Duplicate code reduced by 85% (39 → 6 blocks)
+  - Modular architecture with specialized generators and validators
+- **🎯 Enhanced Accuracy**: Smart Reviewer false positives eliminated
+  - Smarter detection logic for JSDoc, comments, and string literals
+  - Context-aware analysis for better results
+- **✅ 100% Test Pass Rate**: All 37 tests passing with zero breaking changes
+- **📦 Better Maintainability**: Single-responsibility modules for easier contributions
 
-[View Full Changelog](CHANGELOG.md#1015---2025-10-03)
+[View Full Changelog](CHANGELOG.md#1017---2025-10-03)
+
+---
+
+## 📜 Previous Releases
+
+### v1.0.16 - Dependency Updates
+- Major dependency updates (Anthropic SDK, MCP SDK, Vitest)
+- Zero vulnerabilities
+- Enhanced test infrastructure
+
+### v1.0.15 - Security & Examples
+- Security hardened with ReDoS vulnerability fixes
+- 19 comprehensive examples and tutorials
+- Performance benchmarking infrastructure
+- Structured error codes
 
 ## 🚀 Install All 8 Tools (One Command)
 
@@ -284,9 +304,12 @@ Visit our [**Wiki**](https://github.com/j0KZ/mcp-agents/wiki) for complete docum
 
 ### Additional Resources
 
-- **[Modularity Implementation](MODULARITY_IMPLEMENTATION.md)** - Technical details on shared utilities
-- **[Editor Compatibility](EDITOR_COMPATIBILITY.md)** - Full compatibility matrix
-- **[Security Policy](SECURITY.md)** - Security guidelines and reporting
+- **[Modularity Implementation](docs/MODULARITY_IMPLEMENTATION.md)** - Technical details on shared utilities
+- **[Editor Compatibility](docs/EDITOR_COMPATIBILITY.md)** - Full compatibility matrix
+- **[Security Policy](docs/SECURITY.md)** - Security guidelines and reporting
+- **[Contributing Guide](docs/CONTRIBUTING.md)** - How to contribute to the project
+- **[Code of Conduct](docs/CODE_OF_CONDUCT.md)** - Community guidelines
+- **[Roadmap](docs/ROADMAP.md)** - Future plans and features
 
 ---
 

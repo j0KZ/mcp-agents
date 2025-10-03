@@ -1,0 +1,66 @@
+{
+  "timestamp": "2025-10-03T17:04:00.000Z",
+  "branch": "refactor/complexity-reduction",
+  "phase": "BEFORE refactoring",
+  "files": {
+    "refactorer.ts": {
+      "path": "packages/refactor-assistant/src/refactorer.ts",
+      "complexity": 194,
+      "linesOfCode": 1009,
+      "duplicateBlocks": 43,
+      "nestedTernaries": 9,
+      "functions": 8,
+      "exports": [
+        "extractFunction",
+        "convertToAsync",
+        "simplifyConditionals",
+        "removeDeadCode",
+        "applyDesignPattern",
+        "renameVariable",
+        "suggestRefactorings",
+        "calculateMetrics"
+      ]
+    },
+    "analyzer.ts": {
+      "path": "packages/smart-reviewer/src/analyzer.ts",
+      "complexity": 101,
+      "linesOfCode": 414,
+      "duplicateBlocks": 2,
+      "nestedTernaries": 0,
+      "functions": 6,
+      "exports": [
+        "CodeAnalyzer"
+      ]
+    },
+    "scanner.ts": {
+      "path": "packages/security-scanner/src/scanner.ts",
+      "complexity": 70,
+      "linesOfCode": 481,
+      "duplicateBlocks": 35,
+      "nestedTernaries": 3,
+      "functions": 12,
+      "exports": [
+        "scanFile",
+        "scanProject"
+      ]
+    }
+  },
+  "totals": {
+    "complexity": 365,
+    "linesOfCode": 1904,
+    "duplicateBlocks": 80,
+    "nestedTernaries": 12
+  },
+  "tests": {
+    "unit": {
+      "total": 19,
+      "passing": 19,
+      "status": "✅ ALL PASSING"
+    },
+    "apiCompatibility": {
+      "total": 11,
+      "passing": 11,
+      "status": "✅ ALL PASSING"
+    }
+  }
+}

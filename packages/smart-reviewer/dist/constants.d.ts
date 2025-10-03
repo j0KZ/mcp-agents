@@ -42,6 +42,9 @@ export declare const DEFAULTS: {
     readonly AUTO_FIX: false;
     readonly INCLUDE_METRICS: true;
     readonly MAX_ISSUES: 100;
+    readonly FILE_CACHE_SIZE: 500;
+    readonly ANALYSIS_CACHE_SIZE: 200;
+    readonly CACHE_TTL_MS: 1800000;
 };
 export declare const COMPLEXITY: {
     readonly BASE: 1;

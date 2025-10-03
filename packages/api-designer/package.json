@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/api-designer-mcp",
-  "version": "1.0.15",
+  "version": "1.0.17",
   "description": "API Designer MCP - Generate OpenAPI/Swagger specs, design REST endpoints, create GraphQL schemas, and generate API clients. Works with Claude Code, Cursor, Windsurf, Roo Code, and any MCP-compatible editor.",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,9 +22,9 @@
     "start": "node dist/mcp-server.js"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.27.0",
+    "@anthropic-ai/sdk": "^0.65.0",
     "@mcp-tools/shared": "file:../shared",
-    "@modelcontextprotocol/sdk": "^0.5.0",
+    "@modelcontextprotocol/sdk": "^1.19.1",
     "typescript": "^5.3.3"
   },
   "keywords": [
@@ -56,5 +56,11 @@
   "homepage": "https://github.com/j0KZ/mcp-agents/tree/main/packages/api-designer#readme",
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.6.2",
+    "@vitest/coverage-v8": "^3.2.4"
   }
 }

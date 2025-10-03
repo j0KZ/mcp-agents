@@ -70,6 +70,11 @@ export const STRING_LENGTH = {
   MIN_SECRET_LENGTH: 16,
   MAX_SECRET_LENGTH: 512,
   CONTEXT_LINES: 2,
+  TRUNCATE_LENGTH: 20,
+  MIN_API_KEY_LENGTH: 20,
+  AWS_SECRET_KEY_LENGTH: 40,
+  SLACK_TOKEN_MIN_LENGTH: 10,
+  PATTERN_MAX_LENGTH: 200,
 } as const;
 
 // File Scanning Limits
@@ -94,10 +99,15 @@ export const SCAN_DEFAULTS = {
 export const SECURITY_SCORE = {
   PERFECT: 100,
   CRITICAL_PENALTY: 25,
+  CRITICAL_WEIGHT: 10,
   HIGH_PENALTY: 15,
+  HIGH_WEIGHT: 5,
   MEDIUM_PENALTY: 5,
+  MEDIUM_WEIGHT: 2,
   LOW_PENALTY: 1,
+  LOW_WEIGHT: 1,
   MIN_SCORE: 0,
+  MAX_SCORE: 100,
 } as const;
 
 // Excluded Patterns (False Positive Prevention)
