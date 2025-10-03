@@ -33,11 +33,12 @@ Install all 8 tools **instantly** with one command:
 # For Claude Code (default)
 npx @j0kz/mcp-agents
 
-# For Cursor
-npx @j0kz/mcp-agents cursor
-
-# For Windsurf
-npx @j0kz/mcp-agents windsurf
+# For other editors
+npx @j0kz/mcp-agents cursor     # Cursor
+npx @j0kz/mcp-agents windsurf   # Windsurf
+npx @j0kz/mcp-agents vscode     # VS Code
+npx @j0kz/mcp-agents roo        # Roo Code
+npx @j0kz/mcp-agents trae       # Trae
 ```
 
 **That's it!** Restart your editor and all 8 MCP tools will be ready to use.
@@ -52,9 +53,12 @@ npx @j0kz/mcp-agents list
 # Clear cache if having issues
 npx @j0kz/mcp-agents clear-cache
 
-# Show help
+# Show help (see all supported editors)
 npx @j0kz/mcp-agents help
 ```
+
+**Supported Editors:**
+- Claude Code, Cursor, Windsurf, VS Code, Roo Code, Trae
 
 Or use the [manual installation guide](#-installation) below.
 </details>

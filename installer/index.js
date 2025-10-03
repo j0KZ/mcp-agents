@@ -10,7 +10,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { homedir, platform } from 'os';
 import { join, dirname } from 'path';
 
-const VERSION = '1.0.20';
+const VERSION = '1.0.21';
 const TOOLS = [
   { pkg: '@j0kz/smart-reviewer-mcp', name: 'smart-reviewer', desc: 'Code review and quality analysis' },
   { pkg: '@j0kz/test-generator-mcp', name: 'test-generator', desc: 'Test suite generation' },
@@ -26,31 +26,69 @@ const TOOLS = [
 const args = process.argv.slice(2);
 const command = args[0] || 'install';
 
+// Editor configurations
+const EDITORS = {
+  'claude': {
+    name: 'Claude Code',
+    paths: {
+      win32: join('AppData', 'Roaming', 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json'),
+      darwin: join('Library', 'Application Support', 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json'),
+      linux: join('.config', 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json')
+    }
+  },
+  'cursor': {
+    name: 'Cursor',
+    paths: {
+      win32: join('AppData', 'Roaming', 'Cursor', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json'),
+      darwin: join('Library', 'Application Support', 'Cursor', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json'),
+      linux: join('.config', 'Cursor', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json')
+    }
+  },
+  'windsurf': {
+    name: 'Windsurf',
+    paths: {
+      win32: join('AppData', 'Roaming', 'Windsurf', 'User', 'globalStorage', 'windsurf.windsurf', 'settings', 'cline_mcp_settings.json'),
+      darwin: join('Library', 'Application Support', 'Windsurf', 'User', 'globalStorage', 'windsurf.windsurf', 'settings', 'cline_mcp_settings.json'),
+      linux: join('.config', 'Windsurf', 'User', 'globalStorage', 'windsurf.windsurf', 'settings', 'cline_mcp_settings.json')
+    }
+  },
+  'vscode': {
+    name: 'VS Code',
+    paths: {
+      win32: join('AppData', 'Roaming', 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json'),
+      darwin: join('Library', 'Application Support', 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json'),
+      linux: join('.config', 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json')
+    }
+  },
+  'roo': {
+    name: 'Roo Code',
+    paths: {
+      win32: join('AppData', 'Roaming', 'Roo-Code', 'User', 'globalStorage', 'rooveterinaryinc.roo-cline', 'settings', 'cline_mcp_settings.json'),
+      darwin: join('Library', 'Application Support', 'Roo-Code', 'User', 'globalStorage', 'rooveterinaryinc.roo-cline', 'settings', 'cline_mcp_settings.json'),
+      linux: join('.config', 'Roo-Code', 'User', 'globalStorage', 'rooveterinaryinc.roo-cline', 'settings', 'cline_mcp_settings.json')
+    }
+  },
+  'trae': {
+    name: 'Trae',
+    paths: {
+      win32: join('AppData', 'Roaming', 'Trae', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json'),
+      darwin: join('Library', 'Application Support', 'Trae', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json'),
+      linux: join('.config', 'Trae', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json')
+    }
+  }
+};
+
 // Get config path based on editor
 function getConfigPath(editor = 'claude') {
   const home = homedir();
+  const editorConfig = EDITORS[editor.toLowerCase()];
 
-  if (platform() === 'win32') {
-    if (editor === 'windsurf') {
-      return join(home, 'AppData', 'Roaming', 'Windsurf', 'User', 'globalStorage', 'windsurf.windsurf', 'settings', 'cline_mcp_settings.json');
-    } else if (editor === 'cursor') {
-      return join(home, 'AppData', 'Roaming', 'Cursor', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json');
-    }
-    return join(home, 'AppData', 'Roaming', 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json');
-  } else if (platform() === 'darwin') {
-    if (editor === 'windsurf') {
-      return join(home, 'Library', 'Application Support', 'Windsurf', 'User', 'globalStorage', 'windsurf.windsurf', 'settings', 'cline_mcp_settings.json');
-    } else if (editor === 'cursor') {
-      return join(home, 'Library', 'Application Support', 'Cursor', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json');
-    }
-    return join(home, 'Library', 'Application Support', 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json');
-  } else {
-    // Linux
-    if (editor === 'cursor') {
-      return join(home, '.config', 'Cursor', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json');
-    }
-    return join(home, '.config', 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json');
+  if (!editorConfig) {
+    throw new Error(`Unknown editor: ${editor}. Supported: ${Object.keys(EDITORS).join(', ')}`);
   }
+
+  const relativePath = editorConfig.paths[platform()] || editorConfig.paths.linux;
+  return join(home, relativePath);
 }
 
 // Show help
@@ -60,11 +98,17 @@ if (command === 'help' || command === '--help' || command === '-h') {
 One-command installer for all 8 AI development tools
 
 USAGE:
-  npx @j0kz/mcp-agents              Install all tools for Claude Code
+  npx @j0kz/mcp-agents              Install all tools for Claude Code (default)
   npx @j0kz/mcp-agents cursor       Install all tools for Cursor
   npx @j0kz/mcp-agents windsurf     Install all tools for Windsurf
-  npx @j0kz/mcp-agents list          List all available tools
-  npx @j0kz/mcp-agents clear-cache   Clear npm cache and reinstall
+  npx @j0kz/mcp-agents vscode       Install all tools for VS Code
+  npx @j0kz/mcp-agents roo          Install all tools for Roo Code
+  npx @j0kz/mcp-agents trae         Install all tools for Trae
+  npx @j0kz/mcp-agents list         List all available tools
+  npx @j0kz/mcp-agents clear-cache  Clear npm cache and reinstall
+
+SUPPORTED EDITORS:
+${Object.entries(EDITORS).map(([key, cfg]) => `  • ${key.padEnd(10)} - ${cfg.name}`).join('\n')}
 
 TOOLS:
 ${TOOLS.map(t => `  • ${t.name.padEnd(25)} ${t.desc}`).join('\n')}
@@ -102,7 +146,10 @@ if (command === 'clear-cache') {
 }
 
 // Main installation
-const editor = ['cursor', 'windsurf', 'claude'].includes(command) ? command : 'claude';
+const validEditors = Object.keys(EDITORS);
+const editor = validEditors.includes(command.toLowerCase()) ? command.toLowerCase() : 'claude';
+
+const editorName = EDITORS[editor]?.name || editor;
 
 console.log(`
 ╔═══════════════════════════════════════════════════════════╗
@@ -113,7 +160,7 @@ console.log(`
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
 
-Editor: ${editor.toUpperCase()}
+Editor: ${editorName}
 Platform: ${platform()}
 Node: ${process.version}
 
@@ -184,7 +231,7 @@ console.log(`
 
 ${TOOLS.map((t, i) => `   ${i + 1}. ${t.name.padEnd(25)} ${t.desc}`).join('\n')}
 
-🔄 IMPORTANT: Restart ${editor.toUpperCase()} to activate the tools
+🔄 IMPORTANT: Restart ${editorName} to activate the tools
 
 📚 Documentation: https://github.com/j0KZ/mcp-agents
 💬 Support: https://github.com/j0KZ/mcp-agents/issues

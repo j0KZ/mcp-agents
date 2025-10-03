@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/mcp-agents",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "One-command installer for all 8 MCP development tools",
   "type": "module",
   "bin": {
