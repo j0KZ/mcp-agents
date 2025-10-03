@@ -1,0 +1,11 @@
+Design a REST API for a User Management System
+
+Requirements:
+- Create, read, update, and delete users
+- Users have: name, email, role, and created date
+- Support pagination for listing users
+- Filter users by role
+- Search users by name or email
+- JWT authentication required
+- Rate limiting: 100 requests per minute
+- API versioning using URL path (v1)
