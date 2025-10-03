@@ -5,12 +5,14 @@
 
 import fs from 'fs/promises';
 import path from 'path';
-import { glob } from 'fast-glob';
+import fastGlob from 'fast-glob';
 import { FileInfo } from '../types/index.js';
 import { FileCache } from '../cache/index.js';
 import { generateHash, normalizePath, isPathSafe } from '../utils/index.js';
 import { batchProcess } from '../performance/index.js';
 import type { Stats } from 'node:fs';
+
+const { glob } = fastGlob;
 
 /**
  * File system manager with caching and optimizations
