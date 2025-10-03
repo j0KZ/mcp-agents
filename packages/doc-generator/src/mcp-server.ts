@@ -28,7 +28,7 @@ import {
   DocError,
 } from './types.js';
 import * as fs from 'fs';
-import { validateFilePath, validateDirectoryPath } from '@mcp-tools/shared';
+import { validateFilePath, validateDirectoryPath } from '@j0kz/shared';
 
 /**
  * MCP Server instance

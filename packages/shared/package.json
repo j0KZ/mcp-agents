@@ -1,5 +1,5 @@
 {
-  "name": "@mcp-tools/shared",
+  "name": "@j0kz/shared",
   "version": "1.0.16",
   "description": "Shared utilities and types for MCP tools - enables modularity and integration",
   "main": "dist/index.js",
@@ -20,7 +20,6 @@
   ],
   "author": "MCP Tools",
   "license": "MIT",
-  "private": true,
   "dependencies": {
     "@anthropic-ai/sdk": "^0.64.0",
     "@modelcontextprotocol/sdk": "^1.18.2",

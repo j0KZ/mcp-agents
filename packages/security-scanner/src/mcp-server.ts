@@ -22,7 +22,7 @@ import {
   SecurityReport
 } from './index.js';
 import * as fs from 'fs';
-import { validateFilePath, validateDirectoryPath, validatePath } from '@mcp-tools/shared';
+import { validateFilePath, validateDirectoryPath, validatePath } from '@j0kz/shared';
 
 /**
  * Generate security report in markdown format

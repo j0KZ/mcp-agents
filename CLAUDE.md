@@ -16,7 +16,7 @@ This is a **TypeScript monorepo** containing 8 Model Context Protocol (MCP) tool
 7. `doc-generator` - Documentation generation
 8. `security-scanner` - Security vulnerability scanning
 
-**Shared Package:** `@mcp-tools/shared` (private) - Common utilities used by all tools including caching, performance monitoring, file system operations, and inter-MCP communication.
+**Shared Package:** `@j0kz/shared` (private) - Common utilities used by all tools including caching, performance monitoring, file system operations, and inter-MCP communication.
 
 ## Architecture & Code Organization
 
@@ -52,7 +52,7 @@ Three major packages were refactored to reduce complexity by extracting logic in
 
 ### Shared Package Integration
 
-Each tool imports from `@mcp-tools/shared` for common functionality:
+Each tool imports from `@j0kz/shared` for common functionality:
 - **FileSystemManager** - File operations with caching
 - **AnalysisCache** - LRU cache for analysis results (30min TTL)
 - **PerformanceMonitor** - Performance tracking and metrics
@@ -61,7 +61,7 @@ Each tool imports from `@mcp-tools/shared` for common functionality:
 
 Example usage:
 ```typescript
-import { FileSystemManager, AnalysisCache, PerformanceMonitor } from '@mcp-tools/shared';
+import { FileSystemManager, AnalysisCache, PerformanceMonitor } from '@j0kz/shared';
 ```
 
 ### MCP Server Pattern
@@ -167,7 +167,7 @@ return {
 2. Add `package.json` with proper bin/main/types fields
 3. Create `src/mcp-server.ts` implementing MCP protocol
 4. Add core logic in separate files
-5. Import shared utilities from `@mcp-tools/shared`
+5. Import shared utilities from `@j0kz/shared`
 6. Add tests using Vitest
 7. Add to root workspace in root `package.json`
 

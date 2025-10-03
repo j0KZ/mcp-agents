@@ -1,4 +1,4 @@
-import { FileSystemManager, AnalysisCache, PerformanceMonitor, generateHash, } from '@mcp-tools/shared';
+import { FileSystemManager, AnalysisCache, PerformanceMonitor, generateHash, } from '@j0kz/shared';
 import { DEFAULTS } from './constants.js';
 import { detectIssues, calculateMetrics, generateSuggestions, calculateScore, applyFixes, } from './analyzers/index.js';
 /**
@@ -93,7 +93,7 @@ export class CodeAnalyzer {
     async analyzeFiles(filePaths, concurrency = 5) {
         const results = new Map();
         // Use shared batch processing utility
-        const { batchProcess } = await import('@mcp-tools/shared');
+        const { batchProcess } = await import('@j0kz/shared');
         const reviews = await batchProcess(filePaths, async (filePath) => {
             try {
                 return await this.analyzeFile(filePath);

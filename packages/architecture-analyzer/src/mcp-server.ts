@@ -8,7 +8,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { ArchitectureAnalyzer } from './analyzer.js';
 import { AnalysisConfig } from './types.js';
-import { validateDirectoryPath, validatePath } from '@mcp-tools/shared';
+import { validateDirectoryPath, validatePath } from '@j0kz/shared';
 
 class ArchitectureAnalyzerServer {
   private server: Server;
