@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.13] - 2025-10-03
+
+### Security
+- **HIGH**: Added input length validation to prevent ReDoS in parser
+  - Lines longer than 1000 characters are now skipped during parsing
+  - Prevents exponential backtracking from multiple optional regex groups
+  - Follows CodeQL recommendation for complex regex patterns
+  - Location: `packages/test-generator/src/parser.ts:25,94`
+
+### Changed
+- test-generator updated to v1.0.13
+
 ## [1.0.12] - 2025-10-03
 
 ### Security
