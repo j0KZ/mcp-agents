@@ -77,9 +77,10 @@ export async function measure(fn, label) {
     const start = Date.now();
     const result = await fn();
     const duration = Date.now() - start;
-    if (label) {
-        console.log(`[Performance] ${label}: ${duration}ms`);
-    }
+    // Performance tracking - consumers can log if needed
+    // if (label) {
+    //   console.log(`[Performance] ${label}: ${duration}ms`);
+    // }
     return { result, duration };
 }
 /**

@@ -196,7 +196,7 @@ export class ArchitectureAnalyzer {
     /**
      * Generate improvement suggestions
      */
-    generateSuggestions(metrics, circularDependencies, layerViolations) {
+    generateSuggestions(metrics, _circularDependencies, _layerViolations) {
         const suggestions = [];
         // Circular dependencies
         if (metrics.circularDependencies > 0) {

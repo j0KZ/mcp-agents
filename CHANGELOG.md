@@ -2,6 +2,72 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.16] - 2025-10-03
+
+### Updated Dependencies
+- **@anthropic-ai/sdk**: 0.27.3 → **0.65.0** (Major update)
+  - Updated to latest Anthropic SDK with support for new models
+  - Added support for Claude Sonnet 4.5 and Opus 4.1
+  - New tool capabilities and context management features
+  - No breaking changes affecting MCP implementation
+
+- **@modelcontextprotocol/sdk**: 0.5.0 → **1.19.1** (Major update)
+  - Latest MCP protocol implementation
+  - Improved performance and stability
+  - Enhanced type definitions
+
+- **@types/node**: 20.19.18 → **24.6.2** (Major update)
+  - Latest Node.js type definitions
+  - Improved TypeScript support
+
+- **vitest**: 1.6.1 → **3.2.4** (Major update)
+  - **Security Fix**: Resolved moderate vulnerability in esbuild dependency
+  - Better performance and test execution
+  - Enhanced coverage reporting
+
+- **jest**: 29.7.0 → **30.2.0** (Major update in shared package)
+  - Latest Jest testing framework
+  - Improved test runner performance
+
+### Improved
+- **Test Infrastructure**
+  - Added comprehensive `vitest.config.ts` with:
+    - 30-second test timeouts (prevents hanging tests)
+    - Parallel test execution (4 threads max)
+    - v8 coverage provider
+    - Performance monitoring
+  - Removed deprecated workspace configuration
+  - All tests now run successfully with detailed timing
+
+- **Documentation**
+  - Enhanced JSDoc comments in `smart-reviewer` analyzer
+  - Added comprehensive class and method documentation
+  - Included usage examples in JSDoc
+
+### Security
+- **Zero vulnerabilities** - All packages audited clean
+- Fixed moderate severity issue in vitest/esbuild dependency chain
+- Security score: 100/100
+
+### Changed
+- **All packages updated to v1.0.16** (unified versioning)
+  - api-designer: 1.0.15 → 1.0.16
+  - architecture-analyzer: 1.0.15 → 1.0.16
+  - db-schema: 1.0.15 → 1.0.16
+  - doc-generator: 1.0.15 → 1.0.16
+  - refactor-assistant: 1.0.15 → 1.0.16
+  - security-scanner: 1.0.15 → 1.0.16
+  - shared: 1.0.16 (unchanged)
+  - smart-reviewer: 1.0.15 → 1.0.16
+  - test-generator: 1.0.15 → 1.0.16
+
+### Testing
+- ✅ All tests passing
+- ✅ Build verification successful
+- ✅ Coverage reports generated
+
+---
+
 ## [1.0.15] - 2025-10-03
 
 ### Added
