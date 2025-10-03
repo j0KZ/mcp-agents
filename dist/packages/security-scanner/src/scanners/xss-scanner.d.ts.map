@@ -1,0 +1,1 @@
+{"version":3,"file":"xss-scanner.d.ts","sourceRoot":"","sources":["../../../../../packages/security-scanner/src/scanners/xss-scanner.ts"],"names":[],"mappings":"AAAA;;GAEG;AAEH,OAAO,EAAE,eAAe,EAAE,eAAe,EAAmD,MAAM,aAAa,CAAC;AAmBhH;;GAEG;AACH,wBAAsB,UAAU,CAAC,OAAO,EAAE,eAAe,GAAG,OAAO,CAAC,eAAe,EAAE,CAAC,CAqDrF"}

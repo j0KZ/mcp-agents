@@ -82,7 +82,7 @@ export declare function generateAPIClient(spec: OpenAPISpec | GraphQLSchema, opt
  * @example
  * ```typescript
  * const result = validateAPIDesign(openApiSpec);
- * console.log(result.valid, result.errors, result.warnings);
+ * // result.valid, result.errors, result.warnings
  * ```
  */
 export declare function validateAPIDesign(spec: OpenAPISpec | GraphQLSchema): ValidationResult;

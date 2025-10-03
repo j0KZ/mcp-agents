@@ -2,8 +2,8 @@
  * Optimized file system operations for MCP tools
  * Provides caching, batching, and parallel operations
  */
-import fs from 'fs/promises';
 import { FileInfo } from '../types/index.js';
+import type { Stats } from 'node:fs';
 /**
  * File system manager with caching and optimizations
  */
@@ -26,7 +26,7 @@ export declare class FileSystemManager {
     /**
      * Get file statistics with caching
      */
-    getStats(filePath: string, useCache?: boolean): Promise<fs.Stats>;
+    getStats(filePath: string, useCache?: boolean): Promise<Stats>;
     /**
      * Get file information
      */

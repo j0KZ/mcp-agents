@@ -212,7 +212,7 @@ export function designRESTEndpoints(
  */
 function generateRESTEndpointsFromResources(
   resources: string[],
-  config: APIDesignConfig
+  _config: APIDesignConfig
 ): RESTEndpoint[] {
   const endpoints: RESTEndpoint[] = [];
 

@@ -131,12 +131,12 @@ class ArchitectureAnalyzerServer {
                         const validatedProjectPath = validateDirectoryPath(projectPath);
                         const validatedModulePath = validatePath(modulePath);
                         const result = await this.analyzer.analyzeArchitecture(validatedProjectPath);
-                        const module = result.modules.find(m => m.path === modulePath);
+                        const module = result.modules.find(m => m.path === validatedModulePath);
                         if (!module) {
-                            throw new Error(`Module not found: ${modulePath}`);
+                            throw new Error(`Module not found: ${validatedModulePath}`);
                         }
-                        const dependencies = result.dependencies.filter(d => d.from === modulePath);
-                        const dependents = result.dependencies.filter(d => d.to === modulePath);
+                        const dependencies = result.dependencies.filter(d => d.from === validatedModulePath);
+                        const dependents = result.dependencies.filter(d => d.to === validatedModulePath);
                         return {
                             content: [
                                 {

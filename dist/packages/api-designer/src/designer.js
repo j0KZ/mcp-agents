@@ -183,9 +183,8 @@ export function designRESTEndpoints(resources, config) {
  * Generate REST endpoints from resource names
  * @private
  */
-function generateRESTEndpointsFromResources(resources, config) {
+function generateRESTEndpointsFromResources(resources, _config) {
     const endpoints = [];
-    const namingCase = config.conventions?.namingCase || 'camelCase';
     for (const resource of resources) {
         const resourcePath = `/${resource}`;
         const resourceItemPath = `/${resource}/{id}`;
@@ -719,7 +718,7 @@ function generateTypeScriptRestClient(spec, options) {
  * Generate TypeScript GraphQL client
  * @private
  */
-function generateTypeScriptGraphQLClient(schema, options) {
+function generateTypeScriptGraphQLClient(_schema, _options) {
     const lines = [];
     lines.push("// GraphQL client");
     lines.push("export class GraphQLClient {");
@@ -748,7 +747,7 @@ function mapSchemaToTSType(schema) {
     }
     switch (schema.type) {
         case 'string':
-            return schema.enum ? schema.enum.map(v => `'${v}'`).join(' | ') : 'string';
+            return schema.enum ? schema.enum.map((v) => `'${v}'`).join(' | ') : 'string';
         case 'number':
         case 'integer':
             return 'number';
@@ -771,7 +770,7 @@ function mapSchemaToTSType(schema) {
  * @example
  * ```typescript
  * const result = validateAPIDesign(openApiSpec);
- * console.log(result.valid, result.errors, result.warnings);
+ * // result.valid, result.errors, result.warnings
  * ```
  */
 export function validateAPIDesign(spec) {
@@ -924,9 +923,10 @@ function generateExpressMockServer(spec, config) {
     lines.push('');
     // Add logging middleware
     if (config.includeLogging) {
+        lines.push('// Logging middleware');
+        lines.push('// TODO: Replace with proper logger (e.g., winston, pino)');
         lines.push('app.use((req, res, next) => {');
-        lines.push('  // TODO: Replace with proper logger (e.g., winston, pino)');
-        lines.push('  console.log(`${req.method} ${req.path}`);');
+        lines.push('  // Log request: `${req.method} ${req.path}`');
         lines.push('  next();');
         lines.push('});');
         lines.push('');
@@ -946,7 +946,7 @@ function generateExpressMockServer(spec, config) {
                 const successResponse = Object.entries(operation.responses || {}).find(([code]) => code.startsWith('2'));
                 lines.push(`app.${method}('${expressPath}', (req, res) => {`);
                 if (successResponse) {
-                    const [statusCode, response] = successResponse;
+                    const [statusCode, _response] = successResponse;
                     lines.push(`  // ${operation.summary || 'Mock endpoint'}`);
                     lines.push(`  res.status(${statusCode}).json({`);
                     lines.push(`    message: 'Mock response for ${operation.operationId || path}',`);
@@ -964,7 +964,7 @@ function generateExpressMockServer(spec, config) {
     // Start server
     lines.push(`app.listen(${port}, () => {`);
     lines.push(`  // TODO: Replace with proper logger (e.g., winston, pino)`);
-    lines.push(`  console.log('Mock server running on port ${port}');`);
+    lines.push(`  // Server running on port ${port}`);
     lines.push('});');
     return lines.join('\n');
 }

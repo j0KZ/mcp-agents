@@ -190,7 +190,7 @@ export class ProjectScanner {
   /**
    * Get import type
    */
-  private getImportType(importPath: string): 'import' | 'require' | 'dynamic' {
+  private getImportType(_importPath: string): 'import' | 'require' | 'dynamic' {
     // This is a simplified heuristic
     return 'import';
   }

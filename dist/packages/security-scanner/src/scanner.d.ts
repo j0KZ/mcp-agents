@@ -9,10 +9,12 @@ import { SecurityFinding, ScanResult, ScanConfig, SecretPattern, DependencyVulne
 export declare function scanForSecrets(context: FileScanContext, customPatterns?: SecretPattern[]): Promise<SecurityFinding[]>;
 /**
  * Scan for SQL injection vulnerabilities
+ * Delegates to the SQL injection scanner module
  */
 export declare function scanForSQLInjection(context: FileScanContext): Promise<SecurityFinding[]>;
 /**
  * Scan for Cross-Site Scripting (XSS) vulnerabilities
+ * Delegates to the XSS scanner module
  */
 export declare function scanForXSS(context: FileScanContext): Promise<SecurityFinding[]>;
 /**

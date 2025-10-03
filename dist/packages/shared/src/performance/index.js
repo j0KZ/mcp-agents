@@ -57,7 +57,7 @@ export class PerformanceMonitor {
      */
     getAllMetrics() {
         const result = {};
-        for (const [name, values] of this.metrics) {
+        for (const [name, _values] of this.metrics) {
             result[name] = this.getMetrics(name);
         }
         return result;

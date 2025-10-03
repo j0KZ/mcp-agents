@@ -1,0 +1,1 @@
+{"version":3,"file":"openapi-generator.d.ts","sourceRoot":"","sources":["../../../../../packages/api-designer/src/generators/openapi-generator.ts"],"names":[],"mappings":"AAAA;;GAEG;AAEH,OAAO,EAAE,eAAe,EAAe,YAAY,EAAE,eAAe,EAAE,MAAM,aAAa,CAAC;AAW1F;;GAEG;AACH,wBAAgB,mBAAmB,CACjC,MAAM,EAAE,eAAe,EACvB,SAAS,CAAC,EAAE,YAAY,EAAE,GACzB,eAAe,CA6CjB"}

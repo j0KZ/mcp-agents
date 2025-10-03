@@ -272,8 +272,8 @@ export class ArchitectureAnalyzer {
    */
   private generateSuggestions(
     metrics: ArchitectureMetrics,
-    circularDependencies: CircularDependency[],
-    layerViolations: LayerViolation[]
+    _circularDependencies: CircularDependency[],
+    _layerViolations: LayerViolation[]
   ): string[] {
     const suggestions: string[] = [];
 

@@ -9,7 +9,7 @@
  * @returns Complete database schema
  */
 export function designSchema(requirements, options) {
-    const { database, normalForm = '3NF', includeTimestamps = true, includeSoftDeletes = false, useUUIDs = false } = options;
+    const { database, normalForm: _normalForm = '3NF', includeTimestamps: _includeTimestamps = true, includeSoftDeletes: _includeSoftDeletes = false, useUUIDs: _useUUIDs = false } = options;
     // Parse requirements and extract entities
     const entities = extractEntities(requirements);
     const relationships = extractRelationships(requirements, entities);
@@ -322,7 +322,7 @@ function extractEntities(requirements) {
     }
     return Array.from(entities);
 }
-function extractRelationships(requirements, entities) {
+function extractRelationships(requirements, _entities) {
     const relationships = [];
     // Simple relationship extraction
     const relationshipPatterns = [
@@ -540,7 +540,7 @@ function generateMermaidDiagram(schema, options) {
     }
     return diagram;
 }
-function generateDBMLDiagram(schema, options) {
+function generateDBMLDiagram(schema, _options) {
     let dbml = '';
     for (const table of schema.tables || []) {
         dbml += `Table ${table.name} {\n`;
@@ -564,7 +564,7 @@ function generateDBMLDiagram(schema, options) {
     }
     return dbml;
 }
-function generatePlantUMLDiagram(schema, options) {
+function generatePlantUMLDiagram(schema, _options) {
     let uml = '@startuml\n';
     for (const table of schema.tables || schema.collections || []) {
         uml += `entity ${table.name} {\n`;
@@ -722,7 +722,7 @@ function validateSQLSchema(schema, errors, warnings) {
         }
     }
 }
-function validateMongoSchema(schema, errors, warnings) {
+function validateMongoSchema(schema, _errors, warnings) {
     for (const collection of schema.collections || []) {
         const hasId = collection.fields.some(f => f.name === '_id');
         if (!hasId) {

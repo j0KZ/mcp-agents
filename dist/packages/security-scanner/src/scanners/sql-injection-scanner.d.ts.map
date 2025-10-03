@@ -1,0 +1,1 @@
+{"version":3,"file":"sql-injection-scanner.d.ts","sourceRoot":"","sources":["../../../../../packages/security-scanner/src/scanners/sql-injection-scanner.ts"],"names":[],"mappings":"AAAA;;GAEG;AAEH,OAAO,EAAE,eAAe,EAAE,eAAe,EAAmD,MAAM,aAAa,CAAC;AAmBhH;;GAEG;AACH,wBAAsB,mBAAmB,CAAC,OAAO,EAAE,eAAe,GAAG,OAAO,CAAC,eAAe,EAAE,CAAC,CAoC9F"}

@@ -17,6 +17,8 @@ export * from './fs/index.js';
 export * from './cache/index.js';
 // Constants
 export * from './constants/index.js';
+// Security utilities
+export * from './security/path-validator.js';
 export const VERSION = '1.0.0';
 export const PACKAGE_NAME = '@mcp-tools/shared';
 //# sourceMappingURL=index.js.map

@@ -97,7 +97,7 @@ class SmartReviewerServer {
             try {
                 switch (name) {
                     case 'review_file': {
-                        const { filePath, config } = args;
+                        const { filePath, config: _config } = args;
                         // Validate file path to prevent path traversal
                         const validatedPath = validateFilePath(filePath);
                         const result = await this.analyzer.analyzeFile(validatedPath);
@@ -111,7 +111,7 @@ class SmartReviewerServer {
                         };
                     }
                     case 'batch_review': {
-                        const { filePaths, config } = args;
+                        const { filePaths, config: _config } = args;
                         // Validate input
                         if (!Array.isArray(filePaths) || filePaths.length === 0) {
                             throw new Error('filePaths must be a non-empty array');

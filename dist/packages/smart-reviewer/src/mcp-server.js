@@ -3,6 +3,7 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { CallToolRequestSchema, ListToolsRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
 import { CodeAnalyzer } from './analyzer.js';
+import { validateFilePath } from '@mcp-tools/shared';
 class SmartReviewerServer {
     server;
     analyzer;
@@ -96,16 +97,10 @@ class SmartReviewerServer {
             try {
                 switch (name) {
                     case 'review_file': {
-                        const { filePath, config } = args;
-                        // Validate file exists
-                        const { access } = await import('fs/promises');
-                        try {
-                            await access(filePath);
-                        }
-                        catch {
-                            throw new Error(`File not found or not accessible: ${filePath}`);
-                        }
-                        const result = await this.analyzer.analyzeFile(filePath);
+                        const { filePath, config: _config } = args;
+                        // Validate file path to prevent path traversal
+                        const validatedPath = validateFilePath(filePath);
+                        const result = await this.analyzer.analyzeFile(validatedPath);
                         return {
                             content: [
                                 {
@@ -116,12 +111,14 @@ class SmartReviewerServer {
                         };
                     }
                     case 'batch_review': {
-                        const { filePaths, config } = args;
+                        const { filePaths, config: _config } = args;
                         // Validate input
                         if (!Array.isArray(filePaths) || filePaths.length === 0) {
                             throw new Error('filePaths must be a non-empty array');
                         }
-                        const results = await Promise.all(filePaths.map(fp => this.analyzer.analyzeFile(fp)));
+                        // Validate all file paths
+                        const validatedPaths = filePaths.map(fp => validateFilePath(fp));
+                        const results = await Promise.all(validatedPaths.map(fp => this.analyzer.analyzeFile(fp)));
                         const summary = {
                             totalFiles: results.length,
                             averageScore: Math.round(results.reduce((sum, r) => sum + r.overallScore, 0) / results.length),
@@ -139,18 +136,13 @@ class SmartReviewerServer {
                     }
                     case 'apply_fixes': {
                         const { filePath } = args;
-                        // Validate file exists and is writable
-                        const { readFile, writeFile, access } = await import('fs/promises');
-                        try {
-                            await access(filePath);
-                        }
-                        catch {
-                            throw new Error(`File not found or not accessible: ${filePath}`);
-                        }
-                        const content = await readFile(filePath, 'utf-8');
-                        const result = await this.analyzer.analyzeFile(filePath);
+                        // Validate file path to prevent path traversal
+                        const validatedPath = validateFilePath(filePath);
+                        const { readFile, writeFile } = await import('fs/promises');
+                        const content = await readFile(validatedPath, 'utf-8');
+                        const result = await this.analyzer.analyzeFile(validatedPath);
                         const fixedContent = await this.analyzer.applyFixes(content, result.issues);
-                        await writeFile(filePath, fixedContent, 'utf-8');
+                        await writeFile(validatedPath, fixedContent, 'utf-8');
                         return {
                             content: [
                                 {
