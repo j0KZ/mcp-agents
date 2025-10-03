@@ -2,6 +2,68 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.15] - 2025-10-03
+
+### Added
+- **Comprehensive Examples & Tutorials** (19 files, 3,840+ lines)
+  - Tool-specific examples for all 8 MCP tools
+  - 4 detailed tutorials: Getting Started, Common Workflows, Advanced Usage, Best Practices
+  - Real-world code samples and expected outputs
+  - Complete usage documentation
+
+- **Performance Benchmarking Infrastructure**
+  - Benchmark.js integration
+  - Performance targets for all tools
+  - Test data for varying file sizes
+  - CI/CD ready for continuous monitoring
+
+- **Improved Error Handling & Validation**
+  - Error codes for all error types (TEST_GEN_001, REFACTOR_001, etc.)
+  - User-friendly error messages with actionable suggestions
+  - Input validation with clear feedback
+  - Shared validation utilities in @mcp-tools/shared
+
+### Improved
+- **test-generator**: Added comprehensive input validation
+  - File path validation
+  - Framework validation
+  - File size limits (1MB)
+  - Empty file detection
+  - Better error messages with codes
+
+- **refactor-assistant**: Enhanced error handling
+  - Input validation for code and options
+  - Function name validation (identifier rules)
+  - Line range validation with clear messages
+  - Code size limits (100KB)
+
+- **shared package**: New validation utilities
+  - `validateFilePathInput()` - Path validation
+  - `validateFileContent()` - Content validation
+  - `validateIdentifier()` - Variable/function name validation
+  - `validateLineRange()` - Line number validation
+  - `validateEnum()` - Enum value validation
+  - `validatePercentage()` - Percentage validation (0-100)
+  - `createError()` - User-friendly error creation
+
+### Changed
+- **All packages updated to v1.0.15** (unified versioning)
+  - api-designer: 1.0.11 → 1.0.15
+  - architecture-analyzer: 1.0.11 → 1.0.15
+  - db-schema: 1.0.11 → 1.0.15
+  - doc-generator: 1.0.11 → 1.0.15
+  - refactor-assistant: 1.0.12 → 1.0.15
+  - security-scanner: 1.0.11 → 1.0.15
+  - shared: 1.0.11 → 1.0.15
+  - smart-reviewer: 1.0.11 → 1.0.15
+  - test-generator: 1.0.13 → 1.0.15
+
+### Documentation
+- Examples directory with practical use cases
+- Tutorial series from beginner to advanced
+- Best practices and team guidelines
+- Benchmark documentation
+
 ## [1.0.14] - 2025-10-03
 
 ### Security

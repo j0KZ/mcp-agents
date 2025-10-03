@@ -28,5 +28,8 @@ export * from './constants/index.js';
 // Security utilities
 export * from './security/path-validator.js';
 
-export const VERSION = '1.0.0';
+// Validation utilities
+export * from './validation.js';
+
+export const VERSION = '1.0.11';
 export const PACKAGE_NAME = '@mcp-tools/shared';

@@ -37,16 +37,64 @@ export function extractFunction(
   options: ExtractFunctionOptions
 ): RefactoringResult {
   try {
-    const lines = code.split('\n');
+    // Validate inputs
+    if (!code || typeof code !== 'string') {
+      return {
+        code: '',
+        changes: [],
+        success: false,
+        error: 'REFACTOR_001: Invalid code input. Code must be a non-empty string.',
+      };
+    }
+
+    if (code.length > 100000) {
+      return {
+        code,
+        changes: [],
+        success: false,
+        error: `REFACTOR_002: Code too large (${(code.length / 1024).toFixed(2)} KB). Maximum size is 100 KB.`,
+      };
+    }
+
     const { functionName, startLine, endLine, async = false, arrow = false } = options;
 
+    // Validate function name
+    if (!functionName || typeof functionName !== 'string') {
+      return {
+        code,
+        changes: [],
+        success: false,
+        error: 'REFACTOR_003: Invalid function name. Please provide a valid function name.',
+      };
+    }
+
+    if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(functionName)) {
+      return {
+        code,
+        changes: [],
+        success: false,
+        error: `REFACTOR_004: Invalid function name '${functionName}'. Function names must start with a letter, underscore, or $ and contain only alphanumeric characters.`,
+      };
+    }
+
+    const lines = code.split('\n');
+
     // Validate line range
+    if (!startLine || !endLine || typeof startLine !== 'number' || typeof endLine !== 'number') {
+      return {
+        code,
+        changes: [],
+        success: false,
+        error: 'REFACTOR_005: Invalid line range. startLine and endLine must be numbers.',
+      };
+    }
+
     if (startLine < 1 || endLine > lines.length || startLine > endLine) {
       return {
         code,
         changes: [],
         success: false,
-        error: 'Invalid line range specified',
+        error: `REFACTOR_006: Invalid line range (${startLine}-${endLine}). Valid range is 1-${lines.length}, and startLine must be <= endLine.`,
       };
     }
 
