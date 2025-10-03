@@ -1,24 +1,9 @@
 /**
  * Core refactoring logic and transformations
  */
-import { RefactoringResult, RefactoringSuggestion, ExtractFunctionOptions, ConvertToAsyncOptions, SimplifyConditionalsOptions, RemoveDeadCodeOptions, ApplyPatternOptions, RenameVariableOptions, CodeMetrics } from './types.js';
-/**
- * Extract a code block into a separate function
- *
- * @param code - Source code containing the block to extract
- * @param options - Extraction options including function name and line range
- * @returns Refactoring result with extracted function
- *
- * @example
- * ```typescript
- * const result = extractFunction(sourceCode, {
- *   functionName: 'calculateTotal',
- *   startLine: 10,
- *   endLine: 15
- * });
- * ```
- */
-export declare function extractFunction(code: string, options: ExtractFunctionOptions): RefactoringResult;
+import { RefactoringResult, RefactoringSuggestion, ConvertToAsyncOptions, SimplifyConditionalsOptions, RemoveDeadCodeOptions, ApplyPatternOptions, RenameVariableOptions } from './types.js';
+export { extractFunction } from './core/extract-function.js';
+export { calculateMetrics, findDuplicateBlocks } from './analysis/metrics-calculator.js';
 /**
  * Convert callback-based code to async/await
  *
@@ -108,11 +93,4 @@ export declare function renameVariable(options: RenameVariableOptions): Refactor
  * ```
  */
 export declare function suggestRefactorings(code: string, _filePath?: string): RefactoringSuggestion[];
-/**
- * Calculate code metrics for quality analysis
- *
- * @param code - Source code to analyze
- * @returns Code metrics object
- */
-export declare function calculateMetrics(code: string): CodeMetrics;
 //# sourceMappingURL=refactorer.d.ts.map
