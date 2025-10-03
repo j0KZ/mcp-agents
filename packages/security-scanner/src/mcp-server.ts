@@ -15,7 +15,6 @@ import {
 import {
   scanFile,
   scanProject,
-  scanForSecrets,
   ScanConfig,
   ScanResult,
   SecurityFinding,
