@@ -22,7 +22,6 @@ import {
   SecurityReport
 } from './index.js';
 import * as fs from 'fs';
-import * as path from 'path';
 import { validateFilePath, validateDirectoryPath, validatePath } from '@mcp-tools/shared';
 
 /**
