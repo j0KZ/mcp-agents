@@ -264,7 +264,7 @@ export async function scanOWASP(context: FileScanContext): Promise<SecurityFindi
     /pickle\.loads?\(/gi,
     /yaml\.load\(/gi,
     /unserialize\(/gi,
-    /JSON\.parse\(.*?(?:localStorage|sessionStorage|location\.)/gi
+    /JSON\.parse\(.{0,200}?(?:localStorage|sessionStorage|location\.)/gi
   ];
 
   for (const pattern of deserializationPatterns) {
@@ -292,7 +292,7 @@ export async function scanOWASP(context: FileScanContext): Promise<SecurityFindi
   }
 
   // Check for path traversal vulnerabilities
-  const pathTraversalPattern = /(?:readFile|writeFile|open|unlink|rmdir|mkdir|stat)\s*\(.*?(?:\+|concat|\$\{)/gi;
+  const pathTraversalPattern = /(?:readFile|writeFile|open|unlink|rmdir|mkdir|stat)\s?\(.{0,200}?(?:\+|concat|\$\{)/gi;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];

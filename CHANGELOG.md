@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.11] - 2025-10-03
+
+### Security
+- **HIGH**: Fixed additional ReDoS vulnerabilities in test-generator parser (2 regex patterns)
+  - Replaced unbounded quantifiers with bounded {0,500} limits
+  - Affected patterns: function extraction and method extraction
+  - Location: `packages/test-generator/src/parser.ts:25,91`
+- **HIGH**: Fixed additional ReDoS vulnerabilities in security-scanner (2 regex patterns)
+  - Added bounded {0,200} quantifiers for deserialization and path traversal patterns
+  - Location: `packages/security-scanner/src/scanner.ts:267,295`
+- **MEDIUM**: Added explicit permissions to GitHub Actions workflows
+  - Added `contents: read` permissions to CI jobs
+  - Added `pull-requests: write` to dependency-review job
+  - Follows principle of least privilege for workflow security
+
+### Changed
+- All packages updated to v1.0.11
+
 ## [1.0.10] - 2025-10-03
 
 ### Security
