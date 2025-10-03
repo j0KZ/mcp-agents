@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.14] - 2025-10-03
+
+### Security
+- **HIGH**: Fixed ReDoS vulnerability in refactor-assistant import detection
+  - Added bounded quantifiers {1,500} and {1,200} to prevent unbounded backtracking
+  - Added 1000-character line length validation
+  - Location: `packages/refactor-assistant/src/refactorer.ts:695`
+
+### Changed
+- refactor-assistant updated to v1.0.12
+- test-generator remains at v1.0.13
+
 ## [1.0.13] - 2025-10-03
 
 ### Security
