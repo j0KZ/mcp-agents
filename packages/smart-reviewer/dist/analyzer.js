@@ -99,7 +99,9 @@ export class CodeAnalyzer {
                 return await this.analyzeFile(filePath);
             }
             catch (error) {
-                console.error(`Failed to analyze ${filePath}:`, error);
+                // Sanitize path to prevent log injection
+                const safePath = String(filePath).replace(/[\r\n]/g, '').substring(0, 500);
+                console.error(`Failed to analyze ${safePath}:`, error instanceof Error ? error.message : String(error));
                 return null;
             }
         }, {

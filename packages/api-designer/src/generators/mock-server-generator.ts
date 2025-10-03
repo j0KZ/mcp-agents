@@ -60,7 +60,10 @@ export function createMockServer(spec: OpenAPISpec, config: MockServerConfig) {
 
   if (config.includeLogging) {
     app.use((req: Request, _res: Response, next: NextFunction) => {
-      console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+      // Sanitize request data to prevent log injection
+      const method = String(req.method).replace(/[\r\n]/g, '');
+      const path = String(req.path).replace(/[\r\n]/g, '').substring(0, 200);
+      console.log(`[${new Date().toISOString()}] ${method} ${path}`);
       next();
     });
   }
@@ -87,7 +90,7 @@ export function createMockServer(spec: OpenAPISpec, config: MockServerConfig) {
 
   const port = config.port || 3000;
   app.listen(port, () => {
-    console.log(`Mock server running on port ${port}`);
+    console.log(`Mock server running on port ${Number(port)}`);
   });
 
   return app;

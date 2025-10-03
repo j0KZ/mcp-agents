@@ -489,7 +489,9 @@ export async function scanProject(
           } catch (error) {
             // Skip files that can't be read
             if (config.verbose) {
-              console.error(`Error scanning ${fullPath}:`, error);
+              // Sanitize path to prevent log injection
+              const safePath = String(fullPath).replace(/[\r\n]/g, '').substring(0, 500);
+              console.error(`Error scanning ${safePath}:`, error instanceof Error ? error.message : String(error));
             }
           }
         }
