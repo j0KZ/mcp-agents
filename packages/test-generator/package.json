@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/test-generator-mcp",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "Test Intelligence Generator MCP - Automated test generation with edge cases and coverage analysis. Works with Claude Code, Cursor, Windsurf, Roo Code, and any MCP-compatible editor.",
   "type": "module",
   "main": "./dist/index.js",
