@@ -42,6 +42,27 @@ import {
 } from './generators/diagram-generator.js';
 
 import {
+  COMPLEXITY_THRESHOLDS,
+  ANALYSIS_ESTIMATES,
+} from './constants/schema-limits.js';
+
+import {
+  suggestForeignKeyIndexes,
+  suggestFilterColumnIndexes,
+  suggestJsonbIndexes,
+  suggestTextSearchIndexes,
+  suggestCompoundIndexes,
+} from './helpers/index-optimizer.js';
+
+import {
+  detectRepeatingGroups,
+  detectPartialDependencies,
+  detectTransitiveDependencies,
+  detectRedundantData,
+  detectMissingJunctionTables,
+} from './helpers/normalization-helper.js';
+
+import {
   generateSQLRecords,
   generateMongoRecords,
 } from './generators/seed-generator.js';
@@ -140,88 +161,15 @@ export function optimizeIndexes(schema: DatabaseSchema): IndexSuggestion[] {
   const tables = schema.tables || [];
 
   for (const table of tables) {
-    // Check for foreign keys without indexes
-    const foreignKeys = table.foreignKeys || [];
     const existingIndexes = table.indexes || [];
     const indexedColumns = new Set(existingIndexes.flatMap(idx => idx.columns));
 
-    for (const fk of foreignKeys) {
-      if (!indexedColumns.has(fk.column)) {
-        suggestions.push({
-          table: table.name,
-          columns: [fk.column],
-          type: 'BTREE',
-          reason: `Foreign key column '${fk.column}' should be indexed to improve JOIN performance`,
-          estimatedImpact: 'HIGH',
-          priority: 1,
-        });
-      }
-    }
-
-    // Check for commonly filtered columns
-    for (const column of table.columns) {
-      if (
-        (column.name.includes('status') ||
-         column.name.includes('type') ||
-         column.name.includes('category')) &&
-        !indexedColumns.has(column.name)
-      ) {
-        suggestions.push({
-          table: table.name,
-          columns: [column.name],
-          type: 'BTREE',
-          reason: `Commonly filtered column '${column.name}' should be indexed`,
-          estimatedImpact: 'MEDIUM',
-          priority: 2,
-        });
-      }
-
-      // Suggest JSONB GIN indexes
-      if (column.type === 'JSONB' && !indexedColumns.has(column.name)) {
-        suggestions.push({
-          table: table.name,
-          columns: [column.name],
-          type: 'GIN',
-          reason: `JSONB column '${column.name}' should have a GIN index for efficient queries`,
-          estimatedImpact: 'HIGH',
-          priority: 1,
-        });
-      }
-
-      // Suggest text search indexes
-      if (column.type === 'TEXT' && column.name.includes('description')) {
-        suggestions.push({
-          table: table.name,
-          columns: [column.name],
-          type: 'GIN',
-          reason: `Text column '${column.name}' may benefit from full-text search index`,
-          estimatedImpact: 'MEDIUM',
-          priority: 3,
-        });
-      }
-    }
-
-    // Suggest compound indexes for common query patterns
-    const timestampColumns = table.columns.filter(c => c.name === 'created_at' || c.name === 'updated_at');
-    const statusColumn = table.columns.find(c => c.name === 'status');
-
-    if (statusColumn && timestampColumns.length > 0) {
-      const compoundCols = [statusColumn.name, timestampColumns[0].name];
-      const hasCompoundIndex = existingIndexes.some(idx =>
-        idx.columns.length > 1 && idx.columns.includes(statusColumn.name)
-      );
-
-      if (!hasCompoundIndex) {
-        suggestions.push({
-          table: table.name,
-          columns: compoundCols,
-          type: 'BTREE',
-          reason: `Compound index on status and timestamp for efficient filtering and sorting`,
-          estimatedImpact: 'HIGH',
-          priority: 1,
-        });
-      }
-    }
+    // Collect suggestions from all helper functions
+    suggestions.push(...suggestForeignKeyIndexes(table, indexedColumns));
+    suggestions.push(...suggestFilterColumnIndexes(table, indexedColumns));
+    suggestions.push(...suggestJsonbIndexes(table, indexedColumns));
+    suggestions.push(...suggestTextSearchIndexes(table, indexedColumns));
+    suggestions.push(...suggestCompoundIndexes(table, existingIndexes));
   }
 
   return suggestions.sort((a, b) => a.priority - b.priority);
@@ -237,76 +185,15 @@ export function normalizeSchema(schema: DatabaseSchema): NormalizationSuggestion
   const tables = schema.tables || [];
 
   for (const table of tables) {
-    // Check for repeating groups (1NF violation)
-    const arrayColumns = table.columns.filter(c => c.type === 'ARRAY' || c.name.includes('_list'));
-    for (const col of arrayColumns) {
-      suggestions.push({
-        type: 'EXTRACT_TABLE',
-        description: `Column '${col.name}' in '${table.name}' contains repeating groups`,
-        affectedTables: [table.name],
-        proposedChanges: `Extract '${col.name}' into a separate table with a foreign key back to '${table.name}'`,
-        normalForm: '1NF',
-      });
-    }
-
-    // Check for partial dependencies (2NF violation)
-    const compositePK = Array.isArray(table.primaryKey) && table.primaryKey.length > 1;
-    if (compositePK) {
-      const nonKeyColumns = table.columns.filter(c =>
-        !table.primaryKey!.includes(c.name)
-      );
-
-      if (nonKeyColumns.length > 2) {
-        suggestions.push({
-          type: 'EXTRACT_TABLE',
-          description: `Table '${table.name}' has composite primary key with potential partial dependencies`,
-          affectedTables: [table.name],
-          proposedChanges: `Consider extracting columns that depend on only part of the composite key`,
-          normalForm: '2NF',
-        });
-      }
-    }
-
-    // Check for transitive dependencies (3NF violation)
-    const addressColumns = table.columns.filter(c =>
-      c.name.includes('city') || c.name.includes('state') || c.name.includes('country')
-    );
-    if (addressColumns.length >= 2) {
-      suggestions.push({
-        type: 'EXTRACT_TABLE',
-        description: `Table '${table.name}' has potential transitive dependencies in address columns`,
-        affectedTables: [table.name],
-        proposedChanges: `Extract address fields into a separate 'addresses' table`,
-        normalForm: '3NF',
-      });
-    }
-
-    // Check for redundant data
-    const jsonColumns = table.columns.filter(c => c.type === 'JSON' || c.type === 'JSONB');
-    if (jsonColumns.length > 0) {
-      suggestions.push({
-        type: 'REMOVE_REDUNDANCY',
-        description: `Table '${table.name}' uses JSON columns which may contain redundant data`,
-        affectedTables: [table.name],
-        proposedChanges: `Consider normalizing JSON data into separate tables for better querying and integrity`,
-        normalForm: '3NF',
-      });
-    }
+    // Collect suggestions from all helper functions
+    suggestions.push(...detectRepeatingGroups(table));
+    suggestions.push(...detectPartialDependencies(table));
+    suggestions.push(...detectTransitiveDependencies(table));
+    suggestions.push(...detectRedundantData(table));
   }
 
-  // Check for missing junction tables in many-to-many relationships
-  const manyToManyRels = (schema.relationships || []).filter(r => r.type === 'MANY_TO_MANY');
-  for (const rel of manyToManyRels) {
-    if (!rel.junctionTable) {
-      suggestions.push({
-        type: 'ADD_JUNCTION',
-        description: `Many-to-many relationship '${rel.name}' needs a junction table`,
-        affectedTables: [rel.from.table, rel.to.table],
-        proposedChanges: `Create junction table '${rel.from.table}_${rel.to.table}' to properly model the relationship`,
-        normalForm: '3NF',
-      });
-    }
-  }
+  // Check for missing junction tables
+  suggestions.push(...detectMissingJunctionTables(schema.relationships || []));
 
   return suggestions;
 }
@@ -393,8 +280,10 @@ export function analyzeSchema(schema: DatabaseSchema): SchemaAnalysis {
 
   // Estimate complexity
   const complexity =
-    tables.length > 20 || relationships.length > 30 ? 'HIGH' :
-    tables.length > 10 || relationships.length > 15 ? 'MEDIUM' : 'LOW';
+    tables.length > COMPLEXITY_THRESHOLDS.HIGH_COMPLEXITY_TABLE_COUNT ||
+    relationships.length > COMPLEXITY_THRESHOLDS.HIGH_COMPLEXITY_RELATIONSHIP_COUNT ? 'HIGH' :
+    tables.length > COMPLEXITY_THRESHOLDS.MEDIUM_COMPLEXITY_TABLE_COUNT ||
+    relationships.length > COMPLEXITY_THRESHOLDS.MEDIUM_COMPLEXITY_RELATIONSHIP_COUNT ? 'MEDIUM' : 'LOW';
 
   return {
     tableCount: tables.length,
@@ -403,8 +292,8 @@ export function analyzeSchema(schema: DatabaseSchema): SchemaAnalysis {
     relationshipCount: relationships.length,
     normalForm,
     estimatedSize: {
-      rows: tables.length * 1000, // Rough estimate
-      storage: `${Math.ceil(tables.length * 0.5)}MB`,
+      rows: tables.length * ANALYSIS_ESTIMATES.DEFAULT_ROWS_PER_TABLE,
+      storage: `${Math.ceil(tables.length * ANALYSIS_ESTIMATES.STORAGE_MB_PER_TABLE)}MB`,
     },
     complexity,
   };

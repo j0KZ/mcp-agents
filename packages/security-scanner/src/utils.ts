@@ -4,9 +4,7 @@
 
 import crypto from 'crypto';
 import { VulnerabilityType, CodeContext } from './types.js';
-
-const CONTEXT_LINES = 2;
-const MAX_SNIPPET_LENGTH = 200;
+import { FILE_LIMITS, PATTERN_LIMITS } from './constants/security-thresholds.js';
 
 /**
  * Generate unique finding ID
@@ -24,17 +22,17 @@ export function generateFindingId(filePath: string, line: number, type: Vulnerab
 /**
  * Extract code context around issue
  */
-export function extractCodeContext(content: string, lineNumber: number): CodeContext {
+export function extractCodeContext(content: string, lineNumber: number, contextLines = FILE_LIMITS.CONTEXT_LINES): CodeContext {
   const lines = content.split('\n');
   const index = lineNumber - 1;
 
-  const beforeLines = lines.slice(Math.max(0, index - CONTEXT_LINES), index);
+  const beforeLines = lines.slice(Math.max(0, index - contextLines), index);
   const issueLine = lines[index] || '';
-  const afterLines = lines.slice(index + 1, Math.min(lines.length, index + CONTEXT_LINES + 1));
+  const afterLines = lines.slice(index + 1, Math.min(lines.length, index + contextLines + 1));
 
   return {
     beforeLines: beforeLines,
-    issueLine: issueLine.substring(0, MAX_SNIPPET_LENGTH),
+    issueLine: issueLine.substring(0, FILE_LIMITS.MAX_LINE_LENGTH),
     afterLines: afterLines,
     lineNumber: lineNumber
   };
@@ -75,4 +73,62 @@ export function shouldScanFile(filePath: string, excludePatterns: string[]): boo
   }
 
   return true;
+}
+
+/**
+ * Check if a line should be skipped (comments, examples, etc.)
+ */
+export function shouldSkipLine(line: string): boolean {
+  const trimmed = line.trim();
+
+  // Skip comments
+  if (trimmed.startsWith('//') || trimmed.startsWith('#') ||
+      trimmed.startsWith('/*') || trimmed.startsWith('*')) {
+    return true;
+  }
+
+  // Skip lines that appear to be examples
+  const lowerLine = line.toLowerCase();
+  if (lowerLine.includes('example') || lowerLine.includes('sample') ||
+      lowerLine.includes('test') || lowerLine.includes('todo') ||
+      lowerLine.includes('fixme') || lowerLine.includes('mock')) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Truncate sensitive data for display in reports
+ */
+export function truncateSensitive(text: string, maxLength = PATTERN_LIMITS.SECRET_PREVIEW_LENGTH): string {
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return text.substring(0, maxLength) + '...';
+}
+
+/**
+ * Check if a file path belongs to the security scanner itself
+ * Used to avoid self-detection of patterns
+ */
+export function isScannerFile(filePath: string): boolean {
+  return filePath.includes('scanner') || filePath.includes('security-scanner');
+}
+
+/**
+ * Check if a line should be skipped during XSS scanning
+ * Skips pattern definitions, comments, and test code
+ */
+export function shouldSkipXSSLine(line: string): boolean {
+  if (
+    line.includes('pattern:') ||
+    line.includes('description:') ||
+    line.trim().startsWith('//') ||
+    line.trim().startsWith('*') ||
+    line.includes('const dangerousCode')
+  ) {
+    return true;
+  }
+  return false;
 }

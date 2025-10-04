@@ -3,13 +3,13 @@
  */
 
 import { SecurityFinding, FileScanContext, SeverityLevel, VulnerabilityType, OWASPCategory } from '../types.js';
-import { generateFindingId, extractCodeContext } from '../utils.js';
+import { generateFindingId, extractCodeContext, isScannerFile, shouldSkipXSSLine } from '../utils.js';
+import { CVSS_SCORES, CWE_IDS } from '../constants/security-thresholds.js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const CVSS_SCORE_XSS = 7.5;
 
 // Load patterns from external JSON to avoid CodeQL false positives
 const patternsData = JSON.parse(
@@ -29,7 +29,7 @@ export async function scanForXSS(context: FileScanContext): Promise<SecurityFind
   const lines = context.content.split('\n');
 
   // Skip scanner's own files to avoid false positives
-  if (context.filePath.includes('scanner') || context.filePath.includes('security-scanner')) {
+  if (isScannerFile(context.filePath)) {
     return findings;
   }
 
@@ -38,13 +38,7 @@ export async function scanForXSS(context: FileScanContext): Promise<SecurityFind
       const line = lines[i];
 
       // Skip pattern definitions, comments, and test strings
-      if (
-        line.includes('pattern:') ||
-        line.includes('description:') ||
-        line.trim().startsWith('//') ||
-        line.trim().startsWith('*') ||
-        line.includes('const dangerousCode')
-      ) {
+      if (shouldSkipXSSLine(line)) {
         continue;
       }
 
@@ -66,8 +60,8 @@ export async function scanForXSS(context: FileScanContext): Promise<SecurityFind
           recommendation:
             'Sanitize user input before rendering. Use textContent instead of innerHTML, or use a sanitization library like DOMPurify.',
           owaspCategory: OWASPCategory.A03_INJECTION,
-          cweId: 'CWE-79',
-          cvssScore: CVSS_SCORE_XSS,
+          cweId: CWE_IDS.XSS,
+          cvssScore: CVSS_SCORES.XSS,
           metadata: {
             detectedPattern: description
           }

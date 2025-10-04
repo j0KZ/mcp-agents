@@ -4,6 +4,7 @@
  */
 
 import { DatabaseSchema, SQLTable } from '../types.js';
+import { buildColumnDefinition, buildCreateIndexStatement } from '../helpers/sql-builder.js';
 
 export function generateSQLUpMigration(schema: DatabaseSchema): string {
   let sql = `-- Migration: Create ${schema.name} schema\n\n`;
@@ -11,29 +12,14 @@ export function generateSQLUpMigration(schema: DatabaseSchema): string {
   for (const table of schema.tables || []) {
     sql += `CREATE TABLE ${table.name} (\n`;
 
-    const columnDefs = table.columns.map(col => {
-      let def = `  ${col.name} ${col.type}`;
-
-      if (col.length) def += `(${col.length})`;
-      if (col.precision) def += `(${col.precision}${col.scale ? `,${col.scale}` : ''})`;
-      if (col.primaryKey) def += ' PRIMARY KEY';
-      if (col.autoIncrement && schema.database === 'mysql') def += ' AUTO_INCREMENT';
-      if (!col.nullable && !col.primaryKey) def += ' NOT NULL';
-      if (col.unique && !col.primaryKey) def += ' UNIQUE';
-      if (col.defaultValue !== undefined) {
-        def += ` DEFAULT ${typeof col.defaultValue === 'string' ? `'${col.defaultValue}'` : col.defaultValue}`;
-      }
-
-      return def;
-    });
+    const columnDefs = table.columns.map(col => buildColumnDefinition(col, schema.database));
 
     sql += columnDefs.join(',\n');
     sql += '\n);\n\n';
 
     // Create indexes
     for (const index of table.indexes || []) {
-      const unique = index.unique ? 'UNIQUE ' : '';
-      sql += `CREATE ${unique}INDEX ${index.name} ON ${table.name}(${index.columns.join(', ')});\n`;
+      sql += buildCreateIndexStatement(index.name, table.name, index.columns, index.unique) + '\n';
     }
 
     sql += '\n';

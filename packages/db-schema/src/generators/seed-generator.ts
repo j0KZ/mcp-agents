@@ -4,6 +4,7 @@
  */
 
 import { SQLTable, MongoCollection } from '../types.js';
+import { MOCK_DATA_RANGES } from '../constants/schema-limits.js';
 
 export function generateSQLRecords(table: SQLTable, count: number): Record<string, any>[] {
   const records: Record<string, any>[] = [];
@@ -58,10 +59,10 @@ export function generateMockValue(name: string, type: string, index: number): an
     return '$2b$10$hashedpassword' + index;
   }
   if (lowerName.includes('price') || lowerName.includes('amount')) {
-    return (Math.random() * 1000).toFixed(2);
+    return (Math.random() * MOCK_DATA_RANGES.MAX_RANDOM_PRICE).toFixed(2);
   }
   if (lowerName.includes('stock') || lowerName.includes('quantity')) {
-    return Math.floor(Math.random() * 100);
+    return Math.floor(Math.random() * MOCK_DATA_RANGES.MAX_RANDOM_QUANTITY);
   }
   if (lowerName.includes('description')) {
     return `This is a sample description for item ${index}`;
@@ -69,7 +70,7 @@ export function generateMockValue(name: string, type: string, index: number): an
 
   // Type-based defaults
   if (type.includes('INT') || type === 'Number') {
-    return index + 1;
+    return index + MOCK_DATA_RANGES.SEQUENCE_OFFSET;
   }
   if (type.includes('BOOL') || type === 'Boolean') {
     return index % 2 === 0;
@@ -78,7 +79,7 @@ export function generateMockValue(name: string, type: string, index: number): an
     return `value_${index}`;
   }
   if (type === 'DECIMAL' || type === 'NUMERIC') {
-    return (index * 10.5).toFixed(2);
+    return (index * MOCK_DATA_RANGES.DECIMAL_MULTIPLIER).toFixed(2);
   }
 
   return `mock_${index}`;

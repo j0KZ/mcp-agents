@@ -1,19 +1,15 @@
-/**
- * Code Metrics Calculator
- *
- * Calculates complexity, maintainability, and other code quality metrics.
- */
+import { COMPLEXITY_LIMITS, MAINTAINABILITY_CONSTANTS, INDEX_CONSTANTS } from '../constants/refactoring-limits.js';
 /**
  * Calculate nesting depth at a specific line index
  */
 export function getNestingDepth(lines, index) {
-    let depth = 0;
+    let depth = INDEX_CONSTANTS.FIRST_ARRAY_INDEX;
     for (let i = 0; i <= index; i++) {
         const line = lines[i];
         depth += (line.match(/\{/g) || []).length;
         depth -= (line.match(/\}/g) || []).length;
     }
-    return Math.max(0, depth);
+    return Math.max(INDEX_CONSTANTS.FIRST_ARRAY_INDEX, depth);
 }
 /**
  * Find duplicate code blocks (simplified detection)
@@ -21,7 +17,7 @@ export function getNestingDepth(lines, index) {
 export function findDuplicateBlocks(code) {
     const lines = code.split('\n');
     const duplicates = [];
-    const minBlockSize = 3;
+    const minBlockSize = COMPLEXITY_LIMITS.MIN_DUPLICATE_BLOCK_SIZE;
     for (let i = 0; i < lines.length - minBlockSize; i++) {
         const block1 = lines.slice(i, i + minBlockSize).join('\n').trim();
         if (!block1)
@@ -29,7 +25,7 @@ export function findDuplicateBlocks(code) {
         for (let j = i + minBlockSize; j < lines.length - minBlockSize; j++) {
             const block2 = lines.slice(j, j + minBlockSize).join('\n').trim();
             if (block1 === block2) {
-                duplicates.push({ line1: i + 1, line2: j + 1 });
+                duplicates.push({ line1: i + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET, line2: j + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET });
             }
         }
     }
@@ -50,7 +46,7 @@ function calculateCyclomaticComplexity(code) {
         /\b\|\|\b/g,
         /\?/g,
     ];
-    let complexity = 1; // Base complexity
+    let complexity = COMPLEXITY_LIMITS.BASE_COMPLEXITY; // Base complexity
     decisionPoints.forEach(pattern => {
         const matches = code.match(pattern);
         complexity += matches ? matches.length : 0;
@@ -64,7 +60,10 @@ function calculateMaintainabilityIndex(loc, complexity, functionCount) {
     // Simplified maintainability index calculation
     // Real formula: 171 - 5.2 * ln(Halstead Volume) - 0.23 * (Cyclomatic Complexity) - 16.2 * ln(Lines of Code)
     const volume = loc * Math.log2(functionCount || 1);
-    const index = Math.max(0, Math.min(100, 171 - 5.2 * Math.log(volume) - 0.23 * complexity - 16.2 * Math.log(loc)));
+    const index = Math.max(MAINTAINABILITY_CONSTANTS.MIN_SCORE, Math.min(MAINTAINABILITY_CONSTANTS.MAX_SCORE, MAINTAINABILITY_CONSTANTS.BASE_VALUE -
+        MAINTAINABILITY_CONSTANTS.HALSTEAD_COEFFICIENT * Math.log(volume) -
+        MAINTAINABILITY_CONSTANTS.COMPLEXITY_COEFFICIENT * complexity -
+        MAINTAINABILITY_CONSTANTS.LOC_COEFFICIENT * Math.log(loc)));
     return Math.round(index);
 }
 /**

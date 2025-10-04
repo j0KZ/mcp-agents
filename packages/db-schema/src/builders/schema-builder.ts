@@ -13,6 +13,11 @@ import {
   MongoField,
 } from '../types.js';
 
+import {
+  STRING_LIMITS,
+  NUMERIC_LIMITS,
+} from '../constants/schema-limits.js';
+
 export function buildSQLSchema(
   entities: string[],
   relationships: Relationship[],
@@ -43,20 +48,20 @@ export function buildSQLSchema(
     // Common fields based on entity type
     if (entity.includes('user') || entity.includes('customer')) {
       columns.push(
-        { name: 'email', type: 'VARCHAR', length: 255, unique: true, nullable: false },
-        { name: 'name', type: 'VARCHAR', length: 255, nullable: false },
-        { name: 'password_hash', type: 'VARCHAR', length: 255, nullable: false }
+        { name: 'email', type: 'VARCHAR', length: STRING_LIMITS.EMAIL_LENGTH, unique: true, nullable: false },
+        { name: 'name', type: 'VARCHAR', length: STRING_LIMITS.NAME_LENGTH, nullable: false },
+        { name: 'password_hash', type: 'VARCHAR', length: STRING_LIMITS.PASSWORD_HASH_LENGTH, nullable: false }
       );
     } else if (entity.includes('product')) {
       columns.push(
-        { name: 'name', type: 'VARCHAR', length: 255, nullable: false },
+        { name: 'name', type: 'VARCHAR', length: STRING_LIMITS.NAME_LENGTH, nullable: false },
         { name: 'description', type: 'TEXT' },
-        { name: 'price', type: 'DECIMAL', precision: 10, scale: 2, nullable: false },
-        { name: 'stock', type: 'INTEGER', defaultValue: 0 }
+        { name: 'price', type: 'DECIMAL', precision: NUMERIC_LIMITS.DEFAULT_PRICE_PRECISION, scale: NUMERIC_LIMITS.DEFAULT_PRICE_SCALE, nullable: false },
+        { name: 'stock', type: 'INTEGER', defaultValue: NUMERIC_LIMITS.DEFAULT_STOCK_VALUE }
       );
     } else {
       columns.push(
-        { name: 'name', type: 'VARCHAR', length: 255, nullable: false }
+        { name: 'name', type: 'VARCHAR', length: STRING_LIMITS.NAME_LENGTH, nullable: false }
       );
     }
 
@@ -167,11 +172,11 @@ export function extractEntities(requirements: string): string[] {
 
   for (const line of lines) {
     // Skip very long lines to prevent ReDoS
-    if (line.length > 500) continue;
+    if (line.length > STRING_LIMITS.MAX_LINE_LENGTH) continue;
 
     // Match patterns like "users have", "products contain", etc.
     // Limit word length to prevent polynomial regex
-    const entityMatch = line.match(/(\w{1,50})\s+(have|has|contain|include|store)/);
+    const entityMatch = line.match(new RegExp(`(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})\\s+(have|has|contain|include|store)`));
     if (entityMatch) {
       const entity = entityMatch[1].replace(/s$/, ''); // Singular
       if (!entities.includes(entity)) {
@@ -180,7 +185,7 @@ export function extractEntities(requirements: string): string[] {
     }
 
     // Match "X and Y" patterns
-    const multiMatch = line.match(/(\w{1,50})\s+and\s+(\w{1,50})/);
+    const multiMatch = line.match(new RegExp(`(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})\\s+and\\s+(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})`));
     if (multiMatch) {
       const entity1 = multiMatch[1].replace(/s$/, '');
       const entity2 = multiMatch[2].replace(/s$/, '');
@@ -198,11 +203,11 @@ export function extractRelationships(requirements: string, _entities: string[]):
 
   for (const line of lines) {
     // Skip very long lines to prevent ReDoS
-    if (line.length > 500) continue;
+    if (line.length > STRING_LIMITS.MAX_LINE_LENGTH) continue;
 
     // Pattern: "users have many orders"
     // Limit word length to prevent polynomial regex
-    const manyMatch = line.match(/(\w{1,50})\s+have\s+many\s+(\w{1,50})/);
+    const manyMatch = line.match(new RegExp(`(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})\\s+have\\s+many\\s+(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})`));
     if (manyMatch) {
       relationships.push({
         name: `${manyMatch[1]}_${manyMatch[2]}`,
@@ -213,7 +218,7 @@ export function extractRelationships(requirements: string, _entities: string[]):
     }
 
     // Pattern: "orders belong to users"
-    const belongsMatch = line.match(/(\w{1,50})\s+belong\s+to\s+(\w{1,50})/);
+    const belongsMatch = line.match(new RegExp(`(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})\\s+belong\\s+to\\s+(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})`));
     if (belongsMatch) {
       relationships.push({
         name: `${belongsMatch[2]}_${belongsMatch[1]}`,

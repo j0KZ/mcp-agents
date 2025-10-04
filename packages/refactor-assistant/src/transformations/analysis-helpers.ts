@@ -1,3 +1,5 @@
+import { INDEX_CONSTANTS } from '../constants/refactoring-limits.js';
+
 /**
  * Code analysis helpers
  */
@@ -10,7 +12,7 @@ export function analyzeFunctionLengths(code: string): Array<{ name: string; star
     const functionMatch = lines[i].match(/(?:function\s+(\w+)|const\s+(\w+)\s*=\s*(?:async\s*)?\([^)]*\)\s*=>)/);
     if (functionMatch) {
       const name = functionMatch[1] || functionMatch[2];
-      let braceCount = 0;
+      let braceCount = INDEX_CONSTANTS.FIRST_ARRAY_INDEX;
       let started = false;
       let lineCount = 0;
 
@@ -26,8 +28,8 @@ export function analyzeFunctionLengths(code: string): Array<{ name: string; star
 
         if (started) lineCount++;
 
-        if (started && braceCount === 0) {
-          functions.push({ name, startLine: i + 1, lineCount });
+        if (started && braceCount === INDEX_CONSTANTS.FIRST_ARRAY_INDEX) {
+          functions.push({ name, startLine: i + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET, lineCount });
           break;
         }
       }

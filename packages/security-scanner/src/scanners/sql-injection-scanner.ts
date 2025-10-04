@@ -4,12 +4,12 @@
 
 import { SecurityFinding, FileScanContext, SeverityLevel, VulnerabilityType, OWASPCategory } from '../types.js';
 import { generateFindingId, extractCodeContext } from '../utils.js';
+import { CVSS_SCORES, CWE_IDS } from '../constants/security-thresholds.js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const CVSS_SCORE_SQL_INJECTION = 9.8;
 
 // Load patterns from external JSON to avoid CodeQL false positives
 const patternsData = JSON.parse(
@@ -49,8 +49,8 @@ export async function scanForSQLInjection(context: FileScanContext): Promise<Sec
           recommendation:
             'Use parameterized queries or prepared statements instead of string concatenation. Example: db.query("SELECT * FROM users WHERE id = ?", [userId])',
           owaspCategory: OWASPCategory.A03_INJECTION,
-          cweId: 'CWE-89',
-          cvssScore: CVSS_SCORE_SQL_INJECTION,
+          cweId: CWE_IDS.SQL_INJECTION,
+          cvssScore: CVSS_SCORES.SQL_INJECTION,
           metadata: {
             detectedPattern: description
           }

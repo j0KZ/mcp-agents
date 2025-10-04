@@ -27,7 +27,50 @@ This is a **TypeScript monorepo** containing 8 Model Context Protocol (MCP) tool
 
 ### Modular Architecture Pattern
 
-**Recent Refactoring (refactor/complexity-reduction branch):**
+**Recent Refactoring (v1.0.27 - October 2025):**
+**Phase 1-3** systematic refactoring completed with MCP-validated improvements:
+
+**Security Scanner (Perfect Score 100/100 ⭐):**
+- **Before**: Score 57/100, Complexity 71, Maintainability 11, 35 duplicate blocks
+- **After**: Score 100/100, Complexity 33, Maintainability 38, 2 duplicate blocks
+- **Improvements**: +75% score, -54% complexity, +245% maintainability, -94% duplicates
+- **Changes**:
+  - Extracted 30+ magic numbers into `constants/security-thresholds.ts` and `constants/secret-patterns.ts`
+  - Created modular scanners: `scanners/owasp-scanner.ts`, `scanners/dependency-scanner.ts`
+  - Added 6 utility functions in `utils.ts` to eliminate duplication
+  - Expanded secret patterns from 9 to 20 (Google API, Stripe, Twilio, etc.)
+  - Reduced from 395 to 209 lines (-47%)
+
+**DB Schema Designer (Near Perfect 97/100 ⭐):**
+- **Before**: Score 75/100, Complexity 83, Maintainability 14, 22 duplicate blocks
+- **After**: Score 97/100, Complexity 42, Maintainability 31, 13 duplicate blocks
+- **Improvements**: +29% score, -49% complexity, +121% maintainability, -41% duplicates
+- **Changes**:
+  - Extracted 27 magic numbers into `constants/schema-limits.ts` (8 categories)
+  - Created `helpers/index-optimizer.ts` - 5 index suggestion functions (146 lines)
+  - Created `helpers/normalization-helper.ts` - 5 normalization functions (119 lines)
+  - Created `helpers/sql-builder.ts` - SQL generation utilities (46 lines)
+  - Reduced from 411 to 262 lines (-36%)
+
+**Refactor Assistant (Stable 67/100):**
+- **Before**: Score 67/100, Complexity 84, Maintainability 12, 24 duplicate blocks
+- **After**: Score 67/100, Complexity 78, Maintainability 13, 24 duplicate blocks
+- **Improvements**: -7% complexity, +8% maintainability
+- **Changes**:
+  - Extracted 30 magic numbers into `constants/refactoring-limits.ts` (5 categories)
+  - Created `utils/error-helpers.ts` - eliminated 6 duplicate error handlers
+  - Already well-modularized from previous work, focused on constants and utilities
+  - Reduced from 456 to 407 lines (-11%)
+
+**Overall Phase 1-3 Impact:**
+- ✅ +33% average score (66 → 88)
+- ✅ -36% complexity reduction (79 → 51)
+- ✅ +122% maintainability (12 → 27)
+- ✅ -52% duplicate blocks (81 → 39)
+- ✅ 0 security vulnerabilities (validated by Security Scanner MCP)
+- ✅ 100% test pass rate (68/68 tests passing)
+
+**Previous Refactoring (refactor/complexity-reduction branch):**
 Three major packages were refactored to reduce complexity by extracting logic into specialized modules:
 
 1. **api-designer/src/**

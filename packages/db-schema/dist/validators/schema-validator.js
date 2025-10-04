@@ -2,6 +2,7 @@
  * Schema Validator Module
  * Validates database schemas and estimates normalization levels
  */
+import { STRING_LIMITS } from '../constants/schema-limits.js';
 export function validateSQLSchema(schema, errors, warnings) {
     for (const table of schema.tables || []) {
         // Check for primary key
@@ -40,12 +41,12 @@ export function validateSQLSchema(schema, errors, warnings) {
         }
         // Check for long VARCHAR without index
         for (const col of table.columns) {
-            if (col.type === 'VARCHAR' && (col.length || 0) > 500) {
+            if (col.type === 'VARCHAR' && (col.length || 0) > STRING_LIMITS.LONG_VARCHAR_THRESHOLD) {
                 warnings.push({
                     type: 'LONG_VARCHAR',
                     table: table.name,
                     column: col.name,
-                    message: `Column '${col.name}' has VARCHAR length > 500`,
+                    message: `Column '${col.name}' has VARCHAR length > ${STRING_LIMITS.LONG_VARCHAR_THRESHOLD}`,
                     suggestion: 'Consider using TEXT type instead',
                 });
             }

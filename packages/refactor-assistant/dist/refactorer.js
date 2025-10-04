@@ -1,7 +1,7 @@
 /**
  * Core refactoring logic and transformations
  */
-import { REFACTORING_LIMITS, REFACTORING_MESSAGES } from './constants.js';
+import { REFACTORING_LIMITS, REFACTORING_MESSAGES, PATTERN_CONSTANTS, INDEX_CONSTANTS, } from './constants/refactoring-limits.js';
 // Re-export from modular components
 export { extractFunction } from './core/extract-function.js';
 export { calculateMetrics, findDuplicateBlocks } from './analysis/metrics-calculator.js';
@@ -11,6 +11,7 @@ import { applySingletonPattern, applyFactoryPattern, applyObserverPattern, apply
 import { applyGuardClauses, combineNestedConditions } from './transformations/conditional-helpers.js';
 import { removeUnusedImportsFromCode, escapeRegExp } from './transformations/import-helpers.js';
 import { analyzeFunctionLengths } from './transformations/analysis-helpers.js';
+import { getErrorMessage } from './utils/error-helpers.js';
 /**
  * Convert callback-based code to async/await
  */
@@ -30,7 +31,7 @@ export function convertToAsync(options) {
         const callbackPattern = /(\w+)\s?\(\s?\(err,\s?(\w+)\)\s?=>\s?\{/g;
         if (callbackPattern.test(code)) {
             refactoredCode = refactoredCode.replace(/function\s+(\w+)\s*\(/g, 'async function $1(');
-            callbackPattern.lastIndex = 0;
+            callbackPattern.lastIndex = PATTERN_CONSTANTS.REGEX_RESET_INDEX;
             refactoredCode = refactoredCode.replace(callbackPattern, (_match, fn, dataVar) => {
                 return useTryCatch
                     ? `try {\n  const ${dataVar} = await ${fn}();\n`
@@ -49,7 +50,7 @@ export function convertToAsync(options) {
         // Convert Promise.then chains
         const promisePattern = /\.then\s?\(\s?\((\w+)\)\s?=>\s?\{([^}]{1,500})\}\s?\)/g;
         if (promisePattern.test(refactoredCode)) {
-            promisePattern.lastIndex = 0;
+            promisePattern.lastIndex = PATTERN_CONSTANTS.REGEX_RESET_INDEX;
             refactoredCode = refactoredCode.replace(/function\s+(\w+)\s*\(/g, 'async function $1(');
             refactoredCode = refactoredCode.replace(promisePattern, ';\n  const $1 = await promise;\n  $2');
             changes.push({
@@ -61,7 +62,7 @@ export function convertToAsync(options) {
             code: refactoredCode,
             changes,
             success: true,
-            warnings: changes.length === 0 ? ['No callbacks found to convert'] : undefined,
+            warnings: changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES ? [REFACTORING_MESSAGES.NO_CALLBACKS_FOUND] : undefined,
         };
     }
     catch (error) {
@@ -69,7 +70,7 @@ export function convertToAsync(options) {
             code: options.code,
             changes: [],
             success: false,
-            error: error instanceof Error ? error.message : 'Unknown error during async conversion',
+            error: getErrorMessage(error, 'Unknown error during async conversion'),
         };
     }
 }
@@ -122,7 +123,7 @@ export function simplifyConditionals(options) {
             code: refactoredCode,
             changes,
             success: true,
-            warnings: changes.length === 0 ? ['No conditionals found to simplify'] : undefined,
+            warnings: changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES ? [REFACTORING_MESSAGES.NO_CONDITIONALS_FOUND] : undefined,
         };
     }
     catch (error) {
@@ -130,7 +131,7 @@ export function simplifyConditionals(options) {
             code: options.code,
             changes: [],
             success: false,
-            error: error instanceof Error ? error.message : 'Unknown error during conditional simplification',
+            error: getErrorMessage(error, 'Unknown error during conditional simplification'),
         };
     }
 }
@@ -146,7 +147,7 @@ export function removeDeadCode(options) {
             const lines = refactoredCode.split('\n');
             const cleanedLines = [];
             let skipUntilBrace = false;
-            for (let i = 0; i < lines.length; i++) {
+            for (let i = INDEX_CONSTANTS.FIRST_ARRAY_INDEX; i < lines.length; i++) {
                 const line = lines[i];
                 const trimmed = line.trim();
                 if (skipUntilBrace) {
@@ -159,7 +160,7 @@ export function removeDeadCode(options) {
                 cleanedLines.push(line);
                 if (trimmed.startsWith('return ') || trimmed === 'return;') {
                     let hasCodeAfterReturn = false;
-                    for (let j = i + 1; j < lines.length; j++) {
+                    for (let j = i + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET; j < lines.length; j++) {
                         const nextLine = lines[j].trim();
                         if (nextLine.startsWith('}'))
                             break;
@@ -173,7 +174,7 @@ export function removeDeadCode(options) {
                         changes.push({
                             type: 'remove-dead-code',
                             description: 'Removed unreachable code after return statement',
-                            lineRange: { start: i + 2, end: i + 2 },
+                            lineRange: { start: i + INDEX_CONSTANTS.DEAD_CODE_LINE_OFFSET, end: i + INDEX_CONSTANTS.DEAD_CODE_LINE_OFFSET },
                         });
                     }
                 }
@@ -182,7 +183,7 @@ export function removeDeadCode(options) {
         }
         if (removeUnusedImports) {
             const importResult = removeUnusedImportsFromCode(refactoredCode);
-            if (importResult.removed.length > 0) {
+            if (importResult.removed.length > PATTERN_CONSTANTS.NO_OCCURRENCES) {
                 refactoredCode = importResult.code;
                 changes.push({
                     type: 'remove-dead-code',
@@ -194,7 +195,7 @@ export function removeDeadCode(options) {
             code: refactoredCode,
             changes,
             success: true,
-            warnings: changes.length === 0 ? ['No dead code found'] : undefined,
+            warnings: changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES ? [REFACTORING_MESSAGES.NO_DEAD_CODE_FOUND] : undefined,
         };
     }
     catch (error) {
@@ -202,7 +203,7 @@ export function removeDeadCode(options) {
             code: options.code,
             changes: [],
             success: false,
-            error: error instanceof Error ? error.message : 'Unknown error during dead code removal',
+            error: getErrorMessage(error, 'Unknown error during dead code removal'),
         };
     }
 }
@@ -250,7 +251,7 @@ export function applyDesignPattern(options) {
             code: options.code,
             changes: [],
             success: false,
-            error: error instanceof Error ? error.message : 'Unknown error during pattern application',
+            error: getErrorMessage(error, 'Unknown error during pattern application'),
         };
     }
 }
@@ -280,7 +281,7 @@ export function renameVariable(options) {
         const pattern = new RegExp(wordBoundary, 'g');
         let refactoredCode = code;
         const matches = (code.match(pattern) || []).length;
-        if (matches === 0) {
+        if (matches === PATTERN_CONSTANTS.NO_OCCURRENCES) {
             return {
                 code,
                 changes: [],
@@ -299,7 +300,7 @@ export function renameVariable(options) {
             code: refactoredCode,
             changes: [{
                     type: 'rename-variable',
-                    description: `Renamed '${oldName}' to '${newName}' (${matches} occurrence${matches > 1 ? 's' : ''})`,
+                    description: `Renamed '${oldName}' to '${newName}' (${matches} occurrence${matches > PATTERN_CONSTANTS.SINGLE_OCCURRENCE ? 's' : ''})`,
                     before: code,
                     after: refactoredCode,
                 }],
@@ -311,7 +312,7 @@ export function renameVariable(options) {
             code: options.code,
             changes: [],
             success: false,
-            error: error instanceof Error ? error.message : 'Unknown error during variable renaming',
+            error: getErrorMessage(error, 'Unknown error during variable renaming'),
         };
     }
 }
@@ -342,7 +343,7 @@ export function suggestRefactorings(code, _filePath) {
                 type: 'simplify-conditionals',
                 severity: 'warning',
                 message: `Deep nesting detected (depth: ${nestingDepth})`,
-                location: { line: index + 1 },
+                location: { line: index + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET },
                 snippet: line.trim(),
                 rationale: 'Deep nesting reduces readability. Consider using guard clauses or extracting functions.',
             });
@@ -358,7 +359,7 @@ export function suggestRefactorings(code, _filePath) {
                 type: 'convert-to-async',
                 severity: 'info',
                 message: 'Callback detected - consider converting to async/await',
-                location: { line: idx + 1 },
+                location: { line: idx + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET },
                 snippet: line.trim(),
                 rationale: 'Async/await provides better error handling and readability than callbacks.',
             });
