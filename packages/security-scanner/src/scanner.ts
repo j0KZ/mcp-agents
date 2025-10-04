@@ -10,7 +10,6 @@ import {
   SecurityFinding,
   ScanResult,
   ScanConfig,
-  SecretPattern,
   SeverityLevel,
   VulnerabilityType,
   DependencyVulnerability,
