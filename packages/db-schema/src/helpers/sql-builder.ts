@@ -52,7 +52,9 @@ export function buildColumnDefinition(col: SQLColumn, database: string): string 
   if (col.defaultValue !== undefined) {
     if (typeof col.defaultValue === 'string') {
       def += ` DEFAULT '${escapeStringLiteral(col.defaultValue)}'`;
-    } else if (typeof col.defaultValue === 'number' || typeof col.defaultValue === 'boolean') {
+    } else if (typeof col.defaultValue === 'boolean') {
+      def += ` DEFAULT ${col.defaultValue ? 1 : 0}`;
+    } else if (typeof col.defaultValue === 'number') {
       def += ` DEFAULT ${col.defaultValue}`;
     } else {
       throw new Error(`Invalid default value type: ${typeof col.defaultValue}`);

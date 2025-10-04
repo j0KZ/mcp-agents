@@ -64,12 +64,10 @@ export function createGraphQLSchema(
 ): APIDesignResult {
   try {
     let types: GraphQLType[];
-    let config: Partial<APIDesignConfig> | undefined;
 
     // Handle both old and new signatures
     if (Array.isArray(configOrTypes)) {
       types = configOrTypes;
-      config = optionalConfig;
     } else {
       // Old signature: config with resources
       types = (configOrTypes.resources || []).map(resource => ({
@@ -80,7 +78,6 @@ export function createGraphQLSchema(
           { name: 'name', type: 'String!' },
         ],
       }));
-      config = configOrTypes;
     }
 
     const queries: any[] = [];
