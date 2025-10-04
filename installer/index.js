@@ -10,7 +10,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { homedir, platform } from 'os';
 import { join, dirname } from 'path';
 
-const VERSION = '1.0.23';
+const VERSION = '1.0.24';
 const TOOLS = [
   { pkg: '@j0kz/smart-reviewer-mcp', name: 'smart-reviewer', desc: 'Code review and quality analysis' },
   { pkg: '@j0kz/test-generator-mcp', name: 'test-generator', desc: 'Test suite generation' },
@@ -71,9 +71,9 @@ const EDITORS = {
   'trae': {
     name: 'Trae',
     paths: {
-      win32: join('AppData', 'Roaming', 'Trae', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json'),
-      darwin: join('Library', 'Application Support', 'Trae', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json'),
-      linux: join('.config', 'Trae', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json')
+      win32: join('AppData', 'Roaming', 'Trae', 'User', 'mcp.json'),
+      darwin: join('Library', 'Application Support', 'Trae', 'User', 'mcp.json'),
+      linux: join('.config', 'Trae', 'User', 'mcp.json')
     }
   }
 };
