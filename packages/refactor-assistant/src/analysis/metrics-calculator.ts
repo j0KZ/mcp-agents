@@ -97,8 +97,9 @@ function calculateMaintainabilityIndex(loc: number, complexity: number, function
  */
 export function calculateMetrics(code: string): CodeMetrics {
   const lines = code.split('\n').filter(line => line.trim() && !line.trim().startsWith('//'));
+  // Use bounded quantifier to prevent ReDoS on malicious inputs
   const functionCount = (code.match(/function\s+\w+/g) || []).length +
-                        (code.match(/const\s+\w+\s*=\s*\([^)]*\)\s*=>/g) || []).length;
+                        (code.match(/const\s+\w+\s*=\s*(?:async\s+)?(?:\([^)]{0,200}\)|[a-zA-Z_$][\w$]*)\s*=>/g) || []).length;
 
   const complexity = calculateCyclomaticComplexity(code);
   const maxNestingDepth = Math.max(...lines.map((_, idx) => getNestingDepth(lines, idx)));
