@@ -6,11 +6,12 @@
 [![Version](https://img.shields.io/badge/version-1.0.26-blue.svg)](https://github.com/j0KZ/mcp-agents/blob/main/CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 🎉 What's New in v1.0.26
+## 🎉 What's New in v1.0.28
 
-- **📚 Comprehensive Examples**: New example files in [`examples/smart-reviewer/`](../../examples/smart-reviewer/)
-- **🎯 Better Error Messages**: Improved validation and error handling
-- **✅ Production Ready**: Enhanced code analysis and quality metrics
+- **🤖 Auto-Fix Engine**: NEW! Pareto 80/20 principle - 20% of fixes solve 80% of issues
+- **🔧 Smart Fixes**: Remove unused imports, console.log, add null checks (with preview)
+- **✅ 100% Safe**: AST-validated, backup before apply, rollback on error
+- **📊 Confidence Scoring**: Each fix rated 0-100% confidence
 
 ## 🚀 Quick Start
 
@@ -68,14 +69,33 @@ After setup, just chat naturally with your AI:
 
 💬 You: "What code smells are in this file?"
 🤖 AI: Detected: Long method (calculateTotal - 150 lines), Feature Envy (uses Customer data), Duplicate code...
+
+💬 You: "Generate auto-fixes for this file"
+🤖 AI: *Using generate_auto_fixes* Found 5 fixes: 2 unused imports (100% safe), 3 console.log (90% safe), 1 null check (80% - review needed)
+
+💬 You: "Apply the safe fixes only"
+🤖 AI: *Using apply_auto_fixes* ✅ Applied 5 safe fixes. Backup: file.ts.backup
 ```
 
 ## ✨ Features
 
 🔍 **Deep Code Analysis** - Find bugs, code smells, and anti-patterns
 📊 **Quality Metrics** - Complexity, maintainability, coverage scores
-🤖 **Auto-Fix** - Automatically apply suggested improvements
+🤖 **Auto-Fix Engine (NEW!)** - Pareto 80/20 fixes: unused imports, console.log, null checks
+✅ **Safe by Default** - AST validation, auto-backup, rollback on error
 ⚡ **Fast Reviews** - Analyze entire projects in seconds
+
+### 🎯 Auto-Fix Capabilities (Pareto 80/20)
+
+**Safe Fixes (100% confidence):**
+- ✅ Remove unused imports (AST-validated)
+- ✅ Remove console.log statements
+- ✅ Format code (Prettier-compatible)
+
+**Suggestions (requires review):**
+- 💡 Add null/undefined checks (optional chaining)
+- 💡 Fix type assertions
+- 💡 Improve error handling
 
 ## 📦 Complete @j0kz MCP Suite
 

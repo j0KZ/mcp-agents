@@ -3,13 +3,24 @@
 > **8 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
-[![Version](https://img.shields.io/badge/version-1.0.27-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.28-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
 
-## 🎉 What's New in v1.0.27
+## 🎉 What's New in v1.0.28
+
+### 📚 Documentation Organization & Structure
+
+**Complete Documentation Restructuring:**
+- ✨ New [docs/README.md](docs/README.md) - comprehensive documentation index
+- 📁 7 organized categories: getting-started, development, architecture, reports, governance, examples, templates
+- 🔗 All links updated throughout README and project files
+- 📦 Root-level reports moved to organized structure
+- ✅ Improved navigation and discoverability
+
+**Previous Release (v1.0.27):**
 
 ### 🎯 Major Code Quality Improvements - MCP-Validated!
 
@@ -49,7 +60,7 @@
 - **🚀 CI/CD Templates** - GitHub Actions, GitLab CI, pre-commit hooks
 - **🎯 Global Version Management** - `version.json` single source of truth
 
-[View Full Changelog](CHANGELOG.md#1027---2025-10-04)
+[View Full Changelog](CHANGELOG.md#1028---2025-10-04)
 
 ---
 
@@ -135,7 +146,7 @@ include:
   - remote: 'https://raw.githubusercontent.com/j0KZ/mcp-agents/main/templates/gitlab-ci/mcp-quality-gate.gitlab-ci.yml'
 ```
 
-📚 **[Full CI/CD Guide](docs/CI_CD_TEMPLATES.md)** | **[Browse Templates](templates/)**
+📚 **[Full CI/CD Guide](docs/development/CI_CD_TEMPLATES.md)** | **[Browse Templates](templates/)**
 
 ---
 
@@ -785,12 +796,13 @@ Visit our [**Wiki**](https://github.com/j0KZ/mcp-agents/wiki) for complete docum
 
 ### Additional Resources
 
-- **[Modularity Implementation](docs/MODULARITY_IMPLEMENTATION.md)** - Technical details on shared utilities
-- **[Editor Compatibility](docs/EDITOR_COMPATIBILITY.md)** - Full compatibility matrix
-- **[Security Policy](docs/SECURITY.md)** - Security guidelines and reporting
-- **[Contributing Guide](docs/CONTRIBUTING.md)** - How to contribute to the project
-- **[Code of Conduct](docs/CODE_OF_CONDUCT.md)** - Community guidelines
-- **[Roadmap](docs/ROADMAP.md)** - Future plans and features
+- **[📚 Documentation Index](docs/README.md)** - Complete documentation catalog
+- **[Modularity Implementation](docs/architecture/MODULARITY_IMPLEMENTATION.md)** - Technical details on shared utilities
+- **[Editor Compatibility](docs/getting-started/EDITOR_COMPATIBILITY.md)** - Full compatibility matrix
+- **[Security Policy](docs/governance/SECURITY.md)** - Security guidelines and reporting
+- **[Contributing Guide](docs/development/CONTRIBUTING.md)** - How to contribute to the project
+- **[Code of Conduct](docs/governance/CODE_OF_CONDUCT.md)** - Community guidelines
+- **[Roadmap](docs/architecture/ROADMAP.md)** - Future plans and features
 
 ---
 

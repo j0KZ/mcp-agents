@@ -4,11 +4,14 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { CallToolRequestSchema, ListToolsRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
 import { CodeAnalyzer } from './analyzer.js';
 import { validateFilePath } from '@j0kz/shared';
+import { AutoFixer } from './auto-fixer.js';
 class SmartReviewerServer {
     server;
     analyzer;
+    autoFixer;
     constructor() {
         this.analyzer = new CodeAnalyzer();
+        this.autoFixer = new AutoFixer();
         this.server = new Server({
             name: 'smart-reviewer',
             version: '1.0.0',
@@ -89,6 +92,42 @@ class SmartReviewerServer {
                         required: ['filePath'],
                     },
                 },
+                {
+                    name: 'generate_auto_fixes',
+                    description: 'Generate automatic fixes using Pareto principle (20% fixes solve 80% issues). Returns preview without applying changes.',
+                    inputSchema: {
+                        type: 'object',
+                        properties: {
+                            filePath: {
+                                type: 'string',
+                                description: 'Path to the file to analyze for auto-fixes',
+                            },
+                            safeOnly: {
+                                type: 'boolean',
+                                description: 'Only return safe fixes that can be auto-applied (default: false)',
+                            },
+                        },
+                        required: ['filePath'],
+                    },
+                },
+                {
+                    name: 'apply_auto_fixes',
+                    description: 'Apply generated auto-fixes to a file. SAFE: Creates backup before applying.',
+                    inputSchema: {
+                        type: 'object',
+                        properties: {
+                            filePath: {
+                                type: 'string',
+                                description: 'Path to the file to fix',
+                            },
+                            safeOnly: {
+                                type: 'boolean',
+                                description: 'Only apply safe fixes (default: true)',
+                            },
+                        },
+                        required: ['filePath'],
+                    },
+                },
             ],
         }));
         // Handle tool calls
@@ -155,6 +194,101 @@ class SmartReviewerServer {
                                 },
                             ],
                         };
+                    }
+                    case 'generate_auto_fixes': {
+                        const { filePath, safeOnly = false } = args;
+                        // Validate file path
+                        const validatedPath = validateFilePath(filePath);
+                        const { readFile } = await import('fs/promises');
+                        const content = await readFile(validatedPath, 'utf-8');
+                        const fixResult = await this.autoFixer.generateFixes(content, validatedPath);
+                        // Filter by safety if requested
+                        const fixes = safeOnly
+                            ? fixResult.fixes.filter(f => f.safe)
+                            : fixResult.fixes;
+                        const diff = this.autoFixer.generateDiff(fixes);
+                        return {
+                            content: [
+                                {
+                                    type: 'text',
+                                    text: JSON.stringify({
+                                        success: true,
+                                        file: filePath,
+                                        summary: {
+                                            total: fixes.length,
+                                            safe: fixes.filter(f => f.safe).length,
+                                            requiresReview: fixes.filter(f => !f.safe).length,
+                                        },
+                                        fixes: fixes.map(f => ({
+                                            type: f.type,
+                                            line: f.line,
+                                            description: f.description,
+                                            confidence: f.confidence,
+                                            safe: f.safe,
+                                            impact: f.impact,
+                                        })),
+                                        preview: diff,
+                                    }, null, 2),
+                                },
+                            ],
+                        };
+                    }
+                    case 'apply_auto_fixes': {
+                        const { filePath, safeOnly = true } = args;
+                        // Validate file path
+                        const validatedPath = validateFilePath(filePath);
+                        const { readFile, writeFile, copyFile } = await import('fs/promises');
+                        const content = await readFile(validatedPath, 'utf-8');
+                        // Create backup
+                        const backupPath = `${validatedPath}.backup`;
+                        await copyFile(validatedPath, backupPath);
+                        try {
+                            const fixResult = await this.autoFixer.generateFixes(content, validatedPath);
+                            // Only apply safe fixes by default
+                            const fixesToApply = safeOnly
+                                ? fixResult.fixes.filter(f => f.safe)
+                                : fixResult.fixes;
+                            if (fixesToApply.length === 0) {
+                                return {
+                                    content: [
+                                        {
+                                            type: 'text',
+                                            text: JSON.stringify({
+                                                success: true,
+                                                message: 'No fixes to apply',
+                                                file: filePath,
+                                            }, null, 2),
+                                        },
+                                    ],
+                                };
+                            }
+                            // Apply fixes
+                            await writeFile(validatedPath, fixResult.fixedCode, 'utf-8');
+                            return {
+                                content: [
+                                    {
+                                        type: 'text',
+                                        text: JSON.stringify({
+                                            success: true,
+                                            file: filePath,
+                                            backup: backupPath,
+                                            fixesApplied: fixesToApply.length,
+                                            summary: fixResult.summary,
+                                            fixes: fixesToApply.map(f => ({
+                                                type: f.type,
+                                                line: f.line,
+                                                description: f.description,
+                                            })),
+                                        }, null, 2),
+                                    },
+                                ],
+                            };
+                        }
+                        catch (error) {
+                            // Restore from backup on error
+                            await copyFile(backupPath, validatedPath);
+                            throw error;
+                        }
                     }
                     default:
                         throw new Error(`Unknown tool: ${name}`);

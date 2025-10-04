@@ -6,9 +6,12 @@ export function analyzeFunctionLengths(code) {
     const functions = [];
     const lines = code.split('\n');
     for (let i = 0; i < lines.length; i++) {
-        const functionMatch = lines[i].match(/(?:function\s+(\w+)|const\s+(\w+)\s*=\s*(?:async\s*)?\([^)]*\)\s*=>)/);
+        // Use two separate, simpler regexes to avoid ReDoS vulnerability
+        const regularFunctionMatch = lines[i].match(/function\s+(\w+)/);
+        const arrowFunctionMatch = !regularFunctionMatch && lines[i].match(/const\s+(\w+)\s*=\s*(?:async\s+)?(?:\([^)]{0,200}\)|[a-zA-Z_$][\w$]*)\s*=>/);
+        const functionMatch = regularFunctionMatch || arrowFunctionMatch;
         if (functionMatch) {
-            const name = functionMatch[1] || functionMatch[2];
+            const name = functionMatch[1];
             let braceCount = INDEX_CONSTANTS.FIRST_ARRAY_INDEX;
             let started = false;
             let lineCount = 0;

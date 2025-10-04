@@ -11,7 +11,7 @@ import { extractFunction, convertToAsync, simplifyConditionals, removeDeadCode, 
 /**
  * MCP Tool definitions
  */
-const TOOLS = [
+export const TOOLS = [
     {
         name: 'extract_function',
         description: 'Extract a code block into a separate function with automatic parameter detection',

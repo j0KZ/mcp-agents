@@ -38,7 +38,7 @@ import type {
 /**
  * MCP Tool definitions
  */
-const TOOLS: Tool[] = [
+export const TOOLS: Tool[] = [
   {
     name: 'extract_function',
     description: 'Extract a code block into a separate function with automatic parameter detection',

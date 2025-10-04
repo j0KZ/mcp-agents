@@ -1,0 +1,1 @@
+{"version":3,"file":"unused-import-fixer.d.ts","sourceRoot":"","sources":["../../src/fixers/unused-import-fixer.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,SAAS,EAAE,KAAK,UAAU,EAAE,MAAM,iBAAiB,CAAC;AAC7D,OAAO,KAAK,EAAE,OAAO,EAAE,MAAM,kBAAkB,CAAC;AAMhD;;;GAGG;AACH,qBAAa,iBAAkB,SAAQ,SAAS;IAE9C,OAAO,IAAI,MAAM;IAIjB,WAAW,IAAI,MAAM;IAIrB,SAAS,CAAC,OAAO,EAAE,UAAU,GAAG,OAAO,EAAE;CAmF1C"}

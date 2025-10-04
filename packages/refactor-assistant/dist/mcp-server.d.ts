@@ -4,5 +4,9 @@
  *
  * Provides tools for intelligent code refactoring through the Model Context Protocol
  */
-export {};
+import { Tool } from '@modelcontextprotocol/sdk/types.js';
+/**
+ * MCP Tool definitions
+ */
+export declare const TOOLS: Tool[];
 //# sourceMappingURL=mcp-server.d.ts.map
