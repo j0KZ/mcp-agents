@@ -3,10 +3,10 @@
 > Detect circular dependencies, layer violations, and generate dependency graphs
 
 [![npm version](https://img.shields.io/npm/v/@j0kz/architecture-analyzer-mcp)](https://www.npmjs.com/package/@j0kz/architecture-analyzer-mcp)
-[![Version](https://img.shields.io/badge/version-1.0.19-blue.svg)](https://github.com/j0KZ/mcp-agents/blob/main/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.26-blue.svg)](https://github.com/j0KZ/mcp-agents/blob/main/CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 🎉 What's New in v1.0.19
+## 🎉 What's New in v1.0.26
 
 - **📚 Comprehensive Examples**: New example files in [`examples/architecture-analyzer/`](../../examples/architecture-analyzer/)
 - **🎯 Better Error Messages**: Improved validation and error handling
