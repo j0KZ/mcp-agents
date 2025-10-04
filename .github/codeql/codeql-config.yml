@@ -38,3 +38,9 @@ query-filters:
         - '**/xss-scanner.ts'
         - '**/sql-injection-scanner.ts'
         - '**/secret-scanner.ts'
+  # Suppress false positive for non-existent workflow file
+  - exclude:
+      id:
+        - actions/missing-workflow-permissions
+      paths:
+        - '.github/workflows/defender-for-devops.yml'
