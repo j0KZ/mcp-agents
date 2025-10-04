@@ -6,7 +6,7 @@
  */
 
 import { execSync } from 'child_process';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { homedir, platform } from 'os';
 import { join } from 'path';
 
@@ -71,8 +71,8 @@ for (const editor of EDITORS.slice(0, 3)) {
 // Test 4: Version consistency
 console.log('\n📋 Test 4: Version Consistency');
 try {
-  const packageJson = JSON.parse(execSync('cat package.json', { encoding: 'utf8' }));
-  const indexJs = execSync('cat index.js', { encoding: 'utf8' });
+  const packageJson = JSON.parse(readFileSync('package.json', { encoding: 'utf8' }));
+  const indexJs = readFileSync('index.js', { encoding: 'utf8' });
   const versionInCode = indexJs.match(/VERSION = '([^']+)'/)?.[1];
 
   if (packageJson.version === versionInCode) {
