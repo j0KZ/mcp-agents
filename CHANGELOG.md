@@ -2,19 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.0.24] - 2025-10-04
+## [1.0.25] - 2025-10-04
+
+### Changed
+- **Version Sync**: Unified all packages to v1.0.25 for consistency
+  - All 8 MCP tools now at same version
+  - Installer updated to v1.0.25
+  - Eliminates version confusion across packages
+  - Easier to track releases and compatibility
 
 ### Fixed
 - **Trae Support**: Fixed installer to use correct config path for Trae editor
   - Changed from Cline-style path to `AppData/Roaming/Trae/User/mcp.json`
-  - Updated installer v1.0.24 with proper Trae detection
+  - Updated installer with proper Trae detection
 - **Package Corruption**: Removed corrupted `package.json.tmp` files from all packages
   - Fixed npm lockfile errors in smart-reviewer and other packages
-  - Republished smart-reviewer v1.0.21 with clean package structure
-
-### Changed
-- Installer now properly detects and configures Trae editor
-- Cleaned up temporary files across all packages
+  - Cleaned package structure across all tools
+- **Repository Cleanup**: Removed package-lock.json from repo (saves 260KB)
+  - Added to .gitignore for cleaner commits
+  - Users generate their own lockfiles on install
 
 ---
 

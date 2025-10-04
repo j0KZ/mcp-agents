@@ -3,23 +3,24 @@
 > **8 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
-[![Version](https://img.shields.io/badge/version-1.0.24-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.25-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
 
-## 🎉 What's New in v1.0.24
+## 🎉 What's New in v1.0.25
 
+- **🔄 Version Sync**: All packages unified at v1.0.25
+  - No more version confusion - everything at same version!
+  - Easier to track compatibility and releases
 - **✨ Trae Editor Support**: Full support for Trae editor
   - Fixed config path detection
   - Run: `npx @j0kz/mcp-agents@latest trae`
-- **🐛 Package Fixes**: Resolved npm lockfile corruption issues
-  - Cleaned up temporary files
-  - Republished smart-reviewer v1.0.21
+- **🐛 Bug Fixes**: Package corruption and lockfile issues resolved
 - **🧹 Cleaner Repo**: Removed package-lock.json (saves 260KB)
 
-[View Full Changelog](CHANGELOG.md#1024---2025-10-04)
+[View Full Changelog](CHANGELOG.md#1025---2025-10-04)
 
 ---
 
