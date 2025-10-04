@@ -31,7 +31,8 @@
       "Bash(grep:*)",
       "Bash(git commit -m \"$(cat <<''EOF''\nfix: Apply CodeRabbit recommendations to CI/CD templates\n\n**Version Pinning:**\n- Replace @latest with @^1.0.0 for reproducibility\n- All GitHub Actions workflows updated\n- GitLab CI template updated\n- Pre-commit hooks generator updated\n\n**Documentation Improvements:**\n- Add prerequisite comments for npm scripts (build, test)\n- Document required package.json scripts in mcp-pre-merge.yml\n\n**Optimization:**\n- GitLab CI: Exclude test files from refactor suggestions\n- Updated find command: ! -name \"*.test.*\" ! -name \"*.spec.*\"\n\n**Benefits:**\n✅ Reproducible builds (version pinning)\n✅ Better developer experience (clear prerequisites)\n✅ Faster CI (skip test file analysis)\n\nAddresses CodeRabbit review feedback on PR #3\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(gh repo view:*)",
-      "Bash(npx @j0kz/smart-reviewer:*)"
+      "Bash(npx @j0kz/smart-reviewer:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []
