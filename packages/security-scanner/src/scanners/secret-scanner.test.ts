@@ -100,7 +100,7 @@ describe('Secret Scanner', () => {
     it('should detect valid JWT token', async () => {
       // JWT format: header.payload.signature (base64url encoded)
       // Dynamically constructing to avoid literal pattern in source
-      const jwtPrefix = String.fromCharCode(101, 121, 74); // 'eyJ'
+      const jwtPrefix = String.fromCharCode(101, 121, 74); // JWT header prefix
       const header = jwtPrefix + 'A'.repeat(10);
       const payload = jwtPrefix + 'B'.repeat(10);
       const signature = 'C'.repeat(20);
