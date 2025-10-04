@@ -40,6 +40,9 @@ export declare const ANALYSIS_ESTIMATES: {
     readonly DEFAULT_ROWS_PER_TABLE: 1000;
     readonly STORAGE_MB_PER_TABLE: 0.5;
 };
+export declare const SEED_DATA_DEFAULTS: {
+    readonly DEFAULT_RECORDS_PER_TABLE: 10;
+};
 export declare const DIAGRAM_LIMITS: {
     readonly MAX_COLUMNS_IN_DIAGRAM: 10;
 };

@@ -6,7 +6,7 @@
 import { buildSQLSchema, buildMongoSchema, extractEntities, extractRelationships, } from './builders/schema-builder.js';
 import { generateSQLUpMigration, generateSQLDownMigration, generateMongoUpMigration, generateMongoDownMigration, topologicalSort, } from './generators/migration-generator.js';
 import { generateMermaidDiagram, generateDBMLDiagram, generatePlantUMLDiagram, } from './generators/diagram-generator.js';
-import { COMPLEXITY_THRESHOLDS, ANALYSIS_ESTIMATES, } from './constants/schema-limits.js';
+import { COMPLEXITY_THRESHOLDS, ANALYSIS_ESTIMATES, MIGRATION_FORMAT, SEED_DATA_DEFAULTS, } from './constants/schema-limits.js';
 import { suggestForeignKeyIndexes, suggestFilterColumnIndexes, suggestJsonbIndexes, suggestTextSearchIndexes, suggestCompoundIndexes, } from './helpers/index-optimizer.js';
 import { detectRepeatingGroups, detectPartialDependencies, detectTransitiveDependencies, detectRedundantData, detectMissingJunctionTables, } from './helpers/normalization-helper.js';
 import { generateSQLRecords, generateMongoRecords, } from './generators/seed-generator.js';
@@ -37,8 +37,8 @@ export function designSchema(requirements, options) {
  * @returns Migration object with up/down SQL
  */
 export function generateMigration(schema, description) {
-    const timestamp = new Date().toISOString().replace(/[-:T.]/g, '').slice(0, 14);
-    const version = `V${timestamp}`;
+    const timestamp = new Date().toISOString().replace(/[-:T.]/g, '').slice(0, MIGRATION_FORMAT.TIMESTAMP_LENGTH);
+    const version = `${MIGRATION_FORMAT.VERSION_PREFIX}${timestamp}`;
     let upSQL = '';
     let downSQL = '';
     if (schema.database === 'mongodb') {
@@ -121,7 +121,7 @@ export function normalizeSchema(schema) {
  * @param recordsPerTable - Number of records to generate per table
  * @returns Array of seed data
  */
-export function generateSeedData(schema, recordsPerTable = 10) {
+export function generateSeedData(schema, recordsPerTable = SEED_DATA_DEFAULTS.DEFAULT_RECORDS_PER_TABLE) {
     const seedData = [];
     if (schema.database === 'mongodb') {
         const collections = schema.collections || [];
@@ -176,7 +176,9 @@ export function analyzeSchema(schema) {
     const tables = schema.tables || schema.collections || [];
     const relationships = schema.relationships || [];
     const columnCount = tables.reduce((sum, t) => {
-        return sum + (t.columns?.length || t.fields?.length || 0);
+        const sqlColumns = t.columns?.length;
+        const mongoFields = t.fields?.length;
+        return sum + (sqlColumns || mongoFields || 0);
     }, 0);
     const indexCount = tables.reduce((sum, t) => {
         return sum + (t.indexes?.length || 0);
@@ -184,10 +186,15 @@ export function analyzeSchema(schema) {
     // Estimate normal form
     const normalForm = estimateNormalForm(schema);
     // Estimate complexity
-    const complexity = tables.length > COMPLEXITY_THRESHOLDS.HIGH_COMPLEXITY_TABLE_COUNT ||
-        relationships.length > COMPLEXITY_THRESHOLDS.HIGH_COMPLEXITY_RELATIONSHIP_COUNT ? 'HIGH' :
-        tables.length > COMPLEXITY_THRESHOLDS.MEDIUM_COMPLEXITY_TABLE_COUNT ||
-            relationships.length > COMPLEXITY_THRESHOLDS.MEDIUM_COMPLEXITY_RELATIONSHIP_COUNT ? 'MEDIUM' : 'LOW';
+    let complexity = 'LOW';
+    if (tables.length > COMPLEXITY_THRESHOLDS.HIGH_COMPLEXITY_TABLE_COUNT ||
+        relationships.length > COMPLEXITY_THRESHOLDS.HIGH_COMPLEXITY_RELATIONSHIP_COUNT) {
+        complexity = 'HIGH';
+    }
+    else if (tables.length > COMPLEXITY_THRESHOLDS.MEDIUM_COMPLEXITY_TABLE_COUNT ||
+        relationships.length > COMPLEXITY_THRESHOLDS.MEDIUM_COMPLEXITY_RELATIONSHIP_COUNT) {
+        complexity = 'MEDIUM';
+    }
     return {
         tableCount: tables.length,
         columnCount,

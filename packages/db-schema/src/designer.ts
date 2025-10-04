@@ -44,6 +44,8 @@ import {
 import {
   COMPLEXITY_THRESHOLDS,
   ANALYSIS_ESTIMATES,
+  MIGRATION_FORMAT,
+  SEED_DATA_DEFAULTS,
 } from './constants/schema-limits.js';
 
 import {
@@ -107,8 +109,8 @@ export function generateMigration(
   schema: DatabaseSchema,
   description: string
 ): Migration {
-  const timestamp = new Date().toISOString().replace(/[-:T.]/g, '').slice(0, 14);
-  const version = `V${timestamp}`;
+  const timestamp = new Date().toISOString().replace(/[-:T.]/g, '').slice(0, MIGRATION_FORMAT.TIMESTAMP_LENGTH);
+  const version = `${MIGRATION_FORMAT.VERSION_PREFIX}${timestamp}`;
 
   let upSQL = '';
   let downSQL = '';
@@ -206,7 +208,7 @@ export function normalizeSchema(schema: DatabaseSchema): NormalizationSuggestion
  */
 export function generateSeedData(
   schema: DatabaseSchema,
-  recordsPerTable: number = 10
+  recordsPerTable: number = SEED_DATA_DEFAULTS.DEFAULT_RECORDS_PER_TABLE
 ): SeedData[] {
   const seedData: SeedData[] = [];
 
@@ -268,7 +270,9 @@ export function analyzeSchema(schema: DatabaseSchema): SchemaAnalysis {
   const relationships = schema.relationships || [];
 
   const columnCount = tables.reduce((sum, t) => {
-    return sum + ((t as SQLTable).columns?.length || (t as MongoCollection).fields?.length || 0);
+    const sqlColumns = (t as SQLTable).columns?.length;
+    const mongoFields = (t as MongoCollection).fields?.length;
+    return sum + (sqlColumns || mongoFields || 0);
   }, 0);
 
   const indexCount = tables.reduce((sum, t) => {
@@ -279,11 +283,15 @@ export function analyzeSchema(schema: DatabaseSchema): SchemaAnalysis {
   const normalForm = estimateNormalForm(schema);
 
   // Estimate complexity
-  const complexity =
-    tables.length > COMPLEXITY_THRESHOLDS.HIGH_COMPLEXITY_TABLE_COUNT ||
-    relationships.length > COMPLEXITY_THRESHOLDS.HIGH_COMPLEXITY_RELATIONSHIP_COUNT ? 'HIGH' :
-    tables.length > COMPLEXITY_THRESHOLDS.MEDIUM_COMPLEXITY_TABLE_COUNT ||
-    relationships.length > COMPLEXITY_THRESHOLDS.MEDIUM_COMPLEXITY_RELATIONSHIP_COUNT ? 'MEDIUM' : 'LOW';
+  let complexity: 'HIGH' | 'MEDIUM' | 'LOW' = 'LOW';
+
+  if (tables.length > COMPLEXITY_THRESHOLDS.HIGH_COMPLEXITY_TABLE_COUNT ||
+      relationships.length > COMPLEXITY_THRESHOLDS.HIGH_COMPLEXITY_RELATIONSHIP_COUNT) {
+    complexity = 'HIGH';
+  } else if (tables.length > COMPLEXITY_THRESHOLDS.MEDIUM_COMPLEXITY_TABLE_COUNT ||
+             relationships.length > COMPLEXITY_THRESHOLDS.MEDIUM_COMPLEXITY_RELATIONSHIP_COUNT) {
+    complexity = 'MEDIUM';
+  }
 
   return {
     tableCount: tables.length,

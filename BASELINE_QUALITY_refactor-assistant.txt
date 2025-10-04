@@ -1,0 +1,8 @@
+npm error code E404
+npm error 404 Not Found - GET https://registry.npmjs.org/@j0kz%2fsmart-reviewer - Not found
+npm error 404
+npm error 404  '@j0kz/smart-reviewer@*' is not in this registry.
+npm error 404
+npm error 404 Note that you can also install from a
+npm error 404 tarball, folder, http url, or git url.
+npm error A complete log of this run can be found in: C:\Users\j0KZ\AppData\Local\npm-cache\_logs\2025-10-04T21_13_24_494Z-debug-0.log
