@@ -13,7 +13,6 @@ import {
   ValidationResult,
   APIDesignResult,
   GraphQLType,
-  APISchema,
 } from './types.js';
 import { generateOpenAPISpec, generateRESTEndpointsFromResources } from './generators/openapi-generator.js';
 import {
