@@ -8,12 +8,13 @@ export { extractFunction } from './core/extract-function.js';
 export { calculateMetrics, findDuplicateBlocks } from './analysis/metrics-calculator.js';
 // Import for internal use
 import { findDuplicateBlocks, getNestingDepth } from './analysis/metrics-calculator.js';
-import { applySingletonPattern, applyFactoryPattern, applyObserverPattern, applyStrategyPattern, applyDecoratorPattern, applyAdapterPattern, applyFacadePattern, applyProxyPattern, applyCommandPattern, applyChainOfResponsibilityPattern, } from './patterns/index.js';
 import { applyGuardClauses, combineNestedConditions } from './transformations/conditional-helpers.js';
 import { removeUnusedImportsFromCode, escapeRegExp } from './transformations/import-helpers.js';
 import { analyzeFunctionLengths } from './transformations/analysis-helpers.js';
 import { getErrorMessage } from './utils/error-helpers.js';
 import { convertCallbackToAsync, convertPromiseChainToAsync } from './transformations/async-converter.js';
+import { findUnusedVariables, removeUnusedVariables, removeUnreachableCode } from './transformations/dead-code-detector.js';
+import { applyPattern, isValidPattern } from './patterns/pattern-factory.js';
 /**
  * Convert callback-based code to async/await
  */
@@ -137,44 +138,32 @@ export function removeDeadCode(options) {
         const { code, removeUnusedImports = true, removeUnreachable = true } = options;
         let refactoredCode = code;
         const changes = [];
-        if (removeUnreachable) {
-            const lines = refactoredCode.split('\n');
-            const cleanedLines = [];
-            let skipUntilBrace = false;
-            for (let i = INDEX_CONSTANTS.FIRST_ARRAY_INDEX; i < lines.length; i++) {
-                const line = lines[i];
-                const trimmed = line.trim();
-                if (skipUntilBrace) {
-                    if (trimmed.startsWith('}')) {
-                        skipUntilBrace = false;
-                        cleanedLines.push(line);
-                    }
-                    continue;
-                }
-                cleanedLines.push(line);
-                if (trimmed.startsWith('return ') || trimmed === 'return;') {
-                    let hasCodeAfterReturn = false;
-                    for (let j = i + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET; j < lines.length; j++) {
-                        const nextLine = lines[j].trim();
-                        if (nextLine.startsWith('}'))
-                            break;
-                        if (nextLine && !nextLine.startsWith('//')) {
-                            hasCodeAfterReturn = true;
-                            break;
-                        }
-                    }
-                    if (hasCodeAfterReturn) {
-                        skipUntilBrace = true;
-                        changes.push({
-                            type: 'remove-dead-code',
-                            description: 'Removed unreachable code after return statement',
-                            lineRange: { start: i + INDEX_CONSTANTS.DEAD_CODE_LINE_OFFSET, end: i + INDEX_CONSTANTS.DEAD_CODE_LINE_OFFSET },
-                        });
-                    }
-                }
-            }
-            refactoredCode = cleanedLines.join('\n');
+        // Remove unused variables
+        const unusedVars = findUnusedVariables(refactoredCode);
+        if (unusedVars.length > 0) {
+            const after = removeUnusedVariables(refactoredCode, unusedVars);
+            changes.push({
+                type: 'remove-dead-code',
+                description: `Removed ${unusedVars.length} unused variable(s): ${unusedVars.join(', ')}`,
+                before: refactoredCode,
+                after,
+            });
+            refactoredCode = after;
         }
+        // Remove unreachable code
+        if (removeUnreachable) {
+            const unreachableResult = removeUnreachableCode(refactoredCode);
+            if (unreachableResult.removed > 0) {
+                changes.push({
+                    type: 'remove-dead-code',
+                    description: `Removed ${unreachableResult.removed} unreachable line(s) after return statements`,
+                    before: refactoredCode,
+                    after: unreachableResult.code,
+                });
+                refactoredCode = unreachableResult.code;
+            }
+        }
+        // Remove unused imports
         if (removeUnusedImports) {
             const importResult = removeUnusedImportsFromCode(refactoredCode);
             if (importResult.removed.length > PATTERN_CONSTANTS.NO_OCCURRENCES) {
@@ -207,20 +196,7 @@ export function removeDeadCode(options) {
 export function applyDesignPattern(options) {
     try {
         const { code, pattern, patternOptions = {} } = options;
-        const patternMap = {
-            singleton: applySingletonPattern,
-            factory: applyFactoryPattern,
-            observer: applyObserverPattern,
-            strategy: applyStrategyPattern,
-            decorator: applyDecoratorPattern,
-            adapter: applyAdapterPattern,
-            facade: applyFacadePattern,
-            proxy: applyProxyPattern,
-            command: applyCommandPattern,
-            'chain-of-responsibility': applyChainOfResponsibilityPattern,
-        };
-        const applyFunction = patternMap[pattern];
-        if (!applyFunction) {
+        if (!isValidPattern(pattern)) {
             return {
                 code,
                 changes: [],
@@ -228,7 +204,7 @@ export function applyDesignPattern(options) {
                 error: REFACTORING_MESSAGES.INVALID_PATTERN,
             };
         }
-        const refactoredCode = applyFunction(code, patternOptions);
+        const refactoredCode = applyPattern(pattern, code, patternOptions);
         return {
             code: refactoredCode,
             changes: [{
