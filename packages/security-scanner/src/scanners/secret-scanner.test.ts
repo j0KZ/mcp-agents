@@ -53,7 +53,9 @@ describe('Secret Scanner', () => {
 
   describe('API Keys Detection', () => {
     it('should detect generic API key', async () => {
-      const context = createContext('api_key: "abc123def456ghi789jkl012mno345pqr"');
+      // Generic API key: 20+ chars (using repeated pattern)
+      const fakeApiKey = 'A'.repeat(32);
+      const context = createContext(`api_key: "${fakeApiKey}"`);
       const findings = await scanForSecrets(context);
 
       expect(findings.length).toBeGreaterThan(0);
@@ -96,9 +98,9 @@ describe('Secret Scanner', () => {
 
   describe('JWT Tokens Detection', () => {
     it('should detect valid JWT token', async () => {
-      const context = createContext(
-        'const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U";'
-      );
+      // JWT format: eyJ[base64].eyJ[base64].[signature] - using fake base64
+      const fakeJwt = 'eyJ' + 'X'.repeat(20) + '.eyJ' + 'Y'.repeat(20) + '.' + 'Z'.repeat(30);
+      const context = createContext(`const jwt = "${fakeJwt}";`);
       const findings = await scanForSecrets(context);
 
       expect(findings.length).toBeGreaterThan(0);
