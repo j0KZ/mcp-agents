@@ -4,12 +4,16 @@
 import semver from 'semver';
 import fs from 'fs-extra';
 import { getEditorConfigPath } from './detectors/editor.js';
+const MIN_NODE_MAJOR_VERSION = 18;
+const MIN_NODE_MINOR_VERSION = 0;
+const MIN_NODE_PATCH_VERSION = 0;
 export async function validateConfig(selections, detected) {
     const issues = [];
     // Check Node version
     const nodeVersion = process.version;
-    if (!semver.satisfies(nodeVersion, '>=18.0.0')) {
-        issues.push(`Node.js 18+ required (current: ${nodeVersion})`);
+    const minVersion = `${MIN_NODE_MAJOR_VERSION}.${MIN_NODE_MINOR_VERSION}.${MIN_NODE_PATCH_VERSION}`;
+    if (!semver.satisfies(nodeVersion, `>=${minVersion}`)) {
+        issues.push(`Node.js ${MIN_NODE_MAJOR_VERSION}+ required (current: ${nodeVersion})`);
     }
     // Check if editor config path exists or can be created
     const configPath = getEditorConfigPath(selections.editor);

@@ -53,7 +53,8 @@ export async function runWizard(args: WizardArgs): Promise<void> {
     logger.info(`✓ Detected editor: ${detected.editor}`);
   }
   if (detected.project.language) {
-    logger.info(`✓ Detected project: ${detected.project.language}${detected.project.framework ? ` + ${detected.project.framework}` : ''}`);
+    const framework = detected.project.framework ? ` + ${detected.project.framework}` : '';
+    logger.info(`✓ Detected project: ${detected.project.language}${framework}`);
   }
   if (detected.testFramework) {
     logger.info(`✓ Detected test framework: ${detected.testFramework}`);
