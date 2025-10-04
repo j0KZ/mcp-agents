@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.26] - 2025-10-04
+
+### Added
+- **Global Version Management**: Single source of truth for all package versions
+  - Added `version.json` - global version file at root
+  - Added `scripts/sync-versions.js` - auto-sync script
+  - Added `npm run version:sync` command
+  - Perfect for adding new MCPs - they auto-inherit the global version
+
+### Benefits
+- One file to update instead of 10+
+- Impossible to have version mismatches
+- Scalable for future MCP packages
+- Simplified release process
+
+---
+
 ## [1.0.25] - 2025-10-04
 
 ### Changed

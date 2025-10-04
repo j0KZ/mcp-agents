@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/mcp-agents",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "Professional MCP agents for AI code editors - Smart Reviewer, Test Generator, Architecture Analyzer. Works with Claude Code, Roo Code, Windsurf, Cursor, and any MCP-compatible editor.",
   "type": "module",
   "private": true,

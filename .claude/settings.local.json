@@ -19,7 +19,14 @@
       "Bash(tail:*)",
       "Bash(node:*)",
       "Read(//c/Users/j0KZ/AppData/Roaming/Claude/logs//**)",
-      "Read(//c/Users/j0KZ/AppData/Roaming/Claude/**)"
+      "Read(//c/Users/j0KZ/AppData/Roaming/Claude/**)",
+      "Bash(npx @j0kz/mcp-agents@latest:*)",
+      "Bash(rm:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(do echo \"=== $pkg ===\")",
+      "Bash(cat:*)",
+      "Bash(npm test:*)",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []

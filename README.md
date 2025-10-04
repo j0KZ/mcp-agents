@@ -3,24 +3,23 @@
 > **8 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
-[![Version](https://img.shields.io/badge/version-1.0.25-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.26-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
 
-## 🎉 What's New in v1.0.25
+## 🎉 What's New in v1.0.26
 
-- **🔄 Version Sync**: All packages unified at v1.0.25
-  - No more version confusion - everything at same version!
-  - Easier to track compatibility and releases
-- **✨ Trae Editor Support**: Full support for Trae editor
-  - Fixed config path detection
-  - Run: `npx @j0kz/mcp-agents@latest trae`
-- **🐛 Bug Fixes**: Package corruption and lockfile issues resolved
-- **🧹 Cleaner Repo**: Removed package-lock.json (saves 260KB)
+- **🎯 Global Version Management**: Single source of truth for all versions
+  - New `version.json` file - update once, sync all packages
+  - Auto-sync script: `npm run version:sync`
+  - Perfect for adding new MCP packages - they auto-inherit the version
+- **🔄 Scalable Architecture**: Ready for future growth
+  - One command updates all 8+ packages
+  - Impossible to have version mismatches
 
-[View Full Changelog](CHANGELOG.md#1025---2025-10-04)
+[View Full Changelog](CHANGELOG.md#1026---2025-10-04)
 
 ---
 
