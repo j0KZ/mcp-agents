@@ -3,24 +3,44 @@
 > **8 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
-[![Version](https://img.shields.io/badge/version-1.0.28-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.29-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
 
-## 🎉 What's New in v1.0.28
+## 🎉 What's New in v1.0.29
 
-### 📚 Documentation Organization & Structure
+### 🧪 Test Coverage Enforcement & Expansion
 
-**Complete Documentation Restructuring:**
-- ✨ New [docs/README.md](docs/README.md) - comprehensive documentation index
-- 📁 7 organized categories: getting-started, development, architecture, reports, governance, examples, templates
-- 🔗 All links updated throughout README and project files
-- 📦 Root-level reports moved to organized structure
+**CI Coverage Enforcement - 60% Minimum:**
+- ✅ Strict quality gates: statements 60%, branches 50%, functions 60%, lines 60%
+- ✅ Automated coverage validation with `check-coverage.js`
+- ✅ Visual coverage dashboard with `coverage-dashboard.js`
+- ✅ CI builds now fail below coverage thresholds
+
+**342 New Tests Added (+46% growth):**
+- **API Designer**: 3 → 140 tests (+4567%) - OpenAPI, GraphQL, client generation, validation
+- **Refactor Assistant**: 170 → 311 tests (+83%) - async conversion, dead code, design patterns
+- **Security Scanner**: 8 → 64 tests (+700%) - secrets, SQL injection, XSS, utilities
+
+**Refactor Assistant Improvements:**
+- Created modular transformation utilities (async-converter, dead-code-detector)
+- Extracted pattern factory to eliminate 50-line switch statement
+- Reduced complexity from 78 → 71 (-9%)
+- Code size reduced from 462 → 410 lines (-11%)
+
+**Overall:**
+- ✅ 584 passing tests (98.5% pass rate)
+- ✅ Comprehensive test coverage across all packages
+- ✅ Enforced quality standards in CI/CD pipeline
+
+**Previous Release (v1.0.28):**
+- 📚 Complete documentation restructuring
+- 📁 7 organized categories with central index
 - ✅ Improved navigation and discoverability
 
-**Previous Release (v1.0.27):**
+**v1.0.27:**
 
 ### 🎯 Major Code Quality Improvements - MCP-Validated!
 
@@ -60,7 +80,7 @@
 - **🚀 CI/CD Templates** - GitHub Actions, GitLab CI, pre-commit hooks
 - **🎯 Global Version Management** - `version.json` single source of truth
 
-[View Full Changelog](CHANGELOG.md#1028---2025-10-04)
+[View Full Changelog](CHANGELOG.md#1029---2025-10-04)
 
 ---
 

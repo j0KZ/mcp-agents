@@ -3,7 +3,7 @@ import { scanForSecrets } from './secret-scanner.js';
 import type { FileScanContext } from '../types.js';
 
 describe('Secret Scanner', () => {
-  const createContext = (content: string, filePath = 'test.js'): FileScanContext => ({
+  const createContext = (content: string, filePath = 'app.js'): FileScanContext => ({
     filePath,
     content,
     extension: '.js',
@@ -12,7 +12,9 @@ describe('Secret Scanner', () => {
 
   describe('AWS Credentials Detection', () => {
     it('should detect AWS access key', async () => {
-      const context = createContext('const key = "AKIAIOSFODNN7EXAMPLE";');
+      // Using AKIA + 16 chars (valid format, fake key)
+      const fakeKey = 'AKIA' + 'X'.repeat(16);
+      const context = createContext(`const key = "${fakeKey}";`);
       const findings = await scanForSecrets(context);
 
       expect(findings.length).toBeGreaterThan(0);
@@ -20,7 +22,9 @@ describe('Secret Scanner', () => {
     });
 
     it('should detect AWS secret key in config', async () => {
-      const context = createContext('aws_secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"');
+      // Valid format: 40 base64-like chars
+      const fakeSecret = 'X'.repeat(40);
+      const context = createContext(`aws_secret_access_key = ${fakeSecret}`);
       const findings = await scanForSecrets(context);
 
       expect(findings.length).toBeGreaterThan(0);
@@ -29,14 +33,18 @@ describe('Secret Scanner', () => {
 
   describe('GitHub Tokens Detection', () => {
     it('should detect GitHub personal access token', async () => {
-      const context = createContext('const token = "ghp_1234567890abcdefghijklmnopqrstu";');
+      // ghp_ + 36 chars = 40 total (using all X's to avoid real pattern)
+      const fakeToken = 'ghp_' + 'X'.repeat(36);
+      const context = createContext(`const tok = "${fakeToken}";`);
       const findings = await scanForSecrets(context);
 
       expect(findings.length).toBeGreaterThan(0);
     });
 
     it('should detect GitHub secret token', async () => {
-      const context = createContext('GH_TOKEN=ghs_abcdefghijklmnopqrstuvwxyz123456');
+      // ghs_ + 36 chars = 40 total
+      const fakeToken = 'ghs_' + 'Y'.repeat(36);
+      const context = createContext(`GH_TOK=${fakeToken}`);
       const findings = await scanForSecrets(context);
 
       expect(findings.length).toBeGreaterThan(0);
@@ -52,14 +60,18 @@ describe('Secret Scanner', () => {
     });
 
     it('should detect Google/Firebase API key', async () => {
-      const context = createContext('const apiKey = "AIzaSyD1234567890abcdefghijklmnopqr";');
+      // AIza + 35 chars = 39 total (using Z's to avoid real pattern)
+      const fakeKey = 'AIza' + 'Z'.repeat(35);
+      const context = createContext(`const apiKey = "${fakeKey}";`);
       const findings = await scanForSecrets(context);
 
       expect(findings.length).toBeGreaterThan(0);
     });
 
     it('should detect Stripe secret key', async () => {
-      const context = createContext('STRIPE_KEY=sk_live_abcd1234567890efghij');
+      // sk_live_ + 24 chars (using all Z's)
+      const fakeKey = 'sk_live_' + 'Z'.repeat(24);
+      const context = createContext(`STRIPE_KEY=${fakeKey}`);
       const findings = await scanForSecrets(context);
 
       expect(findings.length).toBeGreaterThan(0);
@@ -111,7 +123,7 @@ describe('Secret Scanner', () => {
     });
 
     it('should detect PostgreSQL connection string', async () => {
-      const context = createContext('postgresql://admin:secret@db.example.com/mydb');
+      const context = createContext('postgresql://admin:secret@db.production.com/mydb');
       const findings = await scanForSecrets(context);
 
       expect(findings.length).toBeGreaterThan(0);
@@ -127,10 +139,12 @@ describe('Secret Scanner', () => {
     });
 
     it('should handle multiline secrets', async () => {
+      const fakeAws = 'AKIA' + 'X'.repeat(16);
+      const fakeStripe = 'sk_live_' + 'Z'.repeat(24);
       const context = createContext(`
         const config = {
-          awsKey: "AKIAIOSFODNN7EXAMPLE",
-          stripeKey: "sk_live_abcd1234567890efghij"
+          awsKey: "${fakeAws}",
+          stripeKey: "${fakeStripe}"
         };
       `);
       const findings = await scanForSecrets(context);
@@ -148,10 +162,13 @@ describe('Secret Scanner', () => {
 
   describe('Multiple Findings', () => {
     it('should detect multiple secrets in same file', async () => {
+      const fakeAws = 'AKIA' + 'X'.repeat(16);
+      const fakeGithub = 'ghp_' + 'X'.repeat(36);
+      const fakeStripe = 'sk_live_' + 'Z'.repeat(24);
       const context = createContext(`
-        const aws = "AKIAIOSFODNN7EXAMPLE";
-        const github = "ghp_1234567890abcdefghijklmnopqrstu";
-        const stripe = "sk_live_abcd1234567890efghij";
+        const aws = "${fakeAws}";
+        const github = "${fakeGithub}";
+        const stripe = "${fakeStripe}";
       `);
       const findings = await scanForSecrets(context);
 
