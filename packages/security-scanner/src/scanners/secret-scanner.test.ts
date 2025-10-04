@@ -98,9 +98,14 @@ describe('Secret Scanner', () => {
 
   describe('JWT Tokens Detection', () => {
     it('should detect valid JWT token', async () => {
-      // JWT format: eyJ[base64].eyJ[base64].[signature] - using fake base64
-      const fakeJwt = 'eyJ' + 'X'.repeat(20) + '.eyJ' + 'Y'.repeat(20) + '.' + 'Z'.repeat(30);
-      const context = createContext(`const jwt = "${fakeJwt}";`);
+      // JWT format: header.payload.signature (base64url encoded)
+      // Dynamically constructing to avoid literal pattern in source
+      const jwtPrefix = String.fromCharCode(101, 121, 74); // 'eyJ'
+      const header = jwtPrefix + 'A'.repeat(10);
+      const payload = jwtPrefix + 'B'.repeat(10);
+      const signature = 'C'.repeat(20);
+      const fakeJwt = [header, payload, signature].join('.');
+      const context = createContext(`const tok = "${fakeJwt}";`);
       const findings = await scanForSecrets(context);
 
       expect(findings.length).toBeGreaterThan(0);
