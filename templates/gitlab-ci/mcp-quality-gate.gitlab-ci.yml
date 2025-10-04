@@ -1,0 +1,129 @@
+# GitLab CI/CD template for MCP Quality Gate
+# Add this to your .gitlab-ci.yml or include it as a template
+
+stages:
+  - quality
+  - security
+  - report
+
+variables:
+  NODE_VERSION: "20"
+
+# Smart Reviewer Job
+code-review:
+  stage: quality
+  image: node:${NODE_VERSION}
+  script:
+    - echo "Running Smart Reviewer..."
+    - npx @j0kz/smart-reviewer-mcp@^1.0.0 batch_review .
+  artifacts:
+    reports:
+      codequality: code-review-report.json
+    paths:
+      - code-review-report.json
+    expire_in: 1 week
+  allow_failure: true
+
+# Test Coverage Check
+test-coverage:
+  stage: quality
+  image: node:${NODE_VERSION}
+  script:
+    - echo "Checking test coverage..."
+    - npm install
+    - npm test
+    - npx @j0kz/test-generator-mcp@^1.0.0 analyze_coverage src/
+  coverage: '/Lines\s*:\s*(\d+\.\d+)%/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+  allow_failure: true
+
+# Security Scanning
+security-scan:
+  stage: security
+  image: node:${NODE_VERSION}
+  script:
+    - echo "Running security scan..."
+    - npx @j0kz/security-scanner-mcp@^1.0.0 scan_project . --min-severity medium
+  artifacts:
+    reports:
+      sast: security-report.json
+    paths:
+      - security-report.md
+    expire_in: 1 week
+  allow_failure: false
+  only:
+    - merge_requests
+    - main
+
+# Architecture Analysis
+architecture-check:
+  stage: quality
+  image: node:${NODE_VERSION}
+  script:
+    - echo "Analyzing architecture..."
+    - npx @j0kz/architecture-analyzer-mcp@^1.0.0 analyze_architecture .
+    - npx @j0kz/architecture-analyzer-mcp@^1.0.0 find_circular_deps .
+  artifacts:
+    paths:
+      - architecture-report.json
+      - dependency-graph.mermaid
+    expire_in: 1 week
+  allow_failure: true
+
+# Refactoring Suggestions
+refactor-suggestions:
+  stage: quality
+  image: node:${NODE_VERSION}
+  script:
+    - echo "Getting refactoring suggestions..."
+    - |
+      for file in $(find src -type f \( -name "*.ts" -o -name "*.js" \) ! -name "*.test.*" ! -name "*.spec.*"); do
+        npx @j0kz/refactor-assistant-mcp@^1.0.0 suggest_refactorings "$file"
+      done
+  artifacts:
+    paths:
+      - refactor-suggestions.json
+    expire_in: 1 week
+  allow_failure: true
+  only:
+    - merge_requests
+
+# Quality Gate Summary
+quality-report:
+  stage: report
+  image: node:${NODE_VERSION}
+  script:
+    - echo "Generating quality summary..."
+    - |
+      cat > quality-summary.md <<EOF
+      # MCP Quality Gate Summary
+
+      ## Code Review
+      - Smart Reviewer: $([ -f code-review-report.json ] && echo "✅ Completed" || echo "⏭️ Skipped")
+
+      ## Security
+      - Security Scanner: $([ -f security-report.md ] && echo "✅ Completed" || echo "⏭️ Skipped")
+
+      ## Architecture
+      - Dependency Analysis: $([ -f architecture-report.json ] && echo "✅ Completed" || echo "⏭️ Skipped")
+
+      ## Testing
+      - Test Coverage: $([ -f coverage/coverage-summary.json ] && echo "✅ Completed" || echo "⏭️ Skipped")
+
+      See individual job artifacts for detailed reports.
+      EOF
+    - cat quality-summary.md
+  artifacts:
+    paths:
+      - quality-summary.md
+    expire_in: 1 month
+  dependencies:
+    - code-review
+    - security-scan
+    - architecture-check
+    - test-coverage
+  allow_failure: true

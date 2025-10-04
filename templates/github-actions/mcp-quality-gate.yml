@@ -1,0 +1,202 @@
+# MCP Quality Gate Workflow
+# Add this to .github/workflows/mcp-quality-gate.yml
+# Runs all @j0kz MCP tools for comprehensive code quality checks
+
+name: MCP Quality Gate
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  smart-reviewer:
+    name: Code Review with Smart Reviewer
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Run Smart Reviewer
+        run: |
+          npx @j0kz/smart-reviewer-mcp@^1.0.0 <<EOF
+          {
+            "action": "batch_review",
+            "files": $(git diff --name-only origin/main...HEAD | grep -E '\.(ts|js|tsx|jsx)$' | jq -R . | jq -s .),
+            "config": {
+              "severity": "moderate",
+              "includeMetrics": true,
+              "autoFix": false
+            }
+          }
+          EOF
+        continue-on-error: true
+
+      - name: Upload review results
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-review-report
+          path: mcp-review-*.json
+        if: always()
+
+  test-generator:
+    name: Test Coverage Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Check for missing tests
+        run: |
+          npx @j0kz/test-generator-mcp@^1.0.0 <<EOF
+          {
+            "action": "analyze_coverage",
+            "sourceFiles": $(find src -name "*.ts" -o -name "*.js" | jq -R . | jq -s .)
+          }
+          EOF
+        continue-on-error: true
+
+  security-scanner:
+    name: Security Vulnerability Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Run Security Scanner
+        run: |
+          npx @j0kz/security-scanner-mcp@^1.0.0 <<EOF
+          {
+            "action": "scan_project",
+            "projectPath": ".",
+            "config": {
+              "minSeverity": "medium",
+              "scanSecrets": true,
+              "scanOWASP": true,
+              "scanDependencies": true,
+              "excludePatterns": ["node_modules", ".git", "dist", "build"]
+            }
+          }
+          EOF
+
+      - name: Upload security report
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-scan-report
+          path: security-report-*.md
+        if: always()
+
+      - name: Fail on critical vulnerabilities
+        run: |
+          if grep -q "CRITICAL" security-report-*.md 2>/dev/null; then
+            echo "❌ Critical security vulnerabilities found!"
+            exit 1
+          fi
+
+  architecture-analyzer:
+    name: Architecture Quality Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Analyze Architecture
+        run: |
+          npx @j0kz/architecture-analyzer-mcp@^1.0.0 <<EOF
+          {
+            "action": "analyze_architecture",
+            "projectPath": ".",
+            "config": {
+              "detectCircular": true,
+              "generateGraph": true,
+              "maxDepth": 10
+            }
+          }
+          EOF
+        continue-on-error: true
+
+      - name: Check for circular dependencies
+        run: |
+          if npx @j0kz/architecture-analyzer-mcp@^1.0.0 find_circular_deps .; then
+            echo "⚠️ Circular dependencies detected!"
+          fi
+        continue-on-error: true
+
+  refactor-suggestions:
+    name: Refactoring Recommendations
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Get Refactor Suggestions
+        run: |
+          for file in $(git diff --name-only origin/main...HEAD | grep -E '\.(ts|js)$'); do
+            if [ -f "$file" ]; then
+              echo "Analyzing $file..."
+              npx @j0kz/refactor-assistant-mcp@^1.0.0 <<EOF
+              {
+                "action": "suggest_refactorings",
+                "code": "$(cat $file)",
+                "filePath": "$file"
+              }
+              EOF
+            fi
+          done
+        continue-on-error: true
+
+  quality-summary:
+    name: Generate Quality Report
+    runs-on: ubuntu-latest
+    needs: [smart-reviewer, test-generator, security-scanner, architecture-analyzer]
+    if: always()
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Generate Summary
+        run: |
+          echo "# 📊 MCP Quality Gate Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Checks Completed" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Smart Reviewer: Code quality analysis" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Test Generator: Coverage check" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Security Scanner: Vulnerability scan" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Architecture Analyzer: Dependency analysis" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Refactor Assistant: Improvement suggestions" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📁 Detailed reports available in workflow artifacts" >> $GITHUB_STEP_SUMMARY

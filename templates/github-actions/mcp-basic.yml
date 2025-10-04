@@ -1,0 +1,46 @@
+# Basic MCP Workflow
+# Minimal setup - just code review and security scan on PRs
+# Add this to .github/workflows/mcp-basic.yml
+
+name: Basic MCP Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  mcp-check:
+    name: Code Quality & Security
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Code Review
+        run: |
+          echo "Running code review..."
+          npx @j0kz/smart-reviewer-mcp@^1.0.0 review_file src/**/*.{ts,js}
+        continue-on-error: true
+
+      - name: Security Scan
+        run: |
+          echo "Scanning for security issues..."
+          npx @j0kz/security-scanner-mcp@^1.0.0 scan_project .
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ MCP quality checks completed! Check the Actions tab for detailed results.'
+            })

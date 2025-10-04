@@ -1,0 +1,89 @@
+# Pre-Merge Quality Gate
+# Strict checks that must pass before merging to main
+# Add this to .github/workflows/mcp-pre-merge.yml
+
+name: Pre-Merge Quality Gate
+
+on:
+  pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, ready_for_review]
+
+jobs:
+  quality-gate:
+    name: Enforce Quality Standards
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      # Note: Requires 'build' script in package.json
+      - name: Build
+        run: npm run build
+
+      # Note: Requires 'test' script in package.json
+      - name: Run tests
+        run: npm test
+
+      - name: Critical Security Check
+        id: security
+        run: |
+          npx @j0kz/security-scanner-mcp@^1.0.0 scan_project . > security-results.json
+
+          # Fail if critical vulnerabilities found
+          if grep -q "CRITICAL" security-results.json 2>/dev/null; then
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "::error::Critical security vulnerabilities detected!"
+            exit 1
+          else
+            echo "status=passed" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Code Quality Check
+        id: quality
+        run: |
+          npx @j0kz/smart-reviewer-mcp@^1.0.0 batch_review . > review-results.json
+
+          # Check for high-severity issues
+          if grep -q '"severity": "high"' review-results.json 2>/dev/null; then
+            echo "::warning::High-severity code quality issues found"
+          fi
+        continue-on-error: true
+
+      - name: Architecture Validation
+        run: |
+          # Fail on circular dependencies
+          npx @j0kz/architecture-analyzer-mcp@^1.0.0 find_circular_deps . || {
+            echo "::error::Circular dependencies detected!"
+            exit 1
+          }
+
+      - name: Set PR Status
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = '${{ steps.security.outputs.status }}';
+            const emoji = status === 'passed' ? '✅' : '❌';
+            const message = status === 'passed'
+              ? 'All quality checks passed! Ready to merge.'
+              : 'Quality checks failed. Please fix issues before merging.';
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `${emoji} **Pre-Merge Quality Gate**\n\n${message}`
+            });

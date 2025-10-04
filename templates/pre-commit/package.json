@@ -1,0 +1,29 @@
+{
+  "name": "@j0kz/mcp-hooks-generator",
+  "version": "1.0.0",
+  "description": "Pre-commit hooks generator for @j0kz MCP tools",
+  "type": "module",
+  "bin": {
+    "mcp-hooks": "./hooks-generator.js"
+  },
+  "main": "./hooks-generator.js",
+  "scripts": {
+    "generate": "node hooks-generator.js"
+  },
+  "keywords": [
+    "mcp",
+    "pre-commit",
+    "husky",
+    "code-quality",
+    "git-hooks"
+  ],
+  "author": "j0KZ",
+  "license": "MIT",
+  "peerDependencies": {
+    "husky": "^9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/j0KZ/mcp-agents"
+  }
+}
