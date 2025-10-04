@@ -5,6 +5,39 @@
 import * as fs from 'fs';
 import { DocError } from '../types.js';
 import { parseSourceFile } from '../parsers/source-parser.js';
+/**
+ * Infer return value description from function name and return type
+ */
+function inferReturnDescription(funcName, returnType) {
+    const lowerReturnType = returnType.toLowerCase();
+    // Promise return types
+    if (lowerReturnType.includes('promise')) {
+        const innerType = returnType.match(/Promise<(.+)>/)?.[1];
+        if (innerType === 'void')
+            return 'Promise that resolves when operation completes';
+        if (innerType)
+            return `Promise that resolves with ${innerType}`;
+        return 'Promise that resolves with the result';
+    }
+    // Specific return types
+    if (lowerReturnType === 'boolean' || lowerReturnType === 'bool') {
+        if (funcName.startsWith('is') || funcName.startsWith('has')) {
+            return 'True if condition is met, false otherwise';
+        }
+        return 'Boolean result';
+    }
+    if (lowerReturnType === 'string')
+        return 'The resulting string';
+    if (lowerReturnType === 'number')
+        return 'The calculated number';
+    if (lowerReturnType === 'void')
+        return 'No return value';
+    if (lowerReturnType.includes('[]'))
+        return `Array of ${lowerReturnType.replace('[]', '')}`;
+    if (lowerReturnType === 'any')
+        return 'The return value';
+    return `The ${returnType} result`;
+}
 export async function generateJSDoc(filePath, config = {}) {
     try {
         if (!fs.existsSync(filePath)) {
@@ -20,11 +53,12 @@ export async function generateJSDoc(filePath, config = {}) {
             jsdocContent.push(` * ${func.description || `Function: ${func.name}`}`);
             func.parameters.forEach(param => {
                 const typeStr = param.type?.raw || 'any';
-                const optionalStr = param.optional ? '=' : '';
-                jsdocContent.push(` * @param {${typeStr}} ${optionalStr}${param.name} - ${param.description || 'Parameter description'}`);
+                const paramName = param.optional ? `[${param.name}]` : param.name;
+                jsdocContent.push(` * @param {${typeStr}} ${paramName} - ${param.description || 'Parameter description'}`);
             });
             if (func.returnType) {
-                jsdocContent.push(` * @returns {${func.returnType.raw}} Return value description`);
+                const returnDesc = inferReturnDescription(func.name, func.returnType.raw);
+                jsdocContent.push(` * @returns {${func.returnType.raw}} ${returnDesc}`);
             }
             if (config.addTodoTags && !func.description) {
                 jsdocContent.push(' * @todo Add function description');

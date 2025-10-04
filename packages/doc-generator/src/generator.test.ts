@@ -23,7 +23,11 @@ describe('Doc Generator', () => {
 
   it('should generate JSDoc', async () => {
     const result = await generateJSDoc(testFile, {});
-    expect(result.content).toContain('Function:');
+    // Should contain inferred description instead of generic "Function:"
+    expect(result.content).toContain('Function to test function');
+    expect(result.content).toContain('@param {string} param');
+    expect(result.content).toContain('@returns {number}');
+    expect(result.content).toContain('The calculated number');
   });
 
   it('should generate README', async () => {
