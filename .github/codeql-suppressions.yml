@@ -1,7 +1,15 @@
 # CodeQL Suppressions
 # This file documents intentional vulnerabilities in example/test files
+# and false positives from non-existent files
 
 suppressions:
+  # False positive - file does not exist in repository
+  - paths:
+      - ".github/workflows/defender-for-devops.yml"
+    rules:
+      - "actions/missing-workflow-permissions"
+    reason: "File does not exist in this repository. CodeQL is scanning GitHub workflow templates. All actual workflow files (ci.yml, codeql.yml, security.yml) have proper permissions configured."
+
   # Example files with intentional vulnerabilities
   - paths:
       - "examples/security-scanner/vulnerable-app.js"
