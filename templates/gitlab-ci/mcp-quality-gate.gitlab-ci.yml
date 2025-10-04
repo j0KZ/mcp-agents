@@ -15,7 +15,7 @@ code-review:
   image: node:${NODE_VERSION}
   script:
     - echo "Running Smart Reviewer..."
-    - npx @j0kz/smart-reviewer-mcp@latest batch_review .
+    - npx @j0kz/smart-reviewer-mcp@^1.0.0 batch_review .
   artifacts:
     reports:
       codequality: code-review-report.json
@@ -32,7 +32,7 @@ test-coverage:
     - echo "Checking test coverage..."
     - npm install
     - npm test
-    - npx @j0kz/test-generator-mcp@latest analyze_coverage src/
+    - npx @j0kz/test-generator-mcp@^1.0.0 analyze_coverage src/
   coverage: '/Lines\s*:\s*(\d+\.\d+)%/'
   artifacts:
     reports:
@@ -47,7 +47,7 @@ security-scan:
   image: node:${NODE_VERSION}
   script:
     - echo "Running security scan..."
-    - npx @j0kz/security-scanner-mcp@latest scan_project . --min-severity medium
+    - npx @j0kz/security-scanner-mcp@^1.0.0 scan_project . --min-severity medium
   artifacts:
     reports:
       sast: security-report.json
@@ -65,8 +65,8 @@ architecture-check:
   image: node:${NODE_VERSION}
   script:
     - echo "Analyzing architecture..."
-    - npx @j0kz/architecture-analyzer-mcp@latest analyze_architecture .
-    - npx @j0kz/architecture-analyzer-mcp@latest find_circular_deps .
+    - npx @j0kz/architecture-analyzer-mcp@^1.0.0 analyze_architecture .
+    - npx @j0kz/architecture-analyzer-mcp@^1.0.0 find_circular_deps .
   artifacts:
     paths:
       - architecture-report.json
@@ -81,8 +81,8 @@ refactor-suggestions:
   script:
     - echo "Getting refactoring suggestions..."
     - |
-      for file in $(find src -name "*.ts" -o -name "*.js"); do
-        npx @j0kz/refactor-assistant-mcp@latest suggest_refactorings "$file"
+      for file in $(find src -type f \( -name "*.ts" -o -name "*.js" \) ! -name "*.test.*" ! -name "*.spec.*"); do
+        npx @j0kz/refactor-assistant-mcp@^1.0.0 suggest_refactorings "$file"
       done
   artifacts:
     paths:

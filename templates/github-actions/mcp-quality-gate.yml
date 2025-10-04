@@ -28,7 +28,7 @@ jobs:
 
       - name: Run Smart Reviewer
         run: |
-          npx @j0kz/smart-reviewer-mcp@latest <<EOF
+          npx @j0kz/smart-reviewer-mcp@^1.0.0 <<EOF
           {
             "action": "batch_review",
             "files": $(git diff --name-only origin/main...HEAD | grep -E '\.(ts|js|tsx|jsx)$' | jq -R . | jq -s .),
@@ -63,7 +63,7 @@ jobs:
 
       - name: Check for missing tests
         run: |
-          npx @j0kz/test-generator-mcp@latest <<EOF
+          npx @j0kz/test-generator-mcp@^1.0.0 <<EOF
           {
             "action": "analyze_coverage",
             "sourceFiles": $(find src -name "*.ts" -o -name "*.js" | jq -R . | jq -s .)
@@ -86,7 +86,7 @@ jobs:
 
       - name: Run Security Scanner
         run: |
-          npx @j0kz/security-scanner-mcp@latest <<EOF
+          npx @j0kz/security-scanner-mcp@^1.0.0 <<EOF
           {
             "action": "scan_project",
             "projectPath": ".",
@@ -129,7 +129,7 @@ jobs:
 
       - name: Analyze Architecture
         run: |
-          npx @j0kz/architecture-analyzer-mcp@latest <<EOF
+          npx @j0kz/architecture-analyzer-mcp@^1.0.0 <<EOF
           {
             "action": "analyze_architecture",
             "projectPath": ".",
@@ -144,7 +144,7 @@ jobs:
 
       - name: Check for circular dependencies
         run: |
-          if npx @j0kz/architecture-analyzer-mcp@latest find_circular_deps .; then
+          if npx @j0kz/architecture-analyzer-mcp@^1.0.0 find_circular_deps .; then
             echo "⚠️ Circular dependencies detected!"
           fi
         continue-on-error: true
@@ -167,7 +167,7 @@ jobs:
           for file in $(git diff --name-only origin/main...HEAD | grep -E '\.(ts|js)$'); do
             if [ -f "$file" ]; then
               echo "Analyzing $file..."
-              npx @j0kz/refactor-assistant-mcp@latest <<EOF
+              npx @j0kz/refactor-assistant-mcp@^1.0.0 <<EOF
               {
                 "action": "suggest_refactorings",
                 "code": "$(cat $file)",

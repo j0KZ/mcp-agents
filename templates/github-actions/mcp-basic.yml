@@ -25,13 +25,13 @@ jobs:
       - name: Code Review
         run: |
           echo "Running code review..."
-          npx @j0kz/smart-reviewer-mcp@latest review_file src/**/*.{ts,js}
+          npx @j0kz/smart-reviewer-mcp@^1.0.0 review_file src/**/*.{ts,js}
         continue-on-error: true
 
       - name: Security Scan
         run: |
           echo "Scanning for security issues..."
-          npx @j0kz/security-scanner-mcp@latest scan_project .
+          npx @j0kz/security-scanner-mcp@^1.0.0 scan_project .
 
       - name: Comment on PR
         if: github.event_name == 'pull_request'

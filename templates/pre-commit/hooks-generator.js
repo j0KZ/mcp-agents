@@ -22,11 +22,11 @@ echo "🔍 Running MCP code quality checks..."
 
 # Smart Reviewer - Quick check
 echo "📝 Reviewing changed files..."
-npx @j0kz/smart-reviewer-mcp@latest review_file $(git diff --cached --name-only --diff-filter=ACM | grep -E '\\.(ts|js|tsx|jsx)$' | xargs)
+npx @j0kz/smart-reviewer-mcp@^1.0.0 review_file $(git diff --cached --name-only --diff-filter=ACM | grep -E '\\.(ts|js|tsx|jsx)$' | xargs)
 
 # Security Scanner - Critical issues only
 echo "🔒 Scanning for security issues..."
-npx @j0kz/security-scanner-mcp@latest scan_secrets $(git diff --cached --name-only --diff-filter=ACM | xargs)
+npx @j0kz/security-scanner-mcp@^1.0.0 scan_secrets $(git diff --cached --name-only --diff-filter=ACM | xargs)
 
 echo "✅ Pre-commit checks complete!"
 `,
@@ -46,31 +46,31 @@ fi
 
 # Smart Reviewer - Strict mode
 echo "📝 Code review (strict mode)..."
-npx @j0kz/smart-reviewer-mcp@latest batch_review $STAGED_FILES --severity strict || {
+npx @j0kz/smart-reviewer-mcp@^1.0.0 batch_review $STAGED_FILES --severity strict || {
   echo "❌ Code review found critical issues!"
   exit 1
 }
 
 # Security Scanner - All checks
 echo "🔒 Security scan..."
-npx @j0kz/security-scanner-mcp@latest scan_project . --min-severity medium || {
+npx @j0kz/security-scanner-mcp@^1.0.0 scan_project . --min-severity medium || {
   echo "❌ Security vulnerabilities detected!"
   exit 1
 }
 
 # Test Generator - Check coverage
 echo "🧪 Checking test coverage..."
-npx @j0kz/test-generator-mcp@latest check_coverage $STAGED_FILES || {
+npx @j0kz/test-generator-mcp@^1.0.0 check_coverage $STAGED_FILES || {
   echo "⚠️ Missing test coverage for some files"
 }
 
 # Refactor Assistant - Suggest improvements
 echo "🔧 Checking for refactoring opportunities..."
-npx @j0kz/refactor-assistant-mcp@latest suggest_refactorings $STAGED_FILES
+npx @j0kz/refactor-assistant-mcp@^1.0.0 suggest_refactorings $STAGED_FILES
 
 # Architecture Analyzer - Check for issues
 echo "🏗️ Validating architecture..."
-npx @j0kz/architecture-analyzer-mcp@latest find_circular_deps . || {
+npx @j0kz/architecture-analyzer-mcp@^1.0.0 find_circular_deps . || {
   echo "❌ Circular dependencies detected!"
   exit 1
 }
@@ -84,7 +84,7 @@ echo "✅ All quality checks passed!"
 echo "🔍 Quick MCP check..."
 
 # Just security scan for secrets
-npx @j0kz/security-scanner-mcp@latest scan_secrets $(git diff --cached --name-only --diff-filter=ACM | xargs)
+npx @j0kz/security-scanner-mcp@^1.0.0 scan_secrets $(git diff --cached --name-only --diff-filter=ACM | xargs)
 
 echo "✅ Done!"
 `,
@@ -97,22 +97,22 @@ echo "🔍 Running custom MCP checks..."
 # Customize these checks based on your needs:
 
 # 1. Code Review (moderate severity)
-# npx @j0kz/smart-reviewer-mcp@latest review_file <files>
+# npx @j0kz/smart-reviewer-mcp@^1.0.0 review_file <files>
 
 # 2. Security Scan (high/critical only)
-# npx @j0kz/security-scanner-mcp@latest scan_project . --min-severity high
+# npx @j0kz/security-scanner-mcp@^1.0.0 scan_project . --min-severity high
 
 # 3. Test Coverage
-# npx @j0kz/test-generator-mcp@latest check_coverage <files>
+# npx @j0kz/test-generator-mcp@^1.0.0 check_coverage <files>
 
 # 4. Architecture Validation
-# npx @j0kz/architecture-analyzer-mcp@latest analyze_architecture .
+# npx @j0kz/architecture-analyzer-mcp@^1.0.0 analyze_architecture .
 
 # 5. API Design Validation
-# npx @j0kz/api-designer-mcp@latest validate_api <spec-file>
+# npx @j0kz/api-designer-mcp@^1.0.0 validate_api <spec-file>
 
 # 6. Database Schema Validation
-# npx @j0kz/db-schema-mcp@latest validate_schema <schema-file>
+# npx @j0kz/db-schema-mcp@^1.0.0 validate_schema <schema-file>
 
 echo "✅ Custom checks complete!"
 `

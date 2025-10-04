@@ -29,16 +29,18 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Note: Requires 'build' script in package.json
       - name: Build
         run: npm run build
 
+      # Note: Requires 'test' script in package.json
       - name: Run tests
         run: npm test
 
       - name: Critical Security Check
         id: security
         run: |
-          npx @j0kz/security-scanner-mcp@latest scan_project . > security-results.json
+          npx @j0kz/security-scanner-mcp@^1.0.0 scan_project . > security-results.json
 
           # Fail if critical vulnerabilities found
           if grep -q "CRITICAL" security-results.json 2>/dev/null; then
@@ -52,7 +54,7 @@ jobs:
       - name: Code Quality Check
         id: quality
         run: |
-          npx @j0kz/smart-reviewer-mcp@latest batch_review . > review-results.json
+          npx @j0kz/smart-reviewer-mcp@^1.0.0 batch_review . > review-results.json
 
           # Check for high-severity issues
           if grep -q '"severity": "high"' review-results.json 2>/dev/null; then
@@ -63,7 +65,7 @@ jobs:
       - name: Architecture Validation
         run: |
           # Fail on circular dependencies
-          npx @j0kz/architecture-analyzer-mcp@latest find_circular_deps . || {
+          npx @j0kz/architecture-analyzer-mcp@^1.0.0 find_circular_deps . || {
             echo "::error::Circular dependencies detected!"
             exit 1
           }
