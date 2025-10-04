@@ -126,38 +126,49 @@ npm run publish-all
 
 ### Version Management
 
-**CRITICAL: Always use unified versions across all packages**
+**CRITICAL: All packages use a single source of truth for versions**
 
-This monorepo follows a **unified versioning strategy** where all packages share the same version number:
+This monorepo uses **`version.json`** as the single source of truth for all package versions:
 
-- ✅ **Current version:** All packages at `1.0.25`
-- ✅ **When releasing:** Bump ALL packages to the same version
-- ✅ **Why:** Eliminates version confusion, simplifies dependency management
+- ✅ **Global version file:** `version.json` at root
+- ✅ **Current version:** `1.0.25` (check version.json)
+- ✅ **Auto-sync script:** Syncs all packages from version.json
+- ✅ **Why:** Single place to update, impossible to have version mismatches
 
-**To update versions:**
+**To release a new version:**
+
 ```bash
-# Update all package.json files to new version (e.g., 1.0.26)
-for pkg in packages/*/package.json; do
-  sed -i 's/"version": "[^"]*"/"version": "1.0.26"/' "$pkg"
-done
+# 1. Update version.json
+echo '{"version":"1.0.26","description":"Global version for all MCP packages"}' > version.json
 
-# Update installer
-sed -i 's/"version": "[^"]*"/"version": "1.0.26"/' installer/package.json
-sed -i "s/const VERSION = '[^']*'/const VERSION = '1.0.26'/" installer/index.js
+# 2. Sync all packages automatically
+npm run version:sync
 
-# Update root package
-sed -i 's/"version": "[^"]*"/"version": "1.0.26"/' package.json
+# 3. Update CHANGELOG and README
+# - Update version badge in README.md
+# - Add new section to CHANGELOG.md
 
-# Update CHANGELOG and README badges
-# Then build and publish all
+# 4. Build and publish
+npm run build
 npm run publish-all
 cd installer && npm publish
+
+# 5. Commit and tag
+git add .
+git commit -m "release: v1.0.26"
+git tag v1.0.26
+git push && git push --tags
 ```
 
+**Adding new MCP packages:**
+1. Create in `packages/your-package/`
+2. Run `npm run version:sync` - it will automatically get the global version
+3. No manual version management needed!
+
 **Never:**
-- ❌ Publish packages with different version numbers
-- ❌ Skip updating installer or shared package
-- ❌ Forget to update README/CHANGELOG version badges
+- ❌ Manually edit version in package.json files
+- ❌ Use different versions across packages
+- ❌ Forget to run `npm run version:sync` after updating version.json
 
 ## Important Patterns & Conventions
 
