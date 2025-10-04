@@ -28,7 +28,8 @@ export function detectPartialDependencies(table) {
     const compositePK = Array.isArray(table.primaryKey) && table.primaryKey.length > 1;
     if (compositePK) {
         const nonKeyColumns = table.columns.filter(c => !table.primaryKey.includes(c.name));
-        if (nonKeyColumns.length > NORMALIZATION_LIMITS.MIN_NONKEY_COLUMNS_FOR_EXTRACTION) {
+        // Use >= to include cases with exactly MIN_NONKEY_COLUMNS_FOR_EXTRACTION columns
+        if (nonKeyColumns.length >= NORMALIZATION_LIMITS.MIN_NONKEY_COLUMNS_FOR_EXTRACTION) {
             suggestions.push({
                 type: 'EXTRACT_TABLE',
                 description: `Table '${table.name}' has composite primary key with potential partial dependencies`,

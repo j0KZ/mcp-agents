@@ -20,12 +20,14 @@ export async function scanDependencies(projectPath: string): Promise<DependencyV
     const packageJsonPath = path.join(projectPath, 'package.json');
     const packageJson = JSON.parse(await readFile(packageJsonPath, 'utf-8'));
 
+    // Use nullish coalescing to prevent TypeError when dependencies are undefined
     const allDeps = {
-      ...packageJson.dependencies,
-      ...packageJson.devDependencies
+      ...(packageJson.dependencies ?? {}),
+      ...(packageJson.devDependencies ?? {})
     };
 
     // Known vulnerable packages (example - in production, use npm audit or Snyk API)
+    // Note: Version checking would require semver library for production use
     const knownVulnerabilities: Record<string, { versions: string[], cve: string, severity: SeverityLevel, description: string }> = {
       'lodash': {
         versions: ['<4.17.21'],
@@ -41,6 +43,8 @@ export async function scanDependencies(projectPath: string): Promise<DependencyV
       }
     };
 
+    // TODO: Implement semver version range checking for production use
+    // Currently reports all instances of listed packages regardless of version
     for (const [pkg, version] of Object.entries(allDeps)) {
       if (knownVulnerabilities[pkg]) {
         const vuln = knownVulnerabilities[pkg];

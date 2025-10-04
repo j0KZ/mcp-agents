@@ -65,10 +65,10 @@ export const DEFAULT_SECRET_PATTERNS: SecretPattern[] = [
     description: 'Database connection string detected'
   },
   {
-    name: 'Google API Key',
+    name: 'Google/Firebase API Key',
     pattern: /AIza[0-9A-Za-z_-]{35}/g,
     severity: SeverityLevel.CRITICAL,
-    description: 'Google API key detected'
+    description: 'Google or Firebase API key detected'
   },
   {
     name: 'Stripe API Key',
@@ -123,12 +123,6 @@ export const DEFAULT_SECRET_PATTERNS: SecretPattern[] = [
     pattern: /sq0atp-[0-9A-Za-z_-]{22}/g,
     severity: SeverityLevel.CRITICAL,
     description: 'Square access token detected'
-  },
-  {
-    name: 'Firebase API Key',
-    pattern: /AIza[0-9A-Za-z_-]{35}/g,
-    severity: SeverityLevel.HIGH,
-    description: 'Firebase API key detected'
   }
 ];
 

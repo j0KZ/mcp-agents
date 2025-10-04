@@ -1,15 +1,40 @@
 /**
  * SQL Builder Helpers
- * Helper functions for building SQL DDL statements
+ * Helper functions for building SQL DDL statements with SQL injection prevention
  */
 /**
- * Build SQL column definition string
+ * Escape SQL identifier (table name, column name, etc.)
+ * Validates identifier contains only safe characters
+ * @param identifier - SQL identifier to escape
+ * @returns Validated identifier
+ * @throws Error if identifier contains invalid characters
+ */
+function escapeIdentifier(identifier) {
+    if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(identifier)) {
+        throw new Error(`Invalid SQL identifier: ${identifier}`);
+    }
+    return identifier;
+}
+/**
+ * Escape string literal for SQL
+ * Escapes single quotes by doubling them
+ * @param value - String value to escape
+ * @returns Escaped string value
+ */
+function escapeStringLiteral(value) {
+    return value.replace(/'/g, "''");
+}
+/**
+ * Build SQL column definition string with SQL injection prevention
  * @param col - Column specification
  * @param database - Database type (for dialect-specific syntax)
  * @returns SQL column definition
+ * @throws Error if column name, type, or default value contains invalid characters
  */
 export function buildColumnDefinition(col, database) {
-    let def = `  ${col.name} ${col.type}`;
+    const safeName = escapeIdentifier(col.name);
+    const safeType = escapeIdentifier(col.type);
+    let def = `  ${safeName} ${safeType}`;
     if (col.length)
         def += `(${col.length})`;
     if (col.precision)
@@ -23,20 +48,36 @@ export function buildColumnDefinition(col, database) {
     if (col.unique && !col.primaryKey)
         def += ' UNIQUE';
     if (col.defaultValue !== undefined) {
-        def += ` DEFAULT ${typeof col.defaultValue === 'string' ? `'${col.defaultValue}'` : col.defaultValue}`;
+        if (typeof col.defaultValue === 'string') {
+            def += ` DEFAULT '${escapeStringLiteral(col.defaultValue)}'`;
+        }
+        else if (typeof col.defaultValue === 'number' || typeof col.defaultValue === 'boolean') {
+            def += ` DEFAULT ${col.defaultValue}`;
+        }
+        else {
+            throw new Error(`Invalid default value type: ${typeof col.defaultValue}`);
+        }
     }
     return def;
 }
 /**
- * Build CREATE INDEX statement
+ * Build CREATE INDEX statement with SQL injection prevention
  * @param indexName - Name of the index
  * @param tableName - Name of the table
  * @param columns - Columns to index
  * @param unique - Whether index is unique
  * @returns SQL CREATE INDEX statement
+ * @throws Error if indexName, tableName, or columns contain invalid characters
+ * @throws Error if columns array is empty
  */
 export function buildCreateIndexStatement(indexName, tableName, columns, unique = false) {
+    if (columns.length === 0) {
+        throw new Error('columns array cannot be empty');
+    }
+    const safeIndexName = escapeIdentifier(indexName);
+    const safeTableName = escapeIdentifier(tableName);
+    const safeColumns = columns.map(col => escapeIdentifier(col)).join(', ');
     const uniqueKeyword = unique ? 'UNIQUE ' : '';
-    return `CREATE ${uniqueKeyword}INDEX ${indexName} ON ${tableName}(${columns.join(', ')});`;
+    return `CREATE ${uniqueKeyword}INDEX ${safeIndexName} ON ${safeTableName}(${safeColumns});`;
 }
 //# sourceMappingURL=sql-builder.js.map

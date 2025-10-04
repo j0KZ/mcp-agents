@@ -70,7 +70,9 @@ export function suggestJsonbIndexes(table, indexedColumns) {
 export function suggestTextSearchIndexes(table, indexedColumns) {
     const suggestions = [];
     for (const column of table.columns) {
-        if (column.type === 'TEXT' && column.name.includes('description')) {
+        if (column.type === 'TEXT' &&
+            column.name.includes('description') &&
+            !indexedColumns.has(column.name)) {
             suggestions.push({
                 table: table.name,
                 columns: [column.name],
