@@ -18,6 +18,13 @@ npx @j0kz/mcp-agents cursor
 
 # For Windsurf
 npx @j0kz/mcp-agents windsurf
+
+# For Trae
+npx @j0kz/mcp-agents trae
+
+# For VS Code or Roo Code
+npx @j0kz/mcp-agents vscode
+npx @j0kz/mcp-agents roo
 ```
 
 ## 📦 What Gets Installed
@@ -44,6 +51,13 @@ npx @j0kz/mcp-agents cursor
 
 # Install for Windsurf
 npx @j0kz/mcp-agents windsurf
+
+# Install for Trae
+npx @j0kz/mcp-agents trae
+
+# Install for VS Code or Roo Code
+npx @j0kz/mcp-agents vscode
+npx @j0kz/mcp-agents roo
 
 # List all available tools
 npx @j0kz/mcp-agents list

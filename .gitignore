@@ -4,11 +4,11 @@ jspm_packages/
 bower_components/
 
 # Build outputs
-dist/
-build/
+# Note: dist/ folders are committed for npm publishing
 *.tsbuildinfo
 .rollup.cache/
 .parcel-cache/
+build/
 
 # Logs
 logs/
