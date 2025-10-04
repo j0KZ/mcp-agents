@@ -1,4 +1,4 @@
-import { CodeIssue, CodeMetrics, ReviewResult } from './types.js';
+import { CodeIssue, ReviewResult } from './types.js';
 import {
   FileSystemManager,
   AnalysisCache,
