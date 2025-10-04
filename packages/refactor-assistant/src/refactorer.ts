@@ -21,6 +21,10 @@ import {
   INDEX_CONSTANTS,
 } from './constants/refactoring-limits.js';
 
+import {
+  REGEX_LIMITS,
+} from './constants/transformation-limits.js';
+
 // Re-export from modular components
 export { extractFunction } from './core/extract-function.js';
 export { calculateMetrics, findDuplicateBlocks } from './analysis/metrics-calculator.js';
@@ -44,6 +48,7 @@ import { applyGuardClauses, combineNestedConditions } from './transformations/co
 import { removeUnusedImportsFromCode, escapeRegExp } from './transformations/import-helpers.js';
 import { analyzeFunctionLengths } from './transformations/analysis-helpers.js';
 import { getErrorMessage } from './utils/error-helpers.js';
+import { convertCallbackToAsync, convertPromiseChainToAsync } from './transformations/async-converter.js';
 
 /**
  * Convert callback-based code to async/await
@@ -64,48 +69,28 @@ export function convertToAsync(options: ConvertToAsyncOptions): RefactoringResul
     let refactoredCode = code;
     const changes: RefactoringChange[] = [];
 
-    const callbackPattern = /(\w+)\s?\(\s?\(err,\s?(\w+)\)\s?=>\s?\{/g;
-
-    if (callbackPattern.test(code)) {
-      refactoredCode = refactoredCode.replace(/function\s+(\w+)\s*\(/g, 'async function $1(');
-      callbackPattern.lastIndex = PATTERN_CONSTANTS.REGEX_RESET_INDEX;
-
-      refactoredCode = refactoredCode.replace(
-        callbackPattern,
-        (_match, fn, dataVar) => {
-          return useTryCatch
-            ? `try {\n  const ${dataVar} = await ${fn}();\n`
-            : `const ${dataVar} = await ${fn}();\n`;
-        }
-      );
-
-      if (useTryCatch) {
-        refactoredCode = refactoredCode.replace(/}\s*\);?\s*$/, '} catch (err) {\n  // Handle error\n  throw err;\n}');
-      }
-
+    // Convert callbacks to async/await
+    const callbackResult = convertCallbackToAsync(refactoredCode, useTryCatch);
+    if (callbackResult.changed) {
       changes.push({
         type: 'convert-to-async',
         description: 'Converted callback-based code to async/await',
-        before: code,
-        after: refactoredCode,
+        before: refactoredCode,
+        after: callbackResult.code,
       });
+      refactoredCode = callbackResult.code;
     }
 
-    // Convert Promise.then chains
-    const promisePattern = /\.then\s?\(\s?\((\w+)\)\s?=>\s?\{([^}]{1,500})\}\s?\)/g;
-    if (promisePattern.test(refactoredCode)) {
-      promisePattern.lastIndex = PATTERN_CONSTANTS.REGEX_RESET_INDEX;
-      refactoredCode = refactoredCode.replace(/function\s+(\w+)\s*\(/g, 'async function $1(');
-
-      refactoredCode = refactoredCode.replace(
-        promisePattern,
-        ';\n  const $1 = await promise;\n  $2'
-      );
-
+    // Convert Promise.then chains to async/await
+    const promiseResult = convertPromiseChainToAsync(refactoredCode);
+    if (promiseResult.changed) {
       changes.push({
         type: 'convert-to-async',
         description: 'Converted Promise.then() to async/await',
+        before: refactoredCode,
+        after: promiseResult.code,
       });
+      refactoredCode = promiseResult.code;
     }
 
     return {
@@ -155,7 +140,10 @@ export function simplifyConditionals(options: SimplifyConditionalsOptions): Refa
     }
 
     if (useTernary) {
-      const ternaryPattern = /if\s?\(([^)]{1,200})\)\s?\{\s?return\s+([^;]{1,200});\s?\}\s?else\s?\{\s?return\s+([^;]{1,200});\s?\}/g;
+      const ternaryPattern = new RegExp(
+        `if\\s?\\(([^)]{1,${REGEX_LIMITS.MAX_CONDITION_LENGTH}})\\)\\s?\\{\\s?return\\s+([^;]{1,${REGEX_LIMITS.MAX_RETURN_VALUE_LENGTH}});\\s?\\}\\s?else\\s?\\{\\s?return\\s+([^;]{1,${REGEX_LIMITS.MAX_RETURN_VALUE_LENGTH}});\\s?\\}`,
+        'g'
+      );
       const originalCode = refactoredCode;
       refactoredCode = refactoredCode.replace(ternaryPattern, 'return $1 ? $2 : $3;');
 
