@@ -124,6 +124,41 @@ npm run dev -w packages/smart-reviewer
 npm run publish-all
 ```
 
+### Version Management
+
+**CRITICAL: Always use unified versions across all packages**
+
+This monorepo follows a **unified versioning strategy** where all packages share the same version number:
+
+- ✅ **Current version:** All packages at `1.0.25`
+- ✅ **When releasing:** Bump ALL packages to the same version
+- ✅ **Why:** Eliminates version confusion, simplifies dependency management
+
+**To update versions:**
+```bash
+# Update all package.json files to new version (e.g., 1.0.26)
+for pkg in packages/*/package.json; do
+  sed -i 's/"version": "[^"]*"/"version": "1.0.26"/' "$pkg"
+done
+
+# Update installer
+sed -i 's/"version": "[^"]*"/"version": "1.0.26"/' installer/package.json
+sed -i "s/const VERSION = '[^']*'/const VERSION = '1.0.26'/" installer/index.js
+
+# Update root package
+sed -i 's/"version": "[^"]*"/"version": "1.0.26"/' package.json
+
+# Update CHANGELOG and README badges
+# Then build and publish all
+npm run publish-all
+cd installer && npm publish
+```
+
+**Never:**
+- ❌ Publish packages with different version numbers
+- ❌ Skip updating installer or shared package
+- ❌ Forget to update README/CHANGELOG version badges
+
 ## Important Patterns & Conventions
 
 ### Import/Export Style
