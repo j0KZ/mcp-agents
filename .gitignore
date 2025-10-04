@@ -73,7 +73,9 @@ temp/
 .yarn/
 .pnp.*
 .yarn-integrity
+package-lock.json
 package-lock.json.bak
+**/package-lock.json
 
 # Runtime
 *.pid
