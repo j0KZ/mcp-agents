@@ -4,6 +4,7 @@
  */
 
 import { DatabaseSchema, ERDiagramOptions, SQLTable, MongoCollection } from '../types.js';
+import { DIAGRAM_LIMITS } from '../constants/schema-limits.js';
 
 export function generateMermaidDiagram(schema: DatabaseSchema, options: ERDiagramOptions): string {
   let diagram = 'erDiagram\n';
@@ -17,7 +18,7 @@ export function generateMermaidDiagram(schema: DatabaseSchema, options: ERDiagra
 
     if (options.includeColumns) {
       const columns = (table as SQLTable).columns || (table as MongoCollection).fields || [];
-      for (const col of columns.slice(0, 10)) { // Limit to 10 columns
+      for (const col of columns.slice(0, DIAGRAM_LIMITS.MAX_COLUMNS_IN_DIAGRAM)) {
         const colName = col.name;
         const colType = 'type' in col ? col.type : '';
         diagram += `    ${colType} ${colName}\n`;

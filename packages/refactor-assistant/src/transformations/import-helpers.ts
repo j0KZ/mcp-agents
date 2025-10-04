@@ -1,3 +1,5 @@
+import { CODE_LIMITS } from '../constants/refactoring-limits.js';
+
 /**
  * Import statement helpers
  */
@@ -10,7 +12,7 @@ export function removeUnusedImportsFromCode(code: string): { code: string; remov
   // Find all import statements
   lines.forEach((line, index) => {
     // Skip lines that are too long to prevent ReDoS
-    if (line.length > 1000) return;
+    if (line.length > CODE_LIMITS.MAX_LINE_LENGTH) return;
 
     const importMatch = line.match(/import\s+\{([^}]{1,500})\}\s+from\s+['"]([^'"]{1,200})['"]/);
     if (importMatch) {

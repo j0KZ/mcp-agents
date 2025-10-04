@@ -2,6 +2,7 @@
  * Diagram Generator Module
  * Generates ER diagrams in multiple formats (Mermaid, DBML, PlantUML)
  */
+import { DIAGRAM_LIMITS } from '../constants/schema-limits.js';
 export function generateMermaidDiagram(schema, options) {
     let diagram = 'erDiagram\n';
     const tables = schema.tables || schema.collections || [];
@@ -11,7 +12,7 @@ export function generateMermaidDiagram(schema, options) {
         diagram += `  ${tableName} {\n`;
         if (options.includeColumns) {
             const columns = table.columns || table.fields || [];
-            for (const col of columns.slice(0, 10)) { // Limit to 10 columns
+            for (const col of columns.slice(0, DIAGRAM_LIMITS.MAX_COLUMNS_IN_DIAGRAM)) {
                 const colName = col.name;
                 const colType = 'type' in col ? col.type : '';
                 diagram += `    ${colType} ${colName}\n`;

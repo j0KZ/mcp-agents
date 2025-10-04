@@ -134,3 +134,4 @@ AUDIT_REPORT_*.md
 
 # Refactored files
 *-refactored.ts
+.mcp.json

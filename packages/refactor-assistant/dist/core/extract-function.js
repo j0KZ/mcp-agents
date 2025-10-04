@@ -1,8 +1,5 @@
-/**
- * Extract Function Refactoring
- *
- * Extracts a code block into a separate function with automatic parameter detection.
- */
+import { getErrorMessage } from '../utils/error-helpers.js';
+import { CODE_LIMITS, INDEX_CONSTANTS } from '../constants/refactoring-limits.js';
 /**
  * Analyze a code block to determine parameters and return value
  */
@@ -64,12 +61,12 @@ export function extractFunction(code, options) {
                 error: 'REFACTOR_001: Invalid code input. Code must be a non-empty string.',
             };
         }
-        if (code.length > 100000) {
+        if (code.length > CODE_LIMITS.MAX_CODE_SIZE) {
             return {
                 code,
                 changes: [],
                 success: false,
-                error: `REFACTOR_002: Code too large (${(code.length / 1024).toFixed(2)} KB). Maximum size is 100 KB.`,
+                error: `REFACTOR_002: Code too large (${(code.length / CODE_LIMITS.BYTES_TO_KB).toFixed(2)} KB). Maximum size is 100 KB.`,
             };
         }
         const { functionName, startLine, endLine, async = false, arrow = false } = options;
@@ -100,16 +97,16 @@ export function extractFunction(code, options) {
                 error: 'REFACTOR_005: Invalid line range. startLine and endLine must be numbers.',
             };
         }
-        if (startLine < 1 || endLine > lines.length || startLine > endLine) {
+        if (startLine < INDEX_CONSTANTS.FIRST_LINE_NUMBER || endLine > lines.length || startLine > endLine) {
             return {
                 code,
                 changes: [],
                 success: false,
-                error: `REFACTOR_006: Invalid line range (${startLine}-${endLine}). Valid range is 1-${lines.length}, and startLine must be <= endLine.`,
+                error: `REFACTOR_006: Invalid line range (${startLine}-${endLine}). Valid range is ${INDEX_CONSTANTS.FIRST_LINE_NUMBER}-${lines.length}, and startLine must be <= endLine.`,
             };
         }
         // Extract the code block (convert to 0-indexed)
-        const extractedLines = lines.slice(startLine - 1, endLine);
+        const extractedLines = lines.slice(startLine - INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET, endLine);
         const extractedCode = extractedLines.join('\n');
         // Analyze variables used in the extracted code
         const { parameters, returnValue } = analyzeCodeBlock(extractedCode);
@@ -119,7 +116,7 @@ export function extractFunction(code, options) {
             ? `const ${functionName} = ${asyncKeyword}(${parameters.join(', ')}) => {`
             : `${asyncKeyword}function ${functionName}(${parameters.join(', ')}) {`;
         // Build the extracted function
-        const indentation = getIndentation(lines[startLine - 1]);
+        const indentation = getIndentation(lines[startLine - INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET]);
         const functionBody = extractedLines.map(line => indentation + line).join('\n');
         const returnStatement = returnValue ? `\n${indentation}  return ${returnValue};` : '';
         const extractedFunction = `${indentation}${functionDeclaration}\n${functionBody}${returnStatement}\n${indentation}}`;
@@ -129,7 +126,7 @@ export function extractFunction(code, options) {
             : `${indentation}${async ? 'await ' : ''}${functionName}(${parameters.join(', ')});`;
         // Replace original code with function call
         const newLines = [
-            ...lines.slice(0, startLine - 1),
+            ...lines.slice(INDEX_CONSTANTS.FIRST_ARRAY_INDEX, startLine - INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET),
             functionCall,
             ...lines.slice(endLine),
             '',
@@ -155,7 +152,7 @@ export function extractFunction(code, options) {
             code,
             changes: [],
             success: false,
-            error: error instanceof Error ? error.message : 'Unknown error during function extraction',
+            error: getErrorMessage(error, 'Unknown error during function extraction'),
         };
     }
 }
