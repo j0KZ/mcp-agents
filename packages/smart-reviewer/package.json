@@ -6,7 +6,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "smart-reviewer-mcp": "./dist/mcp-server.js"
+    "smart-reviewer-mcp": "dist/mcp-server.js"
   },
   "files": [
     "dist",
@@ -47,7 +47,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/j0KZ/mcp-agents.git",
+    "url": "git+https://github.com/j0KZ/mcp-agents.git",
     "directory": "packages/smart-reviewer"
   },
   "bugs": {

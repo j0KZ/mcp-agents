@@ -6,7 +6,7 @@
   "main": "dist/mcp-server.js",
   "types": "dist/mcp-server.d.ts",
   "bin": {
-    "orchestrator-mcp": "./dist/mcp-server.js"
+    "orchestrator-mcp": "dist/mcp-server.js"
   },
   "files": [
     "dist",
@@ -48,7 +48,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/j0KZ/mcp-agents.git",
+    "url": "git+https://github.com/j0KZ/mcp-agents.git",
     "directory": "packages/orchestrator-mcp"
   },
   "bugs": {

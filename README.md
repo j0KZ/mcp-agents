@@ -42,12 +42,12 @@ mcp-orchestrator run_workflow --workflow=pre-commit --files=src/app.ts
 
 ### 🧪 Test Coverage Enforcement & Expansion
 
-**CI Coverage Enforcement - Current Thresholds:**
-- ✅ Active thresholds: statements 25%, branches 25%, functions 25%, lines 25%
-- ✅ Actual coverage: statements 62%, branches 67%, functions 75%
-- ✅ Automated coverage validation with `check-coverage.js`
+**CI Coverage Enforcement - Actual Metrics:**
+- ✅ Coverage (deduplicated): **59% statements, 67% branches, 74% functions**
+- ✅ Enforced thresholds: 55% statements, 65% branches, 72% functions
+- ✅ Automated validation with `check-coverage.js` (proper deduplication)
 - ✅ Visual coverage dashboard with `coverage-dashboard.js`
-- 📈 Incrementally increasing to 60% target
+- ✅ All 622 tests passing (100% pass rate)
 
 **342 New Tests Added (+46% growth):**
 - **API Designer**: 3 → 140 tests (+4567%) - OpenAPI, GraphQL, client generation, validation
@@ -62,7 +62,7 @@ mcp-orchestrator run_workflow --workflow=pre-commit --files=src/app.ts
 
 **Overall:**
 - ✅ 622 passing tests (100% pass rate)
-- ✅ Coverage: 62% statements, 67% branches, 75% functions
+- ✅ Coverage: 59% statements, 67% branches, 74% functions (verified, deduplicated)
 - ✅ Comprehensive test coverage across all packages
 - ✅ Enforced quality standards in CI/CD pipeline
 

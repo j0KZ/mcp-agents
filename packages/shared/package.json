@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "bin": {
-    "mcp-agents-install": "./bin/cli.js"
+    "mcp-agents-install": "bin/cli.js"
   },
   "scripts": {
     "build": "tsc",
