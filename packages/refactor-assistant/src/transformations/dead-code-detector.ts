@@ -63,14 +63,23 @@ export function findUnreachableCode(code: string): Array<{ line: number; code: s
 }
 
 /**
+ * Escape special regex characters in a string
+ */
+function escapeRegExp(str: string): string {
+  return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
+/**
  * Remove unused variable declarations
  */
 export function removeUnusedVariables(code: string, unusedVars: string[]): string {
   let result = code;
 
   for (const varName of unusedVars) {
+    // Escape the variable name to prevent regex injection
+    const escapedName = escapeRegExp(varName);
     // Remove declaration lines
-    const declPattern = new RegExp(`\\s*(?:const|let|var)\\s+${varName}\\s*=.*?;\\s*\n`, 'g');
+    const declPattern = new RegExp(`\\s*(?:const|let|var)\\s+${escapedName}\\b\\s*=.*?;\\s*\\n`, 'g');
     result = result.replace(declPattern, '');
   }
 

@@ -500,7 +500,7 @@ describe('API Validator - Edge Cases', () => {
 
     expect(result).toBeDefined();
     // Empty object treated as GraphQL schema with no types, which produces an error
-    expect(result.errors.length).toBeGreaterThanOrEqual(0);
+    expect(result.errors.length).toBeGreaterThan(0);
   });
 
   it('should validate complex OpenAPI spec', () => {
