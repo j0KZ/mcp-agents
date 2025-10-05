@@ -1,0 +1,845 @@
+
+> @j0kz/mcp-agents@1.0.30 test:coverage
+> vitest run --coverage
+
+
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90md:/Users/j0KZ/Documents/Coding/my-claude-agents[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+[90mstderr[2m | packages/refactor-assistant/src/mcp-server.test.ts[2m > [22m[2mMCP Server Integration[2m > [22m[2mTool Definitions[2m > [22m[2mshould export 8 refactoring tools
+[22m[39mRefactoring Assistant MCP Server running on stdio
+
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mTool Definitions[2m > [22mshould export 8 refactoring tools[32m 93[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mTool Definitions[2m > [22mshould define extract_function tool with correct schema[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mTool Definitions[2m > [22mshould define convert_to_async tool with correct schema[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mTool Definitions[2m > [22mshould define simplify_conditionals tool with correct schema[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mTool Definitions[2m > [22mshould define remove_dead_code tool with correct schema[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mTool Definitions[2m > [22mshould define apply_pattern tool with all 10 design patterns[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mTool Definitions[2m > [22mshould define rename_variable tool with correct schema[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mTool Definitions[2m > [22mshould define suggest_refactorings tool with correct schema[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mTool Definitions[2m > [22mshould define calculate_metrics tool with correct schema[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mTool Name Coverage[2m > [22mshould have unique tool names[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mTool Name Coverage[2m > [22mshould use snake_case for all tool names[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mInput Schema Validation[2m > [22mshould have object type for all input schemas[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mInput Schema Validation[2m > [22mshould have required fields defined for tools that need them[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mInput Schema Validation[2m > [22mshould have code parameter in all tool schemas[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mTool Descriptions[2m > [22mshould have non-empty descriptions for all tools[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mTool Descriptions[2m > [22mshould have property descriptions in schemas[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mMCP Protocol Compliance[2m > [22mshould follow MCP tool schema structure[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mMCP Protocol Compliance[2m > [22mshould use correct property types in schemas[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mBoolean Default Values[2m > [22mshould have correct defaults for extract_function[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mBoolean Default Values[2m > [22mshould have correct defaults for convert_to_async[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mBoolean Default Values[2m > [22mshould have correct defaults for simplify_conditionals[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mBoolean Default Values[2m > [22mshould have correct defaults for remove_dead_code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mBoolean Default Values[2m > [22mshould have correct defaults for rename_variable[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mDesign Pattern Enum Validation[2m > [22mshould include all structural patterns[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mDesign Pattern Enum Validation[2m > [22mshould include all behavioral patterns[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mDesign Pattern Enum Validation[2m > [22mshould include all creational patterns[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mOptional Parameters[2m > [22mshould mark optional parameters correctly in extract_function[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mOptional Parameters[2m > [22mshould mark optional parameters correctly in apply_pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mOptional Parameters[2m > [22mshould mark optional parameters correctly in suggest_refactorings[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mParameter Types[2m > [22mshould use number type for line numbers[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mParameter Types[2m > [22mshould use boolean type for flags[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mParameter Types[2m > [22mshould use string type for code and names[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mParameter Types[2m > [22mshould use object type for patternOptions[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mParameter Descriptions[2m > [22mshould describe line number format[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mParameter Descriptions[2m > [22mshould describe rename_variable validation[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/mcp-server.test.ts[2m > [22mMCP Server Integration[2m > [22mTool Count and Coverage[2m > [22mshould have exactly 8 tools matching refactorer exports[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/mcp-client/mcp-client.test.ts[2m > [22mMCPClient[2m > [22minvoke[2m > [22mshould successfully invoke an MCP tool[32m 23[2mms[22m[39m
+ [32m✓[39m packages/shared/src/mcp-client/mcp-client.test.ts[2m > [22mMCPClient[2m > [22minvoke[2m > [22mshould send correct JSON-RPC request[32m 13[2mms[22m[39m
+ [32m✓[39m packages/shared/src/mcp-client/mcp-client.test.ts[2m > [22mMCPClient[2m > [22minvoke[2m > [22mshould handle MCP errors[32m 16[2mms[22m[39m
+ [32m✓[39m packages/shared/src/mcp-client/mcp-client.test.ts[2m > [22mMCPClient[2m > [22minvoke[2m > [22mshould handle process exit with error code[32m 15[2mms[22m[39m
+[90mstdout[2m | packages/api-designer/src/designer.test.ts
+[22m[39mMock server running on port 3000
+
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - designRESTEndpoints[2m > [22mshould generate REST endpoints for single resource[32m 1[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - designRESTEndpoints[2m > [22mshould generate REST endpoints for multiple resources[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - designRESTEndpoints[2m > [22mshould handle empty resources array[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - designRESTEndpoints[2m > [22mshould include metadata in result[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - designRESTEndpoints[2m > [22mshould generate proper CRUD operations[32m 1[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - designRESTEndpoints[2m > [22mshould generate correct paths for resources[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - designRESTEndpoints[2m > [22mshould handle resource names with special characters[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - designRESTEndpoints[2m > [22mshould include tags for resource organization[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - designRESTEndpoints[2m > [22mshould handle errors gracefully[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateOpenAPI[2m > [22mshould generate valid OpenAPI 3.0.3 spec[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateOpenAPI[2m > [22mshould include API info[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateOpenAPI[2m > [22mshould generate servers with baseUrl[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateOpenAPI[2m > [22mshould add bearer authentication[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateOpenAPI[2m > [22mshould add API key authentication[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateOpenAPI[2m > [22mshould add OAuth2 authentication[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateOpenAPI[2m > [22mshould handle no authentication[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateOpenAPI[2m > [22mshould include custom endpoints[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateOpenAPI[2m > [22mshould generate paths from resources[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateOpenAPI[2m > [22mshould include metadata[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - createGraphQLSchema[2m > [22mshould create GraphQL schema from config[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - createGraphQLSchema[2m > [22mshould create GraphQL schema from types array[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - createGraphQLSchema[2m > [22mshould generate SDL with type definitions[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - createGraphQLSchema[2m > [22mshould generate queries for each type[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - createGraphQLSchema[2m > [22mshould generate get and list queries[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - createGraphQLSchema[2m > [22mshould handle multiple resources[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - createGraphQLSchema[2m > [22mshould handle empty resources[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - createGraphQLSchema[2m > [22mshould include metadata[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - createGraphQLSchema[2m > [22mshould handle errors gracefully[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateAPIClient[2m > [22mshould generate TypeScript REST client with axios[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateAPIClient[2m > [22mshould generate TypeScript REST client with fetch[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateAPIClient[2m > [22mshould generate Python REST client[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateAPIClient[2m > [22mshould return error for unsupported language[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - validateAPIDesign[2m > [22mshould validate OpenAPI spec successfully[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - validateAPIDesign[2m > [22mshould validate GraphQL schema successfully[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateMockServer[2m > [22mshould generate Express mock server code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateMockServer[2m > [22mshould create mock server instance without framework[32m 3[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - generateMockServer[2m > [22mshould handle errors[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/designer.test.ts[2m > [22mAPI Designer - GraphQLClient[2m > [22mshould create GraphQL client instance[32m 0[2mms[22m[39m
+ [32m✓[39m tests/api-compatibility.test.ts[2m > [22mAPI Compatibility - Refactor Assistant[2m > [22mshould export all required functions[32m 85[2mms[22m[39m
+ [32m✓[39m tests/api-compatibility.test.ts[2m > [22mAPI Compatibility - Refactor Assistant[2m > [22mshould maintain extractFunction signature[32m 1[2mms[22m[39m
+ [32m✓[39m tests/api-compatibility.test.ts[2m > [22mAPI Compatibility - Refactor Assistant[2m > [22mshould maintain calculateMetrics signature[32m 1[2mms[22m[39m
+ [32m✓[39m tests/api-compatibility.test.ts[2m > [22mAPI Compatibility - Refactor Assistant[2m > [22mshould maintain suggestRefactorings signature[32m 1[2mms[22m[39m
+ [32m✓[39m tests/api-compatibility.test.ts[2m > [22mAPI Compatibility - Smart Reviewer[2m > [22mshould export CodeAnalyzer class[32m 110[2mms[22m[39m
+ [32m✓[39m packages/shared/src/mcp-client/mcp-client.test.ts[2m > [22mMCPClient[2m > [22minvoke[2m > [22mshould handle timeout[32m 109[2mms[22m[39m
+ [32m✓[39m packages/shared/src/mcp-client/mcp-client.test.ts[2m > [22mMCPClient[2m > [22minvoke[2m > [22mshould handle invalid JSON response[32m 16[2mms[22m[39m
+ [32m✓[39m packages/shared/src/mcp-client/mcp-client.test.ts[2m > [22mMCPClient[2m > [22minvoke[2m > [22mshould cleanup process after successful invocation[32m 15[2mms[22m[39m
+ [32m✓[39m packages/shared/src/mcp-client/mcp-client.test.ts[2m > [22mMCPClient[2m > [22minvoke[2m > [22mshould handle multiple JSON objects in output[32m 15[2mms[22m[39m
+ [32m✓[39m tests/api-compatibility.test.ts[2m > [22mAPI Compatibility - Smart Reviewer[2m > [22mshould maintain CodeAnalyzer.analyzeFile signature[32m 4[2mms[22m[39m
+ [32m✓[39m tests/api-compatibility.test.ts[2m > [22mAPI Compatibility - Smart Reviewer[2m > [22mshould maintain metrics structure[32m 2[2mms[22m[39m
+ [32m✓[39m tests/api-compatibility.test.ts[2m > [22mAPI Compatibility - Security Scanner[2m > [22mshould export all required functions[32m 63[2mms[22m[39m
+ [32m✓[39m tests/api-compatibility.test.ts[2m > [22mAPI Compatibility - Security Scanner[2m > [22mshould maintain scanFile signature[32m 3[2mms[22m[39m
+ [32m✓[39m tests/api-compatibility.test.ts[2m > [22mBackward Compatibility - Return Types[2m > [22mshould maintain RefactoringResult structure[32m 0[2mms[22m[39m
+ [32m✓[39m tests/api-compatibility.test.ts[2m > [22mBackward Compatibility - Return Types[2m > [22mshould maintain CodeMetrics structure[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/mcp-client/mcp-client.test.ts[2m > [22mMCPClient[2m > [22mresolveMCPBinary[2m > [22mshould throw error for unknown MCP[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/mcp-client/mcp-client.test.ts[2m > [22mMCPClient[2m > [22misInstalled[2m > [22mshould return false for unknown MCP[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/mcp-client/mcp-client.test.ts[2m > [22mMCPClient[2m > [22mgetAvailableMCPs[2m > [22mshould return array of MCP names[32m 6[2mms[22m[39m
+ [32m✓[39m packages/shared/src/mcp-client/mcp-client.test.ts[2m > [22mMCPClient[2m > [22mrequest ID increment[2m > [22mshould increment request ID for each invocation[32m 40[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/validator.test.ts[2m > [22mvalidateConfig[2m > [22mshould return no issues for valid configuration[32m 3[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/validator.test.ts[2m > [22mvalidateConfig[2m > [22mshould detect when no MCPs are selected[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/validator.test.ts[2m > [22mvalidateConfig[2m > [22mshould detect unknown editor[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/validator.test.ts[2m > [22mvalidateConfig[2m > [22mshould detect existing config file[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/validator.test.ts[2m > [22mvalidateConfig[2m > [22mshould detect config directory creation failure[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/validator.test.ts[2m > [22mvalidateConfig[2m > [22mshould work with cursor editor[32m 0[2mms[22m[39m
+ [32m✓[39m packages/architecture-analyzer/src/analyzer.test.ts[2m > [22mArchitecture Analyzer[2m > [22mshould create analyzer instance[32m 1[2mms[22m[39m
+ [32m✓[39m packages/architecture-analyzer/src/analyzer.test.ts[2m > [22mArchitecture Analyzer[2m > [22mshould analyze project architecture[32m 120[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould extract function[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould detect parameters in extracted code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould handle arrow function option[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould handle async option[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould fail for invalid line range[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould fail for missing startLine parameter[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould fail for missing endLine parameter[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould fail when startLine is less than 1[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould fail when endLine exceeds total lines[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould fail when startLine > endLine[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould handle async function with return value[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould extract multi-line code block with proper indentation[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould extract function with no parameters[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould handle exception during extraction[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mextractFunction[2m > [22mshould extract arrow function with return value[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mconvertToAsync[2m > [22mshould convert to async[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mconvertToAsync[2m > [22mshould convert Promise chains to async/await[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mconvertToAsync[2m > [22mshould add try block when requested[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mconvertToAsync[2m > [22mshould skip try/catch when not requested[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mconvertToAsync[2m > [22mshould reject code that is too large[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22msimplifyConditionals[2m > [22mshould simplify conditionals[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22msimplifyConditionals[2m > [22mshould apply guard clauses[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22msimplifyConditionals[2m > [22mshould combine nested conditions[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22msimplifyConditionals[2m > [22mshould convert simple if/else to ternary[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mrenameVariable[2m > [22mshould rename variable[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mrenameVariable[2m > [22mshould rename with word boundaries[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mrenameVariable[2m > [22mshould rename in comments when requested[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mrenameVariable[2m > [22mshould skip comments by default[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mrenameVariable[2m > [22mshould reject invalid identifiers[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mrenameVariable[2m > [22mshould fail when variable not found in code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mrenameVariable[2m > [22mshould fail when oldName is empty[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mrenameVariable[2m > [22mshould fail when newName is empty[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mrenameVariable[2m > [22mshould handle renaming with special regex characters[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mrenameVariable[2m > [22mshould show correct occurrence count in changes[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mrenameVariable[2m > [22mshould handle exception during variable renaming[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mremoveDeadCode[2m > [22mshould remove unused variables[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mremoveDeadCode[2m > [22mshould remove unreachable code after return[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mremoveDeadCode[2m > [22mshould remove unused imports[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mremoveDeadCode[2m > [22mshould handle empty code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould apply singleton pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould apply factory pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould apply observer pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould apply strategy pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould reject invalid pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould apply decorator pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould apply adapter pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould apply facade pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould apply proxy pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould apply command pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould apply chain-of-responsibility pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould extract class name for singleton pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould use custom className option for factory pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould handle empty code input for patterns[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould apply decorator with custom decorator class[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mapplyDesignPattern[2m > [22mshould apply proxy with lazy initialization[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22msuggestRefactorings[2m > [22mshould suggest refactorings for complex code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22msuggestRefactorings[2m > [22mshould suggest extracting long functions[32m 3[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22msuggestRefactorings[2m > [22mshould suggest simplifying nested conditions[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22msuggestRefactorings[2m > [22mshould handle simple code without suggestions[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22msuggestRefactorings[2m > [22mshould suggest converting callbacks to async/await[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22msuggestRefactorings[2m > [22mshould include snippet and rationale in suggestions[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22msuggestRefactorings[2m > [22mshould detect multiple callback patterns[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mcalculateMetrics[2m > [22mshould calculate code metrics[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mcalculateMetrics[2m > [22mshould detect high complexity[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mcalculateMetrics[2m > [22mshould calculate nesting depth[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mcalculateMetrics[2m > [22mshould handle empty code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mfindDuplicateBlocks[2m > [22mshould detect duplicate code blocks[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mfindDuplicateBlocks[2m > [22mshould ignore small blocks[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/refactorer.test.ts[2m > [22mRefactor Assistant[2m > [22mfindDuplicateBlocks[2m > [22mshould handle code without duplicates[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanner.test.ts[2m > [22mSecurity Scanner[2m > [22mscanFile[2m > [22mshould scan file without errors[32m 5[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanner.test.ts[2m > [22mSecurity Scanner[2m > [22mscanFile[2m > [22mshould detect SQL injection vulnerability[32m 2[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanner.test.ts[2m > [22mSecurity Scanner[2m > [22mscanFile[2m > [22mshould detect XSS vulnerability[32m 2[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanner.test.ts[2m > [22mSecurity Scanner[2m > [22mscanFile[2m > [22mshould run secret scanning without errors[32m 1[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanner.test.ts[2m > [22mSecurity Scanner[2m > [22mcalculateEntropy[2m > [22mshould calculate entropy for random string[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanner.test.ts[2m > [22mSecurity Scanner[2m > [22mcalculateEntropy[2m > [22mshould return 0 for empty string[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanner.test.ts[2m > [22mSecurity Scanner[2m > [22mcalculateEntropy[2m > [22mshould calculate higher entropy for random data[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanner.test.ts[2m > [22mSecurity Scanner[2m > [22mcalculateEntropy[2m > [22mshould detect high entropy strings[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnusedVariables()[2m > [22mHappy Path[2m > [22mshould find truly unused variables[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnusedVariables()[2m > [22mHappy Path[2m > [22mshould detect multiple unused variables[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnusedVariables()[2m > [22mHappy Path[2m > [22mshould consider variable used if referenced[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnusedVariables()[2m > [22mHappy Path[2m > [22mshould handle variables used in function calls[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnusedVariables()[2m > [22mEdge Cases[2m > [22mshould return empty array for empty code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnusedVariables()[2m > [22mEdge Cases[2m > [22mshould handle code with no variables[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnusedVariables()[2m > [22mEdge Cases[2m > [22mshould skip lines longer than 1000 characters (ReDoS protection)[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnusedVariables()[2m > [22mEdge Cases[2m > [22mshould handle single-character variable names[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnusedVariables()[2m > [22mEdge Cases[2m > [22mshould handle variables with same prefix[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnusedVariables()[2m > [22mEdge Cases[2m > [22mshould count occurrences correctly for MIN_VARIABLE_USAGE threshold[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnusedVariables()[2m > [22mError Cases[2m > [22mshould handle code with syntax errors gracefully[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnusedVariables()[2m > [22mError Cases[2m > [22mshould handle malformed variable declarations[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnusedVariables()[2m > [22mError Cases[2m > [22mshould handle code with only comments[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mHappy Path[2m > [22mshould find unreachable code after return statement[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mHappy Path[2m > [22mshould report correct line numbers for unreachable code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mHappy Path[2m > [22mshould find multiple unreachable statements[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mHappy Path[2m > [22mshould detect unreachable code in multiple functions[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mEdge Cases[2m > [22mshould return empty array for empty code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mEdge Cases[2m > [22mshould not flag closing braces as unreachable[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mEdge Cases[2m > [22mshould not flag closing brackets as unreachable[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mEdge Cases[2m > [22mshould not flag closing parentheses as unreachable[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mEdge Cases[2m > [22mshould ignore empty lines after return[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mEdge Cases[2m > [22mshould ignore single-line comments after return[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mEdge Cases[2m > [22mshould ignore block comments after return[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mEdge Cases[2m > [22mshould check up to UNREACHABLE_CHECK_LINES (5) after return[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mEdge Cases[2m > [22mshould handle return statements at end of file[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mError Cases[2m > [22mshould handle code with no return statements[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mfindUnreachableCode()[2m > [22mError Cases[2m > [22mshould handle malformed code gracefully[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnusedVariables()[2m > [22mHappy Path[2m > [22mshould remove single unused variable[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnusedVariables()[2m > [22mHappy Path[2m > [22mshould remove multiple unused variables[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnusedVariables()[2m > [22mHappy Path[2m > [22mshould handle let declarations[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnusedVariables()[2m > [22mHappy Path[2m > [22mshould handle var declarations[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnusedVariables()[2m > [22mHappy Path[2m > [22mshould preserve whitespace and formatting[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnusedVariables()[2m > [22mEdge Cases[2m > [22mshould return unchanged code when no unused variables provided[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnusedVariables()[2m > [22mEdge Cases[2m > [22mshould handle empty code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnusedVariables()[2m > [22mEdge Cases[2m > [22mshould handle variable with special regex characters in name[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnusedVariables()[2m > [22mEdge Cases[2m > [22mshould remove all occurrences of declaration pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnusedVariables()[2m > [22mIntegration with findUnusedVariables[2m > [22mshould work correctly with findUnusedVariables output[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnreachableCode()[2m > [22mHappy Path[2m > [22mshould remove unreachable code and return count[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnreachableCode()[2m > [22mHappy Path[2m > [22mshould remove multiple unreachable lines[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnreachableCode()[2m > [22mHappy Path[2m > [22mshould preserve reachable code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnreachableCode()[2m > [22mHappy Path[2m > [22mshould work backwards to preserve line indices[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnreachableCode()[2m > [22mEdge Cases[2m > [22mshould return unchanged code when no unreachable code exists[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnreachableCode()[2m > [22mEdge Cases[2m > [22mshould handle empty code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnreachableCode()[2m > [22mEdge Cases[2m > [22mshould preserve closing braces[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnreachableCode()[2m > [22mEdge Cases[2m > [22mshould handle code with only return statement[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mremoveUnreachableCode()[2m > [22mIntegration with findUnreachableCode[2m > [22mshould remove all code identified by findUnreachableCode[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mIntegration Tests[2m > [22mshould handle combined unused variables and unreachable code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mIntegration Tests[2m > [22mshould handle realistic refactoring scenario[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/dead-code-detector.test.ts[2m > [22mIntegration Tests[2m > [22mshould respect ReDoS protection with 1000+ character lines[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22msingleton pattern[2m > [22mshould apply singleton pattern to a class[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22msingleton pattern[2m > [22mshould extract class name from code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22msingleton pattern[2m > [22mshould use default name if no class found[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22mfactory pattern[2m > [22mshould apply factory pattern with custom class name[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22mfactory pattern[2m > [22mshould use default Product name when className not provided[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22mobserver pattern[2m > [22mshould apply observer pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22mstrategy pattern[2m > [22mshould apply strategy pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22mdecorator pattern[2m > [22mshould apply decorator pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22madapter pattern[2m > [22mshould apply adapter pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22mfacade pattern[2m > [22mshould apply facade pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22mproxy pattern[2m > [22mshould apply proxy pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22mcommand pattern[2m > [22mshould apply command pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22mchain-of-responsibility pattern[2m > [22mshould apply chain of responsibility pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22medge cases[2m > [22mshould handle empty code string[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22medge cases[2m > [22mshould handle empty options object[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22medge cases[2m > [22mshould preserve multiline code in singleton pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22medge cases[2m > [22mshould handle special characters in code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22merror handling[2m > [22mshould throw error for unknown pattern[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22merror handling[2m > [22mshould throw error for invalid pattern type[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22merror handling[2m > [22mshould throw error for undefined pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22merror handling[2m > [22mshould throw error for null pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22merror handling[2m > [22mshould throw error for empty string pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22mintegration tests[2m > [22mshould apply pattern and return valid TypeScript code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22mintegration tests[2m > [22mshould preserve original code in appropriate patterns[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mapplyPattern()[2m > [22mintegration tests[2m > [22mshould handle all patterns with same input code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22mvalid patterns[2m > [22mshould return true for singleton[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22mvalid patterns[2m > [22mshould return true for factory[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22mvalid patterns[2m > [22mshould return true for observer[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22mvalid patterns[2m > [22mshould return true for strategy[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22mvalid patterns[2m > [22mshould return true for decorator[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22mvalid patterns[2m > [22mshould return true for adapter[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22mvalid patterns[2m > [22mshould return true for facade[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22mvalid patterns[2m > [22mshould return true for proxy[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22mvalid patterns[2m > [22mshould return true for command[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22mvalid patterns[2m > [22mshould return true for chain-of-responsibility[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22minvalid patterns[2m > [22mshould return false for unknown pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22minvalid patterns[2m > [22mshould return false for empty string[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22minvalid patterns[2m > [22mshould return false for case-sensitive mismatch[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22minvalid patterns[2m > [22mshould return false for partial pattern names[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22minvalid patterns[2m > [22mshould return false for pattern with typo[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22medge cases[2m > [22mshould handle undefined input[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22medge cases[2m > [22mshould handle null input[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22medge cases[2m > [22mshould be case-sensitive[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22mtype guard behavior[2m > [22mshould narrow type to DesignPattern when true[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22misValidPattern()[2m > [22mtype guard behavior[2m > [22mshould work in filter operations[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mgetSupportedPatterns()[2m > [22mshould return array of all supported patterns[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mgetSupportedPatterns()[2m > [22mshould include all design patterns[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mgetSupportedPatterns()[2m > [22mshould return patterns that all pass isValidPattern check[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mgetSupportedPatterns()[2m > [22mshould return same patterns on multiple calls[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mgetSupportedPatterns()[2m > [22mshould return patterns usable with applyPattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mgetSupportedPatterns()[2m > [22mpattern list completeness[2m > [22mshould have exactly 10 patterns[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mgetSupportedPatterns()[2m > [22mpattern list completeness[2m > [22mshould have no duplicate patterns[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mpattern consistency[2m > [22mshould have all patterns from getSupportedPatterns work in applyPattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mpattern consistency[2m > [22mshould validate all getSupportedPatterns with isValidPattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/patterns/pattern-factory.test.ts[2m > [22mpattern-factory[2m > [22mpattern consistency[2m > [22mshould reject patterns not in getSupportedPatterns[32m 0[2mms[22m[39m
+[90mstderr[2m | packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22m[2mAutoFixer[2m > [22m[2medge cases[2m > [22m[2mshould handle invalid syntax gracefully
+[22m[39mCannot parse test.ts for auto-fixing: SyntaxError: Unexpected token (2:11)
+    at toParseError [90m(d:\Users\j0KZ\Documents\Coding\my-claude-agents\[39mnode_modules\[4m@babel[24m\parser\src\parse-error.ts:95:45[90m)[39m
+    at TypeScriptParserMixin.raise [90m(d:\Users\j0KZ\Documents\Coding\my-claude-agents\[39mnode_modules\[4m@babel[24m\parser\src\tokenizer\index.ts:1503:19[90m)[39m
+    at TypeScriptParserMixin.unexpected [90m(d:\Users\j0KZ\Documents\Coding\my-claude-agents\[39mnode_modules\[4m@babel[24m\parser\src\tokenizer\index.ts:1543:16[90m)[39m
+    at TypeScriptParserMixin.parsePropertyName [90m(d:\Users\j0KZ\Documents\Coding\my-claude-agents\[39mnode_modules\[4m@babel[24m\parser\src\parser\expression.ts:2441:18[90m)[39m
+    at TypeScriptParserMixin.parsePropertyDefinition [90m(d:\Users\j0KZ\Documents\Coding\my-claude-agents\[39mnode_modules\[4m@babel[24m\parser\src\parser\expression.ts:2188:10[90m)[39m
+    at TypeScriptParserMixin.parseObjectLike [90m(d:\Users\j0KZ\Documents\Coding\my-claude-agents\[39mnode_modules\[4m@babel[24m\parser\src\parser\expression.ts:2085:21[90m)[39m
+    at TypeScriptParserMixin.parseExprAtom [90m(d:\Users\j0KZ\Documents\Coding\my-claude-agents\[39mnode_modules\[4m@babel[24m\parser\src\parser\expression.ts:1174:21[90m)[39m
+    at TypeScriptParserMixin.parseExprAtom [90m(d:\Users\j0KZ\Documents\Coding\my-claude-agents\[39mnode_modules\[4m@babel[24m\parser\src\plugins\jsx\index.ts:583:22[90m)[39m
+    at TypeScriptParserMixin.parseExprSubscripts [90m(d:\Users\j0KZ\Documents\Coding\my-claude-agents\[39mnode_modules\[4m@babel[24m\parser\src\parser\expression.ts:734:23[90m)[39m
+    at TypeScriptParserMixin.parseUpdate [90m(d:\Users\j0KZ\Documents\Coding\my-claude-agents\[39mnode_modules\[4m@babel[24m\parser\src\parser\expression.ts:713:21[90m)[39m {
+  code: [32m'BABEL_PARSER_SYNTAX_ERROR'[39m,
+  reasonCode: [32m'UnexpectedToken'[39m,
+  loc: Position { line: [33m2[39m, column: [33m11[39m, index: [33m12[39m },
+  pos: [33m12[39m,
+  syntaxPlugin: [90mundefined[39m
+}
+
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mfindUnusedImports[2m > [22mshould detect unused named imports[32m 10[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mfindUnusedImports[2m > [22mshould detect unused default imports[32m 1[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mfindUnusedImports[2m > [22mshould NOT mark side-effect imports as unused[32m 0[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mfindUnusedImports[2m > [22mshould detect JSX component usage[32m 2[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mfindUnusedImports[2m > [22mshould detect namespace import usage[32m 1[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mfindUnusedImports[2m > [22mshould detect import used in type annotation[32m 2[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mfindConsoleLogs[2m > [22mshould detect console.log statements[32m 1[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mfindConsoleLogs[2m > [22mshould detect console.warn and console.error[32m 1[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mfindConsoleLogs[2m > [22mshould handle console.log with multiple arguments[32m 0[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mfindNullAccess[2m > [22mshould suggest optional chaining for potential null access[32m 0[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mfindNullAccess[2m > [22mshould NOT suggest optional chaining for window object[32m 1[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mfindNullAccess[2m > [22mshould NOT suggest optional chaining for this[32m 2[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mfindNullAccess[2m > [22mshould NOT suggest if already has optional chaining[32m 0[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mfindNullAccess[2m > [22mshould skip Node.js global objects[32m 0[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mapplyFixes[2m > [22mshould apply safe fixes correctly[32m 0[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mapplyFixes[2m > [22mshould preserve line numbers when removing lines[32m 1[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mapplyFixes[2m > [22mshould handle multiple fixes on same line (column-aware)[32m 1[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mapplyFixes[2m > [22mshould NOT apply unsafe fixes[32m 0[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22medge cases[2m > [22mshould handle invalid syntax gracefully[32m 23[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22medge cases[2m > [22mshould handle empty files[32m 0[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22medge cases[2m > [22mshould handle files with only comments[32m 1[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22medge cases[2m > [22mshould handle very long lines safely[32m 0[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mconfidence scoring[2m > [22mshould assign correct confidence scores[32m 1[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22msummary statistics[2m > [22mshould calculate correct summary[32m 0[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/auto-fixer.test.ts[2m > [22mAutoFixer[2m > [22mgenerateDiff[2m > [22mshould generate readable diff output[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/installer.test.ts[2m > [22minstallMCPs[2m > [22mshould install valid MCP packages[32m 3[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/installer.test.ts[2m > [22minstallMCPs[2m > [22mshould skip unknown MCPs and log warning[32m 1[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/installer.test.ts[2m > [22minstallMCPs[2m > [22mshould handle installation errors[32m 1[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/installer.test.ts[2m > [22minstallMCPs[2m > [22mshould use verbose output when requested[32m 1[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/installer.test.ts[2m > [22minstallMCPs[2m > [22mshould install multiple packages in sequence[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/installer.test.ts[2m > [22minstallMCPs[2m > [22mshould handle empty MCP list[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould generate valid OpenAPI 3.0.3 specification[32m 1[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould include correct API info[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould add default description when not provided[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould include contact information[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould include MIT license[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould use provided baseUrl for servers[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould include staging server[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould add bearer authentication scheme[32m 1[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould add API key authentication scheme[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould add OAuth2 authentication scheme[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould not add security when auth type is none[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould generate endpoints from resources[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould add custom endpoints to paths[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould add tags from endpoints[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould include metadata with endpoint count[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould handle error when config is invalid[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould prevent prototype pollution in paths[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateOpenAPISpec[2m > [22mshould prevent prototype pollution in methods[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould generate 5 CRUD endpoints per resource[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould generate LIST endpoint[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould generate CREATE endpoint[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould generate GET BY ID endpoint[32m 1[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould generate UPDATE endpoint[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould generate DELETE endpoint[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould add pagination parameters to LIST endpoint[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould set correct default values for pagination[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould add ID parameter to item endpoints[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould add request body to CREATE endpoint[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould add request body to UPDATE endpoint[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould include proper response codes[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould add tags to all endpoints[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould handle multiple resources[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould handle empty resources array[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould capitalize resource names correctly[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould handle singular resource names[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould handle plural resource names ending with "s"[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould include schema references[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould include pagination in response schema[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould set correct status codes[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/openapi-generator.test.ts[2m > [22mOpenAPI Generator - generateRESTEndpointsFromResources[2m > [22mshould include error schemas[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - OpenAPI Validation[2m > [22mshould validate valid OpenAPI spec[32m 1[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - OpenAPI Validation[2m > [22mshould return error when title is missing[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - OpenAPI Validation[2m > [22mshould return error when version is missing[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - OpenAPI Validation[2m > [22mshould return error when info is missing[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - OpenAPI Validation[2m > [22mshould warn when no paths are defined[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - OpenAPI Validation[2m > [22mshould warn when no security scheme is defined[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - OpenAPI Validation[2m > [22mshould warn when server URLs lack versioning[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - OpenAPI Validation[2m > [22mshould not warn when server URLs include versioning[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - OpenAPI Validation[2m > [22mshould include suggestions when validation passes[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - OpenAPI Validation[2m > [22mshould set error severity correctly[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - OpenAPI Validation[2m > [22mshould set warning severity correctly[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - OpenAPI Validation[2m > [22mshould include helpful suggestions in warnings[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - OpenAPI Validation[2m > [22mshould handle spec with all warnings[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - GraphQL Validation[2m > [22mshould validate valid GraphQL schema[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - GraphQL Validation[2m > [22mshould return error when no types are defined[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - GraphQL Validation[2m > [22mshould warn when no queries are defined[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - GraphQL Validation[2m > [22mshould handle schema with undefined queries[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - GraphQL Validation[2m > [22mshould set error severity for GraphQL errors[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - GraphQL Validation[2m > [22mshould set warning severity for GraphQL warnings[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - GraphQL Validation[2m > [22mshould include suggestions for GraphQL warnings[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - GraphQL Validation[2m > [22mshould provide success suggestions when GraphQL schema is valid[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - GraphQL Validation[2m > [22mshould handle schema with mutations[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - GraphQL Validation[2m > [22mshould handle schema with subscriptions[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - Edge Cases[2m > [22mshould handle null spec gracefully[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - Edge Cases[2m > [22mshould handle undefined spec gracefully[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - Edge Cases[2m > [22mshould distinguish between OpenAPI and GraphQL specs[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - Edge Cases[2m > [22mshould handle empty objects[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/validators/api-validator.test.ts[2m > [22mAPI Validator - Edge Cases[2m > [22mshould validate complex OpenAPI spec[32m 0[2mms[22m[39m
+ [32m✓[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould parse exported functions with JSDoc[32m 11[2mms[22m[39m
+ [32m✓[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould infer descriptions from function names[32m 7[2mms[22m[39m
+ [32m✓[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould parse async functions[32m 7[2mms[22m[39m
+ [31m×[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould parse function parameters with types[32m 8[2mms[22m[39m
+[31m   → Cannot read properties of undefined (reading 'parameters')[39m
+ [31m×[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould infer parameter descriptions[32m 7[2mms[22m[39m
+[31m   → Cannot read properties of undefined (reading 'parameters')[39m
+ [32m✓[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould parse classes with JSDoc[32m 17[2mms[22m[39m
+ [32m✓[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould parse classes with inheritance[32m 5[2mms[22m[39m
+ [32m✓[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould parse abstract classes[32m 4[2mms[22m[39m
+ [32m✓[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould parse interfaces with JSDoc[32m 7[2mms[22m[39m
+ [32m✓[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould parse interfaces with inheritance[32m 5[2mms[22m[39m
+ [32m✓[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould infer class descriptions from names[32m 5[2mms[22m[39m
+ [32m✓[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould infer interface descriptions from names[32m 4[2mms[22m[39m
+ [32m✓[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould handle mixed exports and non-exports[32m 9[2mms[22m[39m
+ [32m✓[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould handle empty files[32m 0[2mms[22m[39m
+ [31m×[39m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould preserve acronyms in descriptions[32m 8[2mms[22m[39m
+[31m   → expected 'Retrieves mcps' to contain 'MCPs'[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mAWS Credentials Detection[2m > [22mshould detect AWS access key[32m 2[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mAWS Credentials Detection[2m > [22mshould detect AWS secret key in config[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mGitHub Tokens Detection[2m > [22mshould detect GitHub personal access token[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mGitHub Tokens Detection[2m > [22mshould detect GitHub secret token[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mAPI Keys Detection[2m > [22mshould detect generic API key[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mAPI Keys Detection[2m > [22mshould detect Google/Firebase API key[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mAPI Keys Detection[2m > [22mshould detect Stripe secret key[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mPrivate Keys Detection[2m > [22mshould detect RSA private key[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mPrivate Keys Detection[2m > [22mshould detect EC private key[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mJWT Tokens Detection[2m > [22mshould detect valid JWT token[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mPassword Detection[2m > [22mshould detect hardcoded password[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mDatabase Connection Strings[2m > [22mshould detect MongoDB connection string[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mDatabase Connection Strings[2m > [22mshould detect PostgreSQL connection string[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mEdge Cases[2m > [22mshould handle empty content[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mEdge Cases[2m > [22mshould handle multiline secrets[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mEdge Cases[2m > [22mshould handle code without secrets[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/secret-scanner.test.ts[2m > [22mSecret Scanner[2m > [22mMultiple Findings[2m > [22mshould detect multiple secrets in same file[32m 0[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/analyzer.test.ts[2m > [22mSmart Reviewer[2m > [22mshould review file[32m 3[2mms[22m[39m
+ [32m✓[39m packages/smart-reviewer/src/analyzer.test.ts[2m > [22mSmart Reviewer[2m > [22mshould have score[32m 1[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mSchema Design[2m > [22mshould design SQL schema[32m 1[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mSchema Design[2m > [22mshould design MongoDB schema[32m 0[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mSchema Design[2m > [22mshould handle complex relationships[32m 0[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mSchema Design[2m > [22mshould include timestamps when requested[32m 0[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mMigration Generation[2m > [22mshould generate migration[32m 0[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mMigration Generation[2m > [22mshould generate migration with foreign keys[32m 0[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mMigration Generation[2m > [22mshould generate MongoDB migration[32m 0[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mER Diagram Generation[2m > [22mshould generate Mermaid diagram[32m 0[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mER Diagram Generation[2m > [22mshould generate DBML diagram[32m 0[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mSeed Data Generation[2m > [22mshould generate seed data[32m 1[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mSeed Data Generation[2m > [22mshould respect foreign key constraints[32m 0[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mSchema Validation[2m > [22mshould validate schema[32m 0[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mSchema Validation[2m > [22mshould detect missing primary keys[32m 0[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mIndex Optimization[2m > [22mshould return index suggestions[32m 0[2mms[22m[39m
+ [32m✓[39m packages/db-schema/src/designer.test.ts[2m > [22mDB Schema Designer[2m > [22mSchema Analysis[2m > [22mshould analyze schema complexity[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mremoveUnusedImportsFromCode[2m > [22mshould remove completely unused imports[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mremoveUnusedImportsFromCode[2m > [22mshould keep used imports[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mremoveUnusedImportsFromCode[2m > [22mshould remove only unused imports from mixed usage[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mremoveUnusedImportsFromCode[2m > [22mshould handle multiple import statements[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mremoveUnusedImportsFromCode[2m > [22mshould skip lines that are too long[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mremoveUnusedImportsFromCode[2m > [22mshould handle imports with no usage in code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mremoveUnusedImportsFromCode[2m > [22mshould handle word boundaries correctly[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mremoveUnusedImportsFromCode[2m > [22mshould preserve imports used in comments when testing[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mremoveUnusedImportsFromCode[2m > [22mshould handle empty import list after filtering[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mremoveUnusedImportsFromCode[2m > [22mshould handle partially used imports and update import statement[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mremoveUnusedImportsFromCode[2m > [22mshould handle imports with special characters in names[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mremoveUnusedImportsFromCode[2m > [22mshould handle code with no imports[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mescapeRegExp[2m > [22mshould escape special regex characters[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mescapeRegExp[2m > [22mshould escape brackets and parentheses[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mescapeRegExp[2m > [22mshould escape anchors and pipes[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mescapeRegExp[2m > [22mshould escape backslashes[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mescapeRegExp[2m > [22mshould handle strings with multiple special characters[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mescapeRegExp[2m > [22mshould handle empty string[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mescapeRegExp[2m > [22mshould handle string with no special characters[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mescapeRegExp[2m > [22mshould escape dollar sign used in identifiers[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mIntegration[2m > [22mshould correctly use escapeRegExp in import detection[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/import-helpers.test.ts[2m > [22mImport Helpers[2m > [22mIntegration[2m > [22mshould handle complex real-world scenario[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertCallbackToAsync()[2m > [22mHappy Path[2m > [22mshould convert basic callback pattern to async/await without try-catch[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertCallbackToAsync()[2m > [22mHappy Path[2m > [22mshould convert callback pattern to async/await with try-catch[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertCallbackToAsync()[2m > [22mHappy Path[2m > [22mshould handle multiple callback patterns in same code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertCallbackToAsync()[2m > [22mHappy Path[2m > [22mshould handle callback with different variable names[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertCallbackToAsync()[2m > [22mEdge Cases[2m > [22mshould return unchanged when no callback pattern found[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertCallbackToAsync()[2m > [22mEdge Cases[2m > [22mshould handle empty string[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertCallbackToAsync()[2m > [22mEdge Cases[2m > [22mshould handle code with no functions[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertCallbackToAsync()[2m > [22mEdge Cases[2m > [22mshould handle callback pattern with spaces[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertCallbackToAsync()[2m > [22mEdge Cases[2m > [22mshould preserve code without callback pattern when using try-catch[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertCallbackToAsync()[2m > [22mError Cases[2m > [22mshould handle malformed callback pattern gracefully[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertCallbackToAsync()[2m > [22mError Cases[2m > [22mshould not break on invalid syntax[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertPromiseChainToAsync()[2m > [22mHappy Path[2m > [22mshould convert basic .then() chain to async/await[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertPromiseChainToAsync()[2m > [22mHappy Path[2m > [22mshould handle .then() with arrow function[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertPromiseChainToAsync()[2m > [22mHappy Path[2m > [22mshould handle multiple .then() chains[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertPromiseChainToAsync()[2m > [22mHappy Path[2m > [22mshould handle .then() with minimal spaces[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertPromiseChainToAsync()[2m > [22mEdge Cases[2m > [22mshould return unchanged when no .then() pattern found[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertPromiseChainToAsync()[2m > [22mEdge Cases[2m > [22mshould handle empty string[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertPromiseChainToAsync()[2m > [22mEdge Cases[2m > [22mshould handle code without promises[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertPromiseChainToAsync()[2m > [22mEdge Cases[2m > [22mshould respect MAX_PROMISE_CALLBACK_LENGTH limit[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertPromiseChainToAsync()[2m > [22mEdge Cases[2m > [22mshould handle simple .then() patterns[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertPromiseChainToAsync()[2m > [22mError Cases[2m > [22mshould handle malformed .then() pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mconvertPromiseChainToAsync()[2m > [22mError Cases[2m > [22mshould not break on invalid syntax[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mwrapInTryCatch()[2m > [22mHappy Path[2m > [22mshould wrap code in try-catch with default error handler[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mwrapInTryCatch()[2m > [22mHappy Path[2m > [22mshould wrap code with custom error handler[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mwrapInTryCatch()[2m > [22mHappy Path[2m > [22mshould handle multi-line code[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mwrapInTryCatch()[2m > [22mHappy Path[2m > [22mshould handle complex error handler[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mwrapInTryCatch()[2m > [22mEdge Cases[2m > [22mshould handle empty string[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mwrapInTryCatch()[2m > [22mEdge Cases[2m > [22mshould handle single line code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mwrapInTryCatch()[2m > [22mEdge Cases[2m > [22mshould handle code with existing try-catch[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mwrapInTryCatch()[2m > [22mEdge Cases[2m > [22mshould handle empty error handler string[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mwrapInTryCatch()[2m > [22mEdge Cases[2m > [22mshould preserve indentation in code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mwrapInTryCatch()[2m > [22mError Cases[2m > [22mshould handle special characters in code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mwrapInTryCatch()[2m > [22mError Cases[2m > [22mshould handle special characters in error handler[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mIntegration Tests[2m > [22mshould convert callback to async and wrap in try-catch[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mIntegration Tests[2m > [22mshould convert promise chain and wrap in try-catch[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/async-converter.test.ts[2m > [22mIntegration Tests[2m > [22mshould handle no changes gracefully in pipeline[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mPathValidationError[2m > [22mshould create error with attempted path[32m 1[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateNoTraversal[2m > [22mshould allow safe relative paths[32m 1[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateNoTraversal[2m > [22mshould allow safe absolute paths[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateNoTraversal[2m > [22mshould reject path traversal with ..[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateNoTraversal[2m > [22mshould reject normalized paths that still contain ..[32m 0[2mms[22m[39m
+ [31m×[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateNoTraversal[2m > [22mshould reject path traversal in absolute paths[32m 5[2mms[22m[39m
+[31m   → expected [Function] to throw an error[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidatePath[2m > [22mshould return absolute path for valid input[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidatePath[2m > [22mshould throw for traversal attempts[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidatePath[2m > [22mshould validate path is within allowed root[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidatePath[2m > [22mshould reject paths outside allowed root[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidatePath[2m > [22mshould handle Windows paths[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateFilePath[2m > [22mshould validate existing file[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateFilePath[2m > [22mshould throw for non-existent file[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateFilePath[2m > [22mshould throw when path is directory not file[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateFilePath[2m > [22mshould validate file within allowed root[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateFilePath[2m > [22mshould reject file outside allowed root[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateDirectoryPath[2m > [22mshould validate existing directory[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateDirectoryPath[2m > [22mshould throw for non-existent directory[32m 1[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateDirectoryPath[2m > [22mshould throw when path is file not directory[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateDirectoryPath[2m > [22mshould validate directory within allowed root[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22msanitizeFilename[2m > [22mshould remove path separators[32m 0[2mms[22m[39m
+ [31m×[39m packages/shared/src/security/path-validator.test.ts[2m > [22msanitizeFilename[2m > [22mshould remove null bytes[32m 1[2mms[22m[39m
+[31m   → expected 'foobar' to be 'foo_bar' // Object.is equality[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22msanitizeFilename[2m > [22mshould remove path traversal sequences[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22msanitizeFilename[2m > [22mshould replace special characters with underscores[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22msanitizeFilename[2m > [22mshould preserve safe characters[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22msanitizeFilename[2m > [22mshould limit filename length to 255 characters[32m 0[2mms[22m[39m
+ [32m✓[39m packages/shared/src/security/path-validator.test.ts[2m > [22msanitizeFilename[2m > [22mshould handle empty string[32m 0[2mms[22m[39m
+ [31m×[39m packages/shared/src/security/path-validator.test.ts[2m > [22msanitizeFilename[2m > [22mshould handle complex attack patterns[32m 0[2mms[22m[39m
+[31m   → expected 'etcpasswd.txt' to be 'etcpasswd_.txt' // Object.is equality[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mcreatePreCommitWorkflow[2m > [22mshould create workflow with correct steps[32m 1[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mcreatePreCommitWorkflow[2m > [22mshould configure code-review step correctly[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mcreatePreCommitWorkflow[2m > [22mshould configure security-scan step correctly[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mcreatePreMergeWorkflow[2m > [22mshould create workflow with 4 steps[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mcreatePreMergeWorkflow[2m > [22mshould configure batch-review with strict severity[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mcreatePreMergeWorkflow[2m > [22mshould configure architecture-analysis with circular detection[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mcreatePreMergeWorkflow[2m > [22mshould make test-coverage depend on batch-review[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mcreateQualityAuditWorkflow[2m > [22mshould create workflow with 3 steps[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mcreateQualityAuditWorkflow[2m > [22mshould configure security-report with output path[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mcreateQualityAuditWorkflow[2m > [22mshould configure architecture with graph generation[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mcreateWorkflow[2m > [22mshould create pre-commit workflow[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mcreateWorkflow[2m > [22mshould create pre-merge workflow[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mcreateWorkflow[2m > [22mshould create quality-audit workflow[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mcreateWorkflow[2m > [22mshould throw error for unknown workflow[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mWorkflow Integration[2m > [22mshould have correct tool names for all steps[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mWorkflow Integration[2m > [22mshould have action field for all steps[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/tests/orchestrator.test.ts[2m > [22mOrchestrator Workflows[2m > [22mWorkflow Integration[2m > [22mshould have params for all steps[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/detectors.test.ts[2m > [22mProject Detector[2m > [22mshould detect TypeScript projects[32m 2[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/detectors.test.ts[2m > [22mProject Detector[2m > [22mshould detect package manager[32m 1[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/detectors.test.ts[2m > [22mProject Detector[2m > [22mshould recommend MCPs for React projects[32m 1[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/detectors.test.ts[2m > [22mProject Detector[2m > [22mshould recommend MCPs for API projects[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/detectors.test.ts[2m > [22mProject Detector[2m > [22mshould always recommend smart-reviewer and security-scanner[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/detectors.test.ts[2m > [22mTest Framework Detector[2m > [22mshould detect test framework or return null[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/src/workflows.test.ts[2m > [22mWORKFLOWS metadata[2m > [22mshould define pre-commit workflow metadata[32m 1[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/src/workflows.test.ts[2m > [22mWORKFLOWS metadata[2m > [22mshould define pre-merge workflow metadata[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/src/workflows.test.ts[2m > [22mWORKFLOWS metadata[2m > [22mshould define quality-audit workflow metadata[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/src/workflows.test.ts[2m > [22mcreatePreCommitWorkflow[2m > [22mshould create pipeline with 2 steps[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/src/workflows.test.ts[2m > [22mcreatePreCommitWorkflow[2m > [22mshould handle multiple files[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/src/workflows.test.ts[2m > [22mcreatePreMergeWorkflow[2m > [22mshould create pipeline with 4 steps[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/src/workflows.test.ts[2m > [22mcreatePreMergeWorkflow[2m > [22mshould handle multiple files and project path[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/src/workflows.test.ts[2m > [22mcreateQualityAuditWorkflow[2m > [22mshould create pipeline with 3 steps[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/src/workflows.test.ts[2m > [22mcreateQualityAuditWorkflow[2m > [22mshould work with different project paths[32m 0[2mms[22m[39m
+ [32m✓[39m packages/orchestrator-mcp/src/workflows.test.ts[2m > [22mcreateQualityAuditWorkflow[2m > [22mshould work with Windows paths[32m 0[2mms[22m[39m
+ [32m✓[39m packages/doc-generator/src/generator.test.ts[2m > [22mDoc Generator[2m > [22mshould generate JSDoc[32m 3[2mms[22m[39m
+ [32m✓[39m packages/doc-generator/src/generator.test.ts[2m > [22mDoc Generator[2m > [22mshould generate README[32m 1[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/validator.test.ts[2m > [22mConfig Validator[2m > [22mshould pass validation for valid config[32m 3[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/validator.test.ts[2m > [22mConfig Validator[2m > [22mshould fail if no MCPs selected[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/validator.test.ts[2m > [22mConfig Validator[2m > [22mshould fail for unknown editor[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/validator.test.ts[2m > [22mConfig Validator[2m > [22mshould check Node version[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould generate TypeScript client with axios[32m 1[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould generate TypeScript client with fetch[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould generate client class with correct name[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould include baseURL property[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould include axios client property when using axios[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould generate constructor with config parameter[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould generate methods for each endpoint[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould generate axios method calls[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould generate fetch method calls[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould include type definitions when requested[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould handle required and optional properties[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould map schema types to TypeScript types correctly[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould handle enum types[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould handle schema references[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptRestClient[2m > [22mshould handle multiple HTTP methods[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptGraphQLClient[2m > [22mshould generate GraphQL client class[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptGraphQLClient[2m > [22mshould include endpoint property[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptGraphQLClient[2m > [22mshould include constructor[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptGraphQLClient[2m > [22mshould include query method[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptGraphQLClient[2m > [22mshould use fetch for GraphQL requests[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptGraphQLClient[2m > [22mshould include proper headers[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptGraphQLClient[2m > [22mshould send query and variables in body[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generateTypeScriptGraphQLClient[2m > [22mshould return JSON response[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generatePythonRestClient[2m > [22mshould import requests library[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generatePythonRestClient[2m > [22mshould import typing modules[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generatePythonRestClient[2m > [22mshould generate client class[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generatePythonRestClient[2m > [22mshould include __init__ method[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generatePythonRestClient[2m > [22mshould generate methods for endpoints[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generatePythonRestClient[2m > [22mshould use requests with correct HTTP method[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generatePythonRestClient[2m > [22mshould use f-strings for URL construction[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generatePythonRestClient[2m > [22mshould include params parameter[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generatePythonRestClient[2m > [22mshould return JSON response[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generatePythonRestClient[2m > [22mshould handle multiple paths[32m 0[2mms[22m[39m
+ [32m✓[39m packages/api-designer/src/generators/client-generator.test.ts[2m > [22mClient Generator - generatePythonRestClient[2m > [22mshould handle PUT and DELETE methods[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mgetErrorMessage[2m > [22mshould extract message from Error object[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mgetErrorMessage[2m > [22mshould return default message for string error[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mgetErrorMessage[2m > [22mshould return default message for number error[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mgetErrorMessage[2m > [22mshould return default message for null[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mgetErrorMessage[2m > [22mshould return default message for undefined[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mgetErrorMessage[2m > [22mshould return default message for object without message[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mgetErrorMessage[2m > [22mshould handle TypeError instances[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mgetErrorMessage[2m > [22mshould handle ReferenceError instances[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mcreateFailedResult[2m > [22mshould create failed result with string error[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mcreateFailedResult[2m > [22mshould create failed result with Error object[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mcreateFailedResult[2m > [22mshould preserve original code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mcreateFailedResult[2m > [22mshould always have empty changes array[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mcreateFailedResult[2m > [22mshould handle TypeError as Error object[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mcreateFailedResult[2m > [22mshould handle empty error message[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mcreateFailedResult[2m > [22mshould handle multiline code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mIntegration[2m > [22mshould work together in error handling flow[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/utils/error-helpers.test.ts[2m > [22mError Helpers[2m > [22mIntegration[2m > [22mshould handle unknown error types in flow[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/sql-injection-scanner.test.ts[2m > [22mSQL Injection Scanner[2m > [22mString Concatenation Detection[2m > [22mshould detect SQL query with string concatenation[32m 2[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/sql-injection-scanner.test.ts[2m > [22mSQL Injection Scanner[2m > [22mString Concatenation Detection[2m > [22mshould detect template literal in query call[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/sql-injection-scanner.test.ts[2m > [22mSQL Injection Scanner[2m > [22mString Concatenation Detection[2m > [22mshould detect multi-line SQL concatenation[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/sql-injection-scanner.test.ts[2m > [22mSQL Injection Scanner[2m > [22mUser Input in Queries[2m > [22mshould detect req.body in SQL query[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/sql-injection-scanner.test.ts[2m > [22mSQL Injection Scanner[2m > [22mUser Input in Queries[2m > [22mshould detect req.params in query[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/sql-injection-scanner.test.ts[2m > [22mSQL Injection Scanner[2m > [22mUser Input in Queries[2m > [22mshould detect req.query in SQL[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/sql-injection-scanner.test.ts[2m > [22mSQL Injection Scanner[2m > [22mDifferent SQL Operations[2m > [22mshould detect INSERT with concatenation[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/sql-injection-scanner.test.ts[2m > [22mSQL Injection Scanner[2m > [22mDifferent SQL Operations[2m > [22mshould detect UPDATE with concatenation[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/sql-injection-scanner.test.ts[2m > [22mSQL Injection Scanner[2m > [22mDifferent SQL Operations[2m > [22mshould detect DELETE with concatenation[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/sql-injection-scanner.test.ts[2m > [22mSQL Injection Scanner[2m > [22mEdge Cases[2m > [22mshould handle empty content[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/sql-injection-scanner.test.ts[2m > [22mSQL Injection Scanner[2m > [22mEdge Cases[2m > [22mshould handle non-SQL code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/sql-injection-scanner.test.ts[2m > [22mSQL Injection Scanner[2m > [22mEdge Cases[2m > [22mshould not flag safe string operations[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/sql-injection-scanner.test.ts[2m > [22mSQL Injection Scanner[2m > [22mMultiple Vulnerabilities[2m > [22mshould detect multiple SQL injection points[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/xss-scanner.test.ts[2m > [22mXSS Scanner[2m > [22minnerHTML Detection[2m > [22mshould detect innerHTML with user input[32m 1[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/xss-scanner.test.ts[2m > [22mXSS Scanner[2m > [22minnerHTML Detection[2m > [22mshould detect innerHTML with template literals[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/xss-scanner.test.ts[2m > [22mXSS Scanner[2m > [22mdocument.write Detection[2m > [22mshould detect document.write with user data[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/xss-scanner.test.ts[2m > [22mXSS Scanner[2m > [22mdocument.write Detection[2m > [22mshould detect outerHTML assignment[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/xss-scanner.test.ts[2m > [22mXSS Scanner[2m > [22minsertAdjacentHTML Detection[2m > [22mshould detect insertAdjacentHTML with user input[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/xss-scanner.test.ts[2m > [22mXSS Scanner[2m > [22mURL Parameter Usage[2m > [22mshould detect URL params in innerHTML[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/xss-scanner.test.ts[2m > [22mXSS Scanner[2m > [22mURL Parameter Usage[2m > [22mshould detect URL hash in document.write[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/xss-scanner.test.ts[2m > [22mXSS Scanner[2m > [22mEdge Cases[2m > [22mshould handle empty content[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/xss-scanner.test.ts[2m > [22mXSS Scanner[2m > [22mEdge Cases[2m > [22mshould handle safe code without XSS[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/xss-scanner.test.ts[2m > [22mXSS Scanner[2m > [22mReact/JSX Patterns[2m > [22mshould detect dangerouslySetInnerHTML[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/scanners/xss-scanner.test.ts[2m > [22mXSS Scanner[2m > [22mMultiple Vulnerabilities[2m > [22mshould detect multiple XSS issues[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/index.test.ts[2m > [22mPackage Exports[2m > [22mFunction Exports[2m > [22mshould export extractFunction[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/index.test.ts[2m > [22mPackage Exports[2m > [22mFunction Exports[2m > [22mshould export convertToAsync[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/index.test.ts[2m > [22mPackage Exports[2m > [22mFunction Exports[2m > [22mshould export simplifyConditionals[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/index.test.ts[2m > [22mPackage Exports[2m > [22mFunction Exports[2m > [22mshould export removeDeadCode[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/index.test.ts[2m > [22mPackage Exports[2m > [22mFunction Exports[2m > [22mshould export applyDesignPattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/index.test.ts[2m > [22mPackage Exports[2m > [22mFunction Exports[2m > [22mshould export renameVariable[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/index.test.ts[2m > [22mPackage Exports[2m > [22mFunction Exports[2m > [22mshould export suggestRefactorings[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/index.test.ts[2m > [22mPackage Exports[2m > [22mFunction Exports[2m > [22mshould export calculateMetrics[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/index.test.ts[2m > [22mPackage Exports[2m > [22mMetadata Exports[2m > [22mshould export VERSION constant[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/index.test.ts[2m > [22mPackage Exports[2m > [22mMetadata Exports[2m > [22mshould export NAME constant[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/index.test.ts[2m > [22mPackage Exports[2m > [22mMetadata Exports[2m > [22mshould export DESCRIPTION constant[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/index.test.ts[2m > [22mPackage Exports[2m > [22mPackage Integrity[2m > [22mshould have all expected exports[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/index.test.ts[2m > [22mPackage Exports[2m > [22mPackage Integrity[2m > [22mshould not have unexpected exports[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/utils/file-system.test.ts[2m > [22mwriteConfigFile[2m > [22mshould write config file to detected editor path[32m 3[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/utils/file-system.test.ts[2m > [22mwriteConfigFile[2m > [22mshould write config file to custom path[32m 1[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/utils/file-system.test.ts[2m > [22mwriteConfigFile[2m > [22mshould throw error if file exists and force is false[32m 1[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/utils/file-system.test.ts[2m > [22mwriteConfigFile[2m > [22mshould overwrite file if force is true[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/utils/file-system.test.ts[2m > [22mwriteConfigFile[2m > [22mshould throw error if editor config path cannot be determined[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/utils/file-system.test.ts[2m > [22mwriteConfigFile[2m > [22mshould ensure directory exists before writing[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/utils/file-system.test.ts[2m > [22mbackupConfigFile[2m > [22mshould create backup file with timestamp[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/src/utils/file-system.test.ts[2m > [22mbackupConfigFile[2m > [22mshould return null if file does not exist[32m 0[2mms[22m[39m
+ [32m✓[39m packages/test-generator/src/generator.test.ts[2m > [22mTest Generator[2m > [22mshould generate tests[32m 2[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/generators.test.ts[2m > [22mConfig Generators[2m > [22mClaude Code Generator[2m > [22mshould generate valid config structure[32m 1[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/generators.test.ts[2m > [22mConfig Generators[2m > [22mClaude Code Generator[2m > [22mshould include selected MCPs[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/generators.test.ts[2m > [22mConfig Generators[2m > [22mClaude Code Generator[2m > [22mshould use npx command for each MCP[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/generators.test.ts[2m > [22mConfig Generators[2m > [22mClaude Code Generator[2m > [22mshould pin versions to ^1.0.0[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/generators.test.ts[2m > [22mConfig Generators[2m > [22mClaude Code Generator[2m > [22mshould not include unselected MCPs[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/generators.test.ts[2m > [22mConfig Generators[2m > [22mMulti-Editor Generator[2m > [22mshould generate config for Claude Code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/generators.test.ts[2m > [22mConfig Generators[2m > [22mMulti-Editor Generator[2m > [22mshould generate config for Cursor[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/generators.test.ts[2m > [22mConfig Generators[2m > [22mMulti-Editor Generator[2m > [22mshould generate config for Windsurf[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/generators.test.ts[2m > [22mConfig Generators[2m > [22mMulti-Editor Generator[2m > [22mshould generate config for VS Code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/generators.test.ts[2m > [22mConfig Generators[2m > [22mMulti-Editor Generator[2m > [22mshould throw for unknown editor[32m 1[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/utils.test.ts[2m > [22mArgument Parser[2m > [22mshould parse --help flag[32m 1[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/utils.test.ts[2m > [22mArgument Parser[2m > [22mshould parse --version flag[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/utils.test.ts[2m > [22mArgument Parser[2m > [22mshould parse --dry-run flag[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/utils.test.ts[2m > [22mArgument Parser[2m > [22mshould parse --force flag[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/utils.test.ts[2m > [22mArgument Parser[2m > [22mshould parse --verbose flag[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/utils.test.ts[2m > [22mArgument Parser[2m > [22mshould parse --editor with value[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/utils.test.ts[2m > [22mArgument Parser[2m > [22mshould parse --mcps with value[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/utils.test.ts[2m > [22mArgument Parser[2m > [22mshould parse --output with value[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/utils.test.ts[2m > [22mArgument Parser[2m > [22mshould parse multiple flags together[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/utils.test.ts[2m > [22mArgument Parser[2m > [22mshould handle -h as alias for --help[32m 0[2mms[22m[39m
+ [32m✓[39m packages/config-wizard/tests/utils.test.ts[2m > [22mArgument Parser[2m > [22mshould handle -v as alias for --version[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/conditional-helpers.test.ts[2m > [22mConditional Helpers[2m > [22mapplyGuardClauses[2m > [22mshould convert if-else to guard clause[32m 1[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/conditional-helpers.test.ts[2m > [22mConditional Helpers[2m > [22mapplyGuardClauses[2m > [22mshould convert if-else with return value to guard clause[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/conditional-helpers.test.ts[2m > [22mConditional Helpers[2m > [22mapplyGuardClauses[2m > [22mshould handle guard clause with complex return value[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/conditional-helpers.test.ts[2m > [22mConditional Helpers[2m > [22mapplyGuardClauses[2m > [22mshould not change code without matching pattern[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/conditional-helpers.test.ts[2m > [22mConditional Helpers[2m > [22mapplyGuardClauses[2m > [22mshould handle multiple guard clause opportunities[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/conditional-helpers.test.ts[2m > [22mConditional Helpers[2m > [22mapplyGuardClauses[2m > [22mshould handle code with no else clause[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/conditional-helpers.test.ts[2m > [22mConditional Helpers[2m > [22mcombineNestedConditions[2m > [22mshould combine nested if statements[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/conditional-helpers.test.ts[2m > [22mConditional Helpers[2m > [22mcombineNestedConditions[2m > [22mshould handle multiple nested conditions[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/conditional-helpers.test.ts[2m > [22mConditional Helpers[2m > [22mcombineNestedConditions[2m > [22mshould handle nested conditions with complex bodies[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/conditional-helpers.test.ts[2m > [22mConditional Helpers[2m > [22mcombineNestedConditions[2m > [22mshould not change code without nested conditions[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/conditional-helpers.test.ts[2m > [22mConditional Helpers[2m > [22mcombineNestedConditions[2m > [22mshould handle empty result when no pattern matches[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/conditional-helpers.test.ts[2m > [22mConditional Helpers[2m > [22mcombineNestedConditions[2m > [22mshould preserve spacing in combined conditions[32m 0[2mms[22m[39m
+ [32m✓[39m packages/refactor-assistant/src/transformations/conditional-helpers.test.ts[2m > [22mConditional Helpers[2m > [22mIntegration[2m > [22mshould work together on complex code[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould return 0 for empty string[32m 1[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould return 0 for single character repeated[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould calculate high entropy for random strings[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould calculate low entropy for patterns[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould handle special characters[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould be deterministic[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould handle unicode characters[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould calculate higher entropy for diverse strings[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould handle very long strings[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould handle single character[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould handle two different characters[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould handle all same characters[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould calculate entropy for binary strings[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould calculate entropy for hex strings[32m 0[2mms[22m[39m
+ [32m✓[39m packages/security-scanner/src/utils.test.ts[2m > [22mSecurity Scanner Utils[2m > [22mcalculateEntropy[2m > [22mshould calculate entropy for base64-like strings[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould parse function parameters with types
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'parameters')[39m
+[36m [2m❯[22m packages/doc-generator/src/parsers/source-parser.test.ts:[2m102:32[22m[39m
+    [90m100| [39m    [35mconst[39m result [33m=[39m [34mparseSourceFile[39m(filePath)[33m;[39m
+    [90m101| [39m
+    [90m102| [39m    [34mexpect[39m(result[33m.[39mfunctions[[34m0[39m][33m.[39mparameters)[33m.[39m[34mtoHaveLength[39m([34m4[39m)[33m;[39m
+    [90m   | [39m                               [31m^[39m
+    [90m103| [39m
+    [90m104| [39m    const [param1, param2, param3, param4] = result.functions[0].param…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould infer parameter descriptions
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'parameters')[39m
+[36m [2m❯[22m packages/doc-generator/src/parsers/source-parser.test.ts:[2m135:40[22m[39m
+    [90m133| [39m
+    [90m134| [39m    [35mconst[39m result [33m=[39m [34mparseSourceFile[39m(filePath)[33m;[39m
+    [90m135| [39m    [35mconst[39m params [33m=[39m result[33m.[39mfunctions[[34m0[39m][33m.[39mparameters[33m;[39m
+    [90m   | [39m                                       [31m^[39m
+    [90m136| [39m
+    [90m137| [39m    [34mexpect[39m(params[[34m0[39m][33m.[39mdescription)[33m.[39m[34mtoContain[39m([32m'identifier'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m packages/doc-generator/src/parsers/source-parser.test.ts[2m > [22mparseSourceFile[2m > [22mshould preserve acronyms in descriptions
+[31m[1mAssertionError[22m: expected 'Retrieves mcps' to contain 'MCPs'[39m
+
+Expected: [32m"[7mMCP[27ms"[39m
+Received: [31m"[7mRetrieves mcp[27ms"[39m
+
+[36m [2m❯[22m packages/doc-generator/src/parsers/source-parser.test.ts:[2m306:45[22m[39m
+    [90m304| [39m    [35mconst[39m result [33m=[39m [34mparseSourceFile[39m(filePath)[33m;[39m
+    [90m305| [39m
+    [90m306| [39m    [34mexpect[39m(result[33m.[39mfunctions[[34m0[39m][33m.[39mdescription)[33m.[39m[34mtoContain[39m([32m'MCPs'[39m)[33m;[39m
+    [90m   | [39m                                            [31m^[39m
+    [90m307| [39m    [34mexpect[39m(result[33m.[39mfunctions[[34m1[39m][33m.[39mdescription)[33m.[39m[34mtoContain[39m([32m'APIs'[39m)[33m;[39m
+    [90m308| [39m    [34mexpect[39m(result[33m.[39mfunctions[[34m2[39m][33m.[39mdescription)[33m.[39m[34mtoContain[39m([32m'URLs'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m packages/shared/src/security/path-validator.test.ts[2m > [22mvalidateNoTraversal[2m > [22mshould reject path traversal in absolute paths
+[31m[1mAssertionError[22m: expected [Function] to throw an error[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m packages/shared/src/security/path-validator.test.ts:[2m52:8[22m[39m
+    [90m 50| [39m  [34mit[39m([32m'should reject path traversal in absolute paths'[39m[33m,[39m () [33m=>[39m {
+    [90m 51| [39m    [34mexpect[39m(() [33m=>[39m [34mvalidateNoTraversal[39m([32m'/var/../../../etc/passwd'[39m))
+    [90m 52| [39m      [33m.[39m[34mtoThrow[39m([32m'Path traversal detected'[39m)[33m;[39m
+    [90m   | [39m       [31m^[39m
+    [90m 53| [39m  })[33m;[39m
+    [90m 54| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m packages/shared/src/security/path-validator.test.ts[2m > [22msanitizeFilename[2m > [22mshould remove null bytes
+[31m[1mAssertionError[22m: expected 'foobar' to be 'foo_bar' // Object.is equality[39m
+
+Expected: [32m"foo[7m_[27mbar"[39m
+Received: [31m"foobar"[39m
+
+[36m [2m❯[22m packages/shared/src/security/path-validator.test.ts:[2m176:42[22m[39m
+    [90m174| [39m
+    [90m175| [39m  [34mit[39m([32m'should remove null bytes'[39m[33m,[39m () [33m=>[39m {
+    [90m176| [39m    [34mexpect[39m([34msanitizeFilename[39m([32m'foo\0bar'[39m))[33m.[39m[34mtoBe[39m([32m'foo_bar'[39m)[33m;[39m
+    [90m   | [39m                                         [31m^[39m
+    [90m177| [39m  })[33m;[39m
+    [90m178| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m packages/shared/src/security/path-validator.test.ts[2m > [22msanitizeFilename[2m > [22mshould handle complex attack patterns
+[31m[1mAssertionError[22m: expected 'etcpasswd.txt' to be 'etcpasswd_.txt' // Object.is equality[39m
+
+Expected: [32m"etcpasswd[7m_[27m.txt"[39m
+Received: [31m"etcpasswd.txt"[39m
+
+[36m [2m❯[22m packages/shared/src/security/path-validator.test.ts:[2m206:8[22m[39m
+    [90m204| [39m  [34mit[39m([32m'should handle complex attack patterns'[39m[33m,[39m () [33m=>[39m {
+    [90m205| [39m    [34mexpect[39m([34msanitizeFilename[39m([32m'../../../../etc/passwd\0.txt'[39m))
+    [90m206| [39m      [33m.[39m[34mtoBe[39m([32m'etcpasswd_.txt'[39m)[33m;[39m
+    [90m   | [39m       [31m^[39m
+    [90m207| [39m    [34mexpect[39m([34msanitizeFilename[39m([32m'..\\..\\Windows\\System32\\config'[39m))
+    [90m208| [39m      [33m.[39m[34mtoBe[39m([32m'WindowsSystem32config'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m35 passed[39m[22m[90m (37)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m700 passed[39m[22m[90m (706)[39m
+[2m   Start at [22m 18:36:31
+[2m   Duration [22m 2.24s[2m (transform 669ms, setup 0ms, collect 1.56s, tests 1.11s, environment 5ms, prepare 2.60s)[22m
+
