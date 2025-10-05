@@ -2,6 +2,55 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2025-10-05
+
+### 🔧 Post-Release Quality Fixes (PR #10 Continued)
+
+Resolved CI/CD failures and security warnings discovered after merging v1.0.29 to main.
+
+**npm Audit Fixes:**
+- ✅ Upgraded inquirer from ^10.2.2 to ^12.9.6 (config-wizard package)
+- ✅ Updated @types/inquirer from ^9.0.7 to ^9.0.9
+- ✅ Fixed 5 low-severity vulnerabilities in transitive dependencies
+- ✅ npm audit now reports 0 vulnerabilities
+
+**CI Coverage Enforcement Fixes:**
+- ✅ Fixed coverage file format handling (added v8 format support alongside istanbul)
+- ✅ Implemented Windows path deduplication (d: vs D: casing issues)
+- ✅ Changed workflow to use `npx vitest run --coverage` for root-level coverage
+- ✅ Updated check-coverage.js to support both v8 and istanbul formats
+- ✅ Coverage now passing: 61.53% statements, 67% branches, 74.47% functions
+
+**Codecov Integration:**
+- ✅ Made Codecov upload non-blocking with `continue-on-error: true`
+- ✅ Added token parameter for when CODECOV_TOKEN secret is available
+- ✅ Changed fail_ci_if_error to false (coverage still enforced locally)
+- ✅ CI no longer depends on external Codecov service
+
+**CodeQL Security Warnings:**
+- ✅ Added explicit permissions to defender-for-devops.yml workflow
+  - contents: read, security-events: write, actions: read
+- ✅ Removed unused CodeIssue import from auto-fixer.ts
+- ✅ All workflow permissions now follow principle of least privilege
+
+**Code Quality Improvements:**
+- ✅ Fixed API validator test assertion (toBeGreaterThan vs toBeGreaterThanOrEqual)
+- ✅ Added regex injection protection in dead-code-detector.ts
+- ✅ Implemented escapeRegExp() helper to prevent ReDoS attacks
+- ✅ Added word boundaries to variable name matching
+
+**Documentation:**
+- ✅ Updated TODO.md with PR #10 progress
+- ✅ Created comprehensive PR_10_QUALITY_FIXES.md report
+- ✅ Documented all root causes, solutions, and lessons learned
+
+**Results:**
+- 8 commits addressing all issues
+- 68/68 tests passing (100% pass rate)
+- 0 npm vulnerabilities
+- All CodeQL warnings resolved
+- Cross-platform CI/CD working correctly
+
 ## [1.0.29] - 2025-10-04
 
 ### 🧪 Test Coverage Enforcement & Expansion
