@@ -10,6 +10,22 @@ export function validateAPIDesign(spec: OpenAPISpec | GraphQLSchema): Validation
   const errors: any[] = [];
   const warnings: any[] = [];
 
+  // Handle null/undefined spec
+  if (!spec || typeof spec !== 'object') {
+    errors.push({
+      path: 'spec',
+      message: 'Invalid spec: must be an object',
+      severity: 'error' as const,
+      code: 'INVALID_SPEC',
+    });
+    return {
+      valid: false,
+      errors,
+      warnings,
+      suggestions: [],
+    };
+  }
+
   if ('openapi' in spec) {
     validateOpenAPISpec(spec, errors, warnings);
   } else {

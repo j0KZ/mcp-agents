@@ -40,7 +40,9 @@
       "Bash(then)",
       "Bash(if grep -q '\"\"module\"\": \"\"Node16\"\"' \"$file\")",
       "Bash(echo \"Updating module in: $file\")",
-      "Bash(fi)"
+      "Bash(fi)",
+      "Bash(tee:*)",
+      "Bash(npx @j0kz/smart-reviewer@latest generate-auto-fixes:*)"
     ],
     "deny": [],
     "ask": []

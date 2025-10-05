@@ -51,6 +51,8 @@ coverage/
 lib-cov/
 .coverage
 htmlcov/
+.vitest/
+**/coverage/
 
 # Temporary files
 *.tmp
@@ -135,3 +137,14 @@ AUDIT_REPORT_*.md
 # Refactored files
 *-refactored.ts
 .mcp.json
+
+# Root-level reports (moved to docs/)
+COMPREHENSIVE_AUDIT_REPORT.md
+IMPLEMENTATION_PLAN.md
+PHASE_*_COMPLETE.md
+PROGRESS_TRACKER.md
+*_REPORT.md
+AUTO_FIXER_IMPLEMENTATION_REPORT.md
+FIXES_APPLIED_REPORT.md
+MANUAL_AUDIT_REPORT.md
+TEST_COVERAGE_REPORT.md

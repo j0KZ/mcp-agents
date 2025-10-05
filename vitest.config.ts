@@ -19,14 +19,35 @@ export default defineConfig({
     // Enable coverage collection
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'json', 'html'],
+      reporter: ['text', 'json', 'html', 'lcov'],
+
+      // CRITICAL: Coverage thresholds - builds fail if below these
+      thresholds: {
+        statements: 60,
+        branches: 50,
+        functions: 60,
+        lines: 60,
+      },
+
+      // Per-file thresholds (ensures every file meets minimum)
+      perFile: true,
+
       exclude: [
         'node_modules/**',
         'dist/**',
         '**/*.test.ts',
         '**/*.spec.ts',
         '**/mcp-server.ts',
+        '**/types.ts',
+        '**/index.ts', // Re-exports only
+        '**/constants.ts', // Constant definitions
       ],
+
+      // Include all source files for accurate metrics
+      include: ['packages/*/src/**/*.ts'],
+
+      // Check all files, not just tested ones
+      all: true,
     },
 
     // Reporter configuration

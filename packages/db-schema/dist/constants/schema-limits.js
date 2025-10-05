@@ -58,6 +58,11 @@ export const ANALYSIS_ESTIMATES = {
     // Storage estimation (MB per table)
     STORAGE_MB_PER_TABLE: 0.5,
 };
+// Seed Data Generation Defaults
+export const SEED_DATA_DEFAULTS = {
+    // Default number of records per table
+    DEFAULT_RECORDS_PER_TABLE: 10,
+};
 // Diagram Generation Limits
 export const DIAGRAM_LIMITS = {
     // Maximum columns to show in ER diagram

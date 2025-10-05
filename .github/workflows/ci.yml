@@ -35,11 +35,14 @@ jobs:
 
       - name: Run tests
         run: npm run test:ci
-        continue-on-error: true
 
       - name: Generate test coverage
-        run: npm run test:coverage
-        continue-on-error: true
+        run: npx vitest run --coverage
+        if: matrix.node-version == '20.x'
+
+      - name: Enforce coverage thresholds
+        run: node scripts/check-coverage.js
+        if: matrix.node-version == '20.x'
 
       - name: Upload coverage reports
         uses: codecov/codecov-action@v4
@@ -48,7 +51,7 @@ jobs:
           files: ./coverage/coverage-final.json
           flags: unittests
           name: codecov-umbrella
-        continue-on-error: true
+          fail_ci_if_error: true
 
   lint:
     name: Lint and Type Check

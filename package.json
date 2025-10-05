@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/mcp-agents",
-  "version": "1.0.28",
+  "version": "1.0.29",
   "description": "Professional MCP agents for AI code editors - Smart Reviewer, Test Generator, Architecture Analyzer. Works with Claude Code, Roo Code, Windsurf, Cursor, and any MCP-compatible editor.",
   "type": "module",
   "private": true,
@@ -16,6 +16,8 @@
     "test": "npm run test --workspaces --if-present",
     "test:ci": "npm run test:ci --workspaces --if-present",
     "test:coverage": "npm run test:coverage --workspaces --if-present",
+    "test:coverage:check": "npm run test:coverage && node scripts/check-coverage.js",
+    "coverage:dashboard": "node scripts/coverage-dashboard.js",
     "install-all": "node scripts/install-all.js",
     "version:sync": "node scripts/sync-versions.js",
     "publish-all": "npm run build && npm publish --workspaces --access public",
