@@ -1,6 +1,5 @@
 import { parse } from '@babel/parser';
 import type { File } from '@babel/types';
-import { CodeIssue } from './types.js';
 import { INDEX } from './constants/auto-fixer.js';
 import {
   type FixContext,
