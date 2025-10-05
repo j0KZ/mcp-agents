@@ -37,7 +37,8 @@ jobs:
         run: npm run test:ci
 
       - name: Generate test coverage
-        run: npm run test:coverage
+        run: npx vitest run --coverage
+        if: matrix.node-version == '20.x'
 
       - name: Enforce coverage thresholds
         run: node scripts/check-coverage.js
