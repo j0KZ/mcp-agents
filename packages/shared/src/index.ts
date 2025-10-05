@@ -16,6 +16,9 @@ export * from './performance/index.js';
 // Inter-MCP communication
 export * from './integration/index.js';
 
+// MCP Client (MCP-to-MCP communication)
+export * from './mcp-client/index.js';
+
 // File system utilities
 export * from './fs/index.js';
 

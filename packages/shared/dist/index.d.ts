@@ -7,6 +7,7 @@ export * from './types/index.js';
 export * from './utils/index.js';
 export * from './performance/index.js';
 export * from './integration/index.js';
+export * from './mcp-client/index.js';
 export * from './fs/index.js';
 export * from './cache/index.js';
 export * from './constants/index.js';

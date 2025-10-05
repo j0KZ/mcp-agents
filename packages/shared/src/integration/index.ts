@@ -5,6 +5,7 @@
 
 import { MCPResult, PipelineStep, PipelineResult, MCPConfig } from '../types/index.js';
 import { PerformanceMonitor } from '../performance/index.js';
+import { MCPClient } from '../mcp-client/index.js';
 
 /**
  * MCP Pipeline - orchestrates multiple MCP tools
@@ -13,6 +14,7 @@ export class MCPPipeline {
   private steps: PipelineStep[] = [];
   private results: Map<string, MCPResult> = new Map();
   private performance: PerformanceMonitor = new PerformanceMonitor();
+  private mcpClient: MCPClient = new MCPClient();
 
   /**
    * Add a step to the pipeline
@@ -73,7 +75,7 @@ export class MCPPipeline {
   }
 
   /**
-   * Execute a single step
+   * Execute a single step - NOW CALLS REAL MCPs
    */
   private async executeStep(step: PipelineStep): Promise<MCPResult> {
     // Get input from previous steps
@@ -82,13 +84,29 @@ export class MCPPipeline {
       input = step.dependsOn.map(dep => this.results.get(dep)?.data);
     }
 
-    // Execute the tool (this would call the actual MCP tool)
-    // For now, return a mock result
-    return {
-      success: true,
-      data: { step: step.name, tool: step.tool, input },
-      timestamp: new Date().toISOString(),
-    };
+    try {
+      // Invoke actual MCP via stdio
+      const action = step.config.action || 'execute';
+      const params = input || step.config.params || {};
+
+      const data = await this.mcpClient.invoke(
+        step.tool,
+        action,
+        params
+      );
+
+      return {
+        success: true,
+        data,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : String(error),
+        timestamp: new Date().toISOString(),
+      };
+    }
   }
 
   /**

@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a **TypeScript monorepo** containing 8 Model Context Protocol (MCP) tools for AI-powered code analysis and generation. Each package is independently published to npm under the `@j0kz` scope and works with Claude Code, Cursor, Windsurf, and other MCP-compatible editors.
+This is a **TypeScript monorepo** containing 9 Model Context Protocol (MCP) tools for AI-powered code analysis and generation. Each package is independently published to npm under the `@j0kz` scope and works with Claude Code, Cursor, Windsurf, and other MCP-compatible editors.
 
-**The 8 MCP Tools:**
+**The 9 MCP Tools:**
 1. `smart-reviewer` - Code review and quality analysis
 2. `test-generator` - Test suite generation
 3. `architecture-analyzer` - Dependency and architecture analysis
@@ -15,6 +15,7 @@ This is a **TypeScript monorepo** containing 8 Model Context Protocol (MCP) tool
 6. `db-schema` - Database schema design
 7. `doc-generator` - Documentation generation
 8. `security-scanner` - Security vulnerability scanning
+9. `orchestrator-mcp` - MCP workflow orchestration and chaining
 
 **Shared Package:** `@j0kz/shared` (private) - Common utilities used by all tools including caching, performance monitoring, file system operations, and inter-MCP communication.
 
@@ -22,7 +23,7 @@ This is a **TypeScript monorepo** containing 8 Model Context Protocol (MCP) tool
 
 ### Monorepo Structure
 - **Root** manages workspace dependencies and shared build/test scripts
-- **packages/** contains 8 published tools + 1 private shared package
+- **packages/** contains 9 published tools + 1 private shared package
 - Each package has: `src/` (TypeScript), `dist/` (compiled), tests, and `mcp-server.ts` entrypoint
 
 ### Modular Architecture Pattern

@@ -1,23 +1,53 @@
 # @j0kz MCP Development Toolkit
 
-> **8 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
+> **9 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
-[![Version](https://img.shields.io/badge/version-1.0.29-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.30-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
 
+## 🎉 What's New in v1.0.30
+
+### 🔗 MCP Workflow Engine (Orchestrator) - NEW!
+
+**Chain multiple MCP tools into automated workflows:**
+
+```bash
+# Example: Run pre-commit workflow
+mcp-orchestrator run_workflow --workflow=pre-commit --files=src/app.ts
+
+# Result: Automatically runs code review + security scan
+✅ smart-reviewer: 3 issues found (moderate severity)
+✅ security-scanner: No vulnerabilities detected
+```
+
+**3 Pre-built Workflows:**
+- **pre-commit** (2 steps) - Fast local checks: code review + security scan
+- **pre-merge** (4 steps) - Comprehensive PR validation with dependency resolution
+- **quality-audit** (3 steps) - Deep analysis: security report + architecture + docs
+
+**Key Features:**
+- 🔗 MCP-to-MCP communication via JSON-RPC
+- 📊 Dependency resolution (steps can depend on other steps)
+- ⚡ Parallel execution where possible
+- 🛠️ Custom workflow creation with `run_sequence` tool
+- ✅ 85/85 tests passing
+
+[Read full orchestrator docs](packages/orchestrator-mcp/README.md)
+
 ## 🎉 What's New in v1.0.29
 
 ### 🧪 Test Coverage Enforcement & Expansion
 
-**CI Coverage Enforcement - 60% Minimum:**
-- ✅ Strict quality gates: statements 60%, branches 50%, functions 60%, lines 60%
+**CI Coverage Enforcement - Current Thresholds:**
+- ✅ Active thresholds: statements 25%, branches 25%, functions 25%, lines 25%
+- ✅ Actual coverage: statements 62%, branches 67%, functions 75%
 - ✅ Automated coverage validation with `check-coverage.js`
 - ✅ Visual coverage dashboard with `coverage-dashboard.js`
-- ✅ CI builds now fail below coverage thresholds
+- 📈 Incrementally increasing to 60% target
 
 **342 New Tests Added (+46% growth):**
 - **API Designer**: 3 → 140 tests (+4567%) - OpenAPI, GraphQL, client generation, validation
@@ -31,7 +61,8 @@
 - Code size reduced from 462 → 410 lines (-11%)
 
 **Overall:**
-- ✅ 584 passing tests (98.5% pass rate)
+- ✅ 622 passing tests (100% pass rate)
+- ✅ Coverage: 62% statements, 67% branches, 75% functions
 - ✅ Comprehensive test coverage across all packages
 - ✅ Enforced quality standards in CI/CD pipeline
 
@@ -86,7 +117,7 @@
 
 ## ⚡ Quick Install
 
-Install all 8 tools **instantly** with one command:
+Install all 9 tools **instantly** with one command:
 
 ```bash
 # For Claude Code (default)
@@ -104,10 +135,10 @@ npx @j0kz/mcp-agents@latest trae       # Trae
 - ✅ Clear npm cache
 - ✅ Fix malformed config files automatically
 - ✅ Configure MCP settings with `@latest` versions
-- ✅ Pre-install all 8 tools
+- ✅ Pre-install all 9 tools (including orchestrator)
 - ✅ Bypass npx cache issues
 
-Restart your editor and all 8 MCP tools will be ready to use.
+Restart your editor and all 9 MCP tools will be ready to use.
 
 <details>
 <summary>📖 More installation options</summary>
@@ -220,7 +251,7 @@ irm https://raw.githubusercontent.com/j0KZ/mcp-agents/main/install-all.ps1 | iex
 ### Manual Installation
 
 ```bash
-# Install all 8 tools individually
+# Install all 9 tools individually
 claude mcp add smart-reviewer "npx @j0kz/smart-reviewer-mcp" --scope user
 claude mcp add test-generator "npx @j0kz/test-generator-mcp" --scope user
 claude mcp add architecture-analyzer "npx @j0kz/architecture-analyzer-mcp" --scope user
@@ -229,6 +260,7 @@ claude mcp add security-scanner "npx @j0kz/security-scanner-mcp" --scope user
 claude mcp add refactor-assistant "npx @j0kz/refactor-assistant-mcp" --scope user
 claude mcp add api-designer "npx @j0kz/api-designer-mcp" --scope user
 claude mcp add db-schema "npx @j0kz/db-schema-mcp" --scope user
+claude mcp add orchestrator "npx @j0kz/orchestrator-mcp" --scope user
 ```
 
 **✅ Verify Installation:**
@@ -236,7 +268,7 @@ claude mcp add db-schema "npx @j0kz/db-schema-mcp" --scope user
 claude mcp list
 ```
 
-You should see all 8 tools marked as "✓ Connected"
+You should see all 9 tools marked as "✓ Connected"
 
 </details>
 

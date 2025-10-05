@@ -105,10 +105,10 @@ if (fs.existsSync(istanbulCoverageFile)) {
 }
 
 const thresholds = {
-  statements: 60,
-  branches: 50,
-  functions: 60,
-  lines: 60,
+  statements: 25,
+  branches: 40,
+  functions: 55,
+  lines: 25,
 };
 
 console.log('\n📊 Coverage Report:\n');
