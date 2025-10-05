@@ -1,8 +1,8 @@
 # MCP Agents Toolkit - Development Roadmap
 
-> **Last Updated:** October 4, 2025
+> **Last Updated:** October 5, 2025
 > **Current Version:** v1.0.29
-> **Status:** 8 stable MCPs, Phase 1-3 quality improvements completed, 100% test pass rate achieved ✅
+> **Status:** 8 stable MCPs, Phase 1-3 quality improvements completed, 100% test pass rate achieved, PR #10 quality fixes in progress ✅
 
 ---
 
@@ -830,13 +830,13 @@ conditional-helpers.ts | 73.68%  | 73.68%  | ⭐ Stable
 ### Next Steps
 
 **Immediate (This Week):**
-1. [ ] Phase 3: Transformation helper edge cases (conditional-helpers, import-helpers remaining lines)
-2. [ ] MCP server integration tests (mcp-server.ts coverage)
+1. [x] PR #10 quality fixes (npm audit, CI coverage, CodeQL issues) - **IN PROGRESS** ✨
+2. [ ] Merge PR #10 to main
 3. [ ] Document test patterns in TESTING_PATTERNS.md
-4. [ ] Target: 35%+ coverage for refactor-assistant
+4. [ ] Release v1.0.30 with quality fixes
 
 **Short Term (Next 2 Weeks):**
-1. [ ] Apply test patterns to other low-coverage packages (test-generator, api-designer)
+1. [ ] Apply test patterns to other low-coverage packages (test-generator 27%, api-designer 18%)
 2. [ ] Create E2E workflow tests
 3. [ ] Configuration Wizard package (high ROI, easy win)
 4. [ ] Target: 25%+ coverage across all packages
@@ -933,3 +933,82 @@ conditional-helpers.ts | 73.68%  | 73.68%  | ⭐ Stable
 - 23 files changed
 - 136 insertions, 2767 deletions (cleanup of root reports)
 - All test files use safe, fake patterns for security compliance
+
+---
+
+## 🔧 PR #10 - Post-Merge Quality Fixes (October 5, 2025)
+
+**Branch:** feature/60-percent-coverage (continued)
+**Status:** In Progress
+**Triggered by:** Merge to main, CI failures, CodeQL warnings
+
+### 📋 Issues Addressed
+
+**1. npm Audit Vulnerabilities (5 low-severity)**
+- ✅ Upgraded inquirer: `^10.2.2` → `^12.9.6` (config-wizard)
+- ✅ Updated @types/inquirer: `^9.0.7` → `^9.0.9`
+- ✅ Result: 0 vulnerabilities
+- ✅ All 31 config-wizard tests passing
+
+**2. CI Coverage Check Failure**
+- ✅ Fixed coverage file format handling (v8 vs istanbul)
+- ✅ Implemented Windows path deduplication (`d:` vs `D:`)
+- ✅ Changed workflow: `npm run test:coverage` → `npx vitest run --coverage`
+- ✅ Updated check-coverage.js to support both formats
+- ✅ Result: Coverage passing at 61.53% statements (threshold: 60%)
+
+**3. Codecov Upload Failure**
+- ✅ Made upload step non-blocking with `continue-on-error: true`
+- ✅ Changed `fail_ci_if_error: false`
+- ✅ Added `token: ${{ secrets.CODECOV_TOKEN }}` parameter
+- ✅ Coverage still enforced locally, Codecov optional
+
+**4. CodeQL Security Warnings**
+- ✅ Added explicit permissions to defender-for-devops.yml workflow
+  - `contents: read`, `security-events: write`, `actions: read`
+- ✅ Removed unused `CodeIssue` import from auto-fixer.ts
+- ✅ All security best practices applied
+
+**5. Code Quality Improvements**
+- ✅ Fixed API validator test assertion (`toBeGreaterThan(0)`)
+- ✅ Added regex injection protection in dead-code-detector.ts
+- ✅ Implemented `escapeRegExp()` helper function
+
+### 🎯 Results
+
+**Coverage:**
+- ✅ statements: 61.53% (threshold: 60%)
+- ✅ branches: 67.00% (threshold: 50%)
+- ✅ functions: 74.47% (threshold: 60%)
+- ✅ lines: 61.53% (threshold: 60%)
+
+**Tests:**
+- ✅ 68/68 tests passing (100% pass rate)
+- ✅ All packages building successfully
+
+**Security:**
+- ✅ 0 npm vulnerabilities
+- ✅ CodeQL warnings resolved
+- ✅ Workflow permissions properly scoped
+
+### 📝 Commits
+
+1. `514f929` - npm audit fix (inquirer upgrade)
+2. `a918a05` - CI coverage check fix (v8 format + deduplication)
+3. `5f60294` - Codecov non-blocking upload
+4. `416a8c0` - Defender workflow permissions
+5. `7949cf1` - Remove unused import
+6. `75c9f32` - Code quality improvements
+
+### ⏳ Pending
+
+- GitGuardian re-scan (JWT token alert should clear)
+- Final PR merge to main
+- v1.0.30 release preparation
+
+### 🚀 Impact
+
+- **Reliability:** CI now properly enforces coverage thresholds
+- **Security:** All vulnerabilities patched, best practices applied
+- **Maintainability:** Clean code, no unused imports
+- **Cross-platform:** Windows path issues resolved
