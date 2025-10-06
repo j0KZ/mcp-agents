@@ -37,7 +37,7 @@ export declare class TestGenerator {
      */
     private getTestFilePath;
     /**
-     * Estimate test coverage
+     * Estimate test coverage based on generated tests
      */
     private estimateCoverage;
     /**

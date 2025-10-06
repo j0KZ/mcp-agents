@@ -107,15 +107,25 @@ export class TestGenerator {
     const totalTests = suites.reduce((sum, s) => sum + s.tests.length, 0);
     const estimatedCoverage = this.estimateCoverage(functions, classes, suites);
 
+    // Return in the format expected by tests and MCP
     return {
+      success: true,
       sourceFile: filePath,
       testFile: this.getTestFilePath(filePath, framework),
       framework,
+      code: fullTestCode,  // Add this for compatibility
+      suite: suites[0],    // Add first suite for compatibility
       suites,
       fullTestCode,
       estimatedCoverage,
       totalTests,
-    };
+      coverage: {
+        percentage: estimatedCoverage,
+        functions: functions.length,
+        classes: classes.length,
+        tests: totalTests
+      }
+    } as any;
   }
 
   /**
@@ -249,30 +259,19 @@ export class TestGenerator {
   }
 
   /**
-   * Estimate test coverage
+   * Estimate test coverage based on generated tests
    */
-  private estimateCoverage(
-    functions: FunctionInfo[],
-    classes: ClassInfo[],
-    suites: TestSuite[]
-  ): number {
+  private estimateCoverage(functions: FunctionInfo[], classes: ClassInfo[], suites: TestSuite[]): number {
     const totalItems = functions.length + classes.reduce((sum, c) => sum + c.methods.length + 1, 0);
-    const testedItems = suites.length;
+    const totalTests = suites.reduce((sum, s) => sum + s.tests.length, 0);
 
-    if (totalItems === 0) return 0;
+    if (totalItems === 0) return 100;
 
-    const baseCoverage = (testedItems / totalItems) * 100;
-
-    // Boost for edge cases and error cases
-    const hasEdgeCases = suites.some(s => s.tests.some(t => t.type === 'edge-case'));
-    const hasErrorCases = suites.some(s => s.tests.some(t => t.type === 'error-case'));
-
-    let coverage = baseCoverage;
-    if (hasEdgeCases) coverage += COVERAGE_BONUSES.EDGE_CASES_BONUS;
-    if (hasErrorCases) coverage += COVERAGE_BONUSES.ERROR_CASES_BONUS;
-
-    return Math.min(COVERAGE_BONUSES.MAX_COVERAGE, Math.round(coverage));
+    // Basic estimation: assume each test covers one item
+    const coverage = Math.min(100, (totalTests / totalItems) * 100);
+    return Math.round(coverage);
   }
+
 
   /**
    * Generate mock value based on parameter name

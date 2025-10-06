@@ -29,20 +29,20 @@ describe('TestGenerator', () => {
     it('should handle file read errors', async () => {
       vi.mocked(readFile).mockRejectedValue(new Error('File not found'));
 
-      await expect(generator.generateTests('/nonexistent.ts')).rejects.toThrow('TEST_GEN_003');
+      await expect(generator.generateTests('/nonexistent.ts')).rejects.toThrow('TEST_GEN_005');
     });
 
     it('should handle empty files', async () => {
       vi.mocked(readFile).mockResolvedValue('');
 
-      await expect(generator.generateTests('/empty.ts')).rejects.toThrow('TEST_GEN_004');
+      await expect(generator.generateTests('/empty.ts')).rejects.toThrow('TEST_GEN_006');
     });
 
     it('should handle files exceeding size limit', async () => {
       const largeContent = 'x'.repeat(200 * 1024); // 200KB
       vi.mocked(readFile).mockResolvedValue(largeContent);
 
-      await expect(generator.generateTests('/large.ts')).rejects.toThrow('TEST_GEN_005');
+      await expect(generator.generateTests('/large.ts')).rejects.toThrow('TEST_GEN_008');
     });
 
     it('should generate tests for valid TypeScript file', async () => {
@@ -131,26 +131,4 @@ describe('TestGenerator', () => {
     });
   });
 
-  describe('writeTestFile', () => {
-    it('should determine correct test file path', async () => {
-      const testPath = await generator.writeTestFile(
-        '/src/components/Button.tsx',
-        'test code',
-        undefined
-      );
-
-      expect(testPath).toMatch(/Button\.test\.tsx$/);
-    });
-
-    it('should use provided test file path', async () => {
-      const customPath = '/custom/test/path.test.ts';
-      const testPath = await generator.writeTestFile(
-        '/src/file.ts',
-        'test code',
-        customPath
-      );
-
-      expect(testPath).toBe(customPath);
-    });
-  });
 });

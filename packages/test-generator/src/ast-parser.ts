@@ -4,7 +4,10 @@
  */
 
 import { parse } from '@babel/parser';
-import traverse from '@babel/traverse';
+import _traverse from '@babel/traverse';
+
+// Handle ESM/CommonJS compatibility
+const traverse = (_traverse as any).default || _traverse;
 import { FunctionInfo, ClassInfo } from './types.js';
 import { AnalysisCache, generateHash } from '@j0kz/shared';
 import type {
@@ -50,7 +53,7 @@ export class ASTParser {
 
       traverse(ast, {
         // Extract function declarations
-        FunctionDeclaration: path => {
+        FunctionDeclaration: (path: any) => {
           const node = path.node as FunctionDeclaration;
           if (node.id) {
             functions.push(this.extractFunctionInfo(node, node.id.name));
@@ -58,7 +61,7 @@ export class ASTParser {
         },
 
         // Extract arrow functions assigned to variables
-        VariableDeclarator: path => {
+        VariableDeclarator: (path: any) => {
           const { id, init } = path.node;
           if (
             init &&
@@ -71,7 +74,7 @@ export class ASTParser {
         },
 
         // Extract class declarations
-        ClassDeclaration: path => {
+        ClassDeclaration: (path: any) => {
           const node = path.node as ClassDeclaration;
           if (node.id) {
             classes.push(this.extractClassInfo(node));
