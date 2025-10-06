@@ -1,13 +1,13 @@
 # MCP Development Toolkit - Roadmap
 
-## 🎯 Current Status (v1.0.30 - October 2025)
+## 🎯 Current Status (v1.0.31 - October 2025)
 
 ✅ **Completed:**
 - All 9 MCP tools published and stable (including orchestrator-mcp)
-- **625 passing tests** across all packages (100% pass rate)
+- **853 passing tests** across all packages (100% pass rate)
 - Security hardening (100% validation coverage, zero ReDoS vulnerabilities)
 - Comprehensive examples and tutorials
-- Performance benchmarking infrastructure
+- Performance benchmarking infrastructure (2.18x speedup, 99.9% cache hit rate)
 - **Standardized error handling** with 58 error codes across all packages
 - Full documentation with organized structure
 - **Phase 1: Critical Fixes & Standardization** (v1.0.30)
@@ -16,10 +16,16 @@
   - Version alignment enforcement with CI checks
   - Centralized error codes with MCPError class
   - 20 orchestrator integration tests
-- **Phase 2: Quality & Modernization** (v1.0.30)
+- **Phase 2: Quality & Test Coverage** (v1.0.31)
   - ESLint 9 + Prettier setup (auto-fixed 69 issues)
   - AST parser replacement (eliminated ReDoS vulnerabilities)
   - Test-generator complexity reduction (25% reduction)
+  - Test coverage expansion (+228 tests, 625 → 853)
+  - Improved test quality (stronger assertions, removed shallow checks)
+- **Phase 3: Performance & Optimization** (v1.0.31)
+  - AST parsing cache (73% faster, content-based invalidation)
+  - Security scanner caching (config-aware, prevents redundant scans)
+  - Benchmark suite infrastructure (comprehensive performance metrics)
 - **Phase 1-3 quality improvements** (v1.0.27)
   - Security Scanner: 57→100/100 (perfect score)
   - DB Schema: 75→97/100 (near perfect)
@@ -30,25 +36,18 @@
 
 ## 📋 Completed in Recent Releases
 
-### ✅ v1.0.30 - Critical Fixes & Code Modernization
-**Phase 1: Critical Fixes & Standardization (COMPLETE)**
-- ✅ P0-1: Fixed orchestrator bug (batch operations for all files, not just first)
-- ✅ P0-2: 32 validation security tests (100% coverage, Windows + Unix path traversal)
-- ✅ P0-3: Version alignment enforcement (auto-fix script + CI checks)
-- ✅ P0-4: Standardized 58 error codes across all 9 packages (MCPError class)
-- ✅ P0-5: 20 orchestrator integration tests (workflows, real-world scenarios)
-
-**Phase 2: Quality & Modernization (COMPLETE - 5/5 tasks)**
+### ✅ v1.0.31 - Performance & Test Quality 🚀
+**Phase 2: Quality & Test Coverage (COMPLETE - 5/5 tasks)**
 - ✅ P1-1: ESLint 9 + Prettier (flat config, auto-fixed 69 issues)
 - ✅ P1-2: AST parser with @babel/parser (eliminated ReDoS vulnerabilities)
 - ✅ P1-3: Test-generator complexity reduction (388 → 290 LOC, -25%)
-- ✅ P2-1: Improved test coverage (added 225 tests, smart-reviewer analyzers 0% → 100%)
+- ✅ P2-1: Improved test coverage (added 228 tests, smart-reviewer analyzers 0% → 100%)
 - ✅ P2-2: Improved test quality (strengthened api-designer assertions, removed shallow toBeDefined)
 
 **Phase 3: Performance & Optimization (COMPLETE - 3/3 tasks)**
 - ✅ P3-1: AST parsing cache in test-generator (AnalysisCache integration, 73% faster)
 - ✅ P3-2: Performance benchmark suite (2.18x speedup, 99.9% cache hit rate)
-- ✅ P3-3: Caching in security-scanner (content-based invalidation)
+- ✅ P3-3: Caching in security-scanner (content-based invalidation, config-aware)
 
 **Impact:**
 - 📈 Tests: 625 → 853 (+36.5%, +228 tests including 3 cache tests)
@@ -60,6 +59,20 @@
   - Security scans: Config-aware caching
   - Code analysis: Already optimized with AnalysisCache
   - Hash generation: 673K ops/sec throughput
+
+### ✅ v1.0.30 - Critical Fixes & Code Modernization
+**Phase 1: Critical Fixes & Standardization (COMPLETE)**
+- ✅ P0-1: Fixed orchestrator bug (batch operations for all files, not just first)
+- ✅ P0-2: 32 validation security tests (100% coverage, Windows + Unix path traversal)
+- ✅ P0-3: Version alignment enforcement (auto-fix script + CI checks)
+- ✅ P0-4: Standardized 58 error codes across all 9 packages (MCPError class)
+- ✅ P0-5: 20 orchestrator integration tests (workflows, real-world scenarios)
+
+**Impact:**
+- 🔧 Bug Fixes: Orchestrator batch operations fixed
+- 🔒 Security: 100% validation test coverage
+- 🏗️ Architecture: Centralized error codes (58 codes)
+- ✅ Quality: 20 integration tests for real-world scenarios
 
 ### ✅ v1.0.29 - Test Coverage Enforcement & Expansion
 - CI coverage enforcement (60% minimum thresholds)
