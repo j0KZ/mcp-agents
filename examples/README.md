@@ -121,31 +121,31 @@ Analyze project structure
 
 ### Generate Tests
 
-```
+```bash
 Generate tests for src/calculator.js using vitest with edge cases
 ```
 
 ### Review Code
 
-```
+```bash
 Review src/user-service.ts for security issues and performance problems
 ```
 
 ### Design API
 
-```
+```bash
 Design a REST API for a blog with posts, comments, and users
 ```
 
 ### Scan Security
 
-```
+```bash
 Scan src/ for vulnerabilities and generate a security report
 ```
 
 ### Refactor Code
 
-```
+```bash
 Convert the callback functions in src/data-service.js to async/await
 ```
 

@@ -169,7 +169,7 @@ Node: ${process.version}
 // Step 1: Clear npm cache and npx cache
 console.log('📋 Step 1/4: Clearing npm and npx cache...');
 try {
-  execSync('npm cache clean --force', { stdio: 'pipe' });
+  execSync('npm cache clean --force', { stdio: 'inherit' });
   console.log('   ✅ npm cache cleared');
 } catch (error) {
   console.log('   ⚠️  npm cache clear skipped');
@@ -177,7 +177,7 @@ try {
 
 // Clear npx cache specifically for @j0kz packages
 try {
-  const npmCacheDir = execSync('npm config get cache', { encoding: 'utf8' }).trim();
+  const npmCacheDir = execSync('npm config get cache', { stdio: 'inherit', encoding: 'utf8' }).trim();
   console.log('   ✅ npx cache will be bypassed with --yes flag\n');
 } catch (error) {
   console.log('   ⚠️  Could not detect cache directory\n');
@@ -262,7 +262,7 @@ let installed = 0;
 for (const tool of TOOLS) {
   try {
     console.log(`   Installing ${tool.name}...`);
-    execSync(`npx --yes ${tool.pkg}@latest --version 2>/dev/null || echo ""`, {
+    execSync(`npx --yes ${tool.pkg}@latest --version`, {
       stdio: 'pipe',
       timeout: 30000
     });

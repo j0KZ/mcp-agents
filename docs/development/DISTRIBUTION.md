@@ -92,7 +92,7 @@ git push -u origin main
 
 Add to your README.md:
 
-````markdown
+markdown
 ## Installation
 
 ### For Users

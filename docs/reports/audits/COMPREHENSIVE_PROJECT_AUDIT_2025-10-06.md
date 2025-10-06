@@ -180,7 +180,7 @@ packages/
 
 **Deduplicated Coverage** (from `check-coverage.js`):
 
-```
+```text
 Statements:   61.69% ✅ (target: 55%)
 Branches:     76.00% ✅ (target: 65%)
 Functions:    74.63% ✅ (target: 72%)

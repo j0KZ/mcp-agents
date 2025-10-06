@@ -2,7 +2,7 @@
  * Preferences prompts
  */
 
-export function preferencesPrompt(_detected: any) {
+export function preferencesPrompt(detected: any) {
   const prompts: any[] = [];
 
   // Code review severity
@@ -20,7 +20,7 @@ export function preferencesPrompt(_detected: any) {
   });
 
   // Test framework (if not detected)
-  if (!_detected.testFramework) {
+  if (!detected.testFramework) {
     prompts.push({
       type: 'list',
       name: 'testFramework',
