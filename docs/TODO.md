@@ -1001,7 +1001,7 @@ conditional-helpers.ts | 73.68%  | 73.68%  | ⭐ Stable
 **GitHub Secret Scanning Resolved:**
 
 - ✅ Replaced all realistic test patterns with obviously fake patterns
-- ✅ Uses repeated characters (`AKIAXXXXXXXXXXXXXXXX`, `ghp_XXXX...`, `sk_live_ZZZZ...`)
+- ✅ Uses repeated characters (e.g., `AKIA[EXAMPLE]`, `token_[EXAMPLE]`, `key_[EXAMPLE]`)
 - ✅ Patterns match regex but don't trigger security scanners
 - ✅ Zero security alerts in new code
 
