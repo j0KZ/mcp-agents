@@ -253,8 +253,12 @@ cursor.execute(query)
     });
 
     it('should detect JWT tokens', async () => {
+      // Create a fake JWT-like pattern using repeated characters
+      const fakeHeader = 'eyJ' + 'X'.repeat(20);
+      const fakePayload = 'eyJ' + 'Y'.repeat(20);
+      const fakeSignature = 'Z'.repeat(43);
       const testCode = `
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U';
+        const token = '${fakeHeader}.${fakePayload}.${fakeSignature}';
       `;
 
       const testFile = path.join(tmpdir(), 'app-jwt-' + Date.now() + '.js');
