@@ -65,6 +65,7 @@ export function createMockServer(spec: OpenAPISpec, config: MockServerConfig) {
       const safePath = String(req.path)
         .replace(/[\r\n]/g, '')
         .substring(0, 200);
+      // eslint-disable-next-line no-console
       console.log(`[${new Date().toISOString()}] ${method} ${safePath}`);
       next();
     });
@@ -92,6 +93,7 @@ export function createMockServer(spec: OpenAPISpec, config: MockServerConfig) {
 
   const port = config.port || 3000;
   app.listen(port, () => {
+    // eslint-disable-next-line no-console
     console.log(`Mock server running on port ${Number(port)}`);
   });
 
@@ -121,7 +123,7 @@ function generateMockFromSchema(schema: any): any {
   }
 
   switch (schema.type) {
-    case 'object':
+    case 'object': {
       const obj: any = {};
       if (schema.properties) {
         for (const [key, propSchema] of Object.entries(schema.properties)) {
@@ -129,6 +131,7 @@ function generateMockFromSchema(schema: any): any {
         }
       }
       return obj;
+    }
 
     case 'array':
       return [generateMockFromSchema(schema.items)];

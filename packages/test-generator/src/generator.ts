@@ -11,6 +11,7 @@ import {
   FunctionInfo,
   ClassInfo,
 } from './types.js';
+import { FILE_LIMITS, COVERAGE_BONUSES, SAMPLE_VALUES } from './constants/limits.js';
 
 export class TestGenerator {
   private parser: ASTParser;
@@ -71,10 +72,11 @@ export class TestGenerator {
     }
 
     // Check file size
-    if (content.length > 1000000) {
-      // 1MB limit
+    if (content.length > FILE_LIMITS.MAX_FILE_SIZE) {
+      const sizeKB = (content.length / 1024).toFixed(2);
+      const limitKB = (FILE_LIMITS.MAX_FILE_SIZE / 1024).toFixed(0);
       throw new Error(
-        `TEST_GEN_007: File too large: ${filePath} (${(content.length / 1024).toFixed(2)} KB)\nMaximum supported file size is 1000 KB.`
+        `TEST_GEN_007: File too large: ${filePath} (${sizeKB} KB)\nMaximum supported file size is ${limitKB} KB.`
       );
     }
 
@@ -184,7 +186,6 @@ export class TestGenerator {
     };
   }
 
-
   /**
    * Generate complete test file
    */
@@ -267,10 +268,10 @@ export class TestGenerator {
     const hasErrorCases = suites.some(s => s.tests.some(t => t.type === 'error-case'));
 
     let coverage = baseCoverage;
-    if (hasEdgeCases) coverage += 10;
-    if (hasErrorCases) coverage += 10;
+    if (hasEdgeCases) coverage += COVERAGE_BONUSES.EDGE_CASES_BONUS;
+    if (hasErrorCases) coverage += COVERAGE_BONUSES.ERROR_CASES_BONUS;
 
-    return Math.min(100, Math.round(coverage));
+    return Math.min(COVERAGE_BONUSES.MAX_COVERAGE, Math.round(coverage));
   }
 
   /**
@@ -279,11 +280,11 @@ export class TestGenerator {
   private generateMockValue(param: string): string {
     const lower = param.toLowerCase();
 
-    if (lower.includes('id')) return '1';
+    if (lower.includes('id')) return SAMPLE_VALUES.DEFAULT_ID;
     if (lower.includes('name')) return '"test"';
     if (lower.includes('email')) return '"test@example.com"';
-    if (lower.includes('age')) return '25';
-    if (lower.includes('count')) return '10';
+    if (lower.includes('age')) return SAMPLE_VALUES.DEFAULT_AGE;
+    if (lower.includes('count')) return SAMPLE_VALUES.DEFAULT_COUNT;
     if (lower.includes('array') || lower.includes('list')) return '[]';
     if (lower.includes('object') || lower.includes('data')) return '{}';
     if (lower.includes('bool') || lower.includes('is') || lower.includes('has')) return 'true';

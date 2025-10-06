@@ -65,7 +65,7 @@ export class FileSystemManager {
       async filePath => {
         try {
           return await this.readFile(filePath, useCache);
-        } catch (error) {
+        } catch {
           return null;
         }
       },

@@ -16,7 +16,7 @@ import { REGEX, QUALITY_THRESHOLDS } from '@j0kz/shared';
  * @param filePath - File path for context in error messages
  * @returns Array of detected issues with severity and fix suggestions
  */
-export async function detectIssues(content: string, filePath: string): Promise<CodeIssue[]> {
+export async function detectIssues(content: string, _filePath: string): Promise<CodeIssue[]> {
   const issues: CodeIssue[] = [];
   const lines = content.split('\n');
 

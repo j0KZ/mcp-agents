@@ -337,12 +337,12 @@ export class MCPWorkflow {
  * Event bus for MCP communication
  */
 export class MCPEventBus {
-  private listeners: Map<string, Set<Function>> = new Map();
+  private listeners: Map<string, Set<(...args: any[]) => void>> = new Map();
 
   /**
    * Subscribe to an event
    */
-  on(event: string, callback: Function): () => void {
+  on(event: string, callback: (...args: any[]) => void): () => void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, new Set());
     }
@@ -368,7 +368,7 @@ export class MCPEventBus {
   /**
    * Subscribe to event once
    */
-  once(event: string, callback: Function): void {
+  once(event: string, callback: (...args: any[]) => void): void {
     const unsubscribe = this.on(event, (data: any) => {
       callback(data);
       unsubscribe();

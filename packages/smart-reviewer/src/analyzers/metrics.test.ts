@@ -93,7 +93,13 @@ describe('calculateMetrics', () => {
 
 describe('generateSuggestions', () => {
   it('should suggest refactoring for very high complexity', () => {
-    const metrics = { complexity: 150, maintainability: 80, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
+    const metrics = {
+      complexity: 150,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const suggestions = generateSuggestions('', [], metrics);
 
     // Should suggest something about complexity
@@ -102,7 +108,13 @@ describe('generateSuggestions', () => {
   });
 
   it('should suggest refactoring for high complexity', () => {
-    const metrics = { complexity: 75, maintainability: 80, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
+    const metrics = {
+      complexity: 75,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const suggestions = generateSuggestions('', [], metrics);
 
     expect(suggestions.length).toBeGreaterThan(0);
@@ -110,35 +122,65 @@ describe('generateSuggestions', () => {
   });
 
   it('should suggest monitoring for moderate complexity', () => {
-    const metrics = { complexity: 35, maintainability: 80, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
+    const metrics = {
+      complexity: 35,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const suggestions = generateSuggestions('', [], metrics);
 
     expect(suggestions.length).toBeGreaterThan(0);
   });
 
   it('should suggest improving low maintainability', () => {
-    const metrics = { complexity: 10, maintainability: 30, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
+    const metrics = {
+      complexity: 10,
+      maintainability: 30,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const suggestions = generateSuggestions('', [], metrics);
 
     expect(suggestions.some(s => s.toLowerCase().includes('maintainability'))).toBe(true);
   });
 
   it('should suggest improvements for fair maintainability', () => {
-    const metrics = { complexity: 10, maintainability: 55, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
+    const metrics = {
+      complexity: 10,
+      maintainability: 55,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const suggestions = generateSuggestions('', [], metrics);
 
     expect(suggestions.some(s => s.toLowerCase().includes('maintainability'))).toBe(true);
   });
 
   it('should suggest adding documentation for low comment density', () => {
-    const metrics = { complexity: 10, maintainability: 80, linesOfCode: 100, commentDensity: 2, duplicateBlocks: 0 };
+    const metrics = {
+      complexity: 10,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 2,
+      duplicateBlocks: 0,
+    };
     const suggestions = generateSuggestions('', [], metrics);
 
     expect(suggestions.some(s => s.toLowerCase().includes('comment'))).toBe(true);
   });
 
   it('should suggest extracting duplicate blocks', () => {
-    const metrics = { complexity: 10, maintainability: 80, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 20 };
+    const metrics = {
+      complexity: 10,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 20,
+    };
     const suggestions = generateSuggestions('', [], metrics);
 
     expect(suggestions.some(s => s.toLowerCase().includes('duplicate'))).toBe(true);
@@ -147,36 +189,64 @@ describe('generateSuggestions', () => {
   it('should suggest fixing critical errors', () => {
     const issues: CodeIssue[] = [
       { line: 1, severity: 'error', message: 'Critical error', rule: 'test' },
-      { line: 2, severity: 'error', message: 'Another error', rule: 'test' }
+      { line: 2, severity: 'error', message: 'Another error', rule: 'test' },
     ];
-    const metrics = { complexity: 10, maintainability: 80, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
+    const metrics = {
+      complexity: 10,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const suggestions = generateSuggestions('', issues, metrics);
 
     expect(suggestions.some(s => s.includes('2') && s.toLowerCase().includes('error'))).toBe(true);
   });
 
   it('should suggest addressing warnings', () => {
-    const issues: CodeIssue[] = Array(15).fill(null).map((_, i) => ({
-      line: i + 1,
-      severity: 'warning' as const,
-      message: 'Warning',
-      rule: 'test'
-    }));
-    const metrics = { complexity: 10, maintainability: 80, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
+    const issues: CodeIssue[] = Array(15)
+      .fill(null)
+      .map((_, i) => ({
+        line: i + 1,
+        severity: 'warning' as const,
+        message: 'Warning',
+        rule: 'test',
+      }));
+    const metrics = {
+      complexity: 10,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const suggestions = generateSuggestions('', issues, metrics);
 
-    expect(suggestions.some(s => s.includes('15') && s.toLowerCase().includes('warning'))).toBe(true);
+    expect(suggestions.some(s => s.includes('15') && s.toLowerCase().includes('warning'))).toBe(
+      true
+    );
   });
 
   it('should suggest splitting very large files', () => {
-    const metrics = { complexity: 10, maintainability: 80, linesOfCode: 900, commentDensity: 10, duplicateBlocks: 0 };
+    const metrics = {
+      complexity: 10,
+      maintainability: 80,
+      linesOfCode: 900,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const suggestions = generateSuggestions('', [], metrics);
 
     expect(suggestions.some(s => s.toLowerCase().includes('large'))).toBe(true);
   });
 
   it('should suggest monitoring large files', () => {
-    const metrics = { complexity: 10, maintainability: 80, linesOfCode: 600, commentDensity: 10, duplicateBlocks: 0 };
+    const metrics = {
+      complexity: 10,
+      maintainability: 80,
+      linesOfCode: 600,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const suggestions = generateSuggestions('', [], metrics);
 
     // Should contain message about large file
@@ -184,7 +254,13 @@ describe('generateSuggestions', () => {
   });
 
   it('should return empty suggestions for good code', () => {
-    const metrics = { complexity: 15, maintainability: 90, linesOfCode: 100, commentDensity: 20, duplicateBlocks: 0 };
+    const metrics = {
+      complexity: 15,
+      maintainability: 90,
+      linesOfCode: 100,
+      commentDensity: 20,
+      duplicateBlocks: 0,
+    };
     const suggestions = generateSuggestions('', [], metrics);
 
     expect(suggestions).toHaveLength(0);
@@ -193,7 +269,13 @@ describe('generateSuggestions', () => {
 
 describe('calculateScore', () => {
   it('should start with score 100 for perfect code', () => {
-    const metrics = { complexity: 10, maintainability: 90, linesOfCode: 100, commentDensity: 20, duplicateBlocks: 0 };
+    const metrics = {
+      complexity: 10,
+      maintainability: 90,
+      linesOfCode: 100,
+      commentDensity: 20,
+      duplicateBlocks: 0,
+    };
     const score = calculateScore([], metrics);
 
     expect(score).toBeGreaterThan(95);
@@ -201,20 +283,28 @@ describe('calculateScore', () => {
   });
 
   it('should deduct points for errors', () => {
-    const issues: CodeIssue[] = [
-      { line: 1, severity: 'error', message: 'Error', rule: 'test' }
-    ];
-    const metrics = { complexity: 10, maintainability: 80, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
+    const issues: CodeIssue[] = [{ line: 1, severity: 'error', message: 'Error', rule: 'test' }];
+    const metrics = {
+      complexity: 10,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const score = calculateScore(issues, metrics);
 
     expect(score).toBeLessThan(100);
   });
 
   it('should heavily penalize critical errors', () => {
-    const issues: CodeIssue[] = [
-      { line: 1, severity: 'error', message: 'Error', rule: 'test' }
-    ];
-    const metricsGood = { complexity: 10, maintainability: 80, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
+    const issues: CodeIssue[] = [{ line: 1, severity: 'error', message: 'Error', rule: 'test' }];
+    const metricsGood = {
+      complexity: 10,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const scoreGood = calculateScore([], metricsGood);
     const scoreWithError = calculateScore(issues, metricsGood);
 
@@ -223,12 +313,15 @@ describe('calculateScore', () => {
     expect(scoreGood - scoreWithError).toBeGreaterThan(0);
   });
 
-
   it('should lightly penalize info items', () => {
-    const issues: CodeIssue[] = [
-      { line: 1, severity: 'info', message: 'Info', rule: 'test' }
-    ];
-    const metrics = { complexity: 10, maintainability: 80, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
+    const issues: CodeIssue[] = [{ line: 1, severity: 'info', message: 'Info', rule: 'test' }];
+    const metrics = {
+      complexity: 10,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const scoreWithInfo = calculateScore(issues, metrics);
     const scoreWithout = calculateScore([], metrics);
 
@@ -236,7 +329,13 @@ describe('calculateScore', () => {
   });
 
   it('should penalize very high complexity', () => {
-    const metrics = { complexity: 150, maintainability: 80, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
+    const metrics = {
+      complexity: 150,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const score = calculateScore([], metrics);
 
     // Very high complexity should be penalized
@@ -244,8 +343,20 @@ describe('calculateScore', () => {
   });
 
   it('should penalize high complexity moderately', () => {
-    const metricsLow = { complexity: 20, maintainability: 80, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
-    const metricsHigh = { complexity: 75, maintainability: 80, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
+    const metricsLow = {
+      complexity: 20,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
+    const metricsHigh = {
+      complexity: 75,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const scoreLow = calculateScore([], metricsLow);
     const scoreHigh = calculateScore([], metricsHigh);
 
@@ -253,8 +364,20 @@ describe('calculateScore', () => {
   });
 
   it('should reward good maintainability', () => {
-    const metricsGood = { complexity: 10, maintainability: 90, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
-    const metricsFair = { complexity: 10, maintainability: 50, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
+    const metricsGood = {
+      complexity: 10,
+      maintainability: 90,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
+    const metricsFair = {
+      complexity: 10,
+      maintainability: 50,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const scoreGood = calculateScore([], metricsGood);
     const scoreFair = calculateScore([], metricsFair);
 
@@ -263,7 +386,13 @@ describe('calculateScore', () => {
   });
 
   it('should penalize low maintainability', () => {
-    const metrics = { complexity: 10, maintainability: 20, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 0 };
+    const metrics = {
+      complexity: 10,
+      maintainability: 20,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 0,
+    };
     const score = calculateScore([], metrics);
 
     // Low maintainability should result in lower score
@@ -271,8 +400,20 @@ describe('calculateScore', () => {
   });
 
   it('should give bonus for good comment density', () => {
-    const metricsGood = { complexity: 10, maintainability: 80, linesOfCode: 100, commentDensity: 30, duplicateBlocks: 0 };
-    const metricsLow = { complexity: 10, maintainability: 80, linesOfCode: 100, commentDensity: 0, duplicateBlocks: 0 };
+    const metricsGood = {
+      complexity: 10,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 30,
+      duplicateBlocks: 0,
+    };
+    const metricsLow = {
+      complexity: 10,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 0,
+      duplicateBlocks: 0,
+    };
     const scoreGood = calculateScore([], metricsGood);
     const scoreLow = calculateScore([], metricsLow);
 
@@ -281,8 +422,20 @@ describe('calculateScore', () => {
   });
 
   it('should penalize significant duplicates', () => {
-    const metricsClean = { complexity: 10, maintainability: 80, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 5 };
-    const metricsDuplicates = { complexity: 10, maintainability: 80, linesOfCode: 100, commentDensity: 10, duplicateBlocks: 30 };
+    const metricsClean = {
+      complexity: 10,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 5,
+    };
+    const metricsDuplicates = {
+      complexity: 10,
+      maintainability: 80,
+      linesOfCode: 100,
+      commentDensity: 10,
+      duplicateBlocks: 30,
+    };
     const scoreClean = calculateScore([], metricsClean);
     const scoreDuplicates = calculateScore([], metricsDuplicates);
 
@@ -290,20 +443,34 @@ describe('calculateScore', () => {
   });
 
   it('should not allow scores below 0', () => {
-    const issues: CodeIssue[] = Array(100).fill(null).map((_, i) => ({
-      line: i + 1,
-      severity: 'error' as const,
-      message: 'Error',
-      rule: 'test'
-    }));
-    const metrics = { complexity: 1000, maintainability: 0, linesOfCode: 5000, commentDensity: 0, duplicateBlocks: 100 };
+    const issues: CodeIssue[] = Array(100)
+      .fill(null)
+      .map((_, i) => ({
+        line: i + 1,
+        severity: 'error' as const,
+        message: 'Error',
+        rule: 'test',
+      }));
+    const metrics = {
+      complexity: 1000,
+      maintainability: 0,
+      linesOfCode: 5000,
+      commentDensity: 0,
+      duplicateBlocks: 100,
+    };
     const score = calculateScore(issues, metrics);
 
     expect(score).toBe(0);
   });
 
   it('should not allow scores above 100', () => {
-    const metrics = { complexity: 1, maintainability: 100, linesOfCode: 50, commentDensity: 50, duplicateBlocks: 0 };
+    const metrics = {
+      complexity: 1,
+      maintainability: 100,
+      linesOfCode: 50,
+      commentDensity: 50,
+      duplicateBlocks: 0,
+    };
     const score = calculateScore([], metrics);
 
     expect(score).toBeLessThanOrEqual(100);

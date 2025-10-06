@@ -175,3 +175,24 @@ perf-*.log
 
 # Editor artifacts
 .history/
+
+# Security - Private keys and certificates
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+private/
+secrets/
+credentials/
+
+# Database files
+*.sqlite
+*.db
+*.sql
+
+# API keys and tokens (if accidentally created)
+.api_keys
+.tokens
+auth.json
+credentials.json

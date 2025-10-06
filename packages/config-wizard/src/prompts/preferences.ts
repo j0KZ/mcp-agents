@@ -2,9 +2,7 @@
  * Preferences prompts
  */
 
-import type { TestFramework } from '../detectors/test-framework.js';
-
-export function preferencesPrompt(detected: any) {
+export function preferencesPrompt(_detected: any) {
   const prompts: any[] = [];
 
   // Code review severity
@@ -22,7 +20,7 @@ export function preferencesPrompt(detected: any) {
   });
 
   // Test framework (if not detected)
-  if (!detected.testFramework) {
+  if (!_detected.testFramework) {
     prompts.push({
       type: 'list',
       name: 'testFramework',

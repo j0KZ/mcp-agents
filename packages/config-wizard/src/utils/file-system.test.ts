@@ -4,7 +4,6 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import fs from 'fs-extra';
-import path from 'path';
 import { writeConfigFile, backupConfigFile } from './file-system.js';
 
 vi.mock('fs-extra');

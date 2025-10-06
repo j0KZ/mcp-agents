@@ -1,0 +1,66 @@
+# Source files (only publish dist)
+src/
+*.ts
+!dist/**/*.d.ts
+
+# Tests
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+__tests__/
+coverage/
+.nyc_output/
+
+# Development files
+.eslintrc*
+.prettier*
+tsconfig.json
+vitest.config.ts
+jest.config.*
+
+# Documentation (keep README)
+docs/
+*.md
+!README.md
+
+# Examples
+examples/
+
+# CI/CD
+.github/
+.gitlab*
+.travis*
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.*
+
+# Build artifacts
+*.tsbuildinfo
+.cache/
+
+# Git
+.git/
+.gitignore
+
+# Temporary files
+tmp/
+temp/
+*.tmp
