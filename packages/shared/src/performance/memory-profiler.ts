@@ -40,7 +40,7 @@ export class MemoryProfiler extends EventEmitter {
   private snapshots: Map<string, MemorySnapshot[]> = new Map();
   private checkpoints: Map<string, MemorySnapshot> = new Map();
   private startTime: number = 0;
-  private leakThreshold = 50 * 1024 * 1024; // 50MB growth threshold
+  // private leakThreshold = 50 * 1024 * 1024; // 50MB growth threshold - unused for now
 
   constructor(private maxSnapshots = 100) {
     super();
@@ -228,7 +228,7 @@ export class MemoryProfiler extends EventEmitter {
     const n = snapshots.length;
     if (n < 2) return { slope: 0, r2: 0 };
 
-    const x = snapshots.map((s, i) => i);
+    const x = snapshots.map((_s, i) => i);
     const y = snapshots.map(s => s.heapUsed);
 
     const sumX = x.reduce((a, b) => a + b, 0);

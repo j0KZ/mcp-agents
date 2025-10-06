@@ -2,7 +2,7 @@ import { readFile } from 'fs/promises';
 import { ASTParser } from './ast-parser.js';
 import { TestCaseGenerator } from './test-case-generator.js';
 import { AnalysisCache } from '@j0kz/shared';
-import { FILE_LIMITS, SAMPLE_VALUES } from './constants/limits.js';
+import { FILE_LIMITS } from './constants/limits.js';
 export class TestGenerator {
     parser;
     testCaseGenerator;
@@ -206,29 +206,6 @@ export class TestGenerator {
         // Basic estimation: assume each test covers one item
         const coverage = Math.min(100, (totalTests / totalItems) * 100);
         return Math.round(coverage);
-    }
-    /**
-     * Generate mock value based on parameter name
-     */
-    generateMockValue(param) {
-        const lower = param.toLowerCase();
-        if (lower.includes('id'))
-            return SAMPLE_VALUES.DEFAULT_ID;
-        if (lower.includes('name'))
-            return '"test"';
-        if (lower.includes('email'))
-            return '"test@example.com"';
-        if (lower.includes('age'))
-            return SAMPLE_VALUES.DEFAULT_AGE;
-        if (lower.includes('count'))
-            return SAMPLE_VALUES.DEFAULT_COUNT;
-        if (lower.includes('array') || lower.includes('list'))
-            return '[]';
-        if (lower.includes('object') || lower.includes('data'))
-            return '{}';
-        if (lower.includes('bool') || lower.includes('is') || lower.includes('has'))
-            return 'true';
-        return '"mockValue"';
     }
 }
 //# sourceMappingURL=generator.js.map

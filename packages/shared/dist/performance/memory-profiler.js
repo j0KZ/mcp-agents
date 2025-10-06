@@ -15,7 +15,7 @@ export class MemoryProfiler extends EventEmitter {
     snapshots = new Map();
     checkpoints = new Map();
     startTime = 0;
-    leakThreshold = 50 * 1024 * 1024; // 50MB growth threshold
+    // private leakThreshold = 50 * 1024 * 1024; // 50MB growth threshold - unused for now
     constructor(maxSnapshots = 100) {
         super();
         this.maxSnapshots = maxSnapshots;
@@ -171,13 +171,12 @@ export class MemoryProfiler extends EventEmitter {
         const n = snapshots.length;
         if (n < 2)
             return { slope: 0, r2: 0 };
-        const x = snapshots.map((s, i) => i);
+        const x = snapshots.map((_s, i) => i);
         const y = snapshots.map(s => s.heapUsed);
         const sumX = x.reduce((a, b) => a + b, 0);
         const sumY = y.reduce((a, b) => a + b, 0);
         const sumXY = x.reduce((sum, xi, i) => sum + xi * y[i], 0);
         const sumX2 = x.reduce((sum, xi) => sum + xi * xi, 0);
-        const sumY2 = y.reduce((sum, yi) => sum + yi * yi, 0);
         const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
         const intercept = (sumY - slope * sumX) / n;
         // Calculate R-squared

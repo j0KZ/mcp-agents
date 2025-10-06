@@ -11,7 +11,7 @@ import {
   FunctionInfo,
   ClassInfo,
 } from './types.js';
-import { FILE_LIMITS, COVERAGE_BONUSES, SAMPLE_VALUES } from './constants/limits.js';
+import { FILE_LIMITS } from './constants/limits.js';
 
 export class TestGenerator {
   private parser: ASTParser;
@@ -273,21 +273,14 @@ export class TestGenerator {
   }
 
 
-  /**
-   * Generate mock value based on parameter name
-   */
-  private generateMockValue(param: string): string {
-    const lower = param.toLowerCase();
-
-    if (lower.includes('id')) return SAMPLE_VALUES.DEFAULT_ID;
-    if (lower.includes('name')) return '"test"';
-    if (lower.includes('email')) return '"test@example.com"';
-    if (lower.includes('age')) return SAMPLE_VALUES.DEFAULT_AGE;
-    if (lower.includes('count')) return SAMPLE_VALUES.DEFAULT_COUNT;
-    if (lower.includes('array') || lower.includes('list')) return '[]';
-    if (lower.includes('object') || lower.includes('data')) return '{}';
-    if (lower.includes('bool') || lower.includes('is') || lower.includes('has')) return 'true';
-
-    return '"mockValue"';
-  }
+  // Unused method - commented out to fix TypeScript strict mode
+  // private generateMockValue(param: string): string {
+  //   const lower = param.toLowerCase();
+  //   if (lower.includes('name')) return '"test"';
+  //   if (lower.includes('email')) return '"test@example.com"';
+  //   if (lower.includes('array') || lower.includes('list')) return '[]';
+  //   if (lower.includes('object') || lower.includes('data')) return '{}';
+  //   if (lower.includes('bool') || lower.includes('is') || lower.includes('has')) return 'true';
+  //   return '"mockValue"';
+  // }
 }

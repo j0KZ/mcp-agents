@@ -276,7 +276,7 @@ export class CacheManager {
  */
 export function cached(options = {}) {
     const cache = new MemoryCache({ ttl: options.ttl });
-    return function (target, propertyKey, descriptor) {
+    return function (_target, _propertyKey, descriptor) {
         const originalMethod = descriptor.value;
         descriptor.value = async function (...args) {
             let key;

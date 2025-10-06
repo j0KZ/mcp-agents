@@ -40,9 +40,5 @@ export declare class TestGenerator {
      * Estimate test coverage based on generated tests
      */
     private estimateCoverage;
-    /**
-     * Generate mock value based on parameter name
-     */
-    private generateMockValue;
 }
 //# sourceMappingURL=generator.d.ts.map
