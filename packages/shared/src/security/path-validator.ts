@@ -25,13 +25,22 @@ export class PathValidationError extends Error {
  * @throws PathValidationError if path contains traversal sequences
  */
 export function validateNoTraversal(inputPath: string): void {
-  // Normalize the path to resolve any . or .. segments
-  const normalized = path.normalize(inputPath);
-
-  // Check for path traversal patterns
-  if (normalized.includes('..')) {
+  // Check for path traversal patterns BEFORE normalization
+  // This catches attempts that would be resolved away
+  if (inputPath.includes('..')) {
     throw new PathValidationError(
       'Path traversal detected: path contains ".." sequence',
+      inputPath
+    );
+  }
+
+  // Normalize the path to resolve any . segments (but not ..)
+  const normalized = path.normalize(inputPath);
+
+  // Double-check after normalization
+  if (normalized.includes('..')) {
+    throw new PathValidationError(
+      'Path traversal detected: path contains ".." sequence after normalization',
       inputPath
     );
   }
@@ -41,9 +50,8 @@ export function validateNoTraversal(inputPath: string): void {
   const isAbsoluteUnix = normalized.startsWith('/');
   const isAbsoluteWindows = /^[a-zA-Z]:/.test(normalized);
 
-  // Allow absolute paths but ensure they're properly formed
+  // For absolute paths, ensure they're properly formed and no traversal
   if (isAbsoluteUnix || isAbsoluteWindows) {
-    // Absolute paths are okay, just ensure no traversal
     const parts = normalized.split(path.sep);
     if (parts.some(part => part === '..')) {
       throw new PathValidationError('Path traversal detected in absolute path', inputPath);
@@ -127,11 +135,11 @@ export function validateDirectoryPath(dirPath: string, allowedRoot?: string): st
  * @returns Sanitized filename
  */
 export function sanitizeFilename(filename: string): string {
-  // Remove path separators and null bytes
+  // Remove path separators, traversal sequences, and null bytes
   return (
     filename
       .replace(/[/\\]/g, '')
-      .replace(/\0/g, '')
+      .replace(/\0/g, '') // Remove null bytes completely
       .replace(/\.\./g, '')
       // Limit to alphanumeric, dots, dashes, underscores
       .replace(/[^a-zA-Z0-9._-]/g, '_')

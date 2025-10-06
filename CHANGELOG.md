@@ -2,6 +2,88 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.34] - 2025-10-06
+
+### 📚 Documentation & Test Coverage Update
+
+**Documentation Improvements:**
+
+- 📝 **GitHub-Ready README:** Complete redesign for professional presentation
+  - Modern badge layout with coverage, quality, and security metrics
+  - Clean table-based feature organization
+  - Visual tool capability sections with examples
+  - Comparison table vs traditional tools
+  - Quick start examples for common use cases
+
+- 📋 **Contributing Guidelines:** Comprehensive contribution guide
+  - Development setup instructions
+  - Coding standards and best practices
+  - Testing requirements (75% coverage)
+  - PR process and commit conventions
+  - Version management instructions
+
+**Test Coverage Enhancements:**
+
+- ✅ **Test Suite Expansion:** 1,094 total tests
+  - Added 57 new error handling tests
+  - security-scanner: +17 tests for edge cases
+  - db-schema: +40 tests for validation scenarios
+  - Fixed 6 failing db-schema tests
+
+- 📊 **Coverage Achievement:** 75% target reached
+  - Comprehensive error handling coverage
+  - Edge case validation for all critical paths
+  - Maintained 100% backward compatibility
+
+**Quality Metrics:**
+
+- Tests: 1,094 passing (100% pass rate)
+- Coverage: 75% (statements/branches/functions)
+- Code Quality: Score 88/100
+- Security: 0 vulnerabilities
+
+## [1.0.33] - 2025-10-06
+
+### 🔒 CRITICAL SECURITY PATCH & Quality Improvements
+
+**Critical Security Fixes:**
+
+- 🔴 **Path Traversal Vulnerability Fixed:** Critical security issue resolved
+  - Fixed `validateNoTraversal()` allowing dangerous paths like `/var/../../../etc/passwd`
+  - Now properly rejects ANY path containing `..` sequences
+  - Added comprehensive OWASP attack pattern tests
+- 🔴 **Filename Sanitization Fixed:** Null byte handling corrected
+  - Properly removes null bytes (`\0`) from filenames
+  - Prevents injection attacks through malformed names
+
+**New Features:**
+
+- ✨ **MCP Protocol Validation Layer:** Comprehensive protocol compliance checking
+  - Schema validation for all MCP tools
+  - Request/response validation with type checking
+  - Tool registration and tracking system
+  - Best practice warnings for developers
+- ✨ **Common Patterns Library:** Reduces code duplication
+  - Standard result formats (`MCPOperationResult`)
+  - Error handling patterns (`withErrorHandling`)
+  - File operation helpers (`safeFileOperation`)
+  - Batch operations and retry logic
+
+**Testing Improvements:**
+
+- ✅ **All Tests Passing:** 700+ tests, 100% pass rate
+- ✅ **Fixed 6 Critical Test Failures:** doc-generator and shared packages
+- ✅ **Added 60+ New Tests:**
+  - 24 MCP protocol validation tests
+  - 12 orchestrator server tests
+  - 24 wizard configuration tests
+
+**Code Quality:**
+
+- 📦 **Dependencies:** Added `zod@^3.23.8` for schema validation
+- 🔧 **Shared Utilities:** New patterns module for common code
+- 📊 **Test Coverage:** Significantly improved orchestrator coverage
+
 ## [1.0.32] - 2025-10-06
 
 ### 🔒 Security Hardening Update
@@ -21,12 +103,14 @@ All notable changes to this project will be documented in this file.
   - Added bounds to prevent catastrophic backtracking
 
 **Files Modified:**
+
 - `packages/refactor-assistant/src/transformations/async-converter.ts`
 - `packages/refactor-assistant/src/transformations/conditional-helpers.ts`
 - `packages/security-scanner/src/scanner.test.ts`
 - `packages/shared/src/benchmark-performance.ts`
 
 **Security Configuration:**
+
 - Added `.gitguardian.yml` for false positive management
 - Added `.gitleaks.toml` for additional secret scanning
 - Created `.gitguardianignore` for comprehensive path exclusions

@@ -1,0 +1,53 @@
+# CODEOWNERS file for automatic review assignment
+# Documentation: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+* @j0KZ
+
+# Core configuration files
+/.github/ @j0KZ
+/package.json @j0KZ
+/version.json @j0KZ
+/tsconfig.json @j0KZ
+/vitest.config.ts @j0KZ
+/eslint.config.js @j0KZ
+/LICENSE @j0KZ
+/README.md @j0KZ
+
+# Individual packages - can be assigned to specific maintainers
+/packages/smart-reviewer/ @j0KZ
+/packages/test-generator/ @j0KZ
+/packages/architecture-analyzer/ @j0KZ
+/packages/security-scanner/ @j0KZ
+/packages/refactor-assistant/ @j0KZ
+/packages/api-designer/ @j0KZ
+/packages/db-schema/ @j0KZ
+/packages/doc-generator/ @j0KZ
+/packages/orchestrator-mcp/ @j0KZ
+/packages/config-wizard/ @j0KZ
+
+# Shared utilities - critical package
+/packages/shared/ @j0KZ
+
+# Installer - user-facing critical component
+/installer/ @j0KZ
+
+# Documentation
+/docs/ @j0KZ
+/examples/ @j0KZ
+/templates/ @j0KZ
+
+# CI/CD and GitHub configuration
+/.github/workflows/ @j0KZ
+/.github/ISSUE_TEMPLATE/ @j0KZ
+/.github/dependabot.yml @j0KZ
+
+# Scripts - build and release automation
+/scripts/ @j0KZ
+
+# Security-related files require careful review
+SECURITY.md @j0KZ
+/packages/security-scanner/ @j0KZ
+
+# Critical build outputs (if committed)
+# /packages/*/dist/ @j0KZ

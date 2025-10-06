@@ -1,7 +1,7 @@
 /**
  * Preferences prompts
  */
-export function preferencesPrompt(_detected) {
+export function preferencesPrompt(detected) {
     const prompts = [];
     // Code review severity
     prompts.push({
@@ -17,7 +17,7 @@ export function preferencesPrompt(_detected) {
         when: (answers) => answers.mcps.includes('smart-reviewer'),
     });
     // Test framework (if not detected)
-    if (!_detected.testFramework) {
+    if (!detected.testFramework) {
         prompts.push({
             type: 'list',
             name: 'testFramework',

@@ -44,10 +44,11 @@ describe('validateNoTraversal', () => {
     expect(() => validateNoTraversal('./foo/../../../etc')).toThrow(PathValidationError);
   });
 
-  it('should allow normalized absolute paths', () => {
-    // After normalization, /var/../../../etc/passwd becomes /etc/passwd (valid)
-    // The function allows absolute paths as long as they don't contain .. after normalization
-    expect(() => validateNoTraversal('/var/../../../etc/passwd')).not.toThrow();
+  it('should reject path traversal in absolute paths', () => {
+    // Path contains .. which is a security risk - should be rejected
+    expect(() => validateNoTraversal('/var/../../../etc/passwd')).toThrow(
+      'Path traversal detected'
+    );
   });
 });
 

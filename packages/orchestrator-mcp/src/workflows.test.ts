@@ -82,6 +82,10 @@ describe('createPreMergeWorkflow', () => {
 
     expect(pipeline).toBeDefined();
     expect(typeof pipeline.addStep).toBe('function');
+
+    // Verify it has 4 steps
+    const steps = (pipeline as any).steps || [];
+    expect(steps.length).toBe(4);
   });
 
   it('should handle multiple files and project path', () => {
@@ -90,6 +94,47 @@ describe('createPreMergeWorkflow', () => {
     const pipeline = createPreMergeWorkflow(files, projectPath);
 
     expect(pipeline).toBeDefined();
+
+    // Verify batch review uses all files
+    const steps = (pipeline as any).steps || [];
+    const batchReview = steps.find((s: any) => s.name === 'batch-review');
+    expect(batchReview.config.params.filePaths).toEqual(files);
+  });
+
+  it('should use strict severity for pre-merge', () => {
+    const files = ['src/critical.ts'];
+    const projectPath = '/project';
+    const pipeline = createPreMergeWorkflow(files, projectPath);
+
+    const steps = (pipeline as any).steps || [];
+    const batchReview = steps.find((s: any) => s.name === 'batch-review');
+
+    expect(batchReview.config.params.config.severity).toBe('strict');
+  });
+
+  it('should include architecture analysis step', () => {
+    const files = ['src/test.ts'];
+    const projectPath = '/project';
+    const pipeline = createPreMergeWorkflow(files, projectPath);
+
+    const steps = (pipeline as any).steps || [];
+    const archStep = steps.find((s: any) => s.name === 'architecture-analysis');
+
+    expect(archStep).toBeDefined();
+    expect(archStep.tool).toBe('architecture-analyzer');
+    expect(archStep.config.params.projectPath).toBe(projectPath);
+  });
+
+  it('should have test-coverage step depend on batch-review', () => {
+    const files = ['src/test.ts'];
+    const projectPath = '/project';
+    const pipeline = createPreMergeWorkflow(files, projectPath);
+
+    const steps = (pipeline as any).steps || [];
+    const testCoverage = steps.find((s: any) => s.name === 'test-coverage');
+
+    expect(testCoverage).toBeDefined();
+    expect(testCoverage.dependsOn).toEqual(['batch-review']);
   });
 });
 
@@ -100,6 +145,10 @@ describe('createQualityAuditWorkflow', () => {
 
     expect(pipeline).toBeDefined();
     expect(typeof pipeline.addStep).toBe('function');
+
+    // Verify it has 3 steps
+    const steps = (pipeline as any).steps || [];
+    expect(steps.length).toBe(3);
   });
 
   it('should work with different project paths', () => {
@@ -107,6 +156,14 @@ describe('createQualityAuditWorkflow', () => {
     const pipeline = createQualityAuditWorkflow(projectPath);
 
     expect(pipeline).toBeDefined();
+
+    // Verify all steps use the correct projectPath
+    const steps = (pipeline as any).steps || [];
+    steps.forEach((step: any) => {
+      if (step.config?.params?.projectPath) {
+        expect(step.config.params.projectPath).toBe(projectPath);
+      }
+    });
   });
 
   it('should work with Windows paths', () => {
@@ -114,5 +171,80 @@ describe('createQualityAuditWorkflow', () => {
     const pipeline = createQualityAuditWorkflow(projectPath);
 
     expect(pipeline).toBeDefined();
+  });
+
+  it('should include security report generation', () => {
+    const projectPath = '/project';
+    const pipeline = createQualityAuditWorkflow(projectPath);
+
+    const steps = (pipeline as any).steps || [];
+    const securityReport = steps.find((s: any) => s.name === 'security-report');
+
+    expect(securityReport).toBeDefined();
+    expect(securityReport.tool).toBe('security-scanner');
+    expect(securityReport.config.action).toBe('generate_security_report');
+  });
+
+  it('should include architecture analysis', () => {
+    const projectPath = '/project';
+    const pipeline = createQualityAuditWorkflow(projectPath);
+
+    const steps = (pipeline as any).steps || [];
+    const archAnalysis = steps.find((s: any) => s.name === 'architecture-analysis');
+
+    expect(archAnalysis).toBeDefined();
+    expect(archAnalysis.tool).toBe('architecture-analyzer');
+    expect(archAnalysis.config.params.config.generateGraph).toBe(true);
+  });
+
+  it('should include documentation generation', () => {
+    const projectPath = '/project';
+    const pipeline = createQualityAuditWorkflow(projectPath);
+
+    const steps = (pipeline as any).steps || [];
+    const docGen = steps.find((s: any) => s.name === 'generate-docs');
+
+    expect(docGen).toBeDefined();
+    expect(docGen.tool).toBe('doc-generator');
+    expect(docGen.config.action).toBe('generate_full_docs');
+  });
+});
+
+describe('Edge Cases', () => {
+  it('should handle empty file arrays in pre-commit', () => {
+    const files: string[] = [];
+    const pipeline = createPreCommitWorkflow(files);
+
+    expect(pipeline).toBeDefined();
+    const steps = (pipeline as any).steps || [];
+    expect(steps.length).toBe(2);
+  });
+
+  it('should handle empty file arrays in pre-merge', () => {
+    const files: string[] = [];
+    const projectPath = '/project';
+    const pipeline = createPreMergeWorkflow(files, projectPath);
+
+    expect(pipeline).toBeDefined();
+    const steps = (pipeline as any).steps || [];
+    expect(steps.length).toBe(4);
+  });
+
+  it('should handle relative project paths', () => {
+    const projectPath = './relative/path';
+    const pipeline = createQualityAuditWorkflow(projectPath);
+
+    expect(pipeline).toBeDefined();
+  });
+
+  it('should handle very long file lists', () => {
+    const files = Array(1000)
+      .fill(null)
+      .map((_, i) => `src/file${i}.ts`);
+    const pipeline = createPreCommitWorkflow(files);
+
+    const steps = (pipeline as any).steps || [];
+    const reviewStep = steps.find((s: any) => s.name === 'code-review');
+    expect(reviewStep.config.params.filePaths.length).toBe(1000);
   });
 });

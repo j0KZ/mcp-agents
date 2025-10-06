@@ -281,3 +281,13 @@ export {
   type BenchmarkResult,
   type BenchmarkOptions,
 } from './benchmark.js';
+
+// Export memory profiling utilities
+export {
+  MemoryProfiler,
+  globalProfiler,
+  profileMemory,
+  type MemorySnapshot,
+  type MemoryDelta,
+  type MemoryLeakReport,
+} from './memory-profiler.js';

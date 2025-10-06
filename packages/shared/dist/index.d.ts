@@ -12,8 +12,10 @@ export * from './fs/index.js';
 export * from './cache/index.js';
 export * from './constants/index.js';
 export * from './security/path-validator.js';
+export * from './mcp-protocol/validator.js';
 export * from './validation.js';
 export * from './errors/index.js';
-export declare const VERSION = "1.0.31";
+export * from './patterns/index.js';
+export declare const VERSION = "1.0.33";
 export declare const PACKAGE_NAME = "@j0kz/shared";
 //# sourceMappingURL=index.d.ts.map

@@ -21,10 +21,14 @@ export * from './cache/index.js';
 export * from './constants/index.js';
 // Security utilities
 export * from './security/path-validator.js';
+// MCP Protocol validation
+export * from './mcp-protocol/validator.js';
 // Validation utilities
 export * from './validation.js';
 // Error handling
 export * from './errors/index.js';
-export const VERSION = '1.0.31';
+// Common patterns for reducing duplication
+export * from './patterns/index.js';
+export const VERSION = '1.0.33';
 export const PACKAGE_NAME = '@j0kz/shared';
 //# sourceMappingURL=index.js.map

@@ -11,17 +11,43 @@ import { installMCPs } from './installer.js';
 import { validateConfig } from './validator.js';
 import { logger } from './utils/logger.js';
 import { spinner } from './utils/spinner.js';
-export async function runWizard(args) {
+export async function runWizard(args, deps = {}) {
+    // Use injected dependencies or defaults
+    const { spinner: createSpinner = spinner, detectEditor: detectEditorFn = detectEditor, detectProject: detectProjectFn = detectProject, detectTestFramework: detectTestFrameworkFn = detectTestFramework, generateConfig: generateConfigFn = generateConfig, validateConfig: validateConfigFn = validateConfig, installMCPs: installMCPsFn = installMCPs, writeConfigFile: writeConfigFileFn = (await import('./utils/file-system.js')).writeConfigFile, inquirerPrompt = inquirer.prompt } = deps;
     // Welcome message
     logger.header('🎯 MCP Agents Configuration Wizard');
     logger.divider();
     // Step 1: Detect environment
-    const spin = spinner('Analyzing environment...');
+    const spin = createSpinner('Analyzing environment...');
     const detected = {
-        editor: await detectEditor(),
-        project: await detectProject(),
-        testFramework: await detectTestFramework(),
+        editor: null,
+        project: {
+            language: 'unknown',
+            framework: undefined,
+            packageManager: 'npm',
+            hasTests: false
+        },
+        testFramework: null,
     };
+    // Try to detect, but continue if detection fails
+    try {
+        detected.editor = await detectEditorFn();
+    }
+    catch (e) {
+        logger.warn('Editor detection failed, will prompt for selection');
+    }
+    try {
+        detected.project = await detectProjectFn();
+    }
+    catch (e) {
+        logger.warn('Project detection failed, will use defaults');
+    }
+    try {
+        detected.testFramework = await detectTestFrameworkFn();
+    }
+    catch (e) {
+        logger.warn('Test framework detection failed, will prompt for selection');
+    }
     spin.succeed('Environment analyzed');
     // Show detections
     if (detected.editor) {
@@ -36,14 +62,14 @@ export async function runWizard(args) {
     }
     logger.divider();
     // Step 2: Interactive prompts (or use args)
-    const selections = await gatherSelections(args, detected);
+    const selections = await gatherSelections(args, detected, deps);
     // Step 3: Validate selections
     logger.info('\nValidating configuration...');
-    const issues = await validateConfig(selections, detected);
+    const issues = await validateConfigFn(selections, detected);
     if (issues.length > 0) {
         logger.warn('\n⚠️  Configuration issues found:');
         issues.forEach(issue => logger.warn(`  - ${issue}`));
-        const { proceed } = await inquirer.prompt([
+        const { proceed } = await inquirerPrompt([
             {
                 type: 'confirm',
                 name: 'proceed',
@@ -61,7 +87,7 @@ export async function runWizard(args) {
     }
     // Step 4: Generate config
     logger.info('\nGenerating configuration...');
-    const config = await generateConfig(selections);
+    const config = await generateConfigFn(selections);
     if (args.dryRun) {
         logger.info('\n📄 Generated configuration (dry run):');
         console.log(JSON.stringify(config, null, 2));
@@ -70,11 +96,11 @@ export async function runWizard(args) {
     }
     // Step 5: Install MCPs
     if (selections.preferences.installGlobally) {
-        await installMCPs(selections.mcps, args.verbose);
+        await installMCPsFn(selections.mcps, args.verbose);
     }
     // Step 6: Write config
     logger.info('\nWriting configuration file...');
-    const configPath = await writeConfig(config, selections.editor, args.output, args.force);
+    const configPath = await writeConfigFileFn(config, selections.editor, args.output, args.force);
     logger.success(`✓ Configuration written to: ${configPath}`);
     // Success summary
     logger.divider();
@@ -86,7 +112,8 @@ export async function runWizard(args) {
     logger.info('  1. Restart your editor');
     logger.info('  2. Try asking: "Review my code" or "Scan for vulnerabilities"');
 }
-async function gatherSelections(args, detected) {
+export async function gatherSelections(args, detected, deps = {}) {
+    const { inquirerPrompt = inquirer.prompt, editorPrompt: editorPromptFn = editorPrompt, mcpPrompt: mcpPromptFn = mcpPrompt, preferencesPrompt: preferencesPromptFn = preferencesPrompt } = deps;
     // Non-interactive mode
     if (args.editor && args.mcps) {
         return {
@@ -100,10 +127,10 @@ async function gatherSelections(args, detected) {
         };
     }
     // Interactive mode
-    const answers = await inquirer.prompt([
-        editorPrompt(detected.editor),
-        mcpPrompt(detected.project),
-        ...preferencesPrompt(detected),
+    const answers = await inquirerPrompt([
+        editorPromptFn(detected.editor),
+        mcpPromptFn(detected.project),
+        ...preferencesPromptFn(detected),
     ]);
     return {
         editor: answers.editor,
@@ -114,9 +141,5 @@ async function gatherSelections(args, detected) {
             installGlobally: answers.installGlobally !== false,
         },
     };
-}
-async function writeConfig(config, editor, customPath, force) {
-    const { writeConfigFile } = await import('./utils/file-system.js');
-    return writeConfigFile(config, editor, customPath, force);
 }
 //# sourceMappingURL=wizard.js.map

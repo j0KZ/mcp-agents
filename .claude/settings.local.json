@@ -51,7 +51,14 @@
       "Bash(npm run version:sync:*)",
       "Bash(npm run format:*)",
       "Bash(npm run test:coverage:check:*)",
-      "Bash(npm run version:check-shared:*)"
+      "Bash(npm run version:check-shared:*)",
+      "Bash(npm audit:*)",
+      "Bash(do if [ -d \"$dir/src\" ])",
+      "Bash(npx vitest run:*)",
+      "Bash(npm run prettier:write:*)",
+      "Bash(npm run:*)",
+      "Bash(npx prettier:*)",
+      "Bash(npx eslint:*)"
     ],
     "deny": [],
     "ask": []

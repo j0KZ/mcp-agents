@@ -15,12 +15,14 @@ Version 1.0.32 is a critical security update that addresses multiple vulnerabili
 ### Critical Vulnerabilities Resolved
 
 #### 1. ReDoS (Regular Expression Denial of Service)
+
 - **Severity:** High
 - **CVE:** Pending assignment
 - **Impact:** Could cause performance degradation or denial of service
 - **Resolution:** Added bounded quantifiers to all regex patterns
 
 **Affected Files:**
+
 - `packages/refactor-assistant/src/transformations/async-converter.ts`
   - Fixed unbounded `\w+` patterns → `\w{1,50}`
   - Fixed unbounded `\s*` patterns → `\s{0,3}`
@@ -29,12 +31,14 @@ Version 1.0.32 is a critical security update that addresses multiple vulnerabili
   - Bounded all whitespace quantifiers
 
 #### 2. Hardcoded Secrets in Tests
+
 - **Severity:** Medium
 - **Alert:** GitGuardian Secret Detection
 - **Impact:** Potential credential exposure
 - **Resolution:** Replaced real tokens with mock patterns
 
 **Changes:**
+
 - Removed JWT token from jwt.io example in `scanner.test.ts`
 - Implemented safe test patterns using repeated characters:
   ```javascript
@@ -42,6 +46,7 @@ Version 1.0.32 is a critical security update that addresses multiple vulnerabili
   ```
 
 #### 3. Static Analysis Warnings
+
 - **Tool:** CodeQL
 - **Issues:** Unused imports, potential code quality issues
 - **Resolution:** Cleaned up imports in `benchmark-performance.ts`
@@ -66,6 +71,7 @@ Version 1.0.32 is a critical security update that addresses multiple vulnerabili
 ## ✅ Verification
 
 All security tools now report clean:
+
 - GitGuardian: ✅ No secrets detected
 - CodeQL: ✅ No security alerts
 - GitHub Security: ✅ All checks passing
@@ -74,6 +80,7 @@ All security tools now report clean:
 ## 📦 Updated Packages
 
 All packages updated to v1.0.32:
+
 - @j0kz/smart-reviewer-mcp
 - @j0kz/test-generator-mcp
 - @j0kz/architecture-analyzer-mcp
@@ -90,13 +97,17 @@ All packages updated to v1.0.32:
 No breaking changes. This is a security-focused patch release that maintains full backwards compatibility.
 
 ### For Users
+
 Simply update to the latest version:
+
 ```bash
 npm update @j0kz/[package-name]
 ```
 
 ### For Contributors
+
 When writing regex patterns, always use bounded quantifiers:
+
 - ❌ `\w+` → ✅ `\w{1,50}`
 - ❌ `\s*` → ✅ `\s{0,3}`
 - ❌ `[^;]*` → ✅ `[^;]{0,100}`
@@ -110,6 +121,7 @@ When writing regex patterns, always use bounded quantifiers:
 ## 🙏 Acknowledgments
 
 Thanks to the GitHub security tools team for their automated vulnerability detection:
+
 - GitGuardian for secret scanning
 - CodeQL for static analysis
 - Dependabot for dependency updates

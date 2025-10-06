@@ -96,4 +96,5 @@ export declare class ResourcePool<T> {
     };
 }
 export { benchmark, benchmarkSuite, compareBenchmarks, formatBenchmarkResult, type BenchmarkResult, type BenchmarkOptions, } from './benchmark.js';
+export { MemoryProfiler, globalProfiler, profileMemory, type MemorySnapshot, type MemoryDelta, type MemoryLeakReport, } from './memory-profiler.js';
 //# sourceMappingURL=index.d.ts.map
