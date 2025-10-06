@@ -5,7 +5,7 @@
  * Handles version bumping, building, testing, and publishing
  */
 
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -164,7 +164,7 @@ class ReleaseManager {
     );
 
     // Sync versions across packages
-    execSync('npm run version:sync', { stdio: 'inherit' });
+    execFileSync('npm', ['run', 'version:sync'], { stdio: 'inherit', shell: true });
 
     console.log('✅ Version updated across all packages\n');
   }

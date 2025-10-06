@@ -74,7 +74,6 @@ export class MCPPipeline {
       this.performance.mark(`step-${step.name}-start`);
 
       let attempts = 0;
-      let lastError: any;
       const maxRetries = (step as any).retryCount || 0;
 
       while (attempts <= maxRetries) {
@@ -92,7 +91,6 @@ export class MCPPipeline {
           this.performance.mark(`step-${step.name}-end`);
           break;
         } catch (error) {
-          lastError = error;
           attempts++;
           this.retryAttempts.set(step.name, attempts);
 
