@@ -14,20 +14,10 @@ import {
   ListToolsRequestSchema,
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
-import {
-  generateJSDoc,
-  generateReadme,
-  generateApiDocs,
-  generateChangelog,
-} from './generator.js';
-import {
-  JSDocConfig,
-  ReadmeConfig,
-  ApiDocsConfig,
-  ChangelogConfig,
-  DocError,
-} from './types.js';
+import { generateJSDoc, generateReadme, generateApiDocs, generateChangelog } from './generator.js';
+import { JSDocConfig, ReadmeConfig, ApiDocsConfig, ChangelogConfig, DocError } from './types.js';
 import * as fs from 'fs';
+import { MCPError, getErrorMessage } from '@j0kz/shared';
 import { validateFilePath, validateDirectoryPath } from '@j0kz/shared';
 
 /**
@@ -51,7 +41,8 @@ const server = new Server(
 const TOOLS: Tool[] = [
   {
     name: 'generate_jsdoc',
-    description: 'Generate JSDoc comments for a TypeScript/JavaScript file. Analyzes functions, classes, and interfaces to produce comprehensive JSDoc documentation with parameter types, return values, and suggestions for missing documentation.',
+    description:
+      'Generate JSDoc comments for a TypeScript/JavaScript file. Analyzes functions, classes, and interfaces to produce comprehensive JSDoc documentation with parameter types, return values, and suggestions for missing documentation.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -88,7 +79,8 @@ const TOOLS: Tool[] = [
   },
   {
     name: 'generate_readme',
-    description: 'Generate a comprehensive README.md file from project source code and package.json. Creates sections for installation, usage, API reference, badges, table of contents, and more.',
+    description:
+      'Generate a comprehensive README.md file from project source code and package.json. Creates sections for installation, usage, API reference, badges, table of contents, and more.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -148,13 +140,15 @@ const TOOLS: Tool[] = [
   },
   {
     name: 'generate_api_docs',
-    description: 'Generate comprehensive API documentation from TypeScript/JavaScript source files. Extracts classes, interfaces, functions, parameters, and return types to create detailed API reference documentation.',
+    description:
+      'Generate comprehensive API documentation from TypeScript/JavaScript source files. Extracts classes, interfaces, functions, parameters, and return types to create detailed API reference documentation.',
     inputSchema: {
       type: 'object',
       properties: {
         projectPath: {
           type: 'string',
-          description: 'Path to the project source directory (will recursively scan for .ts, .js, .tsx, .jsx files)',
+          description:
+            'Path to the project source directory (will recursively scan for .ts, .js, .tsx, .jsx files)',
         },
         config: {
           type: 'object',
@@ -200,7 +194,8 @@ const TOOLS: Tool[] = [
   },
   {
     name: 'generate_changelog',
-    description: 'Generate a changelog from git commit history using conventional commit format. Groups commits by type (features, fixes, docs, etc.) and optionally includes breaking changes, authors, and commit links.',
+    description:
+      'Generate a changelog from git commit history using conventional commit format. Groups commits by type (features, fixes, docs, etc.) and optionally includes breaking changes, authors, and commit links.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -252,7 +247,8 @@ const TOOLS: Tool[] = [
   },
   {
     name: 'generate_full_docs',
-    description: 'Generate complete documentation suite including JSDoc, README, API documentation, and changelog all at once. This is a convenience tool that runs all documentation generators and saves the results to appropriate files.',
+    description:
+      'Generate complete documentation suite including JSDoc, README, API documentation, and changelog all at once. This is a convenience tool that runs all documentation generators and saves the results to appropriate files.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -309,7 +305,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 /**
  * Register call_tool handler
  */
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
+server.setRequestHandler(CallToolRequestSchema, async request => {
   const { name, arguments: args } = request.params;
 
   try {
@@ -486,28 +482,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       default:
-        throw new Error(`Unknown tool: ${name}`);
+        throw new MCPError('DOC_005', { tool: name });
     }
   } catch (error) {
-    if (error instanceof DocError) {
-      return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify(
-              {
-                error: error.message,
-                code: error.code,
-                details: error.details,
-              },
-              null,
-              2
-            ),
-          },
-        ],
-        isError: true,
-      };
-    }
+    const errorMessage = getErrorMessage(error);
+    const errorCode =
+      error instanceof MCPError ? error.code : error instanceof DocError ? error.code : 'UNKNOWN';
 
     return {
       content: [
@@ -515,8 +495,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           type: 'text',
           text: JSON.stringify(
             {
-              error: 'Documentation generation failed',
-              message: String(error),
+              success: false,
+              error: errorMessage,
+              code: errorCode,
+              ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
+              ...(error instanceof DocError && error.details ? { details: error.details } : {}),
             },
             null,
             2
@@ -537,7 +520,7 @@ async function main() {
   console.error('Documentation Generator MCP Server running on stdio');
 }
 
-main().catch((error) => {
+main().catch(error => {
   console.error('Fatal error in main():', error);
   process.exit(1);
 });

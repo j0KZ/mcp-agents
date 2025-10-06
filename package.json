@@ -1,7 +1,7 @@
 {
   "name": "@j0kz/mcp-agents",
-  "version": "1.0.29",
-  "description": "Professional MCP agents for AI code editors - Smart Reviewer, Test Generator, Architecture Analyzer. Works with Claude Code, Roo Code, Windsurf, Cursor, and any MCP-compatible editor.",
+  "version": "1.0.31",
+  "description": "9 professional MCP agents including workflow orchestrator for AI code editors - Smart Reviewer, Test Generator, Architecture Analyzer, and more. Works with Claude Code, Cursor, Windsurf, and any MCP-compatible editor.",
   "type": "module",
   "private": true,
   "workspaces": [
@@ -15,24 +15,33 @@
     "dev": "npm run dev --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "test:ci": "npm run test:ci --workspaces --if-present",
-    "test:coverage": "npm run test:coverage --workspaces --if-present",
+    "test:coverage": "vitest run --coverage",
     "test:coverage:check": "npm run test:coverage && node scripts/check-coverage.js",
     "coverage:dashboard": "node scripts/coverage-dashboard.js",
+    "benchmark": "node benchmarks/orchestrator-benchmark-simple.js",
     "install-all": "node scripts/install-all.js",
     "version:sync": "node scripts/sync-versions.js",
+    "version:check-shared": "node scripts/enforce-shared-version.js",
     "publish-all": "npm run build && npm publish --workspaces --access public",
     "clean": "npm run clean --workspaces --if-present && rm -rf node_modules",
     "format": "prettier --write \"**/*.{js,ts,json,md}\"",
-    "lint": "eslint packages/*/src --ext .ts,.js"
+    "lint": "eslint \"packages/*/src/**/*.{ts,js}\"",
+    "lint:fix": "eslint \"packages/*/src/**/*.{ts,js}\" --fix"
   },
   "devDependencies": {
     "@types/node": "^24.6.2",
+    "@typescript-eslint/eslint-plugin": "^8.45.0",
+    "@typescript-eslint/parser": "^8.45.0",
+    "eslint": "^9.37.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.6.2",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3",
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.65.0",
+    "@j0kz/orchestrator-mcp": "^1.0.30",
     "@modelcontextprotocol/sdk": "^1.18.2"
   },
   "keywords": [
@@ -63,7 +72,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/j0kz/mcp-agents.git"
+    "url": "git+https://github.com/j0kz/mcp-agents.git"
   },
   "bugs": {
     "url": "https://github.com/j0kz/mcp-agents/issues"

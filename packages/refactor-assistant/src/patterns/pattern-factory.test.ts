@@ -261,8 +261,16 @@ describe('pattern-factory', () => {
       it('should handle all patterns with same input code', () => {
         const code = 'const data = "test";';
         const patterns: DesignPattern[] = [
-          'singleton', 'factory', 'observer', 'strategy', 'decorator',
-          'adapter', 'facade', 'proxy', 'command', 'chain-of-responsibility'
+          'singleton',
+          'factory',
+          'observer',
+          'strategy',
+          'decorator',
+          'adapter',
+          'facade',
+          'proxy',
+          'command',
+          'chain-of-responsibility',
         ];
 
         patterns.forEach(pattern => {
@@ -466,8 +474,7 @@ describe('pattern-factory', () => {
 
       invalidPatterns.forEach(pattern => {
         expect(isValidPattern(pattern)).toBe(false);
-        expect(() => applyPattern(pattern as DesignPattern, 'code', {}))
-          .toThrow(/Unknown pattern/);
+        expect(() => applyPattern(pattern as DesignPattern, 'code', {})).toThrow(/Unknown pattern/);
       });
     });
   });

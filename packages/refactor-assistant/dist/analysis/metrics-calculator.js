@@ -1,4 +1,4 @@
-import { COMPLEXITY_LIMITS, MAINTAINABILITY_CONSTANTS, INDEX_CONSTANTS } from '../constants/refactoring-limits.js';
+import { COMPLEXITY_LIMITS, MAINTAINABILITY_CONSTANTS, INDEX_CONSTANTS, } from '../constants/refactoring-limits.js';
 /**
  * Calculate nesting depth at a specific line index
  */
@@ -19,13 +19,22 @@ export function findDuplicateBlocks(code) {
     const duplicates = [];
     const minBlockSize = COMPLEXITY_LIMITS.MIN_DUPLICATE_BLOCK_SIZE;
     for (let i = 0; i < lines.length - minBlockSize; i++) {
-        const block1 = lines.slice(i, i + minBlockSize).join('\n').trim();
+        const block1 = lines
+            .slice(i, i + minBlockSize)
+            .join('\n')
+            .trim();
         if (!block1)
             continue;
         for (let j = i + minBlockSize; j < lines.length - minBlockSize; j++) {
-            const block2 = lines.slice(j, j + minBlockSize).join('\n').trim();
+            const block2 = lines
+                .slice(j, j + minBlockSize)
+                .join('\n')
+                .trim();
             if (block1 === block2) {
-                duplicates.push({ line1: i + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET, line2: j + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET });
+                duplicates.push({
+                    line1: i + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET,
+                    line2: j + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET,
+                });
             }
         }
     }
@@ -76,7 +85,8 @@ export function calculateMetrics(code) {
     const lines = code.split('\n').filter(line => line.trim() && !line.trim().startsWith('//'));
     // Use bounded quantifier to prevent ReDoS on malicious inputs
     const functionCount = (code.match(/function\s+\w+/g) || []).length +
-        (code.match(/const\s+\w+\s*=\s*(?:async\s+)?(?:\([^)]{0,200}\)|[a-zA-Z_$][\w$]*)\s*=>/g) || []).length;
+        (code.match(/const\s+\w+\s*=\s*(?:async\s+)?(?:\([^)]{0,200}\)|[a-zA-Z_$][\w$]*)\s*=>/g) || [])
+            .length;
     const complexity = calculateCyclomaticComplexity(code);
     const maxNestingDepth = Math.max(...lines.map((_, idx) => getNestingDepth(lines, idx)));
     return {

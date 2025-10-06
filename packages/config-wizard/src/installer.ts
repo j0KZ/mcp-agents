@@ -14,7 +14,7 @@ const MCP_PACKAGES: Record<string, string> = {
   'security-scanner': '@j0kz/security-scanner-mcp',
   'refactor-assistant': '@j0kz/refactor-assistant-mcp',
   'api-designer': '@j0kz/api-designer-mcp',
-  'db-schema': '@j0kz/db-schema-mcp'
+  'db-schema': '@j0kz/db-schema-mcp',
 };
 
 export async function installMCPs(mcps: string[], verbose = false): Promise<void> {
@@ -30,12 +30,8 @@ export async function installMCPs(mcps: string[], verbose = false): Promise<void
 
       spin.text = `Installing ${mcp}...`;
 
-      await execa('npm', [
-        'install',
-        '-g',
-        `${packageName}@^1.0.0`
-      ], {
-        stdio: verbose ? 'inherit' : 'pipe'
+      await execa('npm', ['install', '-g', `${packageName}@^1.0.0`], {
+        stdio: verbose ? 'inherit' : 'pipe',
       });
     }
 

@@ -104,12 +104,12 @@ export function validateDirectoryPath(dirPath, allowedRoot) {
  */
 export function sanitizeFilename(filename) {
     // Remove path separators and null bytes
-    return filename
+    return (filename
         .replace(/[/\\]/g, '')
         .replace(/\0/g, '')
         .replace(/\.\./g, '')
         // Limit to alphanumeric, dots, dashes, underscores
         .replace(/[^a-zA-Z0-9._-]/g, '_')
-        .substring(0, 255); // Limit length
+        .substring(0, 255)); // Limit length
 }
 //# sourceMappingURL=path-validator.js.map

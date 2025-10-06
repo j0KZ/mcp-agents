@@ -12,6 +12,7 @@ import {
   ListToolsRequestSchema,
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
+import { MCPError, getErrorMessage } from '@j0kz/shared';
 import {
   generateOpenAPI,
   designRESTEndpoints,
@@ -48,7 +49,10 @@ const TOOLS: Tool[] = [
             name: { type: 'string', description: 'API name' },
             version: { type: 'string', description: 'API version (e.g., "1.0.0")' },
             description: { type: 'string', description: 'API description' },
-            baseUrl: { type: 'string', description: 'Base URL (e.g., "https://api.example.com/v1")' },
+            baseUrl: {
+              type: 'string',
+              description: 'Base URL (e.g., "https://api.example.com/v1")',
+            },
             style: {
               type: 'string',
               enum: ['REST', 'GraphQL', 'gRPC', 'WebSocket'],
@@ -109,7 +113,8 @@ const TOOLS: Tool[] = [
         resources: {
           type: 'array',
           items: { type: 'string' },
-          description: 'Resource names to generate endpoints for (e.g., ["users", "posts", "comments"])',
+          description:
+            'Resource names to generate endpoints for (e.g., ["users", "posts", "comments"])',
         },
         config: {
           type: 'object',
@@ -299,7 +304,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 /**
  * Handle tool execution requests
  */
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
+server.setRequestHandler(CallToolRequestSchema, async request => {
   const { name, arguments: args } = request.params;
 
   try {
@@ -400,10 +405,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       default:
-        throw new Error(`Unknown tool: ${name}`);
+        throw new MCPError('API_006', { tool: name });
     }
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorMessage = getErrorMessage(error);
+    const errorCode = error instanceof MCPError ? error.code : 'UNKNOWN';
+
     return {
       content: [
         {
@@ -411,7 +418,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           text: JSON.stringify(
             {
               success: false,
-              errors: [errorMessage],
+              error: errorMessage,
+              code: errorCode,
+              ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
             },
             null,
             2
@@ -432,7 +441,7 @@ async function main() {
   console.error('API Designer MCP Server running on stdio');
 }
 
-main().catch((error) => {
+main().catch(error => {
   console.error('Server error:', error);
   process.exit(1);
 });

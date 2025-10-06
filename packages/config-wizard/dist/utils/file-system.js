@@ -10,7 +10,7 @@ export async function writeConfigFile(config, editor, customPath, force = false)
         throw new Error(`Cannot determine config path for editor: ${editor}`);
     }
     // Check if file exists
-    if (!force && await fs.pathExists(configPath)) {
+    if (!force && (await fs.pathExists(configPath))) {
         throw new Error(`Config file already exists: ${configPath}. Use --force to overwrite.`);
     }
     // Ensure directory exists
@@ -20,7 +20,7 @@ export async function writeConfigFile(config, editor, customPath, force = false)
     return configPath;
 }
 export async function backupConfigFile(configPath) {
-    if (!await fs.pathExists(configPath)) {
+    if (!(await fs.pathExists(configPath))) {
         return null;
     }
     const backupPath = `${configPath}.backup.${Date.now()}`;

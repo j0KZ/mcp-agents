@@ -8,11 +8,14 @@ describe('Doc Generator', () => {
   const testFile = path.join(tmpdir(), 'test-code-' + Date.now() + '.ts');
 
   beforeAll(() => {
-    fs.writeFileSync(testFile, `
+    fs.writeFileSync(
+      testFile,
+      `
       export function testFunction(param: string): number {
         return param.length;
       }
-    `);
+    `
+    );
   });
 
   afterAll(() => {
@@ -32,7 +35,7 @@ describe('Doc Generator', () => {
 
   it('should generate README', async () => {
     const result = await generateReadme(process.cwd(), {
-      projectName: 'Test Project'
+      projectName: 'Test Project',
     });
     expect(result.content).toContain('# Test Project');
   });

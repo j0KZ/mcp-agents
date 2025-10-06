@@ -79,7 +79,7 @@ describe('Package Exports', () => {
         'calculateMetrics',
         'VERSION',
         'NAME',
-        'DESCRIPTION'
+        'DESCRIPTION',
       ];
 
       expectedExports.forEach(exportName => {
@@ -92,7 +92,9 @@ describe('Package Exports', () => {
 
       // Should only have functions and metadata, no implementation details
       exports.forEach(exportName => {
-        expect(['function', 'string']).toContain(typeof RefactorAssistant[exportName as keyof typeof RefactorAssistant]);
+        expect(['function', 'string']).toContain(
+          typeof RefactorAssistant[exportName as keyof typeof RefactorAssistant]
+        );
       });
     });
   });

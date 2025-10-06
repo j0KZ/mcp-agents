@@ -133,8 +133,11 @@ export interface MCPToolMetadata {
  */
 export interface PipelineStep {
   name: string;
-  tool: string;
-  config: MCPConfig;
+  tool: string; // MCP name (e.g., 'smart-reviewer')
+  config: MCPConfig & {
+    action?: string; // Tool name to call (e.g., 'review_file')
+    params?: any; // Tool parameters
+  };
   input?: any;
   dependsOn?: string[];
 }

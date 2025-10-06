@@ -34,7 +34,6 @@ export interface IFixer {
  * Abstract base class for fixers with common utilities
  */
 export abstract class BaseFixer implements IFixer {
-
   abstract findFixes(context: FixContext): AutoFix[];
   abstract getName(): string;
   abstract getCoverage(): number;

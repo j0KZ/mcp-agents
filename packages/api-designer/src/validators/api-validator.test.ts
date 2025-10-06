@@ -9,15 +9,15 @@ describe('API Validator - OpenAPI Validation', () => {
       info: {
         title: 'Test API',
         version: '1.0.0',
-        license: { name: 'MIT' }
+        license: { name: 'MIT' },
       },
       paths: {
         '/users': {
-          get: { summary: 'List users' }
-        }
+          get: { summary: 'List users' },
+        },
       },
       components: { schemas: {}, securitySchemes: {} },
-      tags: []
+      tags: [],
     };
 
     const result = validateAPIDesign(spec);
@@ -30,9 +30,9 @@ describe('API Validator - OpenAPI Validation', () => {
     const spec: any = {
       openapi: '3.0.3',
       info: {
-        version: '1.0.0'
+        version: '1.0.0',
       },
-      paths: {}
+      paths: {},
     };
 
     const result = validateAPIDesign(spec);
@@ -48,9 +48,9 @@ describe('API Validator - OpenAPI Validation', () => {
     const spec: any = {
       openapi: '3.0.3',
       info: {
-        title: 'Test API'
+        title: 'Test API',
       },
-      paths: {}
+      paths: {},
     };
 
     const result = validateAPIDesign(spec);
@@ -63,7 +63,7 @@ describe('API Validator - OpenAPI Validation', () => {
   it('should return error when info is missing', () => {
     const spec: any = {
       openapi: '3.0.3',
-      paths: {}
+      paths: {},
     };
 
     const result = validateAPIDesign(spec);
@@ -78,11 +78,11 @@ describe('API Validator - OpenAPI Validation', () => {
       info: {
         title: 'Test API',
         version: '1.0.0',
-        license: { name: 'MIT' }
+        license: { name: 'MIT' },
       },
       paths: {},
       components: { schemas: {}, securitySchemes: {} },
-      tags: []
+      tags: [],
     };
 
     const result = validateAPIDesign(spec);
@@ -98,13 +98,13 @@ describe('API Validator - OpenAPI Validation', () => {
       info: {
         title: 'Test API',
         version: '1.0.0',
-        license: { name: 'MIT' }
+        license: { name: 'MIT' },
       },
       paths: {
-        '/users': { get: {} }
+        '/users': { get: {} },
       },
       components: { schemas: {}, securitySchemes: {} },
-      tags: []
+      tags: [],
     };
 
     const result = validateAPIDesign(spec);
@@ -123,14 +123,12 @@ describe('API Validator - OpenAPI Validation', () => {
       info: {
         title: 'Test API',
         version: '1.0.0',
-        license: { name: 'MIT' }
+        license: { name: 'MIT' },
       },
-      servers: [
-        { url: 'https://api.example.com' }
-      ],
+      servers: [{ url: 'https://api.example.com' }],
       paths: {},
       components: { schemas: {}, securitySchemes: {} },
-      tags: []
+      tags: [],
     };
 
     const result = validateAPIDesign(spec);
@@ -145,14 +143,12 @@ describe('API Validator - OpenAPI Validation', () => {
       info: {
         title: 'Test API',
         version: '1.0.0',
-        license: { name: 'MIT' }
+        license: { name: 'MIT' },
       },
-      servers: [
-        { url: 'https://api.example.com/v1' }
-      ],
+      servers: [{ url: 'https://api.example.com/v1' }],
       paths: {},
       components: { schemas: {}, securitySchemes: {} },
-      tags: []
+      tags: [],
     };
 
     const result = validateAPIDesign(spec);
@@ -166,18 +162,18 @@ describe('API Validator - OpenAPI Validation', () => {
       info: {
         title: 'Test API',
         version: '1.0.0',
-        license: { name: 'MIT' }
+        license: { name: 'MIT' },
       },
       servers: [{ url: 'https://api.example.com/v1' }],
       paths: {
-        '/users': { get: {} }
+        '/users': { get: {} },
       },
       components: {
         schemas: {},
-        securitySchemes: { ApiKey: { type: 'apiKey', in: 'header', name: 'X-API-Key' } }
+        securitySchemes: { ApiKey: { type: 'apiKey', in: 'header', name: 'X-API-Key' } },
       },
       security: [{ ApiKey: [] }],
-      tags: []
+      tags: [],
     };
 
     const result = validateAPIDesign(spec);
@@ -192,7 +188,7 @@ describe('API Validator - OpenAPI Validation', () => {
     const spec: any = {
       openapi: '3.0.3',
       info: {},
-      paths: {}
+      paths: {},
     };
 
     const result = validateAPIDesign(spec);
@@ -208,11 +204,11 @@ describe('API Validator - OpenAPI Validation', () => {
       info: {
         title: 'Test API',
         version: '1.0.0',
-        license: { name: 'MIT' }
+        license: { name: 'MIT' },
       },
       paths: {},
       components: { schemas: {}, securitySchemes: {} },
-      tags: []
+      tags: [],
     };
 
     const result = validateAPIDesign(spec);
@@ -228,11 +224,11 @@ describe('API Validator - OpenAPI Validation', () => {
       info: {
         title: 'Test API',
         version: '1.0.0',
-        license: { name: 'MIT' }
+        license: { name: 'MIT' },
       },
       paths: {},
       components: { schemas: {}, securitySchemes: {} },
-      tags: []
+      tags: [],
     };
 
     const result = validateAPIDesign(spec);
@@ -251,12 +247,12 @@ describe('API Validator - OpenAPI Validation', () => {
       info: {
         title: 'Test API',
         version: '1.0.0',
-        license: { name: 'MIT' }
+        license: { name: 'MIT' },
       },
       servers: [{ url: 'https://api.example.com' }],
       paths: {},
       components: { schemas: {}, securitySchemes: {} },
-      tags: []
+      tags: [],
     };
 
     const result = validateAPIDesign(spec);
@@ -277,13 +273,11 @@ describe('API Validator - GraphQL Validation', () => {
           kind: 'object',
           fields: [
             { name: 'id', type: 'ID!' },
-            { name: 'name', type: 'String!' }
-          ]
-        }
+            { name: 'name', type: 'String!' },
+          ],
+        },
       ],
-      queries: [
-        { name: 'getUser', type: 'User' }
-      ]
+      queries: [{ name: 'getUser', type: 'User' }],
     };
 
     const result = validateAPIDesign(schema);
@@ -295,7 +289,7 @@ describe('API Validator - GraphQL Validation', () => {
   it('should return error when no types are defined', () => {
     const schema: GraphQLSchema = {
       types: [],
-      queries: []
+      queries: [],
     };
 
     const result = validateAPIDesign(schema);
@@ -311,10 +305,10 @@ describe('API Validator - GraphQL Validation', () => {
         {
           name: 'User',
           kind: 'object',
-          fields: [{ name: 'id', type: 'ID!' }]
-        }
+          fields: [{ name: 'id', type: 'ID!' }],
+        },
       ],
-      queries: []
+      queries: [],
     };
 
     const result = validateAPIDesign(schema);
@@ -329,9 +323,9 @@ describe('API Validator - GraphQL Validation', () => {
         {
           name: 'User',
           kind: 'object',
-          fields: []
-        }
-      ]
+          fields: [],
+        },
+      ],
     };
 
     const result = validateAPIDesign(schema);
@@ -342,7 +336,7 @@ describe('API Validator - GraphQL Validation', () => {
   it('should set error severity for GraphQL errors', () => {
     const schema: GraphQLSchema = {
       types: [],
-      queries: []
+      queries: [],
     };
 
     const result = validateAPIDesign(schema);
@@ -358,10 +352,10 @@ describe('API Validator - GraphQL Validation', () => {
         {
           name: 'User',
           kind: 'object',
-          fields: []
-        }
+          fields: [],
+        },
       ],
-      queries: []
+      queries: [],
     };
 
     const result = validateAPIDesign(schema);
@@ -377,10 +371,10 @@ describe('API Validator - GraphQL Validation', () => {
         {
           name: 'User',
           kind: 'object',
-          fields: [{ name: 'id', type: 'ID!' }]
-        }
+          fields: [{ name: 'id', type: 'ID!' }],
+        },
       ],
-      queries: []
+      queries: [],
     };
 
     const result = validateAPIDesign(schema);
@@ -396,12 +390,10 @@ describe('API Validator - GraphQL Validation', () => {
         {
           name: 'User',
           kind: 'object',
-          fields: [{ name: 'id', type: 'ID!' }]
-        }
+          fields: [{ name: 'id', type: 'ID!' }],
+        },
       ],
-      queries: [
-        { name: 'getUser', type: 'User' }
-      ]
+      queries: [{ name: 'getUser', type: 'User' }],
     };
 
     const result = validateAPIDesign(schema);
@@ -418,15 +410,11 @@ describe('API Validator - GraphQL Validation', () => {
         {
           name: 'User',
           kind: 'object',
-          fields: [{ name: 'id', type: 'ID!' }]
-        }
+          fields: [{ name: 'id', type: 'ID!' }],
+        },
       ],
-      queries: [
-        { name: 'getUser', type: 'User' }
-      ],
-      mutations: [
-        { name: 'createUser', type: 'User' }
-      ]
+      queries: [{ name: 'getUser', type: 'User' }],
+      mutations: [{ name: 'createUser', type: 'User' }],
     };
 
     const result = validateAPIDesign(schema);
@@ -440,15 +428,11 @@ describe('API Validator - GraphQL Validation', () => {
         {
           name: 'User',
           kind: 'object',
-          fields: [{ name: 'id', type: 'ID!' }]
-        }
+          fields: [{ name: 'id', type: 'ID!' }],
+        },
       ],
-      queries: [
-        { name: 'getUser', type: 'User' }
-      ],
-      subscriptions: [
-        { name: 'userUpdated', type: 'User' }
-      ]
+      queries: [{ name: 'getUser', type: 'User' }],
+      subscriptions: [{ name: 'userUpdated', type: 'User' }],
     };
 
     const result = validateAPIDesign(schema);
@@ -480,12 +464,12 @@ describe('API Validator - Edge Cases', () => {
     const openApiSpec: any = {
       openapi: '3.0.3',
       info: { title: 'Test', version: '1.0.0' },
-      paths: {}
+      paths: {},
     };
 
     const graphqlSchema: any = {
       types: [{ name: 'User', kind: 'object', fields: [] }],
-      queries: []
+      queries: [],
     };
 
     const openApiResult = validateAPIDesign(openApiSpec);
@@ -512,23 +496,21 @@ describe('API Validator - Edge Cases', () => {
         description: 'A complex API',
         contact: {
           name: 'Support',
-          email: 'support@example.com'
+          email: 'support@example.com',
         },
-        license: { name: 'Apache 2.0' }
+        license: { name: 'Apache 2.0' },
       },
-      servers: [
-        { url: 'https://api.example.com/v2', description: 'Production' }
-      ],
+      servers: [{ url: 'https://api.example.com/v2', description: 'Production' }],
       paths: {
         '/users': {
           get: { summary: 'List users' },
-          post: { summary: 'Create user' }
+          post: { summary: 'Create user' },
         },
         '/users/{id}': {
           get: { summary: 'Get user' },
           put: { summary: 'Update user' },
-          delete: { summary: 'Delete user' }
-        }
+          delete: { summary: 'Delete user' },
+        },
       },
       components: {
         schemas: {
@@ -536,21 +518,19 @@ describe('API Validator - Edge Cases', () => {
             type: 'object',
             properties: {
               id: { type: 'string' },
-              name: { type: 'string' }
-            }
-          }
+              name: { type: 'string' },
+            },
+          },
         },
         securitySchemes: {
           BearerAuth: {
             type: 'http',
-            scheme: 'bearer'
-          }
-        }
+            scheme: 'bearer',
+          },
+        },
       },
       security: [{ BearerAuth: [] }],
-      tags: [
-        { name: 'Users', description: 'User operations' }
-      ]
+      tags: [{ name: 'Users', description: 'User operations' }],
     };
 
     const result = validateAPIDesign(spec);

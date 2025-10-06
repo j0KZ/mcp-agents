@@ -26,7 +26,9 @@ export class UnusedImportFixer extends BaseFixer {
                 if (path.node.specifiers.length === INDEX.ZERO_BASED)
                     return;
                 path.node.specifiers.forEach((spec) => {
-                    if (t.isImportSpecifier(spec) || t.isImportDefaultSpecifier(spec) || t.isImportNamespaceSpecifier(spec)) {
+                    if (t.isImportSpecifier(spec) ||
+                        t.isImportDefaultSpecifier(spec) ||
+                        t.isImportNamespaceSpecifier(spec)) {
                         const localName = spec.local.name;
                         imports.set(localName, {
                             line: spec.loc?.start.line || INDEX.ZERO_BASED,

@@ -7,7 +7,7 @@ describe('XSS Scanner', () => {
     filePath,
     content,
     extension: '.js',
-    size: content.length
+    size: content.length,
   });
 
   describe('innerHTML Detection', () => {

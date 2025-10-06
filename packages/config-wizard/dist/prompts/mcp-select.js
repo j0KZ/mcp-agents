@@ -12,50 +12,50 @@ export function mcpPrompt(project) {
             {
                 name: 'Smart Reviewer (code quality analysis)',
                 value: 'smart-reviewer',
-                checked: recommended.includes('smart-reviewer')
+                checked: recommended.includes('smart-reviewer'),
             },
             {
                 name: 'Security Scanner (vulnerability scanning)',
                 value: 'security-scanner',
-                checked: recommended.includes('security-scanner')
+                checked: recommended.includes('security-scanner'),
             },
             {
                 name: 'Test Generator (auto-generate tests)',
                 value: 'test-generator',
-                checked: recommended.includes('test-generator')
+                checked: recommended.includes('test-generator'),
             },
             {
                 name: 'Architecture Analyzer (dependency analysis)',
                 value: 'architecture-analyzer',
-                checked: recommended.includes('architecture-analyzer')
+                checked: recommended.includes('architecture-analyzer'),
             },
             {
                 name: 'Refactor Assistant (code improvements)',
                 value: 'refactor-assistant',
-                checked: false
+                checked: false,
             },
             {
                 name: 'API Designer (REST/GraphQL design)',
                 value: 'api-designer',
-                checked: recommended.includes('api-designer')
+                checked: recommended.includes('api-designer'),
             },
             {
                 name: 'DB Schema Designer (database design)',
                 value: 'db-schema',
-                checked: recommended.includes('db-schema')
+                checked: recommended.includes('db-schema'),
             },
             {
                 name: 'Doc Generator (documentation)',
                 value: 'doc-generator',
-                checked: false
-            }
+                checked: false,
+            },
         ],
         validate: (answer) => {
             if (answer.length < 1) {
                 return 'You must select at least one MCP tool.';
             }
             return true;
-        }
+        },
     };
 }
 //# sourceMappingURL=mcp-select.js.map

@@ -25,6 +25,8 @@ import {
   calculateMetrics,
 } from './refactorer.js';
 
+import { MCPError, getErrorMessage } from '@j0kz/shared';
+
 import type {
   ExtractFunctionOptions,
   ConvertToAsyncOptions,
@@ -96,7 +98,8 @@ export const TOOLS: Tool[] = [
   },
   {
     name: 'simplify_conditionals',
-    description: 'Simplify nested conditionals using guard clauses, ternary operators, and combined conditions',
+    description:
+      'Simplify nested conditionals using guard clauses, ternary operators, and combined conditions',
     inputSchema: {
       type: 'object',
       properties: {
@@ -120,7 +123,8 @@ export const TOOLS: Tool[] = [
   },
   {
     name: 'remove_dead_code',
-    description: 'Remove dead code including unused variables, unreachable code, and unused imports',
+    description:
+      'Remove dead code including unused variables, unreachable code, and unused imports',
     inputSchema: {
       type: 'object',
       properties: {
@@ -144,7 +148,8 @@ export const TOOLS: Tool[] = [
   },
   {
     name: 'apply_pattern',
-    description: 'Apply a design pattern to existing code (singleton, factory, observer, strategy, decorator, adapter, facade, proxy, command, chain-of-responsibility)',
+    description:
+      'Apply a design pattern to existing code (singleton, factory, observer, strategy, decorator, adapter, facade, proxy, command, chain-of-responsibility)',
     inputSchema: {
       type: 'object',
       properties: {
@@ -205,7 +210,8 @@ export const TOOLS: Tool[] = [
   },
   {
     name: 'suggest_refactorings',
-    description: 'Analyze code and provide intelligent refactoring suggestions based on best practices',
+    description:
+      'Analyze code and provide intelligent refactoring suggestions based on best practices',
     inputSchema: {
       type: 'object',
       properties: {
@@ -223,7 +229,8 @@ export const TOOLS: Tool[] = [
   },
   {
     name: 'calculate_metrics',
-    description: 'Calculate code quality metrics including complexity, LOC, and maintainability index',
+    description:
+      'Calculate code quality metrics including complexity, LOC, and maintainability index',
     inputSchema: {
       type: 'object',
       properties: {
@@ -262,7 +269,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 /**
  * Handle tool execution requests
  */
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
+server.setRequestHandler(CallToolRequestSchema, async request => {
   const { name, arguments: args } = request.params;
 
   if (!args) {
@@ -436,14 +443,23 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
     }
   } catch (error) {
+    const errorMessage = getErrorMessage(error);
+    const errorCode = error instanceof MCPError ? error.code : 'UNKNOWN';
+
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify({
-            error: error instanceof Error ? error.message : 'Unknown error occurred',
-            stack: error instanceof Error ? error.stack : undefined,
-          }),
+          text: JSON.stringify(
+            {
+              success: false,
+              error: errorMessage,
+              code: errorCode,
+              ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
+            },
+            null,
+            2
+          ),
         },
       ],
       isError: true,
@@ -461,7 +477,7 @@ async function main() {
   console.error('Refactoring Assistant MCP Server running on stdio');
 }
 
-main().catch((error) => {
+main().catch(error => {
   console.error('Fatal error in main():', error);
   process.exit(1);
 });

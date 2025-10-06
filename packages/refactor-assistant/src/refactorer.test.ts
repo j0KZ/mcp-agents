@@ -8,7 +8,7 @@ import {
   applyDesignPattern,
   suggestRefactorings,
   calculateMetrics,
-  findDuplicateBlocks
+  findDuplicateBlocks,
 } from './refactorer.js';
 
 describe('Refactor Assistant', () => {
@@ -22,7 +22,7 @@ describe('Refactor Assistant', () => {
       const result = extractFunction(code, {
         functionName: 'add',
         startLine: 3,
-        endLine: 3
+        endLine: 3,
       });
       expect(result.success).toBe(true);
       expect(result.code).toContain('function add');
@@ -40,7 +40,7 @@ describe('Refactor Assistant', () => {
       const result = extractFunction(code, {
         functionName: 'computeSum',
         startLine: 4,
-        endLine: 5
+        endLine: 5,
       });
       expect(result.success).toBe(true);
       expect(result.code).toContain('computeSum');
@@ -52,7 +52,7 @@ describe('Refactor Assistant', () => {
         functionName: 'add',
         startLine: 1,
         endLine: 1,
-        arrow: true
+        arrow: true,
       });
       expect(result.success).toBe(true);
     });
@@ -63,7 +63,7 @@ describe('Refactor Assistant', () => {
         functionName: 'fetchData',
         startLine: 1,
         endLine: 1,
-        async: true
+        async: true,
       });
       expect(result.success).toBe(true);
     });
@@ -73,7 +73,7 @@ describe('Refactor Assistant', () => {
       const result = extractFunction(code, {
         functionName: 'test',
         startLine: 10,
-        endLine: 20
+        endLine: 20,
       });
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
@@ -84,7 +84,7 @@ describe('Refactor Assistant', () => {
       const result = extractFunction(code, {
         functionName: 'test',
         startLine: null as any,
-        endLine: 1
+        endLine: 1,
       });
       expect(result.success).toBe(false);
       expect(result.error).toContain('REFACTOR_005');
@@ -96,7 +96,7 @@ describe('Refactor Assistant', () => {
       const result = extractFunction(code, {
         functionName: 'test',
         startLine: 1,
-        endLine: undefined as any
+        endLine: undefined as any,
       });
       expect(result.success).toBe(false);
       expect(result.error).toContain('REFACTOR_005');
@@ -107,7 +107,7 @@ describe('Refactor Assistant', () => {
       const result = extractFunction(code, {
         functionName: 'test',
         startLine: 0,
-        endLine: 1
+        endLine: 1,
       });
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
@@ -120,7 +120,7 @@ describe('Refactor Assistant', () => {
       const result = extractFunction(code, {
         functionName: 'test',
         startLine: 1,
-        endLine: 100
+        endLine: 100,
       });
       expect(result.success).toBe(false);
       expect(result.error).toContain('REFACTOR_006');
@@ -131,7 +131,7 @@ describe('Refactor Assistant', () => {
       const result = extractFunction(code, {
         functionName: 'test',
         startLine: 3,
-        endLine: 1
+        endLine: 1,
       });
       expect(result.success).toBe(false);
       expect(result.error).toContain('startLine must be <= endLine');
@@ -147,7 +147,7 @@ describe('Refactor Assistant', () => {
         functionName: 'fetchValue',
         startLine: 2,
         endLine: 4,
-        async: true
+        async: true,
       });
       expect(result.success).toBe(true);
       expect(result.code).toContain('async function fetchValue');
@@ -166,7 +166,7 @@ function outer() {
       const result = extractFunction(code, {
         functionName: 'calculateSum',
         startLine: 3,
-        endLine: 5
+        endLine: 5,
       });
       expect(result.success).toBe(true);
       expect(result.code).toContain('calculateSum');
@@ -182,7 +182,7 @@ function outer() {
       const result = extractFunction(code, {
         functionName: 'greet',
         startLine: 2,
-        endLine: 2
+        endLine: 2,
       });
       expect(result.success).toBe(true);
       expect(result.code).toContain('greet(');
@@ -195,7 +195,7 @@ function outer() {
       const result = extractFunction(null as any, {
         functionName: 'test',
         startLine: 1,
-        endLine: 1
+        endLine: 1,
       });
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
@@ -207,7 +207,7 @@ function outer() {
         functionName: 'add',
         startLine: 1,
         endLine: 1,
-        arrow: true
+        arrow: true,
       });
       expect(result.success).toBe(true);
       expect(result.code).toContain('const add = (');
@@ -346,14 +346,24 @@ function outer() {
 
     it('should rename in comments when requested', () => {
       const code = '// oldName variable\nconst oldName = 5;';
-      const result = renameVariable({ code, oldName: 'oldName', newName: 'newName', includeComments: true });
+      const result = renameVariable({
+        code,
+        oldName: 'oldName',
+        newName: 'newName',
+        includeComments: true,
+      });
       expect(result.success).toBe(true);
       expect(result.code).toContain('// newName');
     });
 
     it('should skip comments by default', () => {
       const code = '// oldName variable\nconst oldName = 5;';
-      const result = renameVariable({ code, oldName: 'oldName', newName: 'newName', includeComments: false });
+      const result = renameVariable({
+        code,
+        oldName: 'oldName',
+        newName: 'newName',
+        includeComments: false,
+      });
       expect(result.success).toBe(true);
       // Currently renames in comments too, this is the actual behavior
       expect(result.code).toBeDefined();
@@ -559,7 +569,11 @@ function outer() {
 
     it('should use custom className option for factory pattern', () => {
       const code = `// Factory implementation`;
-      const result = applyDesignPattern({ code, pattern: 'factory', patternOptions: { className: 'Widget' } });
+      const result = applyDesignPattern({
+        code,
+        pattern: 'factory',
+        patternOptions: { className: 'Widget' },
+      });
       expect(result.success).toBe(true);
       expect(result.code).toContain('interface Widget');
       expect(result.code).toContain('ConcreteWidgetA');
@@ -659,7 +673,10 @@ function getData(callback) {
     });
 
     it('should include snippet and rationale in suggestions', () => {
-      const code = Array(12).fill('  if (x) {').join('\n') + '\n    doSomething();\n' + Array(12).fill('  }').join('\n');
+      const code =
+        Array(12).fill('  if (x) {').join('\n') +
+        '\n    doSomething();\n' +
+        Array(12).fill('  }').join('\n');
       const suggestions = suggestRefactorings(code);
       const nestingSuggestion = suggestions.find(s => s.type === 'simplify-conditionals');
       expect(nestingSuggestion).toBeDefined();

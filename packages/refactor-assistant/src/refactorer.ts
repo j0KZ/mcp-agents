@@ -20,9 +20,7 @@ import {
   INDEX_CONSTANTS,
 } from './constants/refactoring-limits.js';
 
-import {
-  REGEX_LIMITS,
-} from './constants/transformation-limits.js';
+import { REGEX_LIMITS } from './constants/transformation-limits.js';
 
 // Re-export from modular components
 export { extractFunction } from './core/extract-function.js';
@@ -31,12 +29,22 @@ export { calculateMetrics, findDuplicateBlocks } from './analysis/metrics-calcul
 // Import for internal use
 import { findDuplicateBlocks, getNestingDepth } from './analysis/metrics-calculator.js';
 
-import { applyGuardClauses, combineNestedConditions } from './transformations/conditional-helpers.js';
+import {
+  applyGuardClauses,
+  combineNestedConditions,
+} from './transformations/conditional-helpers.js';
 import { removeUnusedImportsFromCode, escapeRegExp } from './transformations/import-helpers.js';
 import { analyzeFunctionLengths } from './transformations/analysis-helpers.js';
 import { getErrorMessage } from './utils/error-helpers.js';
-import { convertCallbackToAsync, convertPromiseChainToAsync } from './transformations/async-converter.js';
-import { findUnusedVariables, removeUnusedVariables, removeUnreachableCode } from './transformations/dead-code-detector.js';
+import {
+  convertCallbackToAsync,
+  convertPromiseChainToAsync,
+} from './transformations/async-converter.js';
+import {
+  findUnusedVariables,
+  removeUnusedVariables,
+  removeUnreachableCode,
+} from './transformations/dead-code-detector.js';
 import { applyPattern, isValidPattern } from './patterns/pattern-factory.js';
 
 /**
@@ -86,7 +94,10 @@ export function convertToAsync(options: ConvertToAsyncOptions): RefactoringResul
       code: refactoredCode,
       changes,
       success: true,
-      warnings: changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES ? [REFACTORING_MESSAGES.NO_CALLBACKS_FOUND] : undefined,
+      warnings:
+        changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES
+          ? [REFACTORING_MESSAGES.NO_CALLBACKS_FOUND]
+          : undefined,
     };
   } catch (error) {
     return {
@@ -157,7 +168,10 @@ export function simplifyConditionals(options: SimplifyConditionalsOptions): Refa
       code: refactoredCode,
       changes,
       success: true,
-      warnings: changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES ? [REFACTORING_MESSAGES.NO_CONDITIONALS_FOUND] : undefined,
+      warnings:
+        changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES
+          ? [REFACTORING_MESSAGES.NO_CONDITIONALS_FOUND]
+          : undefined,
     };
   } catch (error) {
     return {
@@ -221,7 +235,10 @@ export function removeDeadCode(options: RemoveDeadCodeOptions): RefactoringResul
       code: refactoredCode,
       changes,
       success: true,
-      warnings: changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES ? [REFACTORING_MESSAGES.NO_DEAD_CODE_FOUND] : undefined,
+      warnings:
+        changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES
+          ? [REFACTORING_MESSAGES.NO_DEAD_CODE_FOUND]
+          : undefined,
     };
   } catch (error) {
     return {
@@ -253,12 +270,14 @@ export function applyDesignPattern(options: ApplyPatternOptions): RefactoringRes
 
     return {
       code: refactoredCode,
-      changes: [{
-        type: 'apply-pattern',
-        description: `Applied ${pattern} pattern`,
-        before: code,
-        after: refactoredCode,
-      }],
+      changes: [
+        {
+          type: 'apply-pattern',
+          description: `Applied ${pattern} pattern`,
+          before: code,
+          after: refactoredCode,
+        },
+      ],
       success: true,
     };
   } catch (error) {
@@ -315,19 +334,21 @@ export function renameVariable(options: RenameVariableOptions): RefactoringResul
 
     if (includeComments) {
       const commentPattern = new RegExp(`(//.*?|/\\*[\\s\\S]*?\\*/)`, 'g');
-      refactoredCode = refactoredCode.replace(commentPattern, (match) => {
+      refactoredCode = refactoredCode.replace(commentPattern, match => {
         return match.replace(new RegExp(oldName, 'g'), newName);
       });
     }
 
     return {
       code: refactoredCode,
-      changes: [{
-        type: 'rename-variable',
-        description: `Renamed '${oldName}' to '${newName}' (${matches} occurrence${matches > PATTERN_CONSTANTS.SINGLE_OCCURRENCE ? 's' : ''})`,
-        before: code,
-        after: refactoredCode,
-      }],
+      changes: [
+        {
+          type: 'rename-variable',
+          description: `Renamed '${oldName}' to '${newName}' (${matches} occurrence${matches > PATTERN_CONSTANTS.SINGLE_OCCURRENCE ? 's' : ''})`,
+          before: code,
+          after: refactoredCode,
+        },
+      ],
       success: true,
     };
   } catch (error) {
@@ -356,7 +377,8 @@ export function suggestRefactorings(code: string, _filePath?: string): Refactori
         severity: 'warning',
         message: `Function '${metric.name}' is ${metric.lineCount} lines long`,
         location: { line: metric.startLine },
-        rationale: 'Long functions are harder to understand and maintain. Consider extracting smaller functions.',
+        rationale:
+          'Long functions are harder to understand and maintain. Consider extracting smaller functions.',
       });
     }
   });
@@ -371,7 +393,8 @@ export function suggestRefactorings(code: string, _filePath?: string): Refactori
         message: `Deep nesting detected (depth: ${nestingDepth})`,
         location: { line: index + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET },
         snippet: line.trim(),
-        rationale: 'Deep nesting reduces readability. Consider using guard clauses or extracting functions.',
+        rationale:
+          'Deep nesting reduces readability. Consider using guard clauses or extracting functions.',
       });
     }
   });

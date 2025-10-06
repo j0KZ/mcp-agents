@@ -43,7 +43,10 @@ export function findUnreachableCode(code) {
             for (let j = 1; j <= DEAD_CODE_LIMITS.UNREACHABLE_CHECK_LINES && i + j < lines.length; j++) {
                 const nextLine = lines[i + j].trim();
                 // Ignore closing braces, empty lines, comments
-                if (nextLine && !nextLine.match(/^[}\])]/) && !nextLine.startsWith('//') && !nextLine.startsWith('/*')) {
+                if (nextLine &&
+                    !nextLine.match(/^[}\])]/) &&
+                    !nextLine.startsWith('//') &&
+                    !nextLine.startsWith('/*')) {
                     unreachable.push({ line: i + j + 1, code: nextLine });
                 }
             }
@@ -52,13 +55,21 @@ export function findUnreachableCode(code) {
     return unreachable;
 }
 /**
+ * Escape special regex characters in a string
+ */
+function escapeRegExp(str) {
+    return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+/**
  * Remove unused variable declarations
  */
 export function removeUnusedVariables(code, unusedVars) {
     let result = code;
     for (const varName of unusedVars) {
+        // Escape the variable name to prevent regex injection
+        const escapedName = escapeRegExp(varName);
         // Remove declaration lines
-        const declPattern = new RegExp(`\\s*(?:const|let|var)\\s+${varName}\\s*=.*?;\\s*\n`, 'g');
+        const declPattern = new RegExp(`\\s*(?:const|let|var)\\s+${escapedName}\\b\\s*=.*?;\\s*\\n`, 'g');
         result = result.replace(declPattern, '');
     }
     return result;

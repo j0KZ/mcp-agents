@@ -61,7 +61,9 @@ export async function generateJSDoc(
       func.parameters.forEach(param => {
         const typeStr = param.type?.raw || 'any';
         const paramName = param.optional ? `[${param.name}]` : param.name;
-        jsdocContent.push(` * @param {${typeStr}} ${paramName} - ${param.description || 'Parameter description'}`);
+        jsdocContent.push(
+          ` * @param {${typeStr}} ${paramName} - ${param.description || 'Parameter description'}`
+        );
       });
 
       if (func.returnType) {
@@ -132,10 +134,6 @@ export async function generateJSDoc(
     if (error instanceof DocError) {
       throw error;
     }
-    throw new DocError(
-      'Failed to generate JSDoc',
-      'JSDOC_GENERATION_FAILED',
-      error
-    );
+    throw new DocError('Failed to generate JSDoc', 'JSDOC_GENERATION_FAILED', error);
   }
 }

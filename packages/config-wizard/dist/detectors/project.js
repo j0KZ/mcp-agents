@@ -8,7 +8,7 @@ export async function detectProject() {
     const info = {
         language: 'unknown',
         packageManager: 'npm',
-        hasTests: false
+        hasTests: false,
     };
     // Check for package.json
     const pkgPath = path.join(cwd, 'package.json');
@@ -60,11 +60,7 @@ export async function detectProject() {
             info.packageManager = 'npm';
         }
         // Check for tests
-        info.hasTests = !!(pkg.scripts?.test ||
-            deps.jest ||
-            deps.vitest ||
-            deps.mocha ||
-            deps.ava);
+        info.hasTests = !!(pkg.scripts?.test || deps.jest || deps.vitest || deps.mocha || deps.ava);
     }
     else if (await fs.pathExists(path.join(cwd, 'requirements.txt'))) {
         info.language = 'python';
@@ -77,7 +73,9 @@ export function getRecommendedMCPs(project) {
     if (project.framework === 'react' || project.framework === 'next') {
         recommendations.push('test-generator');
     }
-    if (project.framework === 'express' || project.framework === 'fastify' || project.framework === 'nest') {
+    if (project.framework === 'express' ||
+        project.framework === 'fastify' ||
+        project.framework === 'nest') {
         recommendations.push('api-designer', 'db-schema');
     }
     if (project.hasTests) {

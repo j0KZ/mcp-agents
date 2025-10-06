@@ -5,7 +5,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { execFileSync } from 'child_process';
-import { DocError, } from './types.js';
+import { DocError } from './types.js';
 // Import extracted modules
 import { parseSourceFile } from './parsers/source-parser.js';
 import { generateJSDoc } from './generators/jsdoc-generator.js';
@@ -141,7 +141,9 @@ export async function generateApiDocs(projectPath, _config = {}) {
             sections.push(`## ${relativePath}`);
             sections.push('');
             // Document functions
-            functions.filter(f => f.isExported).forEach(func => {
+            functions
+                .filter(f => f.isExported)
+                .forEach(func => {
                 sections.push(`### ${func.name}()`);
                 sections.push('');
                 if (func.parameters.length > 0) {
@@ -161,7 +163,9 @@ export async function generateApiDocs(projectPath, _config = {}) {
                 itemsDocumented++;
             });
             // Document classes
-            classes.filter(c => c.isExported).forEach(cls => {
+            classes
+                .filter(c => c.isExported)
+                .forEach(cls => {
                 sections.push(`### ${cls.name}`);
                 sections.push('');
                 if (cls.extends) {
@@ -210,7 +214,10 @@ export async function generateChangelog(projectPath, config = {}) {
                 encoding: 'utf-8',
                 maxBuffer: 10 * 1024 * 1024,
             });
-            const commits = output.trim().split('\n').filter(line => line);
+            const commits = output
+                .trim()
+                .split('\n')
+                .filter(line => line);
             const grouped = {
                 feat: [],
                 fix: [],

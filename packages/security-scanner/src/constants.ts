@@ -148,11 +148,17 @@ export const SCANNABLE_EXTENSIONS = [
 
 // Recommendation Templates
 export const RECOMMENDATIONS = {
-  SQL_INJECTION: 'Use parameterized queries or prepared statements. Never concatenate user input directly into SQL queries.',
+  SQL_INJECTION:
+    'Use parameterized queries or prepared statements. Never concatenate user input directly into SQL queries.',
   XSS: 'Sanitize user input before rendering. Use textContent instead of innerHTML, or use a sanitization library like DOMPurify.',
-  PATH_TRAVERSAL: 'Validate and sanitize file paths. Use path.resolve() and check that the resolved path is within allowed directories.',
-  COMMAND_INJECTION: 'Avoid using shell commands with user input. Use safe alternatives or properly escape/validate input.',
-  WEAK_CRYPTO: 'Use strong cryptographic algorithms like SHA-256, SHA-384, or SHA-512 for hashing. Use AES-256-GCM for encryption.',
-  HARDCODED_SECRET: 'Move secrets to environment variables or a secure secrets management system (e.g., AWS Secrets Manager, HashiCorp Vault).',
-  INSECURE_DESERIALIZATION: 'Avoid deserializing untrusted data. Implement integrity checks and use safe deserialization libraries.',
+  PATH_TRAVERSAL:
+    'Validate and sanitize file paths. Use path.resolve() and check that the resolved path is within allowed directories.',
+  COMMAND_INJECTION:
+    'Avoid using shell commands with user input. Use safe alternatives or properly escape/validate input.',
+  WEAK_CRYPTO:
+    'Use strong cryptographic algorithms like SHA-256, SHA-384, or SHA-512 for hashing. Use AES-256-GCM for encryption.',
+  HARDCODED_SECRET:
+    'Move secrets to environment variables or a secure secrets management system (e.g., AWS Secrets Manager, HashiCorp Vault).',
+  INSECURE_DESERIALIZATION:
+    'Avoid deserializing untrusted data. Implement integrity checks and use safe deserialization libraries.',
 } as const;

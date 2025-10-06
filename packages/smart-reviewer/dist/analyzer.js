@@ -1,4 +1,4 @@
-import { FileSystemManager, AnalysisCache, PerformanceMonitor, generateHash, } from '@j0kz/shared';
+import { FileSystemManager, AnalysisCache, PerformanceMonitor, generateHash } from '@j0kz/shared';
 import { DEFAULTS } from './constants.js';
 import { detectIssues, calculateMetrics, generateSuggestions, calculateScore, applyFixes, } from './analyzers/index.js';
 /**
@@ -100,7 +100,9 @@ export class CodeAnalyzer {
             }
             catch (error) {
                 // Sanitize path to prevent log injection
-                const safePath = String(filePath).replace(/[\r\n]/g, '').substring(0, 500);
+                const safePath = String(filePath)
+                    .replace(/[\r\n]/g, '')
+                    .substring(0, 500);
                 console.error(`Failed to analyze ${safePath}:`, error instanceof Error ? error.message : String(error));
                 return null;
             }

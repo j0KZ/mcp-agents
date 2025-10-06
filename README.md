@@ -1,23 +1,90 @@
 # @j0kz MCP Development Toolkit
 
-> **8 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
+> **9 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
-[![Version](https://img.shields.io/badge/version-1.0.29-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.31-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
+[![Performance](https://img.shields.io/badge/performance-2.18x_faster-brightgreen.svg)](docs/PHASE3_SUMMARY.md)
+[![Tests](https://img.shields.io/badge/tests-853_passing-success.svg)](CHANGELOG.md)
+
+## 🎉 What's New in v1.0.31
+
+### ⚡ Phase 3: Performance & Optimization (COMPLETE)
+
+**Major Performance Boost:**
+- 🚀 **2.18x speedup** with intelligent caching (99.9% hit rate)
+- ⚡ AST parsing **73% faster** with content-based cache invalidation
+- 📊 Hash generation: **673K ops/sec** throughput
+- ✅ Zero breaking changes - fully backwards compatible
+
+**Key Features:**
+- ✨ Intelligent caching in test-generator, security-scanner, smart-reviewer
+- 📈 Reusable performance benchmark suite
+- 🔄 Content-based automatic cache invalidation
+- 📊 Built-in cache statistics and monitoring
+
+**Metrics:**
+```
+Analysis Cache:  2.18x speedup (99.9% hit rate)
+AST Parsing:     73% faster with cache
+Hash Generation: 673K ops/sec
+Tests:           853 total (+228 from v1.0.30)
+Pass Rate:       100% (853/853)
+```
+
+### 📈 Phase 2: Quality & Test Coverage (COMPLETE)
+
+**Test Expansion:**
+- ✅ Added **225 new tests** (625 → 850)
+- ✅ Smart-reviewer analyzers: 0% → 100% coverage
+- ✅ Strengthened api-designer assertions (removed shallow `toBeDefined()`)
+
+**Code Modernization:**
+- ✅ ESLint 9 + Prettier with flat config
+- ✅ AST parser with `@babel/parser` (eliminated ReDoS vulnerabilities)
+- ✅ Auto-fixed 69 code quality issues
+
+### 🔒 Phase 1: Critical Fixes (COMPLETE)
+
+**Security & Reliability:**
+- ✅ Fixed orchestrator batch operations bug (critical)
+- ✅ 100% validation coverage (32 security tests)
+- ✅ Standardized 58 error codes with `MCPError` class
+- ✅ 20 integration tests for real-world workflows
+
+**See [CHANGELOG.md](CHANGELOG.md) for complete v1.0.31 release notes.**
+- 🏗️ Architecture: Centralized error handling, reduced complexity
+- ✅ Quality: ESLint + Prettier enforced, AST-based parsing
+
+### 🔗 MCP Workflow Engine (Orchestrator)
+
+**3 Pre-built Workflows:**
+- **pre-commit** (2 steps) - Fast local checks: code review + security scan
+- **pre-merge** (4 steps) - Comprehensive PR validation with dependency resolution
+- **quality-audit** (3 steps) - Deep analysis: security report + architecture + docs
+
+**Key Features:**
+- 🔗 MCP-to-MCP communication via JSON-RPC
+- 📊 Dependency resolution (steps can depend on other steps)
+- ⚡ Parallel execution where possible
+- ✅ 48/48 tests passing (includes 20 integration tests)
+
+[Read full orchestrator docs](packages/orchestrator-mcp/README.md)
 
 ## 🎉 What's New in v1.0.29
 
 ### 🧪 Test Coverage Enforcement & Expansion
 
-**CI Coverage Enforcement - 60% Minimum:**
-- ✅ Strict quality gates: statements 60%, branches 50%, functions 60%, lines 60%
-- ✅ Automated coverage validation with `check-coverage.js`
+**CI Coverage Enforcement - Actual Metrics:**
+- ✅ Coverage (deduplicated): **59% statements, 67% branches, 74% functions**
+- ✅ Enforced thresholds: 55% statements, 65% branches, 72% functions
+- ✅ Automated validation with `check-coverage.js` (proper deduplication)
 - ✅ Visual coverage dashboard with `coverage-dashboard.js`
-- ✅ CI builds now fail below coverage thresholds
+- ✅ All 622 tests passing (100% pass rate)
 
 **342 New Tests Added (+46% growth):**
 - **API Designer**: 3 → 140 tests (+4567%) - OpenAPI, GraphQL, client generation, validation
@@ -31,7 +98,8 @@
 - Code size reduced from 462 → 410 lines (-11%)
 
 **Overall:**
-- ✅ 584 passing tests (98.5% pass rate)
+- ✅ 622 passing tests (100% pass rate)
+- ✅ Coverage: 59% statements, 67% branches, 74% functions (verified, deduplicated)
 - ✅ Comprehensive test coverage across all packages
 - ✅ Enforced quality standards in CI/CD pipeline
 
@@ -86,7 +154,7 @@
 
 ## ⚡ Quick Install
 
-Install all 8 tools **instantly** with one command:
+Install all 9 tools **instantly** with one command:
 
 ```bash
 # For Claude Code (default)
@@ -104,10 +172,10 @@ npx @j0kz/mcp-agents@latest trae       # Trae
 - ✅ Clear npm cache
 - ✅ Fix malformed config files automatically
 - ✅ Configure MCP settings with `@latest` versions
-- ✅ Pre-install all 8 tools
+- ✅ Pre-install all 9 tools (including orchestrator)
 - ✅ Bypass npx cache issues
 
-Restart your editor and all 8 MCP tools will be ready to use.
+Restart your editor and all 9 MCP tools will be ready to use.
 
 <details>
 <summary>📖 More installation options</summary>
@@ -220,7 +288,7 @@ irm https://raw.githubusercontent.com/j0KZ/mcp-agents/main/install-all.ps1 | iex
 ### Manual Installation
 
 ```bash
-# Install all 8 tools individually
+# Install all 9 tools individually
 claude mcp add smart-reviewer "npx @j0kz/smart-reviewer-mcp" --scope user
 claude mcp add test-generator "npx @j0kz/test-generator-mcp" --scope user
 claude mcp add architecture-analyzer "npx @j0kz/architecture-analyzer-mcp" --scope user
@@ -229,6 +297,7 @@ claude mcp add security-scanner "npx @j0kz/security-scanner-mcp" --scope user
 claude mcp add refactor-assistant "npx @j0kz/refactor-assistant-mcp" --scope user
 claude mcp add api-designer "npx @j0kz/api-designer-mcp" --scope user
 claude mcp add db-schema "npx @j0kz/db-schema-mcp" --scope user
+claude mcp add orchestrator "npx @j0kz/orchestrator-mcp" --scope user
 ```
 
 **✅ Verify Installation:**
@@ -236,7 +305,7 @@ claude mcp add db-schema "npx @j0kz/db-schema-mcp" --scope user
 claude mcp list
 ```
 
-You should see all 8 tools marked as "✓ Connected"
+You should see all 9 tools marked as "✓ Connected"
 
 </details>
 

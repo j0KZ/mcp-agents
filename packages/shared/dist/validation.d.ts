@@ -48,4 +48,12 @@ export interface FriendlyError {
     details?: Record<string, unknown>;
 }
 export declare function createError(code: string, message: string, suggestion?: string, details?: Record<string, unknown>): FriendlyError;
+/**
+ * Validate project path (similar to file path but used for directories)
+ */
+export declare function validateProjectPath(projectPath: unknown): ValidationResult;
+/**
+ * Validate framework/tool name against a list of valid options
+ */
+export declare function validateFramework(framework: unknown, validFrameworks: string[]): ValidationResult;
 //# sourceMappingURL=validation.d.ts.map

@@ -10,11 +10,11 @@ export function generateMockServerCode(spec: OpenAPISpec, config: MockServerConf
 
   lines.push("import express from 'express';");
   lines.push("import cors from 'cors';");
-  lines.push("");
-  lines.push("const app = express();");
-  lines.push("app.use(cors());");
-  lines.push("app.use(express.json());");
-  lines.push("");
+  lines.push('');
+  lines.push('const app = express();');
+  lines.push('app.use(cors());');
+  lines.push('app.use(express.json());');
+  lines.push('');
 
   // Generate routes for each path
   for (const [path, methods] of Object.entries(spec.paths)) {
@@ -32,16 +32,16 @@ export function generateMockServerCode(spec: OpenAPISpec, config: MockServerConf
           lines.push(`  res.json(${JSON.stringify(mockResponse)});`);
         }
         lines.push(`});`);
-        lines.push("");
+        lines.push('');
       }
     }
   }
 
   const port = config.port || 3000;
   lines.push(`const PORT = process.env.PORT || ${port};`);
-  lines.push("app.listen(PORT, () => {");
+  lines.push('app.listen(PORT, () => {');
   lines.push(`  console.log(\`Mock server running on port \${PORT}\`);`);
-  lines.push("});");
+  lines.push('});');
 
   return lines.join('\n');
 }
@@ -62,7 +62,9 @@ export function createMockServer(spec: OpenAPISpec, config: MockServerConfig) {
     app.use((req: Request, _res: Response, next: NextFunction) => {
       // Sanitize request data to prevent log injection
       const method = String(req.method).replace(/[\r\n]/g, '');
-      const safePath = String(req.path).replace(/[\r\n]/g, '').substring(0, 200);
+      const safePath = String(req.path)
+        .replace(/[\r\n]/g, '')
+        .substring(0, 200);
       console.log(`[${new Date().toISOString()}] ${method} ${safePath}`);
       next();
     });

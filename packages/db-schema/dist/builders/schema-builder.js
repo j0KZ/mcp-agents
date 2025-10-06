@@ -2,7 +2,7 @@
  * Schema Builder Module
  * Builds SQL and MongoDB schemas from entities and relationships
  */
-import { STRING_LIMITS, NUMERIC_LIMITS, } from '../constants/schema-limits.js';
+import { STRING_LIMITS, NUMERIC_LIMITS } from '../constants/schema-limits.js';
 export function buildSQLSchema(entities, relationships, options) {
     const tables = [];
     for (const entity of entities) {
@@ -26,17 +26,49 @@ export function buildSQLSchema(entities, relationships, options) {
         }
         // Common fields based on entity type
         if (entity.includes('user') || entity.includes('customer')) {
-            columns.push({ name: 'email', type: 'VARCHAR', length: STRING_LIMITS.EMAIL_LENGTH, unique: true, nullable: false }, { name: 'name', type: 'VARCHAR', length: STRING_LIMITS.NAME_LENGTH, nullable: false }, { name: 'password_hash', type: 'VARCHAR', length: STRING_LIMITS.PASSWORD_HASH_LENGTH, nullable: false });
+            columns.push({
+                name: 'email',
+                type: 'VARCHAR',
+                length: STRING_LIMITS.EMAIL_LENGTH,
+                unique: true,
+                nullable: false,
+            }, { name: 'name', type: 'VARCHAR', length: STRING_LIMITS.NAME_LENGTH, nullable: false }, {
+                name: 'password_hash',
+                type: 'VARCHAR',
+                length: STRING_LIMITS.PASSWORD_HASH_LENGTH,
+                nullable: false,
+            });
         }
         else if (entity.includes('product')) {
-            columns.push({ name: 'name', type: 'VARCHAR', length: STRING_LIMITS.NAME_LENGTH, nullable: false }, { name: 'description', type: 'TEXT' }, { name: 'price', type: 'DECIMAL', precision: NUMERIC_LIMITS.DEFAULT_PRICE_PRECISION, scale: NUMERIC_LIMITS.DEFAULT_PRICE_SCALE, nullable: false }, { name: 'stock', type: 'INTEGER', defaultValue: NUMERIC_LIMITS.DEFAULT_STOCK_VALUE });
+            columns.push({ name: 'name', type: 'VARCHAR', length: STRING_LIMITS.NAME_LENGTH, nullable: false }, { name: 'description', type: 'TEXT' }, {
+                name: 'price',
+                type: 'DECIMAL',
+                precision: NUMERIC_LIMITS.DEFAULT_PRICE_PRECISION,
+                scale: NUMERIC_LIMITS.DEFAULT_PRICE_SCALE,
+                nullable: false,
+            }, { name: 'stock', type: 'INTEGER', defaultValue: NUMERIC_LIMITS.DEFAULT_STOCK_VALUE });
         }
         else {
-            columns.push({ name: 'name', type: 'VARCHAR', length: STRING_LIMITS.NAME_LENGTH, nullable: false });
+            columns.push({
+                name: 'name',
+                type: 'VARCHAR',
+                length: STRING_LIMITS.NAME_LENGTH,
+                nullable: false,
+            });
         }
         // Timestamps
         if (options.includeTimestamps) {
-            columns.push({ name: 'created_at', type: 'TIMESTAMP', defaultValue: 'CURRENT_TIMESTAMP', nullable: false }, { name: 'updated_at', type: 'TIMESTAMP', defaultValue: 'CURRENT_TIMESTAMP', nullable: false });
+            columns.push({
+                name: 'created_at',
+                type: 'TIMESTAMP',
+                defaultValue: 'CURRENT_TIMESTAMP',
+                nullable: false,
+            }, {
+                name: 'updated_at',
+                type: 'TIMESTAMP',
+                defaultValue: 'CURRENT_TIMESTAMP',
+                nullable: false,
+            });
         }
         // Soft deletes
         if (options.includeSoftDeletes) {
@@ -46,9 +78,9 @@ export function buildSQLSchema(entities, relationships, options) {
             name: entity + 's',
             columns,
             primaryKey: 'id',
-            indexes: options.addIndexes ? [
-                { name: `idx_${entity}s_created_at`, columns: ['created_at'] }
-            ] : [],
+            indexes: options.addIndexes
+                ? [{ name: `idx_${entity}s_created_at`, columns: ['created_at'] }]
+                : [],
         });
     }
     return {
@@ -90,9 +122,9 @@ export function buildMongoSchema(entities, relationships, options) {
         collections.push({
             name: entity + 's',
             fields,
-            indexes: options.addIndexes ? [
-                { name: `idx_${entity}s_created`, columns: ['createdAt'] }
-            ] : [],
+            indexes: options.addIndexes
+                ? [{ name: `idx_${entity}s_created`, columns: ['createdAt'] }]
+                : [],
         });
     }
     return {

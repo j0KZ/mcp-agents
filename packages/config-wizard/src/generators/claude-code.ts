@@ -12,12 +12,12 @@ const MCP_PACKAGES: Record<string, string> = {
   'security-scanner': '@j0kz/security-scanner-mcp',
   'refactor-assistant': '@j0kz/refactor-assistant-mcp',
   'api-designer': '@j0kz/api-designer-mcp',
-  'db-schema': '@j0kz/db-schema-mcp'
+  'db-schema': '@j0kz/db-schema-mcp',
 };
 
 export function generateClaudeCodeConfig(selections: WizardSelections): any {
   const config: any = {
-    mcpServers: {}
+    mcpServers: {},
   };
 
   for (const mcp of selections.mcps) {
@@ -25,8 +25,8 @@ export function generateClaudeCodeConfig(selections: WizardSelections): any {
     if (!packageName) continue;
 
     config.mcpServers[mcp] = {
-      command: "npx",
-      args: [`${packageName}@^1.0.0`]
+      command: 'npx',
+      args: [`${packageName}@^1.0.0`],
     };
   }
 

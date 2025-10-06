@@ -101,10 +101,7 @@ export async function retry<T>(
 /**
  * Deep merge objects
  */
-export function deepMerge<T extends Record<string, any>>(
-  target: T,
-  ...sources: Partial<T>[]
-): T {
+export function deepMerge<T extends Record<string, any>>(target: T, ...sources: Partial<T>[]): T {
   if (!sources.length) return target;
   const source = sources.shift();
 

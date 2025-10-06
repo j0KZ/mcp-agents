@@ -11,7 +11,7 @@ describe('Architecture Analyzer', () => {
     const analyzer = new ArchitectureAnalyzer();
     const result = await analyzer.analyzeArchitecture(process.cwd(), {
       detectCircular: true,
-      generateGraph: false
+      generateGraph: false,
     });
     expect(result.modules).toBeDefined();
     expect(Array.isArray(result.modules)).toBe(true);

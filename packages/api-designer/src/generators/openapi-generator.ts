@@ -48,7 +48,7 @@ export function generateOpenAPISpec(
       paths: {},
       components: {
         schemas: {},
-        securitySchemes: {}
+        securitySchemes: {},
       },
       tags: [],
     };
@@ -81,7 +81,7 @@ export function generateOpenAPISpec(
   } catch (error) {
     return {
       success: false,
-      errors: [error instanceof Error ? error.message : 'Unknown error']
+      errors: [error instanceof Error ? error.message : 'Unknown error'],
     };
   }
 }
@@ -128,7 +128,11 @@ function addAuthenticationScheme(spec: OpenAPISpec, config: APIDesignConfig): vo
 function addCustomEndpointsWithTags(spec: OpenAPISpec, endpoints: RESTEndpoint[]): void {
   for (const endpoint of endpoints) {
     // Prevent prototype pollution: reject dangerous keys
-    if (endpoint.path === '__proto__' || endpoint.path === 'constructor' || endpoint.path === 'prototype') {
+    if (
+      endpoint.path === '__proto__' ||
+      endpoint.path === 'constructor' ||
+      endpoint.path === 'prototype'
+    ) {
       continue;
     }
 
@@ -167,7 +171,6 @@ function addCustomEndpointsWithTags(spec: OpenAPISpec, endpoints: RESTEndpoint[]
     }
   }
 }
-
 
 function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { CallToolRequestSchema, ListToolsRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { ArchitectureAnalyzer } from './analyzer.js';
-import { validateDirectoryPath, validatePath } from '@j0kz/shared';
+import { validateDirectoryPath, validatePath, MCPError, getErrorMessage } from '@j0kz/shared';
 class ArchitectureAnalyzerServer {
     server;
     analyzer;
@@ -133,7 +133,7 @@ class ArchitectureAnalyzerServer {
                         const result = await this.analyzer.analyzeArchitecture(validatedProjectPath);
                         const module = result.modules.find(m => m.path === validatedModulePath);
                         if (!module) {
-                            throw new Error(`Module not found: ${validatedModulePath}`);
+                            throw new MCPError('ARCH_002', { module: validatedModulePath });
                         }
                         const dependencies = result.dependencies.filter(d => d.from === validatedModulePath);
                         const dependents = result.dependencies.filter(d => d.to === validatedModulePath);
@@ -175,16 +175,22 @@ class ArchitectureAnalyzerServer {
                         };
                     }
                     default:
-                        throw new Error(`Unknown tool: ${name}`);
+                        throw new MCPError('ARCH_003', { tool: name });
                 }
             }
             catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
+                const errorMessage = getErrorMessage(error);
+                const errorCode = error instanceof MCPError ? error.code : 'UNKNOWN';
                 return {
                     content: [
                         {
                             type: 'text',
-                            text: JSON.stringify({ error: errorMessage }, null, 2),
+                            text: JSON.stringify({
+                                success: false,
+                                error: errorMessage,
+                                code: errorCode,
+                                ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
+                            }, null, 2),
                         },
                     ],
                     isError: true,

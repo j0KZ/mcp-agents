@@ -35,8 +35,8 @@ export async function detectIssues(content: string, filePath: string): Promise<C
         fix: {
           description: "Replace 'var' with 'const' or 'let'",
           oldCode: line,
-          newCode: line.replace(/\bvar\b/, 'const')
-        }
+          newCode: line.replace(/\bvar\b/, 'const'),
+        },
       });
     }
 
@@ -52,8 +52,8 @@ export async function detectIssues(content: string, filePath: string): Promise<C
         fix: {
           description: 'Remove console.log statement',
           oldCode: line,
-          newCode: ''
-        }
+          newCode: '',
+        },
       });
     }
 
@@ -63,7 +63,7 @@ export async function detectIssues(content: string, filePath: string): Promise<C
         line: lineNum,
         severity: 'info',
         message: 'Unresolved TODO/FIXME comment',
-        rule: 'no-todo'
+        rule: 'no-todo',
       });
     }
 
@@ -73,7 +73,7 @@ export async function detectIssues(content: string, filePath: string): Promise<C
         line: lineNum,
         severity: 'info',
         message: `Line too long (${line.length} chars). Consider breaking it up.`,
-        rule: 'max-line-length'
+        rule: 'max-line-length',
       });
     }
 
@@ -83,7 +83,7 @@ export async function detectIssues(content: string, filePath: string): Promise<C
         line: lineNum,
         severity: 'info',
         message: 'Multiple consecutive blank lines',
-        rule: 'no-multiple-empty-lines'
+        rule: 'no-multiple-empty-lines',
       });
     }
 
@@ -99,8 +99,8 @@ export async function detectIssues(content: string, filePath: string): Promise<C
           fix: {
             description: "Replace '==' with '==='",
             oldCode: line,
-            newCode: line.replace(/([^=!])={2}([^=])/, '$1===$2')
-          }
+            newCode: line.replace(/([^=!])={2}([^=])/, '$1===$2'),
+          },
         });
       }
     }
@@ -114,7 +114,7 @@ export async function detectIssues(content: string, filePath: string): Promise<C
           line: lineNum,
           severity: 'warning',
           message: `Function has too many parameters (${params.length}). Consider using an options object.`,
-          rule: 'max-params'
+          rule: 'max-params',
         });
       }
     }
@@ -126,7 +126,7 @@ export async function detectIssues(content: string, filePath: string): Promise<C
         line: lineNum,
         severity: 'info',
         message: 'Avoid magic numbers. Use named constants.',
-        rule: 'no-magic-numbers'
+        rule: 'no-magic-numbers',
       });
     }
 
@@ -141,7 +141,7 @@ export async function detectIssues(content: string, filePath: string): Promise<C
           line: lineNum,
           severity: 'error',
           message: 'Empty catch block. Handle errors properly.',
-          rule: 'no-empty-catch'
+          rule: 'no-empty-catch',
         });
       }
     }
@@ -153,7 +153,7 @@ export async function detectIssues(content: string, filePath: string): Promise<C
         line: lineNum,
         severity: 'warning',
         message: 'Nested ternary operators reduce readability',
-        rule: 'no-nested-ternary'
+        rule: 'no-nested-ternary',
       });
     }
   }

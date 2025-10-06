@@ -31,9 +31,8 @@ export function generateMermaidDiagram(schema: DatabaseSchema, options: ERDiagra
   // Add relationships
   if (options.includeRelationships) {
     for (const rel of schema.relationships || []) {
-      const cardinality = rel.type === 'ONE_TO_ONE' ? '||--||' :
-                         rel.type === 'ONE_TO_MANY' ? '||--o{' :
-                         '}o--o{';
+      const cardinality =
+        rel.type === 'ONE_TO_ONE' ? '||--||' : rel.type === 'ONE_TO_MANY' ? '||--o{' : '}o--o{';
       diagram += `  ${rel.from.table} ${cardinality} ${rel.to.table} : "${rel.name}"\n`;
     }
   }
@@ -68,7 +67,10 @@ export function generateDBMLDiagram(schema: DatabaseSchema, _options: ERDiagramO
   return dbml;
 }
 
-export function generatePlantUMLDiagram(schema: DatabaseSchema, _options: ERDiagramOptions): string {
+export function generatePlantUMLDiagram(
+  schema: DatabaseSchema,
+  _options: ERDiagramOptions
+): string {
   let uml = '@startuml\n';
 
   for (const table of schema.tables || schema.collections || []) {

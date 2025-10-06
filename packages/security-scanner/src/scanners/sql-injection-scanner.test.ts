@@ -7,7 +7,7 @@ describe('SQL Injection Scanner', () => {
     filePath,
     content,
     extension: '.js',
-    size: content.length
+    size: content.length,
   });
 
   describe('String Concatenation Detection', () => {
@@ -47,14 +47,18 @@ describe('SQL Injection Scanner', () => {
     });
 
     it('should detect req.params in query', async () => {
-      const context = createContext('connection.execute(`DELETE FROM users WHERE id = ${req.params.id}`);');
+      const context = createContext(
+        'connection.execute(`DELETE FROM users WHERE id = ${req.params.id}`);'
+      );
       const findings = await scanForSQLInjection(context);
 
       expect(findings.length).toBeGreaterThan(0);
     });
 
     it('should detect req.query in SQL', async () => {
-      const context = createContext('db.query("SELECT * FROM products WHERE category = " + req.query.cat);');
+      const context = createContext(
+        'db.query("SELECT * FROM products WHERE category = " + req.query.cat);'
+      );
       const findings = await scanForSQLInjection(context);
 
       expect(findings.length).toBeGreaterThan(0);
@@ -63,7 +67,9 @@ describe('SQL Injection Scanner', () => {
 
   describe('Different SQL Operations', () => {
     it('should detect INSERT with concatenation', async () => {
-      const context = createContext('INSERT INTO users (name, email) VALUES (" + name + ", " + email + ")');
+      const context = createContext(
+        'INSERT INTO users (name, email) VALUES (" + name + ", " + email + ")'
+      );
       const findings = await scanForSQLInjection(context);
 
       expect(findings.length).toBeGreaterThan(0);

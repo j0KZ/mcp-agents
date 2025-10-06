@@ -25,7 +25,9 @@ export class CodeParser {
       if (line.length > 1000) continue;
 
       // Match function declarations (safe pattern with limits to prevent ReDoS)
-      const funcMatch = line.match(/(?:async\s)?(?:function\s|const\s|let\s|var\s)?(\w+)[=:]?(?:async\s)?\(([^)]{0,500})\)/);
+      const funcMatch = line.match(
+        /(?:async\s)?(?:function\s|const\s|let\s|var\s)?(\w+)[=:]?(?:async\s)?\(([^)]{0,500})\)/
+      );
 
       if (funcMatch) {
         const isAsync = line.includes('async');

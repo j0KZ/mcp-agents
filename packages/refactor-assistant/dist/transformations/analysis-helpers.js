@@ -8,7 +8,8 @@ export function analyzeFunctionLengths(code) {
     for (let i = 0; i < lines.length; i++) {
         // Use two separate, simpler regexes to avoid ReDoS vulnerability
         const regularFunctionMatch = lines[i].match(/function\s+(\w+)/);
-        const arrowFunctionMatch = !regularFunctionMatch && lines[i].match(/const\s+(\w+)\s*=\s*(?:async\s+)?(?:\([^)]{0,200}\)|[a-zA-Z_$][\w$]*)\s*=>/);
+        const arrowFunctionMatch = !regularFunctionMatch &&
+            lines[i].match(/const\s+(\w+)\s*=\s*(?:async\s+)?(?:\([^)]{0,200}\)|[a-zA-Z_$][\w$]*)\s*=>/);
         const functionMatch = regularFunctionMatch || arrowFunctionMatch;
         if (functionMatch) {
             const name = functionMatch[1];

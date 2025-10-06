@@ -10,6 +10,7 @@ export declare class MCPPipeline {
     private steps;
     private results;
     private performance;
+    private mcpClient;
     /**
      * Add a step to the pipeline
      */
@@ -19,7 +20,7 @@ export declare class MCPPipeline {
      */
     execute(): Promise<PipelineResult>;
     /**
-     * Execute a single step
+     * Execute a single step - NOW CALLS REAL MCPs
      */
     private executeStep;
     /**

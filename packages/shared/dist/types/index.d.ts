@@ -123,7 +123,10 @@ export interface MCPToolMetadata {
 export interface PipelineStep {
     name: string;
     tool: string;
-    config: MCPConfig;
+    config: MCPConfig & {
+        action?: string;
+        params?: any;
+    };
     input?: any;
     dependsOn?: string[];
 }

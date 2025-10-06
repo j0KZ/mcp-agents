@@ -6,14 +6,14 @@ import type { AutoFix } from '../auto-fixer.js';
 import { CONFIDENCE, PARETO_COVERAGE, INDEX } from '../constants/auto-fixer.js';
 
 // Handle both ESM and CJS imports
-const traverse = typeof traverseModule === 'function' ? traverseModule : (traverseModule as any).default;
+const traverse =
+  typeof traverseModule === 'function' ? traverseModule : (traverseModule as any).default;
 
 /**
  * Finds and removes unused imports
  * Coverage: 35% of common issues
  */
 export class UnusedImportFixer extends BaseFixer {
-
   getName(): string {
     return 'UnusedImportFixer';
   }
@@ -33,16 +33,22 @@ export class UnusedImportFixer extends BaseFixer {
         // Skip side-effect imports (no specifiers) - early return
         if (path.node.specifiers.length === INDEX.ZERO_BASED) return;
 
-        path.node.specifiers.forEach((spec: t.ImportSpecifier | t.ImportDefaultSpecifier | t.ImportNamespaceSpecifier) => {
-          if (t.isImportSpecifier(spec) || t.isImportDefaultSpecifier(spec) || t.isImportNamespaceSpecifier(spec)) {
-            const localName = spec.local.name;
-            imports.set(localName, {
-              line: spec.loc?.start.line || INDEX.ZERO_BASED,
-              column: spec.loc?.start.column || INDEX.ZERO_BASED,
-              specifier: localName,
-            });
+        path.node.specifiers.forEach(
+          (spec: t.ImportSpecifier | t.ImportDefaultSpecifier | t.ImportNamespaceSpecifier) => {
+            if (
+              t.isImportSpecifier(spec) ||
+              t.isImportDefaultSpecifier(spec) ||
+              t.isImportNamespaceSpecifier(spec)
+            ) {
+              const localName = spec.local.name;
+              imports.set(localName, {
+                line: spec.loc?.start.line || INDEX.ZERO_BASED,
+                column: spec.loc?.start.column || INDEX.ZERO_BASED,
+                specifier: localName,
+              });
+            }
           }
-        });
+        );
       },
     });
 
@@ -51,9 +57,12 @@ export class UnusedImportFixer extends BaseFixer {
       Identifier: (path: NodePath<t.Identifier>) => {
         // Early return if part of import declaration
         const parentType = path.parent.type;
-        if (parentType === 'ImportSpecifier' ||
-            parentType === 'ImportDefaultSpecifier' ||
-            parentType === 'ImportNamespaceSpecifier') return;
+        if (
+          parentType === 'ImportSpecifier' ||
+          parentType === 'ImportDefaultSpecifier' ||
+          parentType === 'ImportNamespaceSpecifier'
+        )
+          return;
 
         usedNames.add(path.node.name);
       },

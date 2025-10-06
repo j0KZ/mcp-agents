@@ -22,7 +22,7 @@ describe('Conditional Helpers', () => {
             const code = `if (data) { process(); } else { return { error: 'missing' }; }`;
             const result = applyGuardClauses(code);
             expect(result.changed).toBe(true);
-            expect(result.code).toContain('return { error: \'missing\' };');
+            expect(result.code).toContain("return { error: 'missing' };");
         });
         it('should not change code without matching pattern', () => {
             const code = `if (x) { console.log('test'); }`;
@@ -94,9 +94,9 @@ if (a) { if (b) { doAB(); } }
     });
     describe('Integration', () => {
         it('should work together on complex code', () => {
-            let code = `if (user) { if (user.active) { process(); } }`;
+            const code = `if (user) { if (user.active) { process(); } }`;
             // Combine nested conditions first
-            let result = combineNestedConditions(code);
+            const result = combineNestedConditions(code);
             expect(result.changed).toBe(true);
             expect(result.code).toContain('user && user.active');
             // Result should be defined and valid

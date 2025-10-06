@@ -7,7 +7,7 @@ describe('Secret Scanner', () => {
     filePath,
     content,
     extension: '.js',
-    size: content.length
+    size: content.length,
   });
 
   describe('AWS Credentials Detection', () => {

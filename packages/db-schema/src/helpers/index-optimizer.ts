@@ -44,8 +44,8 @@ export function suggestFilterColumnIndexes(
   for (const column of table.columns) {
     if (
       (column.name.includes('status') ||
-       column.name.includes('type') ||
-       column.name.includes('category')) &&
+        column.name.includes('type') ||
+        column.name.includes('category')) &&
       !indexedColumns.has(column.name)
     ) {
       suggestions.push({
@@ -119,19 +119,18 @@ export function suggestTextSearchIndexes(
 /**
  * Suggest compound indexes for common query patterns
  */
-export function suggestCompoundIndexes(
-  table: SQLTable,
-  existingIndexes: any[]
-): IndexSuggestion[] {
+export function suggestCompoundIndexes(table: SQLTable, existingIndexes: any[]): IndexSuggestion[] {
   const suggestions: IndexSuggestion[] = [];
 
-  const timestampColumns = table.columns.filter(c => c.name === 'created_at' || c.name === 'updated_at');
+  const timestampColumns = table.columns.filter(
+    c => c.name === 'created_at' || c.name === 'updated_at'
+  );
   const statusColumn = table.columns.find(c => c.name === 'status');
 
   if (statusColumn && timestampColumns.length > 0) {
     const compoundCols = [statusColumn.name, timestampColumns[0].name];
-    const hasCompoundIndex = existingIndexes.some(idx =>
-      idx.columns.length > 1 && idx.columns.includes(statusColumn.name)
+    const hasCompoundIndex = existingIndexes.some(
+      idx => idx.columns.length > 1 && idx.columns.includes(statusColumn.name)
     );
 
     if (!hasCompoundIndex) {

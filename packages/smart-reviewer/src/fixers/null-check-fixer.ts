@@ -6,14 +6,14 @@ import type { AutoFix } from '../auto-fixer.js';
 import { CONFIDENCE, PARETO_COVERAGE, INDEX } from '../constants/auto-fixer.js';
 
 // Handle both ESM and CJS imports
-const traverse = typeof traverseModule === 'function' ? traverseModule : (traverseModule as any).default;
+const traverse =
+  typeof traverseModule === 'function' ? traverseModule : (traverseModule as any).default;
 
 /**
  * Suggests optional chaining for null/undefined access
  * Coverage: 25% of common issues
  */
 export class NullCheckFixer extends BaseFixer {
-
   // Memoized constant set for performance
   private readonly NEVER_NULL_OBJECTS = new Set([
     'this',
@@ -28,7 +28,7 @@ export class NullCheckFixer extends BaseFixer {
     'Number',
     'Boolean',
     'process', // Node.js
-    'global',  // Node.js
+    'global', // Node.js
   ]);
 
   getName(): string {
@@ -61,10 +61,7 @@ export class NullCheckFixer extends BaseFixer {
         const escapedName = objName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
         // Suggest optional chaining (regex created once per iteration)
-        const newCode = oldCode.replace(
-          new RegExp(`${escapedName}\\.`, 'g'),
-          `${objName}?.`
-        );
+        const newCode = oldCode.replace(new RegExp(`${escapedName}\\.`, 'g'), `${objName}?.`);
 
         if (oldCode === newCode) return;
 

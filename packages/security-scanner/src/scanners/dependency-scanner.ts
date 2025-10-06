@@ -24,23 +24,26 @@ export async function scanDependencies(projectPath: string): Promise<DependencyV
     // Use nullish coalescing to prevent TypeError when dependencies are undefined
     const allDeps = {
       ...(packageJson.dependencies ?? {}),
-      ...(packageJson.devDependencies ?? {})
+      ...(packageJson.devDependencies ?? {}),
     };
 
     // Known vulnerable packages (example - in production, use npm audit or Snyk API)
-    const knownVulnerabilities: Record<string, { versions: string[], cve: string, severity: SeverityLevel, description: string }> = {
-      'lodash': {
+    const knownVulnerabilities: Record<
+      string,
+      { versions: string[]; cve: string; severity: SeverityLevel; description: string }
+    > = {
+      lodash: {
         versions: ['<4.17.21'],
         cve: 'CVE-2020-8203',
         severity: SeverityLevel.HIGH,
-        description: 'Prototype pollution vulnerability'
+        description: 'Prototype pollution vulnerability',
       },
-      'minimist': {
+      minimist: {
         versions: ['<1.2.6'],
         cve: 'CVE-2021-44906',
         severity: SeverityLevel.MEDIUM,
-        description: 'Prototype pollution vulnerability'
-      }
+        description: 'Prototype pollution vulnerability',
+      },
     };
 
     // Check each dependency against known vulnerabilities using semver
@@ -65,7 +68,7 @@ export async function scanDependencies(projectPath: string): Promise<DependencyV
             vulnerabilityId: vuln.cve,
             severity: vuln.severity,
             description: vuln.description,
-            references: [`https://nvd.nist.gov/vuln/detail/${vuln.cve}`]
+            references: [`https://nvd.nist.gov/vuln/detail/${vuln.cve}`],
           });
         }
       }

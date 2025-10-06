@@ -14,8 +14,8 @@ export function editorPrompt(detectedEditor: SupportedEditor) {
       { name: 'Cursor (Anysphere)', value: 'cursor' },
       { name: 'Windsurf (Codeium)', value: 'windsurf' },
       { name: 'VS Code + Continue', value: 'vscode' },
-      { name: 'Roo Code', value: 'roo' }
+      { name: 'Roo Code', value: 'roo' },
     ],
-    default: detectedEditor || 'claude-code'
+    default: detectedEditor || 'claude-code',
   };
 }

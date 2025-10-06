@@ -269,7 +269,7 @@ return { user, posts };`;
 throw err;`;
             const result = wrapInTryCatch(input, errorHandler);
             expect(result).toContain('if (err instanceof ValidationError)');
-            expect(result).toContain("return { error: err.message }");
+            expect(result).toContain('return { error: err.message }');
         });
     });
     describe('Edge Cases', () => {

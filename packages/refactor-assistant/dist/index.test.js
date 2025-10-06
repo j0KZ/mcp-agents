@@ -66,7 +66,7 @@ describe('Package Exports', () => {
                 'calculateMetrics',
                 'VERSION',
                 'NAME',
-                'DESCRIPTION'
+                'DESCRIPTION',
             ];
             expectedExports.forEach(exportName => {
                 expect(exports).toContain(exportName);

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { CallToolRequestSchema, ListToolsRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { TestGenerator } from './generator.js';
 import { writeFile } from 'fs/promises';
+import { MCPError, getErrorMessage } from '@j0kz/shared';
 class TestGeneratorServer {
     server;
     generator;
@@ -173,16 +174,22 @@ class TestGeneratorServer {
                         };
                     }
                     default:
-                        throw new Error(`Unknown tool: ${name}`);
+                        throw new MCPError('TEST_004', { tool: name });
                 }
             }
             catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
+                const errorMessage = getErrorMessage(error);
+                const errorCode = error instanceof MCPError ? error.code : 'UNKNOWN';
                 return {
                     content: [
                         {
                             type: 'text',
-                            text: JSON.stringify({ error: errorMessage }, null, 2),
+                            text: JSON.stringify({
+                                success: false,
+                                error: errorMessage,
+                                code: errorCode,
+                                ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
+                            }, null, 2),
                         },
                     ],
                     isError: true,

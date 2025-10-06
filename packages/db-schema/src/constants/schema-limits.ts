@@ -31,9 +31,9 @@ export const NUMERIC_LIMITS = {
 
 // Index Optimization Priorities
 export const INDEX_PRIORITY = {
-  HIGH: 1,      // Foreign keys, JSONB columns
-  MEDIUM: 2,    // Status, type, category columns
-  LOW: 3,       // Text search indexes
+  HIGH: 1, // Foreign keys, JSONB columns
+  MEDIUM: 2, // Status, type, category columns
+  LOW: 3, // Text search indexes
 } as const;
 
 // Index Impact Levels

@@ -137,7 +137,7 @@ export function throttle<T extends (...args: any[]) => any>(
   limit: number
 ): (...args: Parameters<T>) => void {
   let inThrottle: boolean;
-  return function(this: any, ...args: Parameters<T>) {
+  return function (this: any, ...args: Parameters<T>) {
     if (!inThrottle) {
       func.apply(this, args);
       inThrottle = true;
@@ -188,7 +188,10 @@ export async function parallelProcess<T, R>(
 
     if (executing.length >= maxConcurrency) {
       await Promise.race(executing);
-      executing.splice(executing.findIndex(p => p === promise), 1);
+      executing.splice(
+        executing.findIndex(p => p === promise),
+        1
+      );
     }
   }
 
@@ -268,3 +271,13 @@ export class ResourcePool<T> {
     };
   }
 }
+
+// Export benchmark utilities
+export {
+  benchmark,
+  benchmarkSuite,
+  compareBenchmarks,
+  formatBenchmarkResult,
+  type BenchmarkResult,
+  type BenchmarkOptions,
+} from './benchmark.js';

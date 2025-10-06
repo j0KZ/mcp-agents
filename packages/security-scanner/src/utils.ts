@@ -22,7 +22,11 @@ export function generateFindingId(filePath: string, line: number, type: Vulnerab
 /**
  * Extract code context around issue
  */
-export function extractCodeContext(content: string, lineNumber: number, contextLines = FILE_LIMITS.CONTEXT_LINES): CodeContext {
+export function extractCodeContext(
+  content: string,
+  lineNumber: number,
+  contextLines = FILE_LIMITS.CONTEXT_LINES
+): CodeContext {
   const lines = content.split('\n');
   const index = lineNumber - 1;
 
@@ -34,7 +38,7 @@ export function extractCodeContext(content: string, lineNumber: number, contextL
     beforeLines: beforeLines,
     issueLine: issueLine.substring(0, FILE_LIMITS.MAX_LINE_LENGTH),
     afterLines: afterLines,
-    lineNumber: lineNumber
+    lineNumber: lineNumber,
   };
 }
 
@@ -82,16 +86,25 @@ export function shouldSkipLine(line: string): boolean {
   const trimmed = line.trim();
 
   // Skip comments
-  if (trimmed.startsWith('//') || trimmed.startsWith('#') ||
-      trimmed.startsWith('/*') || trimmed.startsWith('*')) {
+  if (
+    trimmed.startsWith('//') ||
+    trimmed.startsWith('#') ||
+    trimmed.startsWith('/*') ||
+    trimmed.startsWith('*')
+  ) {
     return true;
   }
 
   // Skip lines that appear to be examples
   const lowerLine = line.toLowerCase();
-  if (lowerLine.includes('example') || lowerLine.includes('sample') ||
-      lowerLine.includes('test') || lowerLine.includes('todo') ||
-      lowerLine.includes('fixme') || lowerLine.includes('mock')) {
+  if (
+    lowerLine.includes('example') ||
+    lowerLine.includes('sample') ||
+    lowerLine.includes('test') ||
+    lowerLine.includes('todo') ||
+    lowerLine.includes('fixme') ||
+    lowerLine.includes('mock')
+  ) {
     return true;
   }
 
@@ -101,7 +114,10 @@ export function shouldSkipLine(line: string): boolean {
 /**
  * Truncate sensitive data for display in reports
  */
-export function truncateSensitive(text: string, maxLength = PATTERN_LIMITS.SECRET_PREVIEW_LENGTH): string {
+export function truncateSensitive(
+  text: string,
+  maxLength = PATTERN_LIMITS.SECRET_PREVIEW_LENGTH
+): string {
   if (text.length <= maxLength) {
     return text;
   }

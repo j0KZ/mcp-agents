@@ -42,7 +42,13 @@
       "Bash(echo \"Updating module in: $file\")",
       "Bash(fi)",
       "Bash(tee:*)",
-      "Bash(npx @j0kz/smart-reviewer@latest generate-auto-fixes:*)"
+      "Bash(npx @j0kz/smart-reviewer@latest generate-auto-fixes:*)",
+      "Bash(npm outdated:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npm run lint:fix:*)",
+      "Bash(npm run coverage:dashboard:*)",
+      "Bash(awk:*)",
+      "Bash(npm run version:sync:*)"
     ],
     "deny": [],
     "ask": []

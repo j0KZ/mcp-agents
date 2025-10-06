@@ -15,10 +15,10 @@ export function preferencesPrompt(detected: any) {
     choices: [
       { name: 'Lenient (minimal noise)', value: 'lenient' },
       { name: 'Moderate (balanced)', value: 'moderate' },
-      { name: 'Strict (catch everything)', value: 'strict' }
+      { name: 'Strict (catch everything)', value: 'strict' },
     ],
     default: 'moderate',
-    when: (answers: any) => answers.mcps.includes('smart-reviewer')
+    when: (answers: any) => answers.mcps.includes('smart-reviewer'),
   });
 
   // Test framework (if not detected)
@@ -32,9 +32,9 @@ export function preferencesPrompt(detected: any) {
         { name: 'Vitest', value: 'vitest' },
         { name: 'Mocha', value: 'mocha' },
         { name: 'Ava', value: 'ava' },
-        { name: 'Skip (no tests)', value: null }
+        { name: 'Skip (no tests)', value: null },
       ],
-      when: (answers: any) => answers.mcps.includes('test-generator')
+      when: (answers: any) => answers.mcps.includes('test-generator'),
     });
   }
 
@@ -43,7 +43,7 @@ export function preferencesPrompt(detected: any) {
     type: 'confirm',
     name: 'installGlobally',
     message: 'Install MCP packages globally? (Recommended for faster startup)',
-    default: true
+    default: true,
   });
 
   return prompts;

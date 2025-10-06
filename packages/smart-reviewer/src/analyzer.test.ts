@@ -9,12 +9,15 @@ describe('Smart Reviewer', () => {
   const testFile = path.join(tmpdir(), 'test-review-' + Date.now() + '.ts');
 
   beforeAll(() => {
-    fs.writeFileSync(testFile, `
+    fs.writeFileSync(
+      testFile,
+      `
       function test() {
         var x = 1;
         console.log(x);
       }
-    `);
+    `
+    );
   });
 
   afterAll(() => {

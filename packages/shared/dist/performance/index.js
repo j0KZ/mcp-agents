@@ -214,4 +214,6 @@ export class ResourcePool {
         };
     }
 }
+// Export benchmark utilities
+export { benchmark, benchmarkSuite, compareBenchmarks, formatBenchmarkResult, } from './benchmark.js';
 //# sourceMappingURL=index.js.map

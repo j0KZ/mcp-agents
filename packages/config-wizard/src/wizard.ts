@@ -44,7 +44,7 @@ export async function runWizard(args: WizardArgs): Promise<void> {
   const detected = {
     editor: await detectEditor(),
     project: await detectProject(),
-    testFramework: await detectTestFramework()
+    testFramework: await detectTestFramework(),
   };
   spin.succeed('Environment analyzed');
 
@@ -73,12 +73,14 @@ export async function runWizard(args: WizardArgs): Promise<void> {
     logger.warn('\n⚠️  Configuration issues found:');
     issues.forEach(issue => logger.warn(`  - ${issue}`));
 
-    const { proceed } = await inquirer.prompt([{
-      type: 'confirm',
-      name: 'proceed',
-      message: 'Continue anyway?',
-      default: false
-    }]);
+    const { proceed } = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'proceed',
+        message: 'Continue anyway?',
+        default: false,
+      },
+    ]);
 
     if (!proceed) {
       logger.info('Configuration cancelled');
@@ -121,11 +123,7 @@ export async function runWizard(args: WizardArgs): Promise<void> {
   logger.info('  2. Try asking: "Review my code" or "Scan for vulnerabilities"');
 }
 
-async function gatherSelections(
-  args: WizardArgs,
-  detected: any
-): Promise<WizardSelections> {
-
+async function gatherSelections(args: WizardArgs, detected: any): Promise<WizardSelections> {
   // Non-interactive mode
   if (args.editor && args.mcps) {
     return {
@@ -134,8 +132,8 @@ async function gatherSelections(
       preferences: {
         reviewSeverity: 'moderate',
         testFramework: detected.testFramework,
-        installGlobally: true
-      }
+        installGlobally: true,
+      },
     };
   }
 
@@ -143,7 +141,7 @@ async function gatherSelections(
   const answers = await inquirer.prompt([
     editorPrompt(detected.editor),
     mcpPrompt(detected.project),
-    ...preferencesPrompt(detected)
+    ...preferencesPrompt(detected),
   ]);
 
   return {
@@ -152,8 +150,8 @@ async function gatherSelections(
     preferences: {
       reviewSeverity: answers.reviewSeverity || 'moderate',
       testFramework: answers.testFramework || detected.testFramework,
-      installGlobally: answers.installGlobally !== false
-    }
+      installGlobally: answers.installGlobally !== false,
+    },
   };
 }
 

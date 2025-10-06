@@ -34,9 +34,7 @@ export function detectPartialDependencies(table: SQLTable): NormalizationSuggest
   const compositePK = Array.isArray(table.primaryKey) && table.primaryKey.length > 1;
 
   if (compositePK) {
-    const nonKeyColumns = table.columns.filter(c =>
-      !table.primaryKey!.includes(c.name)
-    );
+    const nonKeyColumns = table.columns.filter(c => !table.primaryKey!.includes(c.name));
 
     // Use >= to include cases with exactly MIN_NONKEY_COLUMNS_FOR_EXTRACTION columns
     if (nonKeyColumns.length >= NORMALIZATION_LIMITS.MIN_NONKEY_COLUMNS_FOR_EXTRACTION) {
@@ -60,8 +58,8 @@ export function detectTransitiveDependencies(table: SQLTable): NormalizationSugg
   const suggestions: NormalizationSuggestion[] = [];
 
   // Check for address columns that suggest transitive dependencies
-  const addressColumns = table.columns.filter(c =>
-    c.name.includes('city') || c.name.includes('state') || c.name.includes('country')
+  const addressColumns = table.columns.filter(
+    c => c.name.includes('city') || c.name.includes('state') || c.name.includes('country')
   );
 
   if (addressColumns.length >= NORMALIZATION_LIMITS.MIN_ADDRESS_COLUMNS_FOR_EXTRACTION) {
@@ -100,7 +98,9 @@ export function detectRedundantData(table: SQLTable): NormalizationSuggestion[] 
 /**
  * Check for missing junction tables in many-to-many relationships
  */
-export function detectMissingJunctionTables(relationships: Relationship[]): NormalizationSuggestion[] {
+export function detectMissingJunctionTables(
+  relationships: Relationship[]
+): NormalizationSuggestion[] {
   const suggestions: NormalizationSuggestion[] = [];
   const manyToManyRels = relationships.filter(r => r.type === 'MANY_TO_MANY');
 

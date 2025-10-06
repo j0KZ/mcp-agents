@@ -2,13 +2,10 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { CodeAnalyzer } from './analyzer.js';
 import { ReviewConfig } from './types.js';
-import { validateFilePath } from '@j0kz/shared';
+import { validateFilePath, MCPError, getErrorMessage } from '@j0kz/shared';
 import { AutoFixer } from './auto-fixer.js';
 
 class SmartReviewerServer {
@@ -41,7 +38,8 @@ class SmartReviewerServer {
       tools: [
         {
           name: 'review_file',
-          description: 'Review a code file and provide detailed analysis with issues, metrics, and suggestions',
+          description:
+            'Review a code file and provide detailed analysis with issues, metrics, and suggestions',
           inputSchema: {
             type: 'object',
             properties: {
@@ -107,7 +105,8 @@ class SmartReviewerServer {
         },
         {
           name: 'generate_auto_fixes',
-          description: 'Generate automatic fixes using Pareto principle (20% fixes solve 80% issues). Returns preview without applying changes.',
+          description:
+            'Generate automatic fixes using Pareto principle (20% fixes solve 80% issues). Returns preview without applying changes.',
           inputSchema: {
             type: 'object',
             properties: {
@@ -125,7 +124,8 @@ class SmartReviewerServer {
         },
         {
           name: 'apply_auto_fixes',
-          description: 'Apply generated auto-fixes to a file. SAFE: Creates backup before applying.',
+          description:
+            'Apply generated auto-fixes to a file. SAFE: Creates backup before applying.',
           inputSchema: {
             type: 'object',
             properties: {
@@ -145,13 +145,16 @@ class SmartReviewerServer {
     }));
 
     // Handle tool calls
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
 
       try {
         switch (name) {
           case 'review_file': {
-            const { filePath, config: _config } = args as { filePath: string; config?: ReviewConfig };
+            const { filePath, config: _config } = args as {
+              filePath: string;
+              config?: ReviewConfig;
+            };
 
             // Validate file path to prevent path traversal
             const validatedPath = validateFilePath(filePath);
@@ -169,11 +172,14 @@ class SmartReviewerServer {
           }
 
           case 'batch_review': {
-            const { filePaths, config: _config } = args as { filePaths: string[]; config?: ReviewConfig };
+            const { filePaths, config: _config } = args as {
+              filePaths: string[];
+              config?: ReviewConfig;
+            };
 
             // Validate input
             if (!Array.isArray(filePaths) || filePaths.length === 0) {
-              throw new Error('filePaths must be a non-empty array');
+              throw new MCPError('REV_001', { tool: 'batch_review' });
             }
 
             // Validate all file paths
@@ -219,11 +225,15 @@ class SmartReviewerServer {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify({
-                    success: true,
-                    file: filePath,
-                    fixesApplied: result.issues.filter(i => i.fix).length,
-                  }, null, 2),
+                  text: JSON.stringify(
+                    {
+                      success: true,
+                      file: filePath,
+                      fixesApplied: result.issues.filter(i => i.fix).length,
+                    },
+                    null,
+                    2
+                  ),
                 },
               ],
             };
@@ -241,9 +251,7 @@ class SmartReviewerServer {
             const fixResult = await this.autoFixer.generateFixes(content, validatedPath);
 
             // Filter by safety if requested
-            const fixes = safeOnly
-              ? fixResult.fixes.filter(f => f.safe)
-              : fixResult.fixes;
+            const fixes = safeOnly ? fixResult.fixes.filter(f => f.safe) : fixResult.fixes;
 
             const diff = this.autoFixer.generateDiff(fixes);
 
@@ -251,24 +259,28 @@ class SmartReviewerServer {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify({
-                    success: true,
-                    file: filePath,
-                    summary: {
-                      total: fixes.length,
-                      safe: fixes.filter(f => f.safe).length,
-                      requiresReview: fixes.filter(f => !f.safe).length,
+                  text: JSON.stringify(
+                    {
+                      success: true,
+                      file: filePath,
+                      summary: {
+                        total: fixes.length,
+                        safe: fixes.filter(f => f.safe).length,
+                        requiresReview: fixes.filter(f => !f.safe).length,
+                      },
+                      fixes: fixes.map(f => ({
+                        type: f.type,
+                        line: f.line,
+                        description: f.description,
+                        confidence: f.confidence,
+                        safe: f.safe,
+                        impact: f.impact,
+                      })),
+                      preview: diff,
                     },
-                    fixes: fixes.map(f => ({
-                      type: f.type,
-                      line: f.line,
-                      description: f.description,
-                      confidence: f.confidence,
-                      safe: f.safe,
-                      impact: f.impact,
-                    })),
-                    preview: diff,
-                  }, null, 2),
+                    null,
+                    2
+                  ),
                 },
               ],
             };
@@ -291,20 +303,22 @@ class SmartReviewerServer {
               const fixResult = await this.autoFixer.generateFixes(content, validatedPath);
 
               // Only apply safe fixes by default
-              const fixesToApply = safeOnly
-                ? fixResult.fixes.filter(f => f.safe)
-                : fixResult.fixes;
+              const fixesToApply = safeOnly ? fixResult.fixes.filter(f => f.safe) : fixResult.fixes;
 
               if (fixesToApply.length === 0) {
                 return {
                   content: [
                     {
                       type: 'text',
-                      text: JSON.stringify({
-                        success: true,
-                        message: 'No fixes to apply',
-                        file: filePath,
-                      }, null, 2),
+                      text: JSON.stringify(
+                        {
+                          success: true,
+                          message: 'No fixes to apply',
+                          file: filePath,
+                        },
+                        null,
+                        2
+                      ),
                     },
                   ],
                 };
@@ -317,18 +331,22 @@ class SmartReviewerServer {
                 content: [
                   {
                     type: 'text',
-                    text: JSON.stringify({
-                      success: true,
-                      file: filePath,
-                      backup: backupPath,
-                      fixesApplied: fixesToApply.length,
-                      summary: fixResult.summary,
-                      fixes: fixesToApply.map(f => ({
-                        type: f.type,
-                        line: f.line,
-                        description: f.description,
-                      })),
-                    }, null, 2),
+                    text: JSON.stringify(
+                      {
+                        success: true,
+                        file: filePath,
+                        backup: backupPath,
+                        fixesApplied: fixesToApply.length,
+                        summary: fixResult.summary,
+                        fixes: fixesToApply.map(f => ({
+                          type: f.type,
+                          line: f.line,
+                          description: f.description,
+                        })),
+                      },
+                      null,
+                      2
+                    ),
                   },
                 ],
               };
@@ -340,15 +358,26 @@ class SmartReviewerServer {
           }
 
           default:
-            throw new Error(`Unknown tool: ${name}`);
+            throw new MCPError('REV_002', { tool: name });
         }
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
+        const errorMessage = getErrorMessage(error);
+        const errorCode = error instanceof MCPError ? error.code : 'UNKNOWN';
+
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify({ error: errorMessage }, null, 2),
+              text: JSON.stringify(
+                {
+                  success: false,
+                  error: errorMessage,
+                  code: errorCode,
+                  ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
+                },
+                null,
+                2
+              ),
             },
           ],
           isError: true,

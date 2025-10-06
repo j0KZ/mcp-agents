@@ -10,7 +10,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
-  Tool
+  Tool,
 } from '@modelcontextprotocol/sdk/types.js';
 import {
   scanFile,
@@ -19,16 +19,23 @@ import {
   ScanResult,
   SecurityFinding,
   SeverityLevel,
-  SecurityReport
+  SecurityReport,
 } from './index.js';
 import * as fs from 'fs';
-import { validateFilePath, validateDirectoryPath, validatePath } from '@j0kz/shared';
+import {
+  validateFilePath,
+  validateDirectoryPath,
+  validatePath,
+  MCPError,
+  getErrorMessage,
+} from '@j0kz/shared';
 
 /**
  * Generate security report in markdown format
  */
 function generateSecurityReport(results: ScanResult): SecurityReport {
-  const { findings, dependencyVulnerabilities, filesScanned, scanDuration, securityScore } = results;
+  const { findings, dependencyVulnerabilities, filesScanned, scanDuration, securityScore } =
+    results;
 
   let summary = `Scanned ${filesScanned} files in ${scanDuration}ms. `;
   summary += `Found ${findings.length} code vulnerabilities and ${dependencyVulnerabilities.length} dependency vulnerabilities. `;
@@ -59,7 +66,7 @@ function generateSecurityReport(results: ScanResult): SecurityReport {
     results,
     recommendations,
     generatedAt: new Date(),
-    version: '1.0.0'
+    version: '1.0.0',
   };
 }
 
@@ -94,7 +101,7 @@ function formatReportAsMarkdown(report: SecurityReport): string {
       SeverityLevel.HIGH,
       SeverityLevel.MEDIUM,
       SeverityLevel.LOW,
-      SeverityLevel.INFO
+      SeverityLevel.INFO,
     ];
 
     for (const severity of severityGroups) {
@@ -158,32 +165,42 @@ function formatReportAsMarkdown(report: SecurityReport): string {
 const TOOLS: Tool[] = [
   {
     name: 'scan_file',
-    description: 'Scan a single file for security vulnerabilities including secrets, SQL injection, XSS, and OWASP Top 10 issues',
+    description:
+      'Scan a single file for security vulnerabilities including secrets, SQL injection, XSS, and OWASP Top 10 issues',
     inputSchema: {
       type: 'object',
       properties: {
         filePath: {
           type: 'string',
-          description: 'Absolute path to the file to scan'
+          description: 'Absolute path to the file to scan',
         },
         config: {
           type: 'object',
           description: 'Optional scan configuration',
           properties: {
-            scanSecrets: { type: 'boolean', description: 'Include secret scanning (default: true)' },
-            scanSQLInjection: { type: 'boolean', description: 'Include SQL injection scanning (default: true)' },
+            scanSecrets: {
+              type: 'boolean',
+              description: 'Include secret scanning (default: true)',
+            },
+            scanSQLInjection: {
+              type: 'boolean',
+              description: 'Include SQL injection scanning (default: true)',
+            },
             scanXSS: { type: 'boolean', description: 'Include XSS scanning (default: true)' },
-            scanOWASP: { type: 'boolean', description: 'Include OWASP Top 10 checks (default: true)' },
+            scanOWASP: {
+              type: 'boolean',
+              description: 'Include OWASP Top 10 checks (default: true)',
+            },
             minSeverity: {
               type: 'string',
               enum: ['critical', 'high', 'medium', 'low', 'info'],
-              description: 'Minimum severity to report'
-            }
-          }
-        }
+              description: 'Minimum severity to report',
+            },
+          },
+        },
       },
-      required: ['filePath']
-    }
+      required: ['filePath'],
+    },
   },
   {
     name: 'scan_project',
@@ -193,7 +210,7 @@ const TOOLS: Tool[] = [
       properties: {
         projectPath: {
           type: 'string',
-          description: 'Absolute path to the project directory'
+          description: 'Absolute path to the project directory',
         },
         config: {
           type: 'object',
@@ -203,23 +220,26 @@ const TOOLS: Tool[] = [
             scanSQLInjection: { type: 'boolean' },
             scanXSS: { type: 'boolean' },
             scanOWASP: { type: 'boolean' },
-            scanDependencies: { type: 'boolean', description: 'Scan package.json for vulnerable dependencies' },
+            scanDependencies: {
+              type: 'boolean',
+              description: 'Scan package.json for vulnerable dependencies',
+            },
             excludePatterns: {
               type: 'array',
               items: { type: 'string' },
-              description: 'Patterns to exclude (e.g., ["node_modules", ".git"])'
+              description: 'Patterns to exclude (e.g., ["node_modules", ".git"])',
             },
             maxFileSize: { type: 'number', description: 'Maximum file size to scan in bytes' },
             minSeverity: {
               type: 'string',
-              enum: ['critical', 'high', 'medium', 'low', 'info']
+              enum: ['critical', 'high', 'medium', 'low', 'info'],
             },
-            verbose: { type: 'boolean', description: 'Enable verbose logging' }
-          }
-        }
+            verbose: { type: 'boolean', description: 'Enable verbose logging' },
+          },
+        },
       },
-      required: ['projectPath']
-    }
+      required: ['projectPath'],
+    },
   },
   {
     name: 'scan_secrets',
@@ -229,7 +249,7 @@ const TOOLS: Tool[] = [
       properties: {
         targetPath: {
           type: 'string',
-          description: 'Path to file or directory to scan'
+          description: 'Path to file or directory to scan',
         },
         customPatterns: {
           type: 'array',
@@ -240,13 +260,13 @@ const TOOLS: Tool[] = [
               name: { type: 'string' },
               pattern: { type: 'string', description: 'Regex pattern as string' },
               severity: { type: 'string', enum: ['critical', 'high', 'medium', 'low', 'info'] },
-              description: { type: 'string' }
-            }
-          }
-        }
+              description: { type: 'string' },
+            },
+          },
+        },
       },
-      required: ['targetPath']
-    }
+      required: ['targetPath'],
+    },
   },
   {
     name: 'scan_vulnerabilities',
@@ -256,19 +276,26 @@ const TOOLS: Tool[] = [
       properties: {
         targetPath: {
           type: 'string',
-          description: 'Path to file or directory to scan'
+          description: 'Path to file or directory to scan',
         },
         vulnerabilityTypes: {
           type: 'array',
           items: {
             type: 'string',
-            enum: ['sql_injection', 'xss', 'path_traversal', 'command_injection', 'weak_crypto', 'insecure_deserialization']
+            enum: [
+              'sql_injection',
+              'xss',
+              'path_traversal',
+              'command_injection',
+              'weak_crypto',
+              'insecure_deserialization',
+            ],
           },
-          description: 'Specific vulnerability types to scan for'
-        }
+          description: 'Specific vulnerability types to scan for',
+        },
       },
-      required: ['targetPath', 'vulnerabilityTypes']
-    }
+      required: ['targetPath', 'vulnerabilityTypes'],
+    },
   },
   {
     name: 'generate_security_report',
@@ -278,20 +305,20 @@ const TOOLS: Tool[] = [
       properties: {
         projectPath: {
           type: 'string',
-          description: 'Path to the project to scan and generate report for'
+          description: 'Path to the project to scan and generate report for',
         },
         outputPath: {
           type: 'string',
-          description: 'Optional path to save the report markdown file'
+          description: 'Optional path to save the report markdown file',
         },
         config: {
           type: 'object',
-          description: 'Scan configuration (same as scan_project)'
-        }
+          description: 'Scan configuration (same as scan_project)',
+        },
       },
-      required: ['projectPath']
-    }
-  }
+      required: ['projectPath'],
+    },
+  },
 ];
 
 /**
@@ -300,12 +327,12 @@ const TOOLS: Tool[] = [
 const server = new Server(
   {
     name: 'security-scanner',
-    version: '1.0.0'
+    version: '1.0.0',
   },
   {
     capabilities: {
-      tools: {}
-    }
+      tools: {},
+    },
   }
 );
 
@@ -313,13 +340,13 @@ const server = new Server(
  * List available tools
  */
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
-  tools: TOOLS
+  tools: TOOLS,
 }));
 
 /**
  * Handle tool calls
  */
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
+server.setRequestHandler(CallToolRequestSchema, async request => {
   const { name, arguments: args } = request.params;
 
   try {
@@ -333,14 +360,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [
             {
               type: 'text',
-              text: JSON.stringify({
-                success: true,
-                filePath,
-                findingsCount: findings.length,
-                findings
-              }, null, 2)
-            }
-          ]
+              text: JSON.stringify(
+                {
+                  success: true,
+                  filePath,
+                  findingsCount: findings.length,
+                  findings,
+                },
+                null,
+                2
+              ),
+            },
+          ],
         };
       }
 
@@ -353,17 +384,24 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [
             {
               type: 'text',
-              text: JSON.stringify({
-                success: true,
-                ...results
-              }, null, 2)
-            }
-          ]
+              text: JSON.stringify(
+                {
+                  success: true,
+                  ...results,
+                },
+                null,
+                2
+              ),
+            },
+          ],
         };
       }
 
       case 'scan_secrets': {
-        const { targetPath, customPatterns } = args as { targetPath: string; customPatterns?: any[] };
+        const { targetPath, customPatterns } = args as {
+          targetPath: string;
+          customPatterns?: any[];
+        };
 
         const validatedPath = validatePath(targetPath);
         const stats = fs.statSync(validatedPath);
@@ -375,7 +413,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             scanSQLInjection: false,
             scanXSS: false,
             scanOWASP: false,
-            scanDependencies: false
+            scanDependencies: false,
           };
           findings = await scanFile(validatedPath, config);
         } else {
@@ -385,7 +423,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             scanXSS: false,
             scanOWASP: false,
             scanDependencies: false,
-            customPatterns
+            customPatterns,
           };
           const results = await scanProject(validatedPath, config);
           findings = results.findings;
@@ -395,20 +433,24 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [
             {
               type: 'text',
-              text: JSON.stringify({
-                success: true,
-                secretsFound: findings.length,
-                findings
-              }, null, 2)
-            }
-          ]
+              text: JSON.stringify(
+                {
+                  success: true,
+                  secretsFound: findings.length,
+                  findings,
+                },
+                null,
+                2
+              ),
+            },
+          ],
         };
       }
 
       case 'scan_vulnerabilities': {
         const { targetPath, vulnerabilityTypes } = args as {
           targetPath: string;
-          vulnerabilityTypes: string[]
+          vulnerabilityTypes: string[];
         };
 
         const validatedPath = validatePath(targetPath);
@@ -417,10 +459,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           scanSecrets: false,
           scanSQLInjection: vulnerabilityTypes.includes('sql_injection'),
           scanXSS: vulnerabilityTypes.includes('xss'),
-          scanOWASP: vulnerabilityTypes.includes('weak_crypto') ||
-                     vulnerabilityTypes.includes('insecure_deserialization') ||
-                     vulnerabilityTypes.includes('path_traversal'),
-          scanDependencies: false
+          scanOWASP:
+            vulnerabilityTypes.includes('weak_crypto') ||
+            vulnerabilityTypes.includes('insecure_deserialization') ||
+            vulnerabilityTypes.includes('path_traversal'),
+          scanDependencies: false,
         };
 
         const stats = fs.statSync(validatedPath);
@@ -440,14 +483,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [
             {
               type: 'text',
-              text: JSON.stringify({
-                success: true,
-                vulnerabilityTypes,
-                findingsCount: findings.length,
-                findings
-              }, null, 2)
-            }
-          ]
+              text: JSON.stringify(
+                {
+                  success: true,
+                  vulnerabilityTypes,
+                  findingsCount: findings.length,
+                  findings,
+                },
+                null,
+                2
+              ),
+            },
+          ],
         };
       }
 
@@ -455,7 +502,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const { projectPath, outputPath, config } = args as {
           projectPath: string;
           outputPath?: string;
-          config?: ScanConfig
+          config?: ScanConfig;
         };
 
         const validatedProjectPath = validateDirectoryPath(projectPath);
@@ -473,29 +520,36 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [
             {
               type: 'text',
-              text: markdown
-            }
-          ]
+              text: markdown,
+            },
+          ],
         };
       }
 
       default:
-        throw new Error(`Unknown tool: ${name}`);
+        throw new MCPError('SEC_004', { tool: name });
     }
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorMessage = getErrorMessage(error);
+    const errorCode = error instanceof MCPError ? error.code : 'UNKNOWN';
 
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify({
-            success: false,
-            error: errorMessage
-          }, null, 2)
-        }
+          text: JSON.stringify(
+            {
+              success: false,
+              error: errorMessage,
+              code: errorCode,
+              ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
+            },
+            null,
+            2
+          ),
+        },
       ],
-      isError: true
+      isError: true,
     };
   }
 });
@@ -509,7 +563,7 @@ async function main() {
   console.error('Security Scanner MCP server running on stdio');
 }
 
-main().catch((error) => {
+main().catch(error => {
   console.error('Fatal error:', error);
   process.exit(1);
 });

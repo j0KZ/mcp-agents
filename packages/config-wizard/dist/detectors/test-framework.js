@@ -6,7 +6,7 @@ import path from 'path';
 export async function detectTestFramework() {
     const cwd = process.cwd();
     const pkgPath = path.join(cwd, 'package.json');
-    if (!await fs.pathExists(pkgPath)) {
+    if (!(await fs.pathExists(pkgPath))) {
         return null;
     }
     const pkg = await fs.readJSON(pkgPath);
@@ -27,7 +27,7 @@ export async function detectTestFramework() {
         { file: 'jest.config.js', framework: 'jest' },
         { file: 'jest.config.ts', framework: 'jest' },
         { file: '.mocharc.json', framework: 'mocha' },
-        { file: 'ava.config.js', framework: 'ava' }
+        { file: 'ava.config.js', framework: 'ava' },
     ];
     for (const { file, framework } of configFiles) {
         if (await fs.pathExists(path.join(cwd, file))) {

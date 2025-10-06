@@ -11,7 +11,7 @@ export {
   scanForSQLInjection,
   scanForXSS,
   scanOWASP,
-  scanDependencies
+  scanDependencies,
 } from './scanner.js';
 
 export {
@@ -28,7 +28,7 @@ export {
   // Enums
   SeverityLevel,
   VulnerabilityType,
-  OWASPCategory
+  OWASPCategory,
 } from './types.js';
 
 // Version

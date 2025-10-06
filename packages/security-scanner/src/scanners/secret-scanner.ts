@@ -3,7 +3,13 @@
  * Detects hardcoded secrets and credentials in source code
  */
 
-import { SecurityFinding, FileScanContext, VulnerabilityType, OWASPCategory, SecretPattern } from '../types.js';
+import {
+  SecurityFinding,
+  FileScanContext,
+  VulnerabilityType,
+  OWASPCategory,
+  SecretPattern,
+} from '../types.js';
 import { DEFAULT_SECRET_PATTERNS } from '../constants/secret-patterns.js';
 import { PATTERN_LIMITS, CWE_IDS } from '../constants/security-thresholds.js';
 import {
@@ -11,7 +17,7 @@ import {
   extractCodeContext,
   calculateEntropy,
   shouldSkipLine,
-  truncateSensitive
+  truncateSensitive,
 } from '../utils.js';
 
 /**
@@ -59,13 +65,14 @@ export async function scanForSecrets(
           line: i + 1,
           column: match.index,
           codeSnippet: codeContext.issueLine,
-          recommendation: 'Remove the hardcoded secret and use environment variables or a secure secret management service (e.g., AWS Secrets Manager, HashiCorp Vault, Azure Key Vault).',
+          recommendation:
+            'Remove the hardcoded secret and use environment variables or a secure secret management service (e.g., AWS Secrets Manager, HashiCorp Vault, Azure Key Vault).',
           owaspCategory: OWASPCategory.A02_CRYPTOGRAPHIC_FAILURES,
           cweId: CWE_IDS.HARDCODED_CREDENTIALS,
           metadata: {
             patternName: pattern.name,
-            matchedText: truncateSensitive(matchedText, PATTERN_LIMITS.SECRET_PREVIEW_LENGTH)
-          }
+            matchedText: truncateSensitive(matchedText, PATTERN_LIMITS.SECRET_PREVIEW_LENGTH),
+          },
         });
       }
     }

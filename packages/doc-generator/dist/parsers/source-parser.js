@@ -92,7 +92,10 @@ function inferDescription(name, type) {
  * Infer parameter description from name
  */
 function inferParamDescription(paramName) {
-    const words = paramName.replace(/([A-Z])/g, ' $1').trim().toLowerCase();
+    const words = paramName
+        .replace(/([A-Z])/g, ' $1')
+        .trim()
+        .toLowerCase();
     // Common parameter patterns
     if (paramName === 'id')
         return 'Unique identifier';
@@ -157,7 +160,9 @@ export function parseSourceFile(filePath) {
             const cleanName = nameWithoutDefault.replace(/[?\.]/g, '');
             return {
                 name: cleanName,
-                type: paramType ? { name: paramType, isArray: paramType.includes('[]'), raw: paramType } : undefined,
+                type: paramType
+                    ? { name: paramType, isArray: paramType.includes('[]'), raw: paramType }
+                    : undefined,
                 optional: isOptional,
                 rest: isRest,
                 description: inferParamDescription(cleanName),
@@ -167,7 +172,9 @@ export function parseSourceFile(filePath) {
             name,
             description,
             parameters,
-            returnType: returnType ? { name: returnType.trim(), isArray: returnType.includes('[]'), raw: returnType.trim() } : undefined,
+            returnType: returnType
+                ? { name: returnType.trim(), isArray: returnType.includes('[]'), raw: returnType.trim() }
+                : undefined,
             isAsync: match[0].includes('async'),
             isExported: match[0].includes('export'),
         });

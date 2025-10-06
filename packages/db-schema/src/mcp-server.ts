@@ -7,12 +7,9 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-  McpError,
-  ErrorCode,
-} from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+
+import { MCPError, getErrorMessage } from '@j0kz/shared';
 
 import {
   designSchema,
@@ -25,11 +22,7 @@ import {
   analyzeSchema,
 } from './designer.js';
 
-import type {
-  DatabaseSchema,
-  SchemaDesignOptions,
-  ERDiagramOptions,
-} from './types.js';
+import type { DatabaseSchema, SchemaDesignOptions, ERDiagramOptions } from './types.js';
 
 /**
  * MCP Server for Database Schema Designer
@@ -259,7 +252,7 @@ class DatabaseSchemaServer {
     }));
 
     // Handle tool execution
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       try {
         const { name, arguments: args } = request.params;
 
@@ -289,21 +282,30 @@ class DatabaseSchemaServer {
             return await this.handleAnalyzeSchema(args);
 
           default:
-            throw new McpError(
-              ErrorCode.MethodNotFound,
-              `Unknown tool: ${name}`
-            );
+            throw new MCPError('DB_009', { tool: name });
         }
       } catch (error) {
-        if (error instanceof McpError) {
-          throw error;
-        }
+        const errorMessage = getErrorMessage(error);
+        const errorCode = error instanceof MCPError ? error.code : 'UNKNOWN';
 
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        throw new McpError(
-          ErrorCode.InternalError,
-          `Tool execution failed: ${errorMessage}`
-        );
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(
+                {
+                  success: false,
+                  error: errorMessage,
+                  code: errorCode,
+                  ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
+                },
+                null,
+                2
+              ),
+            },
+          ],
+          isError: true,
+        };
       }
     });
   }
@@ -318,10 +320,7 @@ class DatabaseSchemaServer {
     };
 
     if (!requirements || !options?.database) {
-      throw new McpError(
-        ErrorCode.InvalidParams,
-        'Missing required parameters: requirements and options.database'
-      );
+      throw new MCPError('DB_001');
     }
 
     const schema = designSchema(requirements, options);
@@ -346,10 +345,7 @@ class DatabaseSchemaServer {
     };
 
     if (!schema || !description) {
-      throw new McpError(
-        ErrorCode.InvalidParams,
-        'Missing required parameters: schema and description'
-      );
+      throw new MCPError('DB_002');
     }
 
     const migration = generateMigration(schema, description);
@@ -368,16 +364,16 @@ class DatabaseSchemaServer {
    * Handle create_er_diagram tool
    */
   private async handleCreateERDiagram(args: any) {
-    const { schema, options = { format: 'mermaid', includeColumns: true, includeRelationships: true } } = args as {
+    const {
+      schema,
+      options = { format: 'mermaid', includeColumns: true, includeRelationships: true },
+    } = args as {
       schema: DatabaseSchema;
       options?: ERDiagramOptions;
     };
 
     if (!schema) {
-      throw new McpError(
-        ErrorCode.InvalidParams,
-        'Missing required parameter: schema'
-      );
+      throw new MCPError('DB_003');
     }
 
     const diagram = createERDiagram(schema, options);
@@ -399,10 +395,7 @@ class DatabaseSchemaServer {
     const { schema } = args as { schema: DatabaseSchema };
 
     if (!schema) {
-      throw new McpError(
-        ErrorCode.InvalidParams,
-        'Missing required parameter: schema'
-      );
+      throw new MCPError('DB_003');
     }
 
     const suggestions = optimizeIndexes(schema);
@@ -424,10 +417,7 @@ class DatabaseSchemaServer {
     const { schema } = args as { schema: DatabaseSchema };
 
     if (!schema) {
-      throw new McpError(
-        ErrorCode.InvalidParams,
-        'Missing required parameter: schema'
-      );
+      throw new MCPError('DB_003');
     }
 
     const suggestions = normalizeSchema(schema);
@@ -452,10 +442,7 @@ class DatabaseSchemaServer {
     };
 
     if (!schema) {
-      throw new McpError(
-        ErrorCode.InvalidParams,
-        'Missing required parameter: schema'
-      );
+      throw new MCPError('DB_003');
     }
 
     const seedData = generateSeedData(schema, recordsPerTable);
@@ -477,10 +464,7 @@ class DatabaseSchemaServer {
     const { schema } = args as { schema: DatabaseSchema };
 
     if (!schema) {
-      throw new McpError(
-        ErrorCode.InvalidParams,
-        'Missing required parameter: schema'
-      );
+      throw new MCPError('DB_003');
     }
 
     const validation = validateSchema(schema);
@@ -502,10 +486,7 @@ class DatabaseSchemaServer {
     const { schema } = args as { schema: DatabaseSchema };
 
     if (!schema) {
-      throw new McpError(
-        ErrorCode.InvalidParams,
-        'Missing required parameter: schema'
-      );
+      throw new MCPError('DB_003');
     }
 
     const analysis = analyzeSchema(schema);
@@ -524,7 +505,7 @@ class DatabaseSchemaServer {
    * Setup error handling
    */
   private setupErrorHandling(): void {
-    this.server.onerror = (error) => {
+    this.server.onerror = error => {
       console.error('[MCP Error]', error);
     };
 

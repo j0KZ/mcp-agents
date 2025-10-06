@@ -6,6 +6,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { promisify } from 'util';
+import { AnalysisCache, generateHash } from '@j0kz/shared';
 import {
   SecurityFinding,
   ScanResult,
@@ -13,7 +14,7 @@ import {
   SeverityLevel,
   VulnerabilityType,
   DependencyVulnerability,
-  FileScanContext
+  FileScanContext,
 } from './types.js';
 import { scanForXSS as scanXSS } from './scanners/xss-scanner.js';
 import { scanForSQLInjection as scanSQL } from './scanners/sql-injection-scanner.js';
@@ -25,6 +26,9 @@ import { SEVERITY_WEIGHTS, SECURITY_SCORE } from './constants/security-threshold
 const readFile = promisify(fs.readFile);
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat);
+
+// Global cache instance for security scans
+const scanCache = new AnalysisCache(300, 1800000); // 300 items, 30 min TTL
 
 // Re-export scanner functions for backward compatibility
 export { scanForSecrets } from './scanners/secret-scanner.js';
@@ -69,6 +73,15 @@ export async function scanFile(
   config: ScanConfig = {}
 ): Promise<SecurityFinding[]> {
   const content = await readFile(filePath, 'utf-8');
+  const contentHash = generateHash(content);
+
+  // Check cache
+  const configKey = JSON.stringify(config);
+  const cached = scanCache.get(filePath, 'security-scan', contentHash, configKey);
+  if (cached) {
+    return cached as SecurityFinding[];
+  }
+
   const stats = await stat(filePath);
 
   // Check file size limit
@@ -85,42 +98,46 @@ export async function scanFile(
     filePath,
     content,
     extension: path.extname(filePath),
-    size: stats.size
+    size: stats.size,
   };
 
   const findings: SecurityFinding[] = [];
 
   if (config.scanSecrets !== false) {
-    findings.push(...await scanForSecrets(context, config.customPatterns));
+    findings.push(...(await scanForSecrets(context, config.customPatterns)));
   }
 
   if (config.scanSQLInjection !== false) {
-    findings.push(...await scanForSQLInjection(context));
+    findings.push(...(await scanForSQLInjection(context)));
   }
 
   if (config.scanXSS !== false) {
-    findings.push(...await scanForXSS(context));
+    findings.push(...(await scanForXSS(context)));
   }
 
   if (config.scanOWASP !== false) {
-    findings.push(...await scanOWASP(context));
+    findings.push(...(await scanOWASP(context)));
   }
 
   // Filter by minimum severity
+  let result = findings;
   if (config.minSeverity) {
     const severityOrder = [
       SeverityLevel.INFO,
       SeverityLevel.LOW,
       SeverityLevel.MEDIUM,
       SeverityLevel.HIGH,
-      SeverityLevel.CRITICAL
+      SeverityLevel.CRITICAL,
     ];
     const minIndex = severityOrder.indexOf(config.minSeverity);
 
-    return findings.filter(f => severityOrder.indexOf(f.severity) >= minIndex);
+    result = findings.filter(f => severityOrder.indexOf(f.severity) >= minIndex);
   }
 
-  return findings;
+  // Cache the result
+  scanCache.set(filePath, 'security-scan', contentHash, result, configKey);
+
+  return result;
 }
 
 /**
@@ -146,13 +163,10 @@ export async function scanProject(
     'scanner.test.ts',
     'xss-scanner.ts',
     'sql-injection-scanner.ts',
-    'secret-scanner.ts'
+    'secret-scanner.ts',
   ];
 
-  const excludePatterns = [
-    ...defaultExcludes,
-    ...(config.excludePatterns || [])
-  ];
+  const excludePatterns = [...defaultExcludes, ...(config.excludePatterns || [])];
 
   async function scanDirectory(dirPath: string): Promise<void> {
     const entries = await readdir(dirPath, { withFileTypes: true });
@@ -170,7 +184,30 @@ export async function scanProject(
       } else if (entry.isFile()) {
         // Only scan text files
         const ext = path.extname(entry.name);
-        const textExtensions = ['.js', '.ts', '.jsx', '.tsx', '.py', '.java', '.go', '.rb', '.php', '.cs', '.cpp', '.c', '.h', '.sql', '.sh', '.json', '.yaml', '.yml', '.xml', '.html', '.css', '.env'];
+        const textExtensions = [
+          '.js',
+          '.ts',
+          '.jsx',
+          '.tsx',
+          '.py',
+          '.java',
+          '.go',
+          '.rb',
+          '.php',
+          '.cs',
+          '.cpp',
+          '.c',
+          '.h',
+          '.sql',
+          '.sh',
+          '.json',
+          '.yaml',
+          '.yml',
+          '.xml',
+          '.html',
+          '.css',
+          '.env',
+        ];
 
         if (textExtensions.includes(ext)) {
           try {
@@ -181,8 +218,13 @@ export async function scanProject(
             // Skip files that can't be read
             if (config.verbose) {
               // Sanitize path to prevent log injection
-              const safePath = String(fullPath).replace(/[\r\n]/g, '').substring(0, 500);
-              console.error(`Error scanning ${safePath}:`, error instanceof Error ? error.message : String(error));
+              const safePath = String(fullPath)
+                .replace(/[\r\n]/g, '')
+                .substring(0, 500);
+              console.error(
+                `Error scanning ${safePath}:`,
+                error instanceof Error ? error.message : String(error)
+              );
             }
           }
         }
@@ -206,7 +248,7 @@ export async function scanProject(
     [SeverityLevel.HIGH]: 0,
     [SeverityLevel.MEDIUM]: 0,
     [SeverityLevel.LOW]: 0,
-    [SeverityLevel.INFO]: 0
+    [SeverityLevel.INFO]: 0,
   };
 
   const findingsByType: Record<VulnerabilityType, number> = {} as Record<VulnerabilityType, number>;
@@ -239,6 +281,6 @@ export async function scanProject(
     scanDuration,
     config,
     timestamp: new Date(),
-    securityScore
+    securityScore,
   };
 }
