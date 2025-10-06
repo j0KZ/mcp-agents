@@ -10,6 +10,7 @@
 ## 📊 Executive Summary
 
 After merging PR #10 (Test Coverage Enforcement) to main, several CI/CD issues surfaced:
+
 - **CI Coverage Check** failing due to format mismatch
 - **npm Audit** showing 5 vulnerabilities
 - **Codecov Upload** failing without token
@@ -26,23 +27,26 @@ All issues have been systematically resolved with 8 focused commits.
 **Problem:** 5 low-severity vulnerabilities in inquirer dependency chain
 
 **Root Cause:**
+
 - config-wizard using inquirer `^10.2.2`
 - Transitive dependencies had known vulnerabilities
 
 **Solution:**
+
 ```json
 // packages/config-wizard/package.json
 {
   "dependencies": {
-    "inquirer": "^12.9.6"  // was ^10.2.2
+    "inquirer": "^12.9.6" // was ^10.2.2
   },
   "devDependencies": {
-    "@types/inquirer": "^9.0.9"  // was ^9.0.7
+    "@types/inquirer": "^9.0.9" // was ^9.0.7
   }
 }
 ```
 
 **Validation:**
+
 - ✅ npm audit: 0 vulnerabilities
 - ✅ All 31 config-wizard tests passing
 - ✅ Build successful
@@ -56,6 +60,7 @@ All issues have been systematically resolved with 8 focused commits.
 **Problem:** "Coverage file not found" error in CI
 
 **Root Causes:**
+
 1. Workflow ran `npm run test:coverage` (workspace-based)
 2. Script expected `coverage-summary.json` (istanbul format)
 3. Vitest generates `coverage-final.json` (v8 format)
@@ -64,6 +69,7 @@ All issues have been systematically resolved with 8 focused commits.
 **Solution:**
 
 **A. CI Workflow (.github/workflows/ci.yml)**
+
 ```yaml
 # Before
 - name: Generate test coverage
@@ -76,6 +82,7 @@ All issues have been systematically resolved with 8 focused commits.
 ```
 
 **B. Coverage Check Script (scripts/check-coverage.js)**
+
 - Added support for both istanbul and v8 formats
 - Implemented path normalization for Windows
 - Prefers duplicate with higher coverage when deduplicating
@@ -101,6 +108,7 @@ for (const [filePath, fileCoverage] of Object.entries(v8Data)) {
 ```
 
 **Validation:**
+
 - ✅ Coverage: 61.53% statements (threshold: 60%)
 - ✅ Coverage: 67.00% branches (threshold: 50%)
 - ✅ Coverage: 74.47% functions (threshold: 60%)
@@ -116,31 +124,35 @@ for (const [filePath, fileCoverage] of Object.entries(v8Data)) {
 **Problem:** "Token required - not valid tokenless upload"
 
 **Root Cause:**
+
 - Main branch is protected
 - Codecov requires token for protected branches
 - CI failing when external service unavailable
 
 **Solution:**
+
 ```yaml
 # .github/workflows/ci.yml
 - name: Upload coverage reports
   uses: codecov/codecov-action@v4
   if: matrix.node-version == '20.x'
-  continue-on-error: true  # Don't fail CI
+  continue-on-error: true # Don't fail CI
   with:
     files: ./coverage/coverage-final.json
     flags: unittests
     name: codecov-umbrella
-    fail_ci_if_error: false  # Don't block on upload errors
-    token: ${{ secrets.CODECOV_TOKEN }}  # Use token if available
+    fail_ci_if_error: false # Don't block on upload errors
+    token: ${{ secrets.CODECOV_TOKEN }} # Use token if available
 ```
 
 **Rationale:**
+
 - Coverage already enforced locally via check-coverage.js
 - Codecov is nice-to-have for historical tracking
 - CI should not depend on external services
 
 **Validation:**
+
 - ✅ CI passes without CODECOV_TOKEN
 - ✅ Local coverage check still strict
 - ✅ Can add token later to enable uploads
@@ -156,6 +168,7 @@ for (const [filePath, fileCoverage] of Object.entries(v8Data)) {
 **Problem:** defender-for-devops.yml lacks explicit permissions
 
 **Solution:**
+
 ```yaml
 # .github/workflows/defender-for-devops.yml
 jobs:
@@ -163,9 +176,9 @@ jobs:
     runs-on: windows-latest
 
     permissions:
-      contents: read          # Checkout code
-      security-events: write  # Upload SARIF results
-      actions: read          # Read workflow metadata
+      contents: read # Checkout code
+      security-events: write # Upload SARIF results
+      actions: read # Read workflow metadata
 ```
 
 **Commit:** `416a8c0`
@@ -175,11 +188,12 @@ jobs:
 **Problem:** Unused `CodeIssue` import in auto-fixer.ts
 
 **Solution:**
+
 ```typescript
 // Before
 import { parse } from '@babel/parser';
 import type { File } from '@babel/types';
-import { CodeIssue } from './types.js';  // UNUSED
+import { CodeIssue } from './types.js'; // UNUSED
 import { INDEX } from './constants/auto-fixer.js';
 
 // After
@@ -189,6 +203,7 @@ import { INDEX } from './constants/auto-fixer.js';
 ```
 
 **Validation:**
+
 - ✅ All 27 smart-reviewer tests passing
 - ✅ Build successful
 
@@ -203,6 +218,7 @@ import { INDEX } from './constants/auto-fixer.js';
 **Problem:** Weak test assertion in api-validator.test.ts
 
 **Solution:**
+
 ```typescript
 // Before (allows 0 errors to pass)
 expect(result.errors.length).toBeGreaterThanOrEqual(0);
@@ -218,6 +234,7 @@ expect(result.errors.length).toBeGreaterThan(0);
 **Problem:** Potential regex injection in dead-code-detector.ts
 
 **Solution:**
+
 ```typescript
 /**
  * Escape special regex characters in a string
@@ -233,7 +250,10 @@ export function removeUnusedVariables(code: string, unusedVars: string[]): strin
     // Escape the variable name to prevent regex injection
     const escapedName = escapeRegExp(varName);
     // Add word boundary to prevent partial matches
-    const declPattern = new RegExp(`\\s*(?:const|let|var)\\s+${escapedName}\\b\\s*=.*?;\\s*\\n`, 'g');
+    const declPattern = new RegExp(
+      `\\s*(?:const|let|var)\\s+${escapedName}\\b\\s*=.*?;\\s*\\n`,
+      'g'
+    );
     result = result.replace(declPattern, '');
   }
 
@@ -242,10 +262,12 @@ export function removeUnusedVariables(code: string, unusedVars: string[]): strin
 ```
 
 **Security Impact:**
+
 - ✅ Prevents regex injection via crafted variable names (e.g., `.*`, `[a-z]+`)
 - ✅ Protects against ReDoS attacks
 
 **Validation:**
+
 - ✅ All 68 tests passing
 
 **Commit:** `75c9f32`
@@ -255,6 +277,7 @@ export function removeUnusedVariables(code: string, unusedVars: string[]): strin
 ## 📈 Results Summary
 
 ### Coverage (Local Enforcement)
+
 ```
 ✅ statements  : 61.53% (threshold: 60%)
 ✅ branches    : 67.00% (threshold: 50%)
@@ -263,16 +286,19 @@ export function removeUnusedVariables(code: string, unusedVars: string[]): strin
 ```
 
 ### Test Status
+
 - **Total Tests:** 68 passing (100% pass rate)
 - **Packages:** All building successfully
 - **Regression:** Zero test failures
 
 ### Security
+
 - **npm Audit:** 0 vulnerabilities (was 5)
 - **CodeQL:** All warnings resolved
 - **Workflow Permissions:** Properly scoped (least privilege)
 
 ### Cross-Platform
+
 - **Windows Path Issues:** Resolved with normalization
 - **Coverage Deduplication:** 130 files → 70 unique files
 - **Build Matrix:** Passing on ubuntu/windows/macos
@@ -281,15 +307,15 @@ export function removeUnusedVariables(code: string, unusedVars: string[]): strin
 
 ## 📝 All Commits
 
-| Commit | Description | Impact |
-|--------|-------------|--------|
-| `514f929` | npm audit fix (inquirer upgrade) | 🔒 Security |
-| `a918a05` | CI coverage check fix | 🔧 Critical |
-| `5f60294` | Codecov non-blocking upload | 🛡️ Reliability |
-| `416a8c0` | Defender workflow permissions | 🔒 Security |
-| `7949cf1` | Remove unused import | 🧹 Quality |
-| `75c9f32` | Code quality improvements | 🔒 Security |
-| `20a725e` | Documentation updates | 📚 Docs |
+| Commit    | Description                      | Impact         |
+| --------- | -------------------------------- | -------------- |
+| `514f929` | npm audit fix (inquirer upgrade) | 🔒 Security    |
+| `a918a05` | CI coverage check fix            | 🔧 Critical    |
+| `5f60294` | Codecov non-blocking upload      | 🛡️ Reliability |
+| `416a8c0` | Defender workflow permissions    | 🔒 Security    |
+| `7949cf1` | Remove unused import             | 🧹 Quality     |
+| `75c9f32` | Code quality improvements        | 🔒 Security    |
+| `20a725e` | Documentation updates            | 📚 Docs        |
 
 **Total:** 8 commits, 7 files modified, all tests passing
 
@@ -317,26 +343,31 @@ export function removeUnusedVariables(code: string, unusedVars: string[]): strin
 ## 💡 Lessons Learned
 
 ### 1. Coverage Format Compatibility
+
 **Problem:** Different tools generate different coverage formats
 **Learning:** Always check what format your coverage tool produces
 **Solution:** Support multiple formats in validation scripts
 
 ### 2. Path Normalization on Windows
+
 **Problem:** Windows can report same file with different drive letter casing
 **Learning:** Always normalize paths before comparing
 **Solution:** `.toLowerCase().replace(/\\/g, '/')`
 
 ### 3. External Service Dependencies
+
 **Problem:** CI failing due to external service requirements
 **Learning:** Never block CI on optional external services
 **Solution:** Use `continue-on-error: true` for nice-to-have steps
 
 ### 4. Workflow Permissions
+
 **Problem:** Implicit permissions violate least privilege
 **Learning:** Always explicitly declare required permissions
 **Solution:** Add permissions block to all workflows
 
 ### 5. Regex Security
+
 **Problem:** User input in regex patterns can cause injection/ReDoS
 **Learning:** Always escape special characters in dynamic regex
 **Solution:** Use dedicated escapeRegExp helper function
@@ -346,18 +377,21 @@ export function removeUnusedVariables(code: string, unusedVars: string[]): strin
 ## 🎯 Impact Assessment
 
 ### Immediate Benefits
+
 - ✅ CI/CD pipeline now reliable and cross-platform
 - ✅ Coverage enforcement working correctly
 - ✅ Zero security vulnerabilities
 - ✅ All quality gates passing
 
 ### Long-term Benefits
+
 - 🔒 Better security posture with proper permissions
 - 🛡️ Protection against regex injection attacks
 - 📊 Reliable coverage tracking across platforms
 - 🚀 Foundation for future quality improvements
 
 ### Developer Experience
+
 - ⚡ CI fails fast with clear error messages
 - 📈 Coverage thresholds prevent quality regression
 - 🔍 All security issues caught automatically

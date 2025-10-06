@@ -9,6 +9,7 @@ Expert tips and best practices for using MCP Agents effectively.
 ❌ **Don't**: Install all 8 tools and try to use everything at once
 
 ✅ **Do**: Start with 1-2 tools that solve your biggest pain points
+
 ```
 Week 1: Test Generator
 Week 2: Add Security Scanner
@@ -26,6 +27,7 @@ Week 3: Add Smart Reviewer
 ❌ **Don't**: Accept first output, move on
 
 ✅ **Do**: Review output, provide feedback, iterate
+
 ```
 "Generate tests for calculator.js"
 → Review output
@@ -38,6 +40,7 @@ Week 3: Add Smart Reviewer
 ### Test Generator
 
 ✅ **Best Practices**:
+
 - Generate tests WHILE writing code, not after
 - Review and customize generated tests
 - Use as a starting point, not final solution
@@ -52,6 +55,7 @@ const baseTests = generateTests('user.js');
 ```
 
 ❌ **Anti-patterns**:
+
 - Generating tests for legacy code without understanding it
 - Blindly committing generated tests
 - Skipping test review
@@ -59,6 +63,7 @@ const baseTests = generateTests('user.js');
 ### Smart Reviewer
 
 ✅ **Best Practices**:
+
 - Run before creating PR
 - Address critical/high issues immediately
 - Discuss medium/low issues with team
@@ -74,6 +79,7 @@ const baseTests = generateTests('user.js');
 ```
 
 ❌ **Anti-patterns**:
+
 - Ignoring all suggestions
 - Arguing with every suggestion without considering it
 - Not providing context about project standards
@@ -81,6 +87,7 @@ const baseTests = generateTests('user.js');
 ### API Designer
 
 ✅ **Best Practices**:
+
 - Design API before writing code
 - Generate OpenAPI spec for documentation
 - Use generated mocks for frontend development
@@ -97,6 +104,7 @@ const baseTests = generateTests('user.js');
 ```
 
 ❌ **Anti-patterns**:
+
 - Designing API after writing code
 - Not versioning APIs
 - Skipping authentication/authorization design
@@ -104,6 +112,7 @@ const baseTests = generateTests('user.js');
 ### Database Schema Designer
 
 ✅ **Best Practices**:
+
 - Start with plain text requirements
 - Review generated schema for normalization
 - Add custom indexes based on query patterns
@@ -121,6 +130,7 @@ const baseTests = generateTests('user.js');
 ```
 
 ❌ **Anti-patterns**:
+
 - Over-normalizing (6NF when 3NF is fine)
 - Skipping indexes
 - Not planning for scale
@@ -128,6 +138,7 @@ const baseTests = generateTests('user.js');
 ### Refactor Assistant
 
 ✅ **Best Practices**:
+
 - Generate tests BEFORE refactoring
 - Refactor incrementally
 - Run tests after each change
@@ -143,6 +154,7 @@ const baseTests = generateTests('user.js');
 ```
 
 ❌ **Anti-patterns**:
+
 - Massive refactoring without tests
 - Applying design patterns unnecessarily
 - Refactoring without understanding
@@ -150,6 +162,7 @@ const baseTests = generateTests('user.js');
 ### Security Scanner
 
 ✅ **Best Practices**:
+
 - Scan on every commit
 - Fix critical issues immediately
 - Track and prioritize medium/low issues
@@ -164,6 +177,7 @@ on: [push, pull_request]
 ```
 
 ❌ **Anti-patterns**:
+
 - Scanning only before release
 - Ignoring "false positives" without review
 - Not fixing vulnerabilities
@@ -171,6 +185,7 @@ on: [push, pull_request]
 ### Architecture Analyzer
 
 ✅ **Best Practices**:
+
 - Run regularly (weekly)
 - Track metrics over time
 - Fix circular dependencies early
@@ -185,6 +200,7 @@ on: [push, pull_request]
 ```
 
 ❌ **Anti-patterns**:
+
 - Analyzing once and never again
 - Ignoring "God classes"
 - Allowing layer violations
@@ -192,6 +208,7 @@ on: [push, pull_request]
 ### Documentation Generator
 
 ✅ **Best Practices**:
+
 - Generate docs as you code
 - Review and enhance generated docs
 - Keep docs close to code (JSDoc)
@@ -206,6 +223,7 @@ on: [push, pull_request]
 ```
 
 ❌ **Anti-patterns**:
+
 - Generating all docs at the end
 - Never updating generated docs
 - Auto-generated docs with no review
@@ -255,37 +273,41 @@ on: [push, pull_request]
 ### 1. Shared Configuration
 
 Create team-wide configs:
+
 ```javascript
 // .mcprc.js (version controlled)
 export default {
   testGenerator: {
     framework: 'vitest',
-    coverage: 80
+    coverage: 80,
   },
   smartReviewer: {
     severity: {
       security: 'error',
-      performance: 'warning'
-    }
+      performance: 'warning',
+    },
   },
   securityScanner: {
-    failOn: ['critical', 'high']
-  }
+    failOn: ['critical', 'high'],
+  },
 };
 ```
 
 ### 2. Consistent Standards
 
 Document team decisions:
+
 ```markdown
 # Team MCP Guidelines
 
 ## Test Generator
+
 - Minimum 80% coverage
 - Always include edge cases
 - Review generated tests
 
 ## Smart Reviewer
+
 - Address all critical issues
 - Discuss high issues in PR
 - Medium/low are optional
@@ -341,6 +363,7 @@ if (fileUnchanged && resultsCached) {
 ### 1. Review All Generated Code
 
 Never blindly commit generated code:
+
 - Read it
 - Understand it
 - Test it

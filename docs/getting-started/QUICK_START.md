@@ -5,6 +5,7 @@ Get your MCP agents up and running in 5 minutes!
 ## Installation
 
 ### 1. Clone and Setup
+
 ```bash
 cd D:\Users\j0KZ\Documents\Coding
 git clone <your-repo> my-claude-agents
@@ -13,21 +14,25 @@ npm install
 ```
 
 ### 2. Build Agents
+
 ```bash
 npm run build
 ```
 
 ### 3. Install Globally
+
 ```bash
 npm run install-global
 ```
 
 ### 4. Verify Installation
+
 ```bash
 node scripts/verify-setup.js
 ```
 
 Expected output:
+
 ```
 ✅ MCP config file found and valid
 
@@ -42,6 +47,7 @@ Expected output:
 ## First Usage
 
 ### Smart Code Reviewer
+
 ```bash
 # Review a file
 claude code "Review src/app.js for code quality issues"
@@ -50,6 +56,7 @@ claude code "Review src/app.js for code quality issues"
 ```
 
 ### Test Generator
+
 ```bash
 # Generate tests
 claude code "Generate comprehensive tests for src/utils.js"
@@ -58,6 +65,7 @@ claude code "Generate comprehensive tests for src/utils.js"
 ```
 
 ### Architecture Analyzer
+
 ```bash
 # Analyze architecture
 claude code "Analyze project architecture and detect circular dependencies"
@@ -68,6 +76,7 @@ claude code "Analyze project architecture and detect circular dependencies"
 ## Common Workflows
 
 ### Pre-Commit Workflow
+
 ```bash
 # 1. Review changes
 claude code "Review all modified files with smart-reviewer"
@@ -84,6 +93,7 @@ git commit -m "feat: new feature with tests and review"
 ```
 
 ### New Feature Workflow
+
 ```bash
 # 1. Generate tests first (TDD)
 claude code "Generate tests for new authentication feature in src/auth.js"
@@ -99,6 +109,7 @@ claude code "Check if new auth module maintains good architecture"
 ```
 
 ### Refactoring Workflow
+
 ```bash
 # 1. Analyze current state
 claude code "Analyze architecture and identify refactoring opportunities"
@@ -119,6 +130,7 @@ claude code "Review refactored code for quality"
 ## Troubleshooting
 
 ### Agents Not Found
+
 ```bash
 # Check configuration
 cat ~/.config/claude-code/mcp_config.json
@@ -129,6 +141,7 @@ npm run install-global
 ```
 
 ### Build Errors
+
 ```bash
 # Clean and rebuild
 rm -rf packages/*/dist
@@ -136,6 +149,7 @@ npm run build
 ```
 
 ### Permission Issues (Unix/Mac)
+
 ```bash
 # Make scripts executable
 chmod +x scripts/*.js

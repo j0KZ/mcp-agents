@@ -14,5 +14,5 @@ import { CodeIssue } from '../types.js';
  * @param filePath - File path for context in error messages
  * @returns Array of detected issues with severity and fix suggestions
  */
-export declare function detectIssues(content: string, filePath: string): Promise<CodeIssue[]>;
+export declare function detectIssues(content: string, _filePath: string): Promise<CodeIssue[]>;
 //# sourceMappingURL=code-quality.d.ts.map

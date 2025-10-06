@@ -14,7 +14,7 @@ Review the code in examples/smart-reviewer/pull-request.js and provide detailed 
 
 ### Expected Output
 
-```
+````
 📝 Code Review Report
 
 File: pull-request.js
@@ -45,21 +45,22 @@ Reviewed: 2025-10-03
      }
      return this.db.delete('users', { id });
    }
-   ```
+````
 
 2. Missing Async/Await (Line 23-26)
    Severity: Critical
    Category: Bug
 
    updateUser(id, data) {
-     // Bug: Missing await
-     this.db.update('users', { id }, data);
-     return { success: true };
+   // Bug: Missing await
+   this.db.update('users', { id }, data);
+   return { success: true };
    }
 
    Issue: Function returns before database operation completes
 
    Fix: Add async/await:
+
    ```javascript
    async updateUser(id, data) {
      await this.db.update('users', { id }, data);
@@ -76,19 +77,20 @@ Reviewed: 2025-10-03
    Category: Performance
 
    async getUser(id) {
-     const user = await this.db.findOne('users', { id });
-     const posts = [];
-     for (const postId of user.postIds) {
-       const post = await this.db.findOne('posts', { id: postId });
-       posts.push(post);
-     }
-     user.posts = posts;
-     return user;
+   const user = await this.db.findOne('users', { id });
+   const posts = [];
+   for (const postId of user.postIds) {
+   const post = await this.db.findOne('posts', { id: postId });
+   posts.push(post);
+   }
+   user.posts = posts;
+   return user;
    }
 
    Issue: Making N separate queries in a loop causes performance issues
 
    Fix: Use batch query or JOIN:
+
    ```javascript
    async getUser(id) {
      const user = await this.db.findOne('users', { id });
@@ -105,13 +107,14 @@ Reviewed: 2025-10-03
    Category: Security / Best Practices
 
    async createUser(data) {
-     const user = await this.db.insert('users', data);
-     return user;
+   const user = await this.db.insert('users', data);
+   return user;
    }
 
    Issue: No validation of user input before database insertion
 
    Fix: Add validation:
+
    ```javascript
    async createUser(data) {
      // Validate input
@@ -132,11 +135,12 @@ Reviewed: 2025-10-03
    Category: Code Smell
 
    sendWelcomeEmail(userId, email, name, template,
-                    language, timezone, preferences)
+   language, timezone, preferences)
 
    Issue: Function has 7 parameters, making it hard to use and test
 
    Fix: Use options object:
+
    ```javascript
    sendWelcomeEmail(userId, options) {
      const {
@@ -164,6 +168,7 @@ Reviewed: 2025-10-03
 📊 SUMMARY
 
 Total Issues: 5
+
 - Critical: 2
 - High: 1
 - Medium: 1
@@ -173,6 +178,7 @@ Recommendation: DO NOT MERGE
 Fix critical issues before merging this PR.
 
 Estimated Fix Time: 30 minutes
+
 ```
 
 ## Example 2: Review Specific Aspects
@@ -180,20 +186,26 @@ Estimated Fix Time: 30 minutes
 ### Security Review Only
 
 ```
+
 Review examples/smart-reviewer/pull-request.js focusing only on security issues
+
 ```
 
 ### Performance Review Only
 
 ```
+
 Analyze examples/smart-reviewer/pull-request.js for performance problems
+
 ```
 
 ### Best Practices Review
 
 ```
+
 Check examples/smart-reviewer/pull-request.js against TypeScript/JavaScript best practices
-```
+
+````
 
 ## Example 3: Compare Before/After
 
@@ -203,14 +215,16 @@ updateUser(id, data) {
   this.db.update('users', { id }, data);
   return { success: true };
 }
-```
+````
 
 ### Review Feedback:
+
 ```
 Missing await - function returns before update completes
 ```
 
 ### After Fix:
+
 ```javascript
 async updateUser(id, data) {
   await this.db.update('users', { id }, data);
@@ -219,6 +233,7 @@ async updateUser(id, data) {
 ```
 
 ### Re-review:
+
 ```
 ✅ Fixed: Now properly awaits database operation
 ```
@@ -249,6 +264,7 @@ Review pull-request.js with custom rules:
 ## MCP Tool Reference
 
 ### Review File
+
 ```json
 {
   "tool": "review_file",
@@ -263,6 +279,7 @@ Review pull-request.js with custom rules:
 ```
 
 ### Review Diff
+
 ```json
 {
   "tool": "review_diff",
@@ -275,6 +292,7 @@ Review pull-request.js with custom rules:
 ```
 
 ### Learn from Feedback
+
 ```json
 {
   "tool": "learn_pattern",

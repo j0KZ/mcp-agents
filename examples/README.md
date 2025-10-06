@@ -14,55 +14,71 @@ New to MCP Agents? Start here:
 ## 🛠️ Tool Examples
 
 ### [Test Generator](./test-generator/)
+
 Generate comprehensive test suites automatically
+
 - Basic test generation
 - Edge cases and error handling
 - Framework-specific examples (Jest, Vitest, Mocha)
 
 ### [Smart Reviewer](./smart-reviewer/)
+
 AI-powered code review
+
 - Pull request reviews
 - Security-focused reviews
 - Performance analysis
 - Learning from feedback
 
 ### [API Designer](./api-designer/)
+
 Design and document APIs
+
 - REST API design
 - OpenAPI spec generation
 - Client SDK generation
 - Mock server creation
 
 ### [Database Schema Designer](./db-schema/)
+
 Design database schemas from requirements
+
 - Schema generation (PostgreSQL, MySQL, MongoDB)
 - ER diagram creation
 - Migration file generation
 - Index optimization
 
 ### [Refactor Assistant](./refactor-assistant/)
+
 Modernize and improve code
+
 - Callback to async/await conversion
 - Conditional simplification
 - Function extraction
 - Design pattern application
 
 ### [Doc Generator](./doc-generator/)
+
 Auto-generate documentation
+
 - JSDoc comments
 - API documentation
 - README generation
 - Changelog creation
 
 ### [Security Scanner](./security-scanner/)
+
 Find security vulnerabilities
+
 - SQL injection detection
 - XSS vulnerabilities
 - Hardcoded secrets
 - OWASP Top 10 coverage
 
 ### [Architecture Analyzer](./architecture-analyzer/)
+
 Analyze project structure
+
 - Circular dependency detection
 - Layer violation checks
 - Dependency graph generation
@@ -71,6 +87,7 @@ Analyze project structure
 ## 🎯 Usage Patterns
 
 ### Pattern 1: TDD Workflow
+
 ```
 1. Design API (API Designer)
 2. Generate tests (Test Generator)
@@ -80,6 +97,7 @@ Analyze project structure
 ```
 
 ### Pattern 2: Legacy Code Modernization
+
 ```
 1. Analyze architecture (Architecture Analyzer)
 2. Add test coverage (Test Generator)
@@ -89,6 +107,7 @@ Analyze project structure
 ```
 
 ### Pattern 3: New Feature Development
+
 ```
 1. Design API (API Designer)
 2. Design database (DB Schema Designer)
@@ -101,26 +120,31 @@ Analyze project structure
 ## 💡 Quick Examples
 
 ### Generate Tests
+
 ```
 Generate tests for src/calculator.js using vitest with edge cases
 ```
 
 ### Review Code
+
 ```
 Review src/user-service.ts for security issues and performance problems
 ```
 
 ### Design API
+
 ```
 Design a REST API for a blog with posts, comments, and users
 ```
 
 ### Scan Security
+
 ```
 Scan src/ for vulnerabilities and generate a security report
 ```
 
 ### Refactor Code
+
 ```
 Convert the callback functions in src/data-service.js to async/await
 ```
@@ -128,18 +152,21 @@ Convert the callback functions in src/data-service.js to async/await
 ## 📖 Learning Path
 
 ### Beginner (Week 1-2)
+
 - Start with Test Generator
 - Learn basic prompts
 - Generate simple tests
 - Review outputs
 
 ### Intermediate (Week 3-4)
+
 - Add Smart Reviewer
 - Add Security Scanner
 - Learn workflow patterns
 - Combine multiple tools
 
 ### Advanced (Month 2-3)
+
 - Master all 8 tools
 - Create custom configurations
 - CI/CD integration
@@ -148,21 +175,25 @@ Convert the callback functions in src/data-service.js to async/await
 ## 🎓 Tutorials by Use Case
 
 ### For Frontend Developers
+
 - [API Designer] Design backend APIs
 - [Test Generator] Generate component tests
 - [Smart Reviewer] Review React/Vue code
 
 ### For Backend Developers
+
 - [DB Schema Designer] Design databases
 - [API Designer] Design REST/GraphQL APIs
 - [Security Scanner] Find vulnerabilities
 
 ### For DevOps Engineers
+
 - [Security Scanner] CI/CD integration
 - [Architecture Analyzer] Monitor code quality
 - [Doc Generator] Auto-generate docs
 
 ### For Team Leads
+
 - [Smart Reviewer] Automated code reviews
 - [Architecture Analyzer] Enforce standards
 - [Security Scanner] Security compliance
@@ -170,6 +201,7 @@ Convert the callback functions in src/data-service.js to async/await
 ## 🔧 Configuration Examples
 
 See individual tool directories for configuration examples:
+
 - `.testgenrc.js` - Test Generator config
 - `.reviewrc.js` - Smart Reviewer rules
 - `.mcprc.js` - Global MCP configuration

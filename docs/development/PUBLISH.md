@@ -3,17 +3,20 @@
 ## Pre-publish Checklist
 
 ### Build All Packages
+
 ```bash
 npm run build:all
 ```
 
 ### Test All Packages
+
 ```bash
 cd packages/<package-name>
 npm test
 ```
 
 ### Verify Package Contents
+
 ```bash
 cd packages/<package-name>
 npm pack --dry-run
@@ -22,12 +25,14 @@ npm pack --dry-run
 ## Publishing
 
 ### Individual Package
+
 ```bash
 cd packages/<package-name>
 npm publish --access public
 ```
 
 ### All Packages (use carefully)
+
 ```bash
 ./publish-all.sh
 ```

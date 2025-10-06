@@ -108,9 +108,9 @@ export class CodeAnalyzer {
             }
         }, {
             concurrency,
-            onProgress: (completed, total) => {
+            onProgress: (_completed, _total) => {
                 // Progress callback - can be used by consumers for logging
-                // console.log(`Progress: ${completed}/${total} files analyzed`);
+                // console.log(`Progress: ${_completed}/${_total} files analyzed`);
             },
         });
         filePaths.forEach((filePath, index) => {

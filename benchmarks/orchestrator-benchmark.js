@@ -39,7 +39,7 @@ class BenchmarkRunner {
   constructor() {
     this.results = {
       separate: {},
-      orchestrator: {}
+      orchestrator: {},
     };
   }
 
@@ -49,17 +49,17 @@ class BenchmarkRunner {
 
     return new Promise((resolve, reject) => {
       const child = spawn('node', [mcpPath], {
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
 
       let stdout = '';
       let stderr = '';
 
-      child.stdout.on('data', (data) => {
+      child.stdout.on('data', data => {
         stdout += data.toString();
       });
 
-      child.stderr.on('data', (data) => {
+      child.stderr.on('data', data => {
         stderr += data.toString();
       });
 
@@ -70,8 +70,8 @@ class BenchmarkRunner {
         method: 'tools/call',
         params: {
           name: toolName,
-          arguments: params
-        }
+          arguments: params,
+        },
       };
 
       child.stdin.write(JSON.stringify(request) + '\n');
@@ -119,14 +119,16 @@ class BenchmarkRunner {
           success,
           error,
           stdout: stdout.substring(0, 200),
-          stderr: stderr.substring(0, 200)
+          stderr: stderr.substring(0, 200),
         });
       });
     });
   }
 
   async runSeparateMCPs(testFile) {
-    console.log(`\n${colors.blue}${colors.bright}📊 Benchmark 1: Running MCPs Separately${colors.reset}`);
+    console.log(
+      `\n${colors.blue}${colors.bright}📊 Benchmark 1: Running MCPs Separately${colors.reset}`
+    );
     console.log(`${colors.dim}Manual sequential execution of each MCP${colors.reset}\n`);
 
     const projectRoot = join(__dirname, '..');
@@ -161,14 +163,16 @@ class BenchmarkRunner {
       totalDuration,
       totalMem,
       processCount,
-      averagePerProcess: totalDuration / processCount
+      averagePerProcess: totalDuration / processCount,
     };
 
     this.printResults('SEPARATE MCPs', this.results.separate);
   }
 
   async runOrchestratorWorkflow(testFile) {
-    console.log(`\n${colors.magenta}${colors.bright}🔗 Benchmark 2: Running via Orchestrator${colors.reset}`);
+    console.log(
+      `\n${colors.magenta}${colors.bright}🔗 Benchmark 2: Running via Orchestrator${colors.reset}`
+    );
     console.log(`${colors.dim}Automated workflow execution${colors.reset}\n`);
 
     const projectRoot = join(__dirname, '..');
@@ -176,20 +180,22 @@ class BenchmarkRunner {
     const startMem = process.memoryUsage();
 
     return new Promise((resolve, reject) => {
-      const child = spawn('node', [
-        join(projectRoot, 'packages/orchestrator-mcp/dist/mcp-server.js')
-      ], {
-        stdio: ['pipe', 'pipe', 'pipe']
-      });
+      const child = spawn(
+        'node',
+        [join(projectRoot, 'packages/orchestrator-mcp/dist/mcp-server.js')],
+        {
+          stdio: ['pipe', 'pipe', 'pipe'],
+        }
+      );
 
       let stdout = '';
       let stderr = '';
 
-      child.stdout.on('data', (data) => {
+      child.stdout.on('data', data => {
         stdout += data.toString();
       });
 
-      child.stderr.on('data', (data) => {
+      child.stderr.on('data', data => {
         stderr += data.toString();
       });
 
@@ -204,9 +210,9 @@ class BenchmarkRunner {
           name: 'run_workflow',
           arguments: {
             workflow: 'pre-commit',
-            files: [testFile]
-          }
-        }
+            files: [testFile],
+          },
+        },
       };
 
       child.stdin.write(JSON.stringify(request) + '\n');
@@ -262,7 +268,7 @@ class BenchmarkRunner {
           stepResults,
           error,
           stdout: stdout.substring(0, 200),
-          stderr: stderr.substring(0, 200)
+          stderr: stderr.substring(0, 200),
         };
 
         this.printResults('ORCHESTRATOR', this.results.orchestrator);
@@ -276,12 +282,18 @@ class BenchmarkRunner {
 
     console.log(`\n${color}${colors.bright}  ${label} Results:${colors.reset}`);
     console.log(`  ${'─'.repeat(50)}`);
-    console.log(`  Total Time:      ${colors.cyan}${data.totalDuration.toFixed(2)}ms${colors.reset}`);
-    console.log(`  Memory Delta:    ${colors.cyan}${(data.totalMem / 1024 / 1024).toFixed(2)}MB${colors.reset}`);
+    console.log(
+      `  Total Time:      ${colors.cyan}${data.totalDuration.toFixed(2)}ms${colors.reset}`
+    );
+    console.log(
+      `  Memory Delta:    ${colors.cyan}${(data.totalMem / 1024 / 1024).toFixed(2)}MB${colors.reset}`
+    );
     console.log(`  Process Count:   ${colors.cyan}${data.processCount}${colors.reset}`);
 
     if (data.averagePerProcess) {
-      console.log(`  Avg per Process: ${colors.cyan}${data.averagePerProcess.toFixed(2)}ms${colors.reset}`);
+      console.log(
+        `  Avg per Process: ${colors.cyan}${data.averagePerProcess.toFixed(2)}ms${colors.reset}`
+      );
     }
 
     if (data.results) {
@@ -314,42 +326,54 @@ class BenchmarkRunner {
 
     // Time comparison
     const timeDiff = sep.totalDuration - orch.totalDuration;
-    const timePercent = ((timeDiff / sep.totalDuration) * 100);
+    const timePercent = (timeDiff / sep.totalDuration) * 100;
     const timeColor = timeDiff > 0 ? colors.green : colors.red;
 
     console.log(`⏱️  ${colors.bright}Execution Time:${colors.reset}`);
     console.log(`   Separate MCPs:   ${sep.totalDuration.toFixed(2)}ms`);
     console.log(`   Orchestrator:    ${orch.totalDuration.toFixed(2)}ms`);
-    console.log(`   ${timeColor}Difference:      ${timeDiff > 0 ? '+' : ''}${timeDiff.toFixed(2)}ms (${timePercent.toFixed(1)}%)${colors.reset}\n`);
+    console.log(
+      `   ${timeColor}Difference:      ${timeDiff > 0 ? '+' : ''}${timeDiff.toFixed(2)}ms (${timePercent.toFixed(1)}%)${colors.reset}\n`
+    );
 
     // Memory comparison
     const memDiff = sep.totalMem - orch.totalMem;
-    const memPercent = ((memDiff / sep.totalMem) * 100);
+    const memPercent = (memDiff / sep.totalMem) * 100;
     const memColor = memDiff > 0 ? colors.green : colors.red;
 
     console.log(`💾 ${colors.bright}Memory Usage:${colors.reset}`);
     console.log(`   Separate MCPs:   ${(sep.totalMem / 1024 / 1024).toFixed(2)}MB`);
     console.log(`   Orchestrator:    ${(orch.totalMem / 1024 / 1024).toFixed(2)}MB`);
-    console.log(`   ${memColor}Difference:      ${memDiff > 0 ? '+' : ''}${(memDiff / 1024 / 1024).toFixed(2)}MB (${memPercent.toFixed(1)}%)${colors.reset}\n`);
+    console.log(
+      `   ${memColor}Difference:      ${memDiff > 0 ? '+' : ''}${(memDiff / 1024 / 1024).toFixed(2)}MB (${memPercent.toFixed(1)}%)${colors.reset}\n`
+    );
 
     // Process count comparison
     console.log(`🔄 ${colors.bright}Process Overhead:${colors.reset}`);
     console.log(`   Separate MCPs:   ${sep.processCount} processes spawned`);
     console.log(`   Orchestrator:    ${orch.processCount} process spawned`);
-    console.log(`   ${colors.green}Reduction:       ${sep.processCount - orch.processCount} fewer processes${colors.reset}\n`);
+    console.log(
+      `   ${colors.green}Reduction:       ${sep.processCount - orch.processCount} fewer processes${colors.reset}\n`
+    );
 
     // Key benefits
     console.log(`${colors.cyan}${colors.bright}🎯 Key Benefits of Orchestrator:${colors.reset}`);
 
     if (timePercent > 0) {
-      console.log(`   ${colors.green}✅ Faster execution (${timePercent.toFixed(1)}% improvement)${colors.reset}`);
+      console.log(
+        `   ${colors.green}✅ Faster execution (${timePercent.toFixed(1)}% improvement)${colors.reset}`
+      );
     }
 
     if (memPercent > 0) {
-      console.log(`   ${colors.green}✅ Lower memory usage (${memPercent.toFixed(1)}% reduction)${colors.reset}`);
+      console.log(
+        `   ${colors.green}✅ Lower memory usage (${memPercent.toFixed(1)}% reduction)${colors.reset}`
+      );
     }
 
-    console.log(`   ${colors.green}✅ Fewer process spawns (${sep.processCount - orch.processCount} reduction)${colors.reset}`);
+    console.log(
+      `   ${colors.green}✅ Fewer process spawns (${sep.processCount - orch.processCount} reduction)${colors.reset}`
+    );
     console.log(`   ${colors.green}✅ Consistent error handling${colors.reset}`);
     console.log(`   ${colors.green}✅ Dependency resolution${colors.reset}`);
     console.log(`   ${colors.green}✅ Progress tracking${colors.reset}`);
@@ -362,7 +386,9 @@ class BenchmarkRunner {
 
       console.log(`${colors.yellow}${colors.bright}⚠️  Orchestrator Overhead:${colors.reset}`);
       console.log(`   Additional time: ${overhead.toFixed(2)}ms (${overheadPercent.toFixed(1)}%)`);
-      console.log(`   ${colors.dim}This is expected for small workflows (< 3 steps)${colors.reset}`);
+      console.log(
+        `   ${colors.dim}This is expected for small workflows (< 3 steps)${colors.reset}`
+      );
       console.log(`   ${colors.dim}Benefits increase with workflow complexity${colors.reset}\n`);
     }
 
@@ -374,9 +400,15 @@ class BenchmarkRunner {
   }
 
   async run() {
-    console.log(`${colors.bright}${colors.cyan}╔═══════════════════════════════════════════════════════════╗${colors.reset}`);
-    console.log(`${colors.bright}${colors.cyan}║        MCP Orchestrator Performance Benchmark             ║${colors.reset}`);
-    console.log(`${colors.bright}${colors.cyan}╚═══════════════════════════════════════════════════════════╝${colors.reset}`);
+    console.log(
+      `${colors.bright}${colors.cyan}╔═══════════════════════════════════════════════════════════╗${colors.reset}`
+    );
+    console.log(
+      `${colors.bright}${colors.cyan}║        MCP Orchestrator Performance Benchmark             ║${colors.reset}`
+    );
+    console.log(
+      `${colors.bright}${colors.cyan}╚═══════════════════════════════════════════════════════════╝${colors.reset}`
+    );
 
     const testFile = join(__dirname, '../packages/orchestrator-mcp/src/workflows.ts');
 
@@ -393,7 +425,9 @@ class BenchmarkRunner {
       // Print comparison
       this.printComparison();
 
-      console.log(`${colors.green}${colors.bright}✅ Benchmark completed successfully!${colors.reset}\n`);
+      console.log(
+        `${colors.green}${colors.bright}✅ Benchmark completed successfully!${colors.reset}\n`
+      );
     } catch (error) {
       console.error(`${colors.red}❌ Benchmark failed:${colors.reset}`, error);
       process.exit(1);

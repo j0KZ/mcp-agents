@@ -106,12 +106,12 @@ packages/config-wizard/
 ```json
 {
   "dependencies": {
-    "inquirer": "^10.0.0",      // Interactive prompts
-    "ora": "^8.0.0",            // Spinners
-    "chalk": "^5.3.0",          // Colors
-    "execa": "^9.0.0",          // Execute npm/npx
-    "fs-extra": "^11.0.0",      // File operations
-    "detect-package-manager": "^3.0.0"  // npm/yarn/pnpm
+    "inquirer": "^10.0.0", // Interactive prompts
+    "ora": "^8.0.0", // Spinners
+    "chalk": "^5.3.0", // Colors
+    "execa": "^9.0.0", // Execute npm/npx
+    "fs-extra": "^11.0.0", // File operations
+    "detect-package-manager": "^3.0.0" // npm/yarn/pnpm
   }
 }
 ```
@@ -121,6 +121,7 @@ packages/config-wizard/
 ### 1. Smart Detection
 
 **Editor Detection:**
+
 ```typescript
 // Check for installed editors
 const editors = await detectInstalledEditors();
@@ -134,6 +135,7 @@ if (editors.length === 1) {
 ```
 
 **Project Detection:**
+
 ```typescript
 // Analyze package.json, tsconfig.json, etc.
 const project = await detectProject();
@@ -151,14 +153,15 @@ const project = await detectProject();
 
 ```typescript
 const recommendations = {
-  'react': ['smart-reviewer', 'test-generator', 'security-scanner'],
-  'node': ['smart-reviewer', 'security-scanner', 'api-designer'],
-  'backend': ['api-designer', 'db-schema', 'security-scanner'],
-  'library': ['smart-reviewer', 'test-generator', 'doc-generator']
+  react: ['smart-reviewer', 'test-generator', 'security-scanner'],
+  node: ['smart-reviewer', 'security-scanner', 'api-designer'],
+  backend: ['api-designer', 'db-schema', 'security-scanner'],
+  library: ['smart-reviewer', 'test-generator', 'doc-generator'],
 };
 ```
 
 **Auto-select based on detection:**
+
 - TypeScript project → enable type checking in reviewer
 - React project → suggest test-generator with React Testing Library
 - API project → suggest api-designer + db-schema
@@ -166,35 +169,35 @@ const recommendations = {
 ### 3. Config Generation
 
 **Claude Code Example:**
+
 ```typescript
 async function generateClaudeCodeConfig(selections) {
   const config = {
-    mcpServers: {}
+    mcpServers: {},
   };
 
   for (const mcp of selections.mcps) {
     config.mcpServers[mcp.name] = {
-      command: "npx",
+      command: 'npx',
       args: [`@j0kz/${mcp.package}@^1.0.0`],
-      ...mcp.config  // Custom config per MCP
+      ...mcp.config, // Custom config per MCP
     };
   }
 
-  const configPath = path.join(
-    os.homedir(),
-    '.config/claude-code/mcp_settings.json'
-  );
+  const configPath = path.join(os.homedir(), '.config/claude-code/mcp_settings.json');
 
   await fs.writeJSON(configPath, config, { spaces: 2 });
 }
 ```
 
 **Cursor Example:**
+
 ```typescript
 async function generateCursorConfig(selections) {
-  const configPath = process.platform === 'win32'
-    ? path.join(process.env.APPDATA, 'Cursor/User/mcp_config.json')
-    : path.join(os.homedir(), '.cursor/mcp_config.json');
+  const configPath =
+    process.platform === 'win32'
+      ? path.join(process.env.APPDATA, 'Cursor/User/mcp_config.json')
+      : path.join(os.homedir(), '.cursor/mcp_config.json');
 
   // Same structure as Claude Code
   await fs.writeJSON(configPath, config, { spaces: 2 });
@@ -231,13 +234,13 @@ async function validateConfig(config) {
   }
 
   // Check editor exists
-  if (!await editorExists(config.editor)) {
+  if (!(await editorExists(config.editor))) {
     issues.push(`Editor not found: ${config.editor}`);
   }
 
   // Check MCP compatibility
   for (const mcp of config.mcps) {
-    if (!await isMCPCompatible(mcp, config.editor)) {
+    if (!(await isMCPCompatible(mcp, config.editor))) {
       issues.push(`${mcp.name} not compatible with ${config.editor}`);
     }
   }
@@ -346,7 +349,7 @@ describe('Configuration Wizard', () => {
   it('generates valid Claude Code config', async () => {
     const selections = {
       editor: 'claude-code',
-      mcps: ['smart-reviewer', 'security-scanner']
+      mcps: ['smart-reviewer', 'security-scanner'],
     };
     const config = await generateConfig(selections);
     expect(config).toMatchSchema(claudeCodeSchema);
@@ -397,11 +400,13 @@ npx mcp-configure --verbose
 ## Implementation Timeline
 
 **Week 1:**
+
 - Day 1-2: Core wizard + editor detection
 - Day 3-4: Config generators (Claude Code, Cursor, Windsurf)
 - Day 5: MCP installation + validation
 
 **Testing & Polish:**
+
 - Day 6: Testing, error handling
 - Day 7: Documentation, examples
 

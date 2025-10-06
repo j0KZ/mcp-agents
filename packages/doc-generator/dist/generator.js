@@ -74,7 +74,7 @@ export async function generateReadme(projectPath, config = {}) {
             sections.push('## Usage');
             sections.push('');
             sections.push('```javascript');
-            sections.push(`const ${packageJson.name?.replace(/[@\/\-]/g, '')} = require('${packageJson.name}');`);
+            sections.push(`const ${packageJson.name?.replace(/[@/-]/g, '')} = require('${packageJson.name}');`);
             sections.push('```');
             sections.push('');
         }
@@ -265,7 +265,7 @@ export async function generateChangelog(projectPath, config = {}) {
                 sections.push('');
             }
         }
-        catch (error) {
+        catch {
             warnings.push('Failed to read git history');
         }
         return {

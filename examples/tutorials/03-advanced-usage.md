@@ -21,8 +21,8 @@ export default {
   setup: {
     beforeEach: true,
     afterEach: true,
-    fixtures: './test/fixtures'
-  }
+    fixtures: './test/fixtures',
+  },
 };
 ```
 
@@ -36,30 +36,26 @@ export default {
     'require-transactions': {
       pattern: /db\.(insert|update|delete)/,
       message: 'Database operations must use transactions',
-      severity: 'error'
+      severity: 'error',
     },
 
     // Custom rule: Async functions must have try/catch
     'async-error-handling': {
-      check: (node) => {
+      check: node => {
         return node.async && !hasTryCatch(node);
       },
       message: 'Async functions must handle errors',
-      severity: 'warning'
-    }
+      severity: 'warning',
+    },
   },
 
-  ignore: [
-    '**/node_modules/**',
-    '**/dist/**',
-    '**/*.test.js'
-  ],
+  ignore: ['**/node_modules/**', '**/dist/**', '**/*.test.js'],
 
   severity: {
     security: 'error',
     performance: 'warning',
-    style: 'info'
-  }
+    style: 'info',
+  },
 };
 ```
 
@@ -154,7 +150,7 @@ import { TestGenerator } from '@j0kz/test-generator-mcp';
 
 const generator = new TestGenerator({
   framework: 'vitest',
-  coverage: 90
+  coverage: 90,
 });
 
 // Generate tests
@@ -175,9 +171,7 @@ const scanner = new SecurityScanner();
 
 // Scan all files
 const files = await glob('src/**/*.js');
-const results = await Promise.all(
-  files.map(file => scanner.scanFile(file))
-);
+const results = await Promise.all(files.map(file => scanner.scanFile(file)));
 
 // Generate report
 const report = scanner.generateReport(results);
@@ -223,13 +217,13 @@ async function refactorPipeline(file) {
   // 5. Generate additional tests for edge cases
   console.log('Adding edge case tests...');
   const edgeTests = await testGen.generateTests(simplified, {
-    includeEdgeCases: true
+    includeEdgeCases: true,
   });
 
   return {
     code: simplified,
     tests: [...originalTests, ...edgeTests],
-    review
+    review,
   };
 }
 ```
@@ -259,12 +253,12 @@ async function apiFirst(requirements) {
   // 4. Generate client SDKs
   const tsClient = await api.generateClient(spec, {
     language: 'typescript',
-    outputFormat: 'axios'
+    outputFormat: 'axios',
   });
 
   const pyClient = await api.generateClient(spec, {
     language: 'python',
-    outputFormat: 'requests'
+    outputFormat: 'requests',
   });
 
   // 5. Generate documentation
@@ -279,7 +273,7 @@ async function apiFirst(requirements) {
     schema,
     clients: { typescript: tsClient, python: pyClient },
     docs: { api: apiDocs, database: dbDocs },
-    mockServer
+    mockServer,
   };
 }
 ```
@@ -317,7 +311,7 @@ async function secureCode(file) {
   return {
     code,
     remaining: recheck.filter(v => !v.fixed),
-    tests: securityTests
+    tests: securityTests,
   };
 }
 ```
@@ -332,11 +326,7 @@ import pLimit from 'p-limit';
 const limit = pLimit(10); // Max 10 concurrent operations
 
 const files = await glob('src/**/*.js');
-const results = await Promise.all(
-  files.map(file =>
-    limit(() => scanner.scanFile(file))
-  )
-);
+const results = await Promise.all(files.map(file => limit(() => scanner.scanFile(file))));
 ```
 
 ### Caching Results
@@ -346,7 +336,7 @@ import { LRUCache } from 'lru-cache';
 
 const cache = new LRUCache({
   max: 500,
-  ttl: 1000 * 60 * 5 // 5 minutes
+  ttl: 1000 * 60 * 5, // 5 minutes
 });
 
 async function cachedScan(file) {
@@ -375,28 +365,25 @@ export function activate(context) {
   const reviewer = new SmartReviewer();
 
   // Command: Review current file
-  const reviewCommand = vscode.commands.registerCommand(
-    'mcp.reviewFile',
-    async () => {
-      const editor = vscode.window.activeTextEditor;
-      if (!editor) return;
+  const reviewCommand = vscode.commands.registerCommand('mcp.reviewFile', async () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) return;
 
-      const document = editor.document;
-      const code = document.getText();
+    const document = editor.document;
+    const code = document.getText();
 
-      const review = await reviewer.reviewCode(code);
+    const review = await reviewer.reviewCode(code);
 
-      // Show results in panel
-      const panel = vscode.window.createWebviewPanel(
-        'codeReview',
-        'Code Review',
-        vscode.ViewColumn.Beside,
-        {}
-      );
+    // Show results in panel
+    const panel = vscode.window.createWebviewPanel(
+      'codeReview',
+      'Code Review',
+      vscode.ViewColumn.Beside,
+      {}
+    );
 
-      panel.webview.html = formatReview(review);
-    }
-  );
+    panel.webview.html = formatReview(review);
+  });
 
   context.subscriptions.push(reviewCommand);
 }
@@ -414,27 +401,31 @@ export class MyCustomTool {
   constructor() {
     this.server = new MCPServer({
       name: 'my-custom-tool',
-      version: '1.0.0'
+      version: '1.0.0',
     });
 
     this.registerTools();
   }
 
   registerTools() {
-    this.server.tool('my_function', {
-      description: 'Does something cool',
-      parameters: {
-        input: {
-          type: 'string',
-          description: 'Input data'
-        }
+    this.server.tool(
+      'my_function',
+      {
+        description: 'Does something cool',
+        parameters: {
+          input: {
+            type: 'string',
+            description: 'Input data',
+          },
+        },
+      },
+      async params => {
+        // Your logic here
+        return {
+          result: processInput(params.input),
+        };
       }
-    }, async (params) => {
-      // Your logic here
-      return {
-        result: processInput(params.input)
-      };
-    });
+    );
   }
 
   start() {

@@ -73,7 +73,9 @@ if (!installerIndex.match(`const VERSION = '${globalVersion}'`)) {
   updated++;
 }
 
-console.log(`\n${updated > 0 ? '✨' : 'ℹ️'}  ${updated} file(s) updated to version ${globalVersion}\n`);
+console.log(
+  `\n${updated > 0 ? '✨' : 'ℹ️'}  ${updated} file(s) updated to version ${globalVersion}\n`
+);
 
 if (updated === 0) {
   console.log('All packages already at the latest version! 🎉\n');

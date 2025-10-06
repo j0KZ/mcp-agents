@@ -13,9 +13,11 @@ Automated test generation agent that creates comprehensive test suites with edge
 ## Tools Available
 
 ### `generate_tests`
+
 Generate comprehensive test suite for a source file.
 
 **Parameters:**
+
 - `sourceFile` (string, required): Path to the source file
 - `config` (object, optional): Test generation configuration
   - `framework`: 'jest' | 'mocha' | 'vitest' | 'ava'
@@ -24,37 +26,45 @@ Generate comprehensive test suite for a source file.
   - `includeErrorCases`: boolean
 
 **Example:**
+
 ```bash
 claude code "Generate tests for src/utils.js with test-generator"
 ```
 
 **Response includes:**
+
 - Generated test code
 - Test suites and individual test cases
 - Estimated coverage percentage
 - Total number of tests generated
 
 ### `write_test_file`
+
 Generate tests and write directly to a test file.
 
 **Parameters:**
+
 - `sourceFile` (string, required): Path to the source file
 - `testFile` (string, optional): Custom test file path
 - `config` (object, optional): Test generation configuration
 
 **Example:**
+
 ```bash
 claude code "Generate and write tests for src/auth.js"
 ```
 
 ### `batch_generate`
+
 Generate tests for multiple files at once.
 
 **Parameters:**
+
 - `sourceFiles` (array, required): Array of source file paths
 - `config` (object, optional): Test generation configuration
 
 **Example:**
+
 ```bash
 claude code "Generate tests for all files in src/utils/"
 ```
@@ -62,6 +72,7 @@ claude code "Generate tests for all files in src/utils/"
 ## Test Types Generated
 
 ### Happy Path Tests
+
 Standard functionality tests with typical valid inputs.
 
 ```javascript
@@ -71,6 +82,7 @@ it('should calculate sum with valid numbers', () => {
 ```
 
 ### Edge Case Tests
+
 Boundary conditions and unusual inputs.
 
 ```javascript
@@ -84,6 +96,7 @@ it('should handle large inputs', () => {
 ```
 
 ### Error Case Tests
+
 Invalid inputs and error conditions.
 
 ```javascript
@@ -93,6 +106,7 @@ it('should throw on invalid input type', () => {
 ```
 
 ### Integration Tests
+
 Tests for class interactions and method flows.
 
 ```javascript
@@ -105,6 +119,7 @@ it('should create instance and call methods', () => {
 ## Supported Frameworks
 
 ### Jest (Default)
+
 ```javascript
 import { describe, it, expect, beforeEach } from '@jest/globals';
 import * as target from './module';
@@ -117,12 +132,14 @@ describe('moduleName', () => {
 ```
 
 ### Vitest
+
 ```javascript
 import { describe, it, expect, beforeEach } from 'vitest';
 import * as target from './module';
 ```
 
 ### Mocha + Chai
+
 ```javascript
 import { describe, it, before } from 'mocha';
 import { expect } from 'chai';
@@ -130,11 +147,12 @@ import * as target from './module';
 ```
 
 ### AVA
+
 ```javascript
 import test from 'ava';
 import * as target from './module';
 
-test('should work', async (t) => {
+test('should work', async t => {
   t.truthy(target.func());
 });
 ```
@@ -174,6 +192,7 @@ test('should work', async (t) => {
 ## Integration with Claude Code
 
 ### TDD Workflow
+
 ```bash
 # Generate tests FIRST
 claude code "Generate tests for new feature in src/feature.js"
@@ -183,6 +202,7 @@ claude code "Implement src/feature.js to pass the generated tests"
 ```
 
 ### SPARC Integration
+
 ```bash
 # Automatic test generation in SPARC TDD workflow
 npx claude-flow sparc tdd "New authentication feature"
@@ -191,6 +211,7 @@ npx claude-flow sparc tdd "New authentication feature"
 ```
 
 ### Pre-commit Testing
+
 ```bash
 # Generate tests for modified files
 claude code "Generate tests for all modified files"
@@ -219,16 +240,16 @@ Create `~/.config/claude-code/agents.config.json`:
 
 The generator intelligently creates mock values based on parameter names:
 
-| Parameter Pattern | Generated Value |
-|-------------------|----------------|
-| `*id*` | `1` |
-| `*name*` | `"test"` |
-| `*email*` | `"test@example.com"` |
-| `*age*` | `25` |
-| `*count*` | `10` |
-| `*array*`, `*list*` | `[]` |
-| `*object*`, `*data*` | `{}` |
-| `*bool*`, `is*`, `has*` | `true` |
+| Parameter Pattern       | Generated Value      |
+| ----------------------- | -------------------- |
+| `*id*`                  | `1`                  |
+| `*name*`                | `"test"`             |
+| `*email*`               | `"test@example.com"` |
+| `*age*`                 | `25`                 |
+| `*count*`               | `10`                 |
+| `*array*`, `*list*`     | `[]`                 |
+| `*object*`, `*data*`    | `{}`                 |
+| `*bool*`, `is*`, `has*` | `true`               |
 
 ## Best Practices
 
@@ -241,6 +262,7 @@ The generator intelligently creates mock values based on parameter names:
 ## Coverage Estimation
 
 The agent estimates coverage based on:
+
 - Number of functions/methods tested
 - Edge case coverage
 - Error case coverage

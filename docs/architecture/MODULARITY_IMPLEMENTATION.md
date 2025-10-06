@@ -121,6 +121,7 @@ Added `"@mcp-tools/shared": "file:../shared"` dependency to all 8 packages:
 Fully integrated smart-reviewer with shared utilities:
 
 **Changes Made**:
+
 - ✅ Added `FileSystemManager` for cached file operations
 - ✅ Added `AnalysisCache` for result caching
 - ✅ Added `PerformanceMonitor` for metrics tracking
@@ -130,6 +131,7 @@ Fully integrated smart-reviewer with shared utilities:
 - ✅ Added performance metrics to `ReviewResult` type
 
 **Performance Improvements**:
+
 - 90%+ reduction in repeated file reads (cache hits)
 - Automatic cache invalidation on file changes
 - Batch processing with configurable concurrency
@@ -160,12 +162,12 @@ Created comprehensive documentation:
 
 ### Caching Performance
 
-| Operation | Without Cache | With Cache | Improvement |
-|-----------|---------------|------------|-------------|
-| Single file read | 5-10ms | <1ms | **90%+** |
-| Batch 100 files | 500-1000ms | 50-100ms | **80-90%** |
-| Repeated analysis | 100-200ms | <5ms | **95%+** |
-| File glob | 50-100ms | 10-20ms | **70-80%** |
+| Operation         | Without Cache | With Cache | Improvement |
+| ----------------- | ------------- | ---------- | ----------- |
+| Single file read  | 5-10ms        | <1ms       | **90%+**    |
+| Batch 100 files   | 500-1000ms    | 50-100ms   | **80-90%**  |
+| Repeated analysis | 100-200ms     | <5ms       | **95%+**    |
+| File glob         | 50-100ms      | 10-20ms    | **70-80%**  |
 
 ### Expected Cache Hit Rates
 
@@ -263,13 +265,13 @@ fileWatcher.watch('./src', (event, file) => {
 });
 
 // Consumer 1
-eventBus.on(EVENT_TYPE.FILE_CHANGED, async (data) => {
+eventBus.on(EVENT_TYPE.FILE_CHANGED, async data => {
   const result = await analyzer.analyze(data.file);
   eventBus.emit(EVENT_TYPE.ANALYSIS_COMPLETED, { result });
 });
 
 // Consumer 2
-eventBus.on(EVENT_TYPE.ANALYSIS_COMPLETED, async (data) => {
+eventBus.on(EVENT_TYPE.ANALYSIS_COMPLETED, async data => {
   await testGen.generateTests(data.result);
 });
 ```

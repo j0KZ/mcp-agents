@@ -7,16 +7,19 @@ We're excited to announce **CI/CD templates** for the MCP Agents Toolkit! 🎉
 Add automated code quality checks to your pipeline with **zero configuration**:
 
 ### ✅ GitHub Actions (3 Workflows)
+
 - **mcp-basic.yml** - Quick PR checks (code review + security)
 - **mcp-quality-gate.yml** - Comprehensive 5-job pipeline
 - **mcp-pre-merge.yml** - Strict enforcement before merge to main
 
 ### ✅ Pre-commit Hooks
+
 - **Interactive generator** with 4 modes (basic, strict, minimal, custom)
 - **Auto-installs Husky** if needed
 - **Blocks commits** on critical issues (strict mode)
 
 ### ✅ GitLab CI
+
 - **Complete pipeline** with quality, security, and reporting stages
 - **Artifact support** for reports and graphs
 - **Optimized** to skip test files in refactoring analysis
@@ -24,6 +27,7 @@ Add automated code quality checks to your pipeline with **zero configuration**:
 ## Quick Start
 
 ### GitHub Actions
+
 ```bash
 # Copy the basic template
 curl -o .github/workflows/mcp-basic.yml \
@@ -38,6 +42,7 @@ git push
 **That's it!** Open a PR and see MCP tools in action.
 
 ### Pre-commit Hooks
+
 ```bash
 # Generate hooks (interactive)
 npx @j0kz/mcp-hooks-generator
@@ -49,6 +54,7 @@ npx @j0kz/mcp-hooks-generator strict
 Hooks will run automatically on every `git commit`.
 
 ### GitLab CI
+
 ```yaml
 # Add to .gitlab-ci.yml
 include:
@@ -66,6 +72,7 @@ include:
 ## Example Output
 
 **GitHub Actions:**
+
 ```
 ✅ MCP Quality Gate Summary
 
@@ -80,6 +87,7 @@ include:
 ```
 
 **Pre-commit Hooks:**
+
 ```
 🔍 Running MCP code quality checks...
 📝 Reviewing changed files...
@@ -93,14 +101,17 @@ include:
 ## Templates Included
 
 ### GitHub Actions
+
 1. **[mcp-basic.yml](templates/github-actions/mcp-basic.yml)** - Minimal setup for quick adoption
 2. **[mcp-quality-gate.yml](templates/github-actions/mcp-quality-gate.yml)** - Comprehensive quality checks
 3. **[mcp-pre-merge.yml](templates/github-actions/mcp-pre-merge.yml)** - Strict pre-merge enforcement
 
 ### Pre-commit Hooks
+
 - **[hooks-generator.js](templates/pre-commit/hooks-generator.js)** - Interactive CLI generator
 
 ### GitLab CI
+
 - **[mcp-quality-gate.gitlab-ci.yml](templates/gitlab-ci/mcp-quality-gate.gitlab-ci.yml)** - Full pipeline
 
 ## Documentation
@@ -112,18 +123,21 @@ include:
 ## Customization Examples
 
 **Adjust severity levels:**
+
 ```yaml
 npx @j0kz/smart-reviewer-mcp@^1.0.0 batch_review . \
-  --severity strict  # Options: lenient, moderate, strict
+--severity strict # Options: lenient, moderate, strict
 ```
 
 **Exclude files:**
+
 ```yaml
 npx @j0kz/security-scanner-mcp@^1.0.0 scan_project . \
-  --exclude-patterns "node_modules,dist,*.test.ts"
+--exclude-patterns "node_modules,dist,*.test.ts"
 ```
 
 **Run specific checks only:**
+
 ```yaml
 # Comment out unwanted jobs in workflow file
 # architecture-analyzer:  # Disabled
@@ -147,6 +161,7 @@ According to our [roadmap](docs/TODO.md), we're working on:
 ## Feedback Welcome
 
 Try the templates and let us know:
+
 - What worked well?
 - What could be improved?
 - What templates are missing?

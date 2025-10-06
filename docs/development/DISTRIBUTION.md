@@ -3,6 +3,7 @@
 ## Option 1: Publish to NPM (Recommended)
 
 ### Benefits
+
 - ✅ Users install with one command: `npx @your-name/smart-reviewer`
 - ✅ Automatic updates
 - ✅ Version management
@@ -21,6 +22,7 @@ cd D:\Users\j0KZ\Documents\Coding\my-claude-agents
 Update each package's `package.json`:
 
 **packages/smart-reviewer/package.json:**
+
 ```json
 {
   "name": "@YOUR-NPM-USERNAME/smart-reviewer-mcp",
@@ -67,6 +69,7 @@ claude mcp add architecture-analyzer "npx @YOUR-USERNAME/architecture-analyzer-m
 ## Option 2: GitHub Repository (Good for Open Source)
 
 ### Benefits
+
 - ✅ Free hosting
 - ✅ Version control
 - ✅ Community contributions
@@ -89,24 +92,28 @@ git push -u origin main
 
 Add to your README.md:
 
-```markdown
+````markdown
 ## Installation
 
 ### For Users
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/YOUR-USERNAME/my-claude-agents.git
 cd my-claude-agents
 ```
+````
 
 2. Install dependencies and build:
+
 ```bash
 npm install
 npm run build
 ```
 
 3. Add to Claude Code (user-wide):
+
 ```bash
 # Get your absolute path
 AGENTS_PATH=$(pwd)
@@ -118,10 +125,12 @@ claude mcp add architecture-analyzer node "$AGENTS_PATH/packages/architecture-an
 ```
 
 4. Verify:
+
 ```bash
 claude mcp list
 ```
-```
+
+````
 
 #### 3. Users Install From Your Repo
 
@@ -133,13 +142,14 @@ npm install && npm run build
 
 # Add to Claude Code
 claude mcp add smart-reviewer node "~/my-claude-agents/packages/smart-reviewer/dist/mcp-server.js" --scope user
-```
+````
 
 ---
 
 ## Option 3: One-Line Installer Script (Easiest for Users)
 
 ### Benefits
+
 - ✅ Zero configuration
 - ✅ Automatic path detection
 - ✅ Cross-platform
@@ -232,6 +242,7 @@ claude mcp list
 ```
 
 Users run:
+
 ```powershell
 # Windows
 iwr https://raw.githubusercontent.com/YOUR-USERNAME/my-claude-agents/main/scripts/auto-install.ps1 | iex
@@ -258,12 +269,12 @@ CMD ["node", "packages/smart-reviewer/dist/mcp-server.js"]
 
 ## Comparison
 
-| Method | Ease (Users) | Ease (You) | Updates | Best For |
-|--------|--------------|------------|---------|----------|
-| NPM | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | Auto | Public distribution |
-| GitHub | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Manual | Open source |
-| One-liner | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Manual | Quick sharing |
-| Docker | ⭐⭐ | ⭐⭐ | Manual | Enterprise |
+| Method    | Ease (Users) | Ease (You) | Updates | Best For            |
+| --------- | ------------ | ---------- | ------- | ------------------- |
+| NPM       | ⭐⭐⭐⭐⭐   | ⭐⭐⭐     | Auto    | Public distribution |
+| GitHub    | ⭐⭐⭐       | ⭐⭐⭐⭐⭐ | Manual  | Open source         |
+| One-liner | ⭐⭐⭐⭐     | ⭐⭐⭐⭐   | Manual  | Quick sharing       |
+| Docker    | ⭐⭐         | ⭐⭐       | Manual  | Enterprise          |
 
 ---
 
@@ -277,21 +288,26 @@ CMD ["node", "packages/smart-reviewer/dist/mcp-server.js"]
 
 Your README would show:
 
-```markdown
+````markdown
 ## Quick Install
 
 ### Option A: NPM (Recommended)
+
 ```bash
 claude mcp add smart-reviewer "npx @YOUR-NAME/smart-reviewer-mcp" --scope user
 ```
+````
 
 ### Option B: One-Liner
+
 ```bash
 curl -fsSL https://your-url/install.sh | bash
 ```
 
 ### Option C: Manual
+
 See [Installation Guide](INSTALLATION.md)
+
 ```
 
 ---
@@ -304,3 +320,4 @@ See [Installation Guide](INSTALLATION.md)
 4. Test on fresh machine
 5. Document in README.md
 6. Share with community!
+```

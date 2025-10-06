@@ -115,7 +115,7 @@ echo "🔍 Running custom MCP checks..."
 # npx @j0kz/db-schema-mcp@^1.0.0 validate_schema <schema-file>
 
 echo "✅ Custom checks complete!"
-`
+`,
 };
 
 function installHusky() {

@@ -13,6 +13,7 @@ Generate tests for examples/test-generator/calculator.js with vitest framework
 ```
 
 The Test Generator will:
+
 - ✅ Parse the Calculator class
 - ✅ Detect all methods (add, subtract, multiply, divide, percentage)
 - ✅ Generate tests with edge cases

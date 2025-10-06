@@ -12,6 +12,7 @@ npx @j0kz/mcp-config-wizard
 ```
 
 The wizard will:
+
 1. ✅ Detect your editor and project type
 2. ✅ Recommend relevant MCP tools
 3. ✅ Generate configuration automatically
@@ -120,15 +121,15 @@ Try asking: "Review my code" or "Scan for vulnerabilities"
 
 ## CLI Options
 
-| Flag | Description | Example |
-|------|-------------|---------|
-| `--editor` | Specify editor | `--editor=claude-code` |
-| `--mcps` | Comma-separated MCP list | `--mcps=smart-reviewer,security-scanner` |
-| `--dry-run` | Show config without installing | `--dry-run` |
-| `--force` | Overwrite existing config | `--force` |
-| `--output` | Custom output path | `--output=./config.json` |
-| `--verbose` | Detailed logging | `--verbose` |
-| `--help` | Show help | `--help` |
+| Flag        | Description                    | Example                                  |
+| ----------- | ------------------------------ | ---------------------------------------- |
+| `--editor`  | Specify editor                 | `--editor=claude-code`                   |
+| `--mcps`    | Comma-separated MCP list       | `--mcps=smart-reviewer,security-scanner` |
+| `--dry-run` | Show config without installing | `--dry-run`                              |
+| `--force`   | Overwrite existing config      | `--force`                                |
+| `--output`  | Custom output path             | `--output=./config.json`                 |
+| `--verbose` | Detailed logging               | `--verbose`                              |
+| `--help`    | Show help                      | `--help`                                 |
 
 ---
 
@@ -136,12 +137,12 @@ Try asking: "Review my code" or "Scan for vulnerabilities"
 
 The wizard suggests MCPs based on your project:
 
-| Project Type | Recommended MCPs |
-|--------------|------------------|
-| **React App** | Smart Reviewer, Test Generator, Security Scanner |
-| **Node.js API** | API Designer, DB Schema, Security Scanner |
-| **Library/Package** | Smart Reviewer, Test Generator, Doc Generator |
-| **Full-stack** | All 8 MCPs |
+| Project Type        | Recommended MCPs                                 |
+| ------------------- | ------------------------------------------------ |
+| **React App**       | Smart Reviewer, Test Generator, Security Scanner |
+| **Node.js API**     | API Designer, DB Schema, Security Scanner        |
+| **Library/Package** | Smart Reviewer, Test Generator, Doc Generator    |
+| **Full-stack**      | All 8 MCPs                                       |
 
 ---
 
@@ -158,6 +159,7 @@ The wizard suggests MCPs based on your project:
 ### Config file not found
 
 **Check editor config path:**
+
 - Claude Code: `~/.config/claude-code/mcp_settings.json`
 - Cursor: `~/.cursor/mcp_config.json` (Mac/Linux) or `%APPDATA%\Cursor\User\mcp_config.json` (Windows)
 - Windsurf: `~/.windsurf/mcp_config.json`

@@ -56,7 +56,13 @@ console.log('📂 Checking agent files...');
 const agentPaths = {
   'smart-reviewer': join(projectRoot, 'packages', 'smart-reviewer', 'dist', 'mcp-server.js'),
   'test-generator': join(projectRoot, 'packages', 'test-generator', 'dist', 'mcp-server.js'),
-  'architecture-analyzer': join(projectRoot, 'packages', 'architecture-analyzer', 'dist', 'mcp-server.js'),
+  'architecture-analyzer': join(
+    projectRoot,
+    'packages',
+    'architecture-analyzer',
+    'dist',
+    'mcp-server.js'
+  ),
 };
 
 for (const [name, path] of Object.entries(agentPaths)) {

@@ -73,7 +73,7 @@ export class PerformanceMonitor {
 /**
  * Measure execution time of a function
  */
-export async function measure(fn, label) {
+export async function measure(fn, _label) {
     const start = Date.now();
     const result = await fn();
     const duration = Date.now() - start;

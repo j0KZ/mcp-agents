@@ -23,6 +23,7 @@ https://github.com/j0KZ/mcp-agents/security/advisories/new
 Or email: security@example.com (GitHub issues preferred)
 
 Include:
+
 - Description of the vulnerability
 - Steps to reproduce
 - Potential impact
@@ -116,6 +117,7 @@ This project provides **development and build tools** only. It is not intended f
 ### Local Execution
 
 All MCP tools run locally on your machine. No data is sent to external servers except:
+
 - npm package downloads
 - Git repository operations
 
@@ -126,6 +128,7 @@ These tools do not implement authentication or authorization. They are designed 
 ### File System Access
 
 MCP tools require file system access to:
+
 - Read source code files
 - Generate documentation
 - Create test files
@@ -140,6 +143,7 @@ Ensure you run these tools only on trusted codebases.
 We regularly review and update dependencies to address security vulnerabilities.
 
 Current strategy:
+
 - Automated Dependabot updates
 - Monthly security audits
 - Immediate critical CVE patches
@@ -147,6 +151,7 @@ Current strategy:
 ### Trusted Sources
 
 All dependencies are from:
+
 - npm official registry
 - Verified publishers
 - Well-maintained packages
@@ -160,6 +165,7 @@ This project follows OWASP Top 10 security guidelines for application security.
 ### CWE
 
 We scan for Common Weakness Enumeration (CWE) issues including:
+
 - CWE-79 (Cross-site Scripting)
 - CWE-89 (SQL Injection)
 - CWE-78 (Command Injection)
@@ -178,9 +184,9 @@ We scan for Common Weakness Enumeration (CWE) issues including:
 
 ## Security Audit History
 
-| Date | Version | Findings | Status |
-|------|---------|----------|--------|
-| 2025-10-01 | 1.0.7 | 0 real vulnerabilities | ✅ Passed |
+| Date       | Version | Findings               | Status    |
+| ---------- | ------- | ---------------------- | --------- |
+| 2025-10-01 | 1.0.7   | 0 real vulnerabilities | ✅ Passed |
 
 ## Security Tools Used
 

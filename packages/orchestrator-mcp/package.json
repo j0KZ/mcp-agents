@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@j0kz/shared": "^1.0.31",
-    "@modelcontextprotocol/sdk": "^1.18.2"
+    "@modelcontextprotocol/sdk": "^1.19.1"
   },
   "devDependencies": {
     "@types/node": "^24.6.2",

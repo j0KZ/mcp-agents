@@ -25,7 +25,7 @@
   "author": "MCP Tools",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.18.2",
+    "@modelcontextprotocol/sdk": "^1.19.1",
     "fast-glob": "^3.3.2",
     "lru-cache": "^11.0.2"
   },

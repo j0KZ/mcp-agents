@@ -12,8 +12,8 @@ describe('Config Validator', () => {
     mcps: ['smart-reviewer', 'security-scanner'],
     preferences: {
       reviewSeverity: 'moderate',
-      installGlobally: true
-    }
+      installGlobally: true,
+    },
   };
 
   const mockDetected = {
@@ -21,9 +21,9 @@ describe('Config Validator', () => {
     project: {
       language: 'typescript',
       packageManager: 'npm',
-      hasTests: true
+      hasTests: true,
     },
-    testFramework: 'vitest'
+    testFramework: 'vitest',
   };
 
   it('should pass validation for valid config', async () => {
@@ -36,7 +36,7 @@ describe('Config Validator', () => {
   it('should fail if no MCPs selected', async () => {
     const invalidSelections = {
       ...mockSelections,
-      mcps: []
+      mcps: [],
     };
 
     const issues = await validateConfig(invalidSelections, mockDetected);
@@ -47,7 +47,7 @@ describe('Config Validator', () => {
   it('should fail for unknown editor', async () => {
     const invalidSelections = {
       ...mockSelections,
-      editor: 'unknown-editor' as any
+      editor: 'unknown-editor' as any,
     };
 
     const issues = await validateConfig(invalidSelections, mockDetected);

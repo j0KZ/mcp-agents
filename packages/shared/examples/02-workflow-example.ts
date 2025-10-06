@@ -58,12 +58,10 @@ async function securityWorkflow(projectPath: string) {
   const workflow = new MCPWorkflow('security-audit-workflow');
 
   // Step 1: Scan for security vulnerabilities
-  workflow.step(
-    'security-scan',
-    'security-scanner',
-    'scanProject',
-    { minSeverity: 'high', scanSecrets: true }
-  );
+  workflow.step('security-scan', 'security-scanner', 'scanProject', {
+    minSeverity: 'high',
+    scanSecrets: true,
+  });
 
   // Step 2: Generate tests only if vulnerabilities found
   workflow.step(
@@ -71,19 +69,16 @@ async function securityWorkflow(projectPath: string) {
     'test-generator',
     'generateSecurityTests',
     { framework: 'jest', includeErrorCases: true },
-    (results) => {
+    results => {
       // Condition: only run if vulnerabilities found
       return results['security-scan']?.data?.vulnerabilities?.length > 0;
     }
   );
 
   // Step 3: Generate documentation always
-  workflow.step(
-    'document-findings',
-    'doc-generator',
-    'generateSecurityDocs',
-    { format: 'markdown' }
-  );
+  workflow.step('document-findings', 'doc-generator', 'generateSecurityDocs', {
+    format: 'markdown',
+  });
 
   // Execute workflow
   console.log('🔐 Starting security audit workflow...\n');

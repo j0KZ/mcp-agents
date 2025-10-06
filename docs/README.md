@@ -5,12 +5,14 @@ Complete documentation for the MCP Tools monorepo. This project contains 8 Model
 ## 📚 Table of Contents
 
 ### Getting Started
+
 Essential guides for new users and setup instructions.
 
 - **[Quick Start Guide](getting-started/QUICK_START.md)** - Get up and running in 5 minutes
 - **[Editor Compatibility](getting-started/EDITOR_COMPATIBILITY.md)** - Claude Code, Cursor, Windsurf, and other MCP-compatible editors
 
 ### Development
+
 Guides for contributors and maintainers.
 
 - **[Contributing Guide](development/CONTRIBUTING.md)** - How to contribute to this project
@@ -19,6 +21,7 @@ Guides for contributors and maintainers.
 - **[Distribution Strategy](development/DISTRIBUTION.md)** - Package distribution and npm scope management
 
 ### Architecture
+
 Technical design and planning documents.
 
 - **[Project Roadmap](architecture/ROADMAP.md)** - Future plans and feature timeline
@@ -28,6 +31,7 @@ Technical design and planning documents.
 ### Reports
 
 #### Audits
+
 Code quality and security audit reports.
 
 - **[Project Audit (2025-10-03)](reports/audits/PROJECT_AUDIT_2025-10-03.md)** - Comprehensive project analysis
@@ -37,6 +41,7 @@ Code quality and security audit reports.
 - **[Manual Audit Report](reports/audits/MANUAL_AUDIT_REPORT.md)** - Manual review findings
 
 #### Improvements
+
 Implementation progress and improvement tracking.
 
 - **[Phase 1 Complete](reports/improvements/IMPROVEMENT_PHASE1_COMPLETE.md)** - Phase 1 refactoring results
@@ -47,24 +52,28 @@ Implementation progress and improvement tracking.
 - **[Test Coverage Report](reports/improvements/TEST_COVERAGE_REPORT.md)** - Test coverage analysis
 
 #### Releases
+
 Version history and release notes.
 
 - **[Release Notes](reports/releases/RELEASE_NOTES.md)** - Latest release information
 - **[Release Notes v1.0.16](reports/releases/RELEASE_NOTES_v1.0.16.md)** - Specific v1.0.16 changes
 
 ### Governance
+
 Project policies and security guidelines.
 
 - **[Code of Conduct](governance/CODE_OF_CONDUCT.md)** - Community standards
 - **[Security Policy](governance/SECURITY.md)** - Security vulnerability reporting and handling
 
 ### Examples
+
 Practical usage examples and workflows.
 
 - **[Workflow Examples](examples/WORKFLOW_EXAMPLES.md)** - Common MCP tool workflows
 - **[Sample Commands](examples/sample-commands.sh)** - Shell script examples
 
 ### Templates
+
 Reusable templates for documentation and configuration.
 
 - **[Simple README Template](templates/SIMPLE_README_TEMPLATE.md)** - Template for package READMEs

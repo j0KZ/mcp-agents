@@ -187,6 +187,7 @@ Generate a comprehensive security report for examples/security-scanner/vulnerabl
 ## Critical Issues
 
 ### 1. SQL Injection (CWE-89)
+
 - **Line**: 4
 - **Severity**: Critical
 - **CVSS**: 9.8
@@ -215,6 +216,7 @@ User input directly concatenated into SQL query without sanitization...
 ## Example 4: Fix Vulnerabilities
 
 ### Before Scan Results:
+
 ```javascript
 // VULNERABLE
 function getUserByEmail(email) {
@@ -224,6 +226,7 @@ function getUserByEmail(email) {
 ```
 
 ### After Applying Fixes:
+
 ```javascript
 // SECURE
 function getUserByEmail(email) {
@@ -233,7 +236,7 @@ function getUserByEmail(email) {
   }
 
   // Parameterized query prevents SQL injection
-  const query = "SELECT * FROM users WHERE email = ?";
+  const query = 'SELECT * FROM users WHERE email = ?';
   return db.execute(query, [email]);
 }
 ```
@@ -241,6 +244,7 @@ function getUserByEmail(email) {
 ## MCP Tool Reference
 
 ### Scan File
+
 ```json
 {
   "tool": "scan_file",
@@ -255,6 +259,7 @@ function getUserByEmail(email) {
 ```
 
 ### Scan for Secrets
+
 ```json
 {
   "tool": "scan_secrets",
@@ -268,11 +273,14 @@ function getUserByEmail(email) {
 ```
 
 ### Generate Report
+
 ```json
 {
   "tool": "generate_report",
   "arguments": {
-    "scanResults": { /* scan output */ },
+    "scanResults": {
+      /* scan output */
+    },
     "format": "markdown",
     "includeRemediation": true
   }

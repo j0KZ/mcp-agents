@@ -15,6 +15,7 @@ Design a PostgreSQL database schema based on examples/db-schema/ecommerce-requir
 ### Expected Output
 
 **SQL Schema**:
+
 ```sql
 -- Users table
 CREATE TABLE users (
@@ -162,6 +163,7 @@ Generate a migration for the e-commerce schema with up/down scripts
 ### Expected Output
 
 **Migration: 001_create_ecommerce_schema.sql**
+
 ```sql
 -- Up
 CREATE TABLE users (
@@ -262,6 +264,7 @@ Analyze the e-commerce schema and suggest index optimizations
 ## MCP Tool Reference
 
 ### Design Schema
+
 ```json
 {
   "tool": "design_schema",
@@ -279,22 +282,28 @@ Analyze the e-commerce schema and suggest index optimizations
 ```
 
 ### Generate Migration
+
 ```json
 {
   "tool": "generate_migration",
   "arguments": {
-    "schema": { /* schema object */ },
+    "schema": {
+      /* schema object */
+    },
     "description": "create initial schema"
   }
 }
 ```
 
 ### Create ER Diagram
+
 ```json
 {
   "tool": "create_er_diagram",
   "arguments": {
-    "schema": { /* schema object */ },
+    "schema": {
+      /* schema object */
+    },
     "options": {
       "format": "mermaid",
       "includeColumns": true,

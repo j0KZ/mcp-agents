@@ -42,7 +42,7 @@ describe('API Compatibility - Refactor Assistant', () => {
       code: testCode,
       functionName: 'testFn',
       startLine: 1,
-      endLine: 3
+      endLine: 3,
     });
 
     // Verify return structure
@@ -177,7 +177,7 @@ describe('Backward Compatibility - Return Types', () => {
       code: 'const x = 1;',
       functionName: 'test',
       startLine: 1,
-      endLine: 1
+      endLine: 1,
     });
 
     // All results should have these fields

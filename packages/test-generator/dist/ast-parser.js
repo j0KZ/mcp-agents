@@ -25,13 +25,7 @@ export class ASTParser {
         try {
             const ast = parse(content, {
                 sourceType: 'module',
-                plugins: [
-                    'typescript',
-                    'jsx',
-                    'decorators-legacy',
-                    'classProperties',
-                    'objectRestSpread',
-                ],
+                plugins: ['typescript', 'jsx', 'decorators-legacy', 'classProperties', 'objectRestSpread'],
                 errorRecovery: true,
             });
             const functions = [];

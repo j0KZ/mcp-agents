@@ -1,7 +1,7 @@
 {
   "name": "@j0kz/mcp-agents",
   "version": "1.0.31",
-  "description": "9 professional MCP agents including workflow orchestrator for AI code editors - Smart Reviewer, Test Generator, Architecture Analyzer, and more. Works with Claude Code, Cursor, Windsurf, and any MCP-compatible editor.",
+  "description": "11-package monorepo with 9 professional MCP agents plus shared utilities - Smart Reviewer, Test Generator, Architecture Analyzer, Orchestrator, and more. Works with Claude Code, Cursor, Windsurf, and any MCP-compatible editor.",
   "type": "module",
   "private": true,
   "workspaces": [
@@ -41,8 +41,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@j0kz/orchestrator-mcp": "^1.0.30",
-    "@modelcontextprotocol/sdk": "^1.18.2"
+    "@modelcontextprotocol/sdk": "^1.19.1"
   },
   "keywords": [
     "mcp",

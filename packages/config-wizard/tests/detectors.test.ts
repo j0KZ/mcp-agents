@@ -25,7 +25,7 @@ describe('Project Detector', () => {
       language: 'typescript',
       framework: 'react',
       packageManager: 'npm',
-      hasTests: true
+      hasTests: true,
     };
 
     const recommendations = getRecommendedMCPs(project);
@@ -38,7 +38,7 @@ describe('Project Detector', () => {
       language: 'typescript',
       framework: 'express',
       packageManager: 'npm',
-      hasTests: false
+      hasTests: false,
     };
 
     const recommendations = getRecommendedMCPs(project);
@@ -50,7 +50,7 @@ describe('Project Detector', () => {
     const project: ProjectInfo = {
       language: 'javascript',
       packageManager: 'npm',
-      hasTests: false
+      hasTests: false,
     };
 
     const recommendations = getRecommendedMCPs(project);

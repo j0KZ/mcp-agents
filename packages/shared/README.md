@@ -87,7 +87,7 @@ pipeline
   .addStep({
     name: 'analyze',
     tool: 'architecture-analyzer',
-    execute: async (input) => {
+    execute: async input => {
       // Analyze project architecture
       return { complexity: 45, modularity: 78 };
     },
@@ -96,7 +96,7 @@ pipeline
     name: 'review',
     tool: 'smart-reviewer',
     dependsOn: ['analyze'],
-    execute: async (input) => {
+    execute: async input => {
       // Review based on architecture analysis
       const archResults = input[0];
       return { issues: [], score: archResults.data.modularity };
@@ -129,10 +129,13 @@ watcher.watch('./src', (event, filename) => {
 
 // Batch operations
 const batch = new BatchFileOperations();
-await batch.writeMultiple([
-  { path: './file1.ts', content: 'code1' },
-  { path: './file2.ts', content: 'code2' },
-], { concurrency: 5 });
+await batch.writeMultiple(
+  [
+    { path: './file1.ts', content: 'code1' },
+    { path: './file2.ts', content: 'code2' },
+  ],
+  { concurrency: 5 }
+);
 ```
 
 ### 2. Caching (`cache`)
@@ -167,12 +170,7 @@ console.log(`Hit rate: ${stats.hitRate}%`);
 Monitor and optimize execution performance.
 
 ```typescript
-import {
-  PerformanceMonitor,
-  measure,
-  batchProcess,
-  parallelProcess,
-} from '@mcp-tools/shared';
+import { PerformanceMonitor, measure, batchProcess, parallelProcess } from '@mcp-tools/shared';
 
 // Performance monitoring
 const monitor = new PerformanceMonitor();
@@ -182,20 +180,13 @@ const metrics = monitor.stop();
 console.log(`Duration: ${metrics.duration}ms`);
 
 // Measure function execution
-const { result, duration } = await measure(
-  async () => expensiveOperation(),
-  'operation-name'
-);
+const { result, duration } = await measure(async () => expensiveOperation(), 'operation-name');
 
 // Batch processing with concurrency limit
-const results = await batchProcess(
-  items,
-  async (item) => processItem(item),
-  {
-    concurrency: 5,
-    onProgress: (completed, total) => console.log(`${completed}/${total}`),
-  }
-);
+const results = await batchProcess(items, async item => processItem(item), {
+  concurrency: 5,
+  onProgress: (completed, total) => console.log(`${completed}/${total}`),
+});
 
 // Parallel processing
 const results = await parallelProcess(
@@ -210,16 +201,16 @@ const results = await parallelProcess(
 Orchestrate multiple MCP tools working together.
 
 ```typescript
-import {
-  MCPPipeline,
-  MCPIntegration,
-  MCPWorkflow,
-  MCPEventBus,
-} from '@mcp-tools/shared';
+import { MCPPipeline, MCPIntegration, MCPWorkflow, MCPEventBus } from '@mcp-tools/shared';
 
 // Pipeline: Sequential with dependencies
 const pipeline = new MCPPipeline();
-pipeline.addStep({ name: 'step1', execute: async () => { /*...*/ } });
+pipeline.addStep({
+  name: 'step1',
+  execute: async () => {
+    /*...*/
+  },
+});
 const result = await pipeline.execute();
 
 // Integration: Register and call tools
@@ -235,20 +226,20 @@ await integration.parallel([
 // Chain operations
 await integration.chain(initialInput, [
   { tool: 'tool1', method: 'process' },
-  { tool: 'tool2', method: 'transform', transform: (data) => data.output },
+  { tool: 'tool2', method: 'transform', transform: data => data.output },
 ]);
 
 // Workflow: Conditional execution
 const workflow = new MCPWorkflow('my-workflow');
 workflow
   .step('scan', 'security-scanner', 'scan')
-  .step('test', 'test-generator', 'generate', {}, (results) => {
+  .step('test', 'test-generator', 'generate', {}, results => {
     return results['scan'].data.vulnerabilities.length > 0;
   });
 
 // Event bus: Loosely coupled communication
 const eventBus = new MCPEventBus();
-eventBus.on('file:changed', (data) => {
+eventBus.on('file:changed', data => {
   console.log('File changed:', data.filePath);
 });
 eventBus.emit('file:changed', { filePath: './src/index.ts' });
@@ -373,12 +364,7 @@ MCP_TOOLS.SMART_REVIEWER; // 'smart-reviewer'
 ### Pattern 1: MCP Tool with Caching
 
 ```typescript
-import {
-  FileSystemManager,
-  AnalysisCache,
-  generateHash,
-  MCPResult,
-} from '@mcp-tools/shared';
+import { FileSystemManager, AnalysisCache, generateHash, MCPResult } from '@mcp-tools/shared';
 
 export class MyMCPTool {
   private fsManager: FileSystemManager;
@@ -428,7 +414,7 @@ async function processProject(projectPath: string) {
   // Process in batches
   const results = await batchProcess(
     files,
-    async (file) => {
+    async file => {
       const content = await fsManager.readFile(file, true);
       return analyzeFile(content);
     },
@@ -471,7 +457,7 @@ pipeline
     name: 'review',
     tool: 'reviewer',
     dependsOn: ['analyze'],
-    execute: async (input) => {
+    execute: async input => {
       const archResults = input[0];
       const tool = integration.getTool('reviewer');
       return tool.review(archResults.data.problematicFiles);
@@ -481,7 +467,7 @@ pipeline
     name: 'refactor',
     tool: 'refactorer',
     dependsOn: ['review'],
-    execute: async (input) => {
+    execute: async input => {
       const reviewResults = input[0];
       const tool = integration.getTool('refactorer');
       return tool.suggestRefactorings(reviewResults.data.issues);
@@ -500,22 +486,26 @@ const eventBus = new MCPEventBus();
 const watcher = new FileWatcher(500);
 
 // Tool 1: Watch for file changes
-watcher.watch('./src', (event, filename) => {
-  eventBus.emit(EVENT_TYPE.FILE_CHANGED, {
-    event,
-    filePath: filename,
-    timestamp: new Date().toISOString(),
-  });
-}, { recursive: true });
+watcher.watch(
+  './src',
+  (event, filename) => {
+    eventBus.emit(EVENT_TYPE.FILE_CHANGED, {
+      event,
+      filePath: filename,
+      timestamp: new Date().toISOString(),
+    });
+  },
+  { recursive: true }
+);
 
 // Tool 2: Analyze on file change
-eventBus.on(EVENT_TYPE.FILE_CHANGED, async (data) => {
+eventBus.on(EVENT_TYPE.FILE_CHANGED, async data => {
   const result = await analyzer.analyze(data.filePath);
   eventBus.emit(EVENT_TYPE.ANALYSIS_COMPLETED, { result });
 });
 
 // Tool 3: Generate tests on analysis completion
-eventBus.on(EVENT_TYPE.ANALYSIS_COMPLETED, async (data) => {
+eventBus.on(EVENT_TYPE.ANALYSIS_COMPLETED, async data => {
   if (data.result.issues.length > 0) {
     await testGenerator.generateTests(data.result);
   }
@@ -526,12 +516,12 @@ eventBus.on(EVENT_TYPE.ANALYSIS_COMPLETED, async (data) => {
 
 Typical performance improvements with shared utilities:
 
-| Operation | Without Cache | With Cache | Improvement |
-|-----------|---------------|------------|-------------|
-| File Read (single) | 5-10ms | <1ms | **90%+** |
-| File Read (batch 100) | 500-1000ms | 50-100ms | **80-90%** |
-| Analysis (repeated) | 100-200ms | <5ms | **95%+** |
-| Find Files (glob) | 50-100ms | 10-20ms | **70-80%** |
+| Operation             | Without Cache | With Cache | Improvement |
+| --------------------- | ------------- | ---------- | ----------- |
+| File Read (single)    | 5-10ms        | <1ms       | **90%+**    |
+| File Read (batch 100) | 500-1000ms    | 50-100ms   | **80-90%**  |
+| Analysis (repeated)   | 100-200ms     | <5ms       | **95%+**    |
+| Find Files (glob)     | 50-100ms      | 10-20ms    | **70-80%**  |
 
 Cache hit rates in production: **80-95%**
 

@@ -314,11 +314,7 @@ describe('Orchestrator Integration Tests', () => {
 
     it('should handle pre-merge PR scenario', () => {
       // Simulate PR with multiple changed files
-      const changedFiles = [
-        'src/api/auth.ts',
-        'src/api/users.ts',
-        'src/middleware/jwt.ts',
-      ];
+      const changedFiles = ['src/api/auth.ts', 'src/api/users.ts', 'src/middleware/jwt.ts'];
       const repoRoot = '/home/user/my-app';
 
       const workflow = createPreMergeWorkflow(changedFiles, repoRoot);
@@ -347,9 +343,7 @@ describe('Orchestrator Integration Tests', () => {
 
       // Should generate security report
       expect(steps[0].config.params.projectPath).toBe(projectPath);
-      expect(steps[0].config.params.outputPath).toBe(
-        '/var/www/production-app/reports/security.md'
-      );
+      expect(steps[0].config.params.outputPath).toBe('/var/www/production-app/reports/security.md');
 
       // Should analyze architecture with graph
       expect(steps[1].config.params.projectPath).toBe(projectPath);

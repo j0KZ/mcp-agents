@@ -9,6 +9,7 @@
 ## 🎯 Objectives
 
 Reduce code complexity in high-complexity modules while maintaining:
+
 - ✅ 100% backward compatibility
 - ✅ Zero breaking changes to public APIs
 - ✅ Equal or better performance
@@ -19,6 +20,7 @@ Reduce code complexity in high-complexity modules while maintaining:
 ## 📊 Target Files
 
 ### 1. `packages/refactor-assistant/src/refactorer.ts`
+
 - **Current Complexity:** 194 (CRITICAL)
 - **Current LOC:** 1,009
 - **Target Complexity:** <50 per module
@@ -29,6 +31,7 @@ Reduce code complexity in high-complexity modules while maintaining:
   - Single file contains 8 large functions
 
 **Refactoring Strategy:**
+
 ```
 refactorer.ts (1009 LOC)
 ├── core/
@@ -47,6 +50,7 @@ refactorer.ts (1009 LOC)
 ```
 
 ### 2. `packages/smart-reviewer/src/analyzer.ts`
+
 - **Current Complexity:** 100
 - **Current LOC:** 412
 - **Target Complexity:** <40 per module
@@ -56,6 +60,7 @@ refactorer.ts (1009 LOC)
   - Large detectIssues method
 
 **Refactoring Strategy:**
+
 ```
 analyzer.ts (412 LOC)
 ├── core/
@@ -70,6 +75,7 @@ analyzer.ts (412 LOC)
 ```
 
 ### 3. `packages/security-scanner/src/scanner.ts`
+
 - **Current Complexity:** 70
 - **Current LOC:** 481
 - **Target Complexity:** <30 per module
@@ -80,6 +86,7 @@ analyzer.ts (412 LOC)
   - Low comment density (6%)
 
 **Refactoring Strategy:**
+
 ```
 scanner.ts (481 LOC)
 ├── core/
@@ -99,18 +106,21 @@ scanner.ts (481 LOC)
 ## 🧪 Testing Strategy
 
 ### API Compatibility Tests ✅
+
 - **Location:** `tests/api-compatibility.test.ts`
 - **Coverage:** 11 tests across 3 packages
 - **Status:** All passing (11/11)
 - **Purpose:** Ensure no breaking changes to public APIs
 
 ### Performance Benchmarks ✅
+
 - **Location:** `benchmarks/complexity-baseline.js`
 - **Metrics:** ops/sec, mean time, RME%
 - **Baseline:** Will be captured before refactoring
 - **Target:** ≥90% of baseline performance
 
 ### Unit Tests
+
 - **Status:** All existing tests must continue to pass
 - **New Tests:** Add tests for new internal modules
 - **Coverage:** Maintain or improve current coverage
@@ -120,17 +130,20 @@ scanner.ts (481 LOC)
 ## 📋 Refactoring Phases
 
 ### Phase 1: Infrastructure Setup ✅
+
 - [x] Create refactor/complexity-reduction branch
 - [x] Set up API compatibility tests
 - [x] Create performance benchmark suite
 - [x] Document refactoring plan
 
 ### Phase 2: Baseline Capture 🔄
+
 - [ ] Run performance benchmarks (before)
 - [ ] Capture current metrics
 - [ ] Document current API surface
 
 ### Phase 3: Refactor `refactorer.ts`
+
 - [ ] Extract `extract-function` logic
 - [ ] Extract `convert-async` logic
 - [ ] Extract `simplify-conditionals` logic
@@ -142,6 +155,7 @@ scanner.ts (481 LOC)
 - [ ] Fix any issues
 
 ### Phase 4: Refactor `analyzer.ts`
+
 - [ ] Extract quality detection logic
 - [ ] Extract complexity detection logic
 - [ ] Extract metrics calculation
@@ -151,6 +165,7 @@ scanner.ts (481 LOC)
 - [ ] Fix any issues
 
 ### Phase 5: Refactor `scanner.ts`
+
 - [ ] Extract OWASP scanner
 - [ ] Extract finding aggregation logic
 - [ ] Extract report generation
@@ -161,6 +176,7 @@ scanner.ts (481 LOC)
 - [ ] Fix any issues
 
 ### Phase 6: Verification
+
 - [ ] Run all unit tests
 - [ ] Run API compatibility tests
 - [ ] Run performance benchmarks (after)
@@ -169,6 +185,7 @@ scanner.ts (481 LOC)
 - [ ] Code review checklist
 
 ### Phase 7: Documentation & Cleanup
+
 - [ ] Update JSDoc comments
 - [ ] Update README if needed
 - [ ] Add migration guide if needed
@@ -176,6 +193,7 @@ scanner.ts (481 LOC)
 - [ ] Clean up TODO comments
 
 ### Phase 8: Pull Request
+
 - [ ] Create comprehensive PR description
 - [ ] Include before/after metrics
 - [ ] Include compatibility test results
@@ -187,6 +205,7 @@ scanner.ts (481 LOC)
 ## 🎯 Success Criteria
 
 ### Code Quality
+
 - [ ] All files <500 LOC
 - [ ] All modules complexity <50
 - [ ] No duplicate code blocks >20
@@ -194,17 +213,20 @@ scanner.ts (481 LOC)
 - [ ] Comment density >10%
 
 ### Compatibility
+
 - [ ] All 11 API compatibility tests passing
 - [ ] All existing unit tests passing
 - [ ] Zero breaking changes to public APIs
 - [ ] All exports remain identical
 
 ### Performance
+
 - [ ] Performance ≥90% of baseline
 - [ ] No regression in critical paths
 - [ ] Memory usage stable or improved
 
 ### Documentation
+
 - [ ] All new modules have JSDoc
 - [ ] README updated if needed
 - [ ] CHANGELOG updated
@@ -215,27 +237,32 @@ scanner.ts (481 LOC)
 ## 🚀 Gradual Rollout Strategy
 
 ### Stage 1: Internal Review
+
 - Run all tests internally
 - Verify metrics
 - Self-review code
 
 ### Stage 2: Feature Branch
+
 - Create PR from refactor/complexity-reduction → main
 - Automated tests run
 - Request peer review
 
 ### Stage 3: Beta Testing (Optional)
+
 - If available, deploy to beta/staging
 - Monitor for issues
 - Gather feedback
 
 ### Stage 4: Production Release
+
 - Merge to main
 - Version bump (minor: 1.1.0 or patch: 1.0.17)
 - Monitor metrics post-release
 - Be ready to hotfix if needed
 
 ### Stage 5: Post-Release Monitoring
+
 - Watch for GitHub issues
 - Monitor npm download stats
 - Check for regression reports
@@ -246,6 +273,7 @@ scanner.ts (481 LOC)
 ## 📈 Metrics Tracking
 
 ### Before Refactoring
+
 ```
 | File           | Complexity | LOC  | Duplicates | Nested Ternaries |
 |----------------|-----------|------|------------|------------------|
@@ -256,6 +284,7 @@ scanner.ts (481 LOC)
 ```
 
 ### After Refactoring (Target)
+
 ```
 | File           | Complexity | LOC  | Duplicates | Nested Ternaries |
 |----------------|-----------|------|------------|------------------|
@@ -266,6 +295,7 @@ scanner.ts (481 LOC)
 ```
 
 **Target Improvements:**
+
 - 📉 Complexity: -58% (364 → 150)
 - 📐 LOC: Maintained (split into modules)
 - 🔄 Duplicates: -81% (80 → 15)
@@ -276,21 +306,25 @@ scanner.ts (481 LOC)
 ## ⚠️ Risk Mitigation
 
 ### Risk 1: Breaking Changes
+
 - **Mitigation:** API compatibility test suite
 - **Detection:** Automated tests
 - **Recovery:** Revert changes, fix, re-test
 
 ### Risk 2: Performance Regression
+
 - **Mitigation:** Performance benchmarks before/after
 - **Detection:** Automated benchmark comparison
 - **Recovery:** Optimize hot paths, consider rollback
 
 ### Risk 3: Bug Introduction
+
 - **Mitigation:** Maintain high test coverage
 - **Detection:** Unit tests, integration tests
 - **Recovery:** Quick fixes, patches
 
 ### Risk 4: Merge Conflicts
+
 - **Mitigation:** Regular rebases with main
 - **Detection:** Git conflict markers
 - **Recovery:** Careful manual resolution
