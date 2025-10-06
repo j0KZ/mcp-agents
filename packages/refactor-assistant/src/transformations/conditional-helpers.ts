@@ -6,8 +6,9 @@ export function applyGuardClauses(code: string): { code: string; changed: boolea
   let changed = false;
 
   // Pattern: if (condition) { ... } else { return; } (safe with limits)
+  // Added length limit to return value to prevent ReDoS
   const guardPattern =
-    /if\s?\(([^)]{1,200})\)\s?\{([^}]{1,500})\}\s?else\s?\{\s?return\s?([^;]*);\s?\}/g;
+    /if\s?\(([^)]{1,200})\)\s?\{([^}]{1,500})\}\s?else\s?\{\s?return\s?([^;]{0,100});\s?\}/g;
 
   const result = code.replace(guardPattern, (_match, condition, ifBody, returnValue) => {
     changed = true;
