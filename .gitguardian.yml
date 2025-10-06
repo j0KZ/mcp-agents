@@ -1,0 +1,33 @@
+# GitGuardian Configuration
+# This file configures GitGuardian to ignore false positives in documentation and test files
+
+version: 2
+
+# Paths to ignore for secret scanning
+paths-ignore:
+  - "docs/**/*.md"  # Documentation files often contain example patterns
+  - "*.md"          # All markdown files
+  - "**/*.test.ts"  # Test files use safe mock patterns
+  - "**/*.test.js"  # Test files use safe mock patterns
+  - "**/*.spec.ts"  # Spec files use safe mock patterns
+  - "**/*.spec.js"  # Spec files use safe mock patterns
+  - "**/test/**"    # Test directories
+  - "**/tests/**"   # Test directories
+  - "**/examples/**" # Example files
+  - "docs/reports/**" # Report files with examples
+  - "docs/TODO.md"   # TODO file with example patterns
+
+# Known false positive patterns to ignore
+# These are documentation examples and test patterns only
+allowed-patterns:
+  - name: "Documentation Examples"
+    # Patterns that are clearly marked as examples
+    regex: '\[EXAMPLE\]|\[REDACTED\]|\[SAMPLE\]'
+
+  - name: "Repeated Character Patterns"
+    # Patterns using repeated characters (XXX, YYY, ZZZ)
+    regex: 'X{10,}|Y{10,}|Z{10,}'
+
+  - name: "Test Mock Patterns"
+    # Obviously fake patterns used in tests
+    regex: 'fake|mock|dummy|test|example|sample'

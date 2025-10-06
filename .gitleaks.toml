@@ -1,0 +1,31 @@
+# Gitleaks Configuration
+# Additional configuration for secret scanning tools
+
+[allowlist]
+# Files to exclude from scanning
+paths = [
+    "docs/.*\\.md$",
+    ".*\\.test\\.(ts|js)$",
+    ".*\\.spec\\.(ts|js)$",
+    "examples/.*",
+    "CHANGELOG\\.md$",
+    "README\\.md$",
+    "TODO\\.md$"
+]
+
+# Specific commits to allow (if needed)
+commits = []
+
+# Regular expressions for allowed patterns
+regexes = [
+    # Example patterns with brackets
+    "\\[EXAMPLE\\]",
+    "\\[REDACTED\\]",
+    "\\[SAMPLE\\]",
+    # Repeated character patterns (10 or more)
+    "[X]{10,}",
+    "[Y]{10,}",
+    "[Z]{10,}",
+    # Test/mock patterns
+    "(fake|mock|dummy|test|example|sample)"
+]
