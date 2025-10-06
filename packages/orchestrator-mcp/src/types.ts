@@ -12,9 +12,9 @@ export type WorkflowName = 'pre-commit' | 'pre-merge' | 'quality-audit';
  */
 export interface WorkflowStep {
   name: string;
-  mcp: string;        // MCP name (e.g., 'smart-reviewer')
-  tool: string;       // Tool name (e.g., 'review_file')
-  params?: any;       // Tool parameters
+  mcp: string; // MCP name (e.g., 'smart-reviewer')
+  tool: string; // Tool name (e.g., 'review_file')
+  params?: any; // Tool parameters
   dependsOn?: string[]; // Dependency on other steps
 }
 

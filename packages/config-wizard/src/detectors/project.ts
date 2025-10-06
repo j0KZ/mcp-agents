@@ -18,7 +18,7 @@ export async function detectProject(): Promise<ProjectInfo> {
   const info: ProjectInfo = {
     language: 'unknown',
     packageManager: 'npm',
-    hasTests: false
+    hasTests: false,
   };
 
   // Check for package.json
@@ -65,13 +65,7 @@ export async function detectProject(): Promise<ProjectInfo> {
     }
 
     // Check for tests
-    info.hasTests = !!(
-      pkg.scripts?.test ||
-      deps.jest ||
-      deps.vitest ||
-      deps.mocha ||
-      deps.ava
-    );
+    info.hasTests = !!(pkg.scripts?.test || deps.jest || deps.vitest || deps.mocha || deps.ava);
   } else if (await fs.pathExists(path.join(cwd, 'requirements.txt'))) {
     info.language = 'python';
   }
@@ -87,7 +81,11 @@ export function getRecommendedMCPs(project: ProjectInfo): string[] {
     recommendations.push('test-generator');
   }
 
-  if (project.framework === 'express' || project.framework === 'fastify' || project.framework === 'nest') {
+  if (
+    project.framework === 'express' ||
+    project.framework === 'fastify' ||
+    project.framework === 'nest'
+  ) {
     recommendations.push('api-designer', 'db-schema');
   }
 

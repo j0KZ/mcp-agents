@@ -13,10 +13,7 @@ import {
   MongoField,
 } from '../types.js';
 
-import {
-  STRING_LIMITS,
-  NUMERIC_LIMITS,
-} from '../constants/schema-limits.js';
+import { STRING_LIMITS, NUMERIC_LIMITS } from '../constants/schema-limits.js';
 
 export function buildSQLSchema(
   entities: string[],
@@ -48,28 +45,58 @@ export function buildSQLSchema(
     // Common fields based on entity type
     if (entity.includes('user') || entity.includes('customer')) {
       columns.push(
-        { name: 'email', type: 'VARCHAR', length: STRING_LIMITS.EMAIL_LENGTH, unique: true, nullable: false },
+        {
+          name: 'email',
+          type: 'VARCHAR',
+          length: STRING_LIMITS.EMAIL_LENGTH,
+          unique: true,
+          nullable: false,
+        },
         { name: 'name', type: 'VARCHAR', length: STRING_LIMITS.NAME_LENGTH, nullable: false },
-        { name: 'password_hash', type: 'VARCHAR', length: STRING_LIMITS.PASSWORD_HASH_LENGTH, nullable: false }
+        {
+          name: 'password_hash',
+          type: 'VARCHAR',
+          length: STRING_LIMITS.PASSWORD_HASH_LENGTH,
+          nullable: false,
+        }
       );
     } else if (entity.includes('product')) {
       columns.push(
         { name: 'name', type: 'VARCHAR', length: STRING_LIMITS.NAME_LENGTH, nullable: false },
         { name: 'description', type: 'TEXT' },
-        { name: 'price', type: 'DECIMAL', precision: NUMERIC_LIMITS.DEFAULT_PRICE_PRECISION, scale: NUMERIC_LIMITS.DEFAULT_PRICE_SCALE, nullable: false },
+        {
+          name: 'price',
+          type: 'DECIMAL',
+          precision: NUMERIC_LIMITS.DEFAULT_PRICE_PRECISION,
+          scale: NUMERIC_LIMITS.DEFAULT_PRICE_SCALE,
+          nullable: false,
+        },
         { name: 'stock', type: 'INTEGER', defaultValue: NUMERIC_LIMITS.DEFAULT_STOCK_VALUE }
       );
     } else {
-      columns.push(
-        { name: 'name', type: 'VARCHAR', length: STRING_LIMITS.NAME_LENGTH, nullable: false }
-      );
+      columns.push({
+        name: 'name',
+        type: 'VARCHAR',
+        length: STRING_LIMITS.NAME_LENGTH,
+        nullable: false,
+      });
     }
 
     // Timestamps
     if (options.includeTimestamps) {
       columns.push(
-        { name: 'created_at', type: 'TIMESTAMP', defaultValue: 'CURRENT_TIMESTAMP', nullable: false },
-        { name: 'updated_at', type: 'TIMESTAMP', defaultValue: 'CURRENT_TIMESTAMP', nullable: false }
+        {
+          name: 'created_at',
+          type: 'TIMESTAMP',
+          defaultValue: 'CURRENT_TIMESTAMP',
+          nullable: false,
+        },
+        {
+          name: 'updated_at',
+          type: 'TIMESTAMP',
+          defaultValue: 'CURRENT_TIMESTAMP',
+          nullable: false,
+        }
       );
     }
 
@@ -82,9 +109,9 @@ export function buildSQLSchema(
       name: entity + 's',
       columns,
       primaryKey: 'id',
-      indexes: options.addIndexes ? [
-        { name: `idx_${entity}s_created_at`, columns: ['created_at'] }
-      ] : [],
+      indexes: options.addIndexes
+        ? [{ name: `idx_${entity}s_created_at`, columns: ['created_at'] }]
+        : [],
     });
   }
 
@@ -147,9 +174,9 @@ export function buildMongoSchema(
     collections.push({
       name: entity + 's',
       fields,
-      indexes: options.addIndexes ? [
-        { name: `idx_${entity}s_created`, columns: ['createdAt'] }
-      ] : [],
+      indexes: options.addIndexes
+        ? [{ name: `idx_${entity}s_created`, columns: ['createdAt'] }]
+        : [],
     });
   }
 
@@ -176,7 +203,9 @@ export function extractEntities(requirements: string): string[] {
 
     // Match patterns like "users have", "products contain", etc.
     // Limit word length to prevent polynomial regex
-    const entityMatch = line.match(new RegExp(`(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})\\s+(have|has|contain|include|store)`));
+    const entityMatch = line.match(
+      new RegExp(`(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})\\s+(have|has|contain|include|store)`)
+    );
     if (entityMatch) {
       const entity = entityMatch[1].replace(/s$/, ''); // Singular
       if (!entities.includes(entity)) {
@@ -185,7 +214,11 @@ export function extractEntities(requirements: string): string[] {
     }
 
     // Match "X and Y" patterns
-    const multiMatch = line.match(new RegExp(`(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})\\s+and\\s+(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})`));
+    const multiMatch = line.match(
+      new RegExp(
+        `(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})\\s+and\\s+(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})`
+      )
+    );
     if (multiMatch) {
       const entity1 = multiMatch[1].replace(/s$/, '');
       const entity2 = multiMatch[2].replace(/s$/, '');
@@ -207,7 +240,11 @@ export function extractRelationships(requirements: string, _entities: string[]):
 
     // Pattern: "users have many orders"
     // Limit word length to prevent polynomial regex
-    const manyMatch = line.match(new RegExp(`(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})\\s+have\\s+many\\s+(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})`));
+    const manyMatch = line.match(
+      new RegExp(
+        `(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})\\s+have\\s+many\\s+(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})`
+      )
+    );
     if (manyMatch) {
       relationships.push({
         name: `${manyMatch[1]}_${manyMatch[2]}`,
@@ -218,7 +255,11 @@ export function extractRelationships(requirements: string, _entities: string[]):
     }
 
     // Pattern: "orders belong to users"
-    const belongsMatch = line.match(new RegExp(`(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})\\s+belong\\s+to\\s+(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})`));
+    const belongsMatch = line.match(
+      new RegExp(
+        `(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})\\s+belong\\s+to\\s+(\\w{1,${STRING_LIMITS.MAX_WORD_LENGTH}})`
+      )
+    );
     if (belongsMatch) {
       relationships.push({
         name: `${belongsMatch[2]}_${belongsMatch[1]}`,

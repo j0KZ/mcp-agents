@@ -166,3 +166,12 @@ licenses.json
 
 # Benchmark results
 BENCHMARK_RESULTS.md
+benchmark-*.json
+perf-*.log
+
+# Cache directories
+.cache/
+*.cache
+
+# Editor artifacts
+.history/

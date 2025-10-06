@@ -86,7 +86,8 @@ export class ProjectScanner {
     const imports: string[] = [];
 
     // ES6 imports
-    const es6ImportRegex = /import\s+(?:(?:\{[^}]*\}|\*\s+as\s+\w+|\w+)\s+from\s+)?['"]([^'"]+)['"]/g;
+    const es6ImportRegex =
+      /import\s+(?:(?:\{[^}]*\}|\*\s+as\s+\w+|\w+)\s+from\s+)?['"]([^'"]+)['"]/g;
     let match;
     while ((match = es6ImportRegex.exec(content)) !== null) {
       imports.push(match[1]);

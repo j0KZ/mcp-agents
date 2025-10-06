@@ -2,13 +2,10 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { ArchitectureAnalyzer } from './analyzer.js';
 import { AnalysisConfig } from './types.js';
-import { validateDirectoryPath, validatePath } from '@j0kz/shared';
+import { validateDirectoryPath, validatePath, MCPError, getErrorMessage } from '@j0kz/shared';
 
 class ArchitectureAnalyzerServer {
   private server: Server;
@@ -38,7 +35,8 @@ class ArchitectureAnalyzerServer {
       tools: [
         {
           name: 'analyze_architecture',
-          description: 'Analyze project architecture, detect circular dependencies, layer violations, and generate dependency graphs',
+          description:
+            'Analyze project architecture, detect circular dependencies, layer violations, and generate dependency graphs',
           inputSchema: {
             type: 'object',
             properties: {
@@ -69,7 +67,8 @@ class ArchitectureAnalyzerServer {
                   },
                   layerRules: {
                     type: 'object',
-                    description: 'Layer dependency rules (e.g., {"presentation": ["business"], "business": ["data"]})',
+                    description:
+                      'Layer dependency rules (e.g., {"presentation": ["business"], "business": ["data"]})',
                   },
                 },
               },
@@ -113,13 +112,16 @@ class ArchitectureAnalyzerServer {
     }));
 
     // Handle tool calls
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
 
       try {
         switch (name) {
           case 'analyze_architecture': {
-            const { projectPath, config } = args as { projectPath: string; config?: AnalysisConfig };
+            const { projectPath, config } = args as {
+              projectPath: string;
+              config?: AnalysisConfig;
+            };
             const validatedPath = validateDirectoryPath(projectPath);
             const result = await this.analyzer.analyzeArchitecture(validatedPath, config);
 
@@ -127,17 +129,21 @@ class ArchitectureAnalyzerServer {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify({
-                    summary: {
-                      totalModules: result.metrics.totalModules,
-                      totalDependencies: result.metrics.totalDependencies,
-                      circularDependencies: result.metrics.circularDependencies,
-                      layerViolations: result.metrics.layerViolations,
-                      cohesion: `${result.metrics.cohesion}%`,
-                      coupling: `${result.metrics.coupling}%`,
+                  text: JSON.stringify(
+                    {
+                      summary: {
+                        totalModules: result.metrics.totalModules,
+                        totalDependencies: result.metrics.totalDependencies,
+                        circularDependencies: result.metrics.circularDependencies,
+                        layerViolations: result.metrics.layerViolations,
+                        cohesion: `${result.metrics.cohesion}%`,
+                        coupling: `${result.metrics.coupling}%`,
+                      },
+                      ...result,
                     },
-                    ...result,
-                  }, null, 2),
+                    null,
+                    2
+                  ),
                 },
               ],
             };
@@ -151,7 +157,7 @@ class ArchitectureAnalyzerServer {
             const module = result.modules.find(m => m.path === validatedModulePath);
 
             if (!module) {
-              throw new Error(`Module not found: ${validatedModulePath}`);
+              throw new MCPError('ARCH_002', { module: validatedModulePath });
             }
 
             const dependencies = result.dependencies.filter(d => d.from === validatedModulePath);
@@ -161,16 +167,20 @@ class ArchitectureAnalyzerServer {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify({
-                    module,
-                    dependencies,
-                    dependents,
-                    stats: {
-                      dependencyCount: dependencies.length,
-                      dependentCount: dependents.length,
-                      linesOfCode: module.linesOfCode,
+                  text: JSON.stringify(
+                    {
+                      module,
+                      dependencies,
+                      dependents,
+                      stats: {
+                        dependencyCount: dependencies.length,
+                        dependentCount: dependents.length,
+                        linesOfCode: module.linesOfCode,
+                      },
                     },
-                  }, null, 2),
+                    null,
+                    2
+                  ),
                 },
               ],
             };
@@ -188,25 +198,40 @@ class ArchitectureAnalyzerServer {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify({
-                    circularDependencies: result.circularDependencies,
-                    count: result.circularDependencies.length,
-                  }, null, 2),
+                  text: JSON.stringify(
+                    {
+                      circularDependencies: result.circularDependencies,
+                      count: result.circularDependencies.length,
+                    },
+                    null,
+                    2
+                  ),
                 },
               ],
             };
           }
 
           default:
-            throw new Error(`Unknown tool: ${name}`);
+            throw new MCPError('ARCH_003', { tool: name });
         }
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
+        const errorMessage = getErrorMessage(error);
+        const errorCode = error instanceof MCPError ? error.code : 'UNKNOWN';
+
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify({ error: errorMessage }, null, 2),
+              text: JSON.stringify(
+                {
+                  success: false,
+                  error: errorMessage,
+                  code: errorCode,
+                  ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
+                },
+                null,
+                2
+              ),
             },
           ],
           isError: true,

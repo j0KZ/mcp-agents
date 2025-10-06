@@ -89,11 +89,7 @@ export class MCPPipeline {
       const action = step.config.action || 'execute';
       const params = input || step.config.params || {};
 
-      const data = await this.mcpClient.invoke(
-        step.tool,
-        action,
-        params
-      );
+      const data = await this.mcpClient.invoke(step.tool, action, params);
 
       return {
         success: true,

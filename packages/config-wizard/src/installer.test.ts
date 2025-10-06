@@ -7,7 +7,7 @@ import { installMCPs } from './installer.js';
 
 // Mock execa
 vi.mock('execa', () => ({
-  execa: vi.fn().mockResolvedValue({ stdout: '', stderr: '' })
+  execa: vi.fn().mockResolvedValue({ stdout: '', stderr: '' }),
 }));
 
 // Mock spinner
@@ -15,8 +15,8 @@ vi.mock('./utils/spinner.js', () => ({
   spinner: vi.fn(() => ({
     text: '',
     succeed: vi.fn(),
-    fail: vi.fn()
-  }))
+    fail: vi.fn(),
+  })),
 }));
 
 // Mock logger
@@ -24,8 +24,8 @@ vi.mock('./utils/logger.js', () => ({
   logger: {
     warn: vi.fn(),
     info: vi.fn(),
-    error: vi.fn()
-  }
+    error: vi.fn(),
+  },
 }));
 
 describe('installMCPs', () => {
@@ -96,7 +96,7 @@ describe('installMCPs', () => {
     expect(calls).toEqual([
       '@j0kz/smart-reviewer-mcp@^1.0.0',
       '@j0kz/test-generator-mcp@^1.0.0',
-      '@j0kz/security-scanner-mcp@^1.0.0'
+      '@j0kz/security-scanner-mcp@^1.0.0',
     ]);
   });
 

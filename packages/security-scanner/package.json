@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/security-scanner-mcp",
-  "version": "1.0.30",
+  "version": "1.0.31",
   "description": "Security Scanner MCP - Detect vulnerabilities, hardcoded secrets, SQL injection, XSS, and OWASP Top 10 issues. Works with Claude Code, Cursor, Windsurf, Roo Code, and any MCP-compatible editor.",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,7 +22,7 @@
     "start": "node dist/mcp-server.js"
   },
   "dependencies": {
-    "@j0kz/shared": "^1.0.16",
+    "@j0kz/shared": "^1.0.30",
     "@modelcontextprotocol/sdk": "^1.19.1",
     "semver": "^7.7.2",
     "typescript": "^5.3.3"

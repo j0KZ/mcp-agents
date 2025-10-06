@@ -30,7 +30,6 @@ async function main() {
 
     logger.success('\n✨ Configuration complete!');
     logger.info('Next: Restart your editor to activate MCP tools');
-
   } catch (error) {
     logger.error('\n❌ Configuration failed');
 

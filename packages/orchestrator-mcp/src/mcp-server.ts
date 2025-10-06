@@ -7,11 +7,8 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
-import { MCPPipeline } from '@j0kz/shared';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import { MCPPipeline, MCPError, getErrorMessage } from '@j0kz/shared';
 import { WORKFLOWS, createWorkflow } from './workflows.js';
 import { WorkflowName, WorkflowStep } from './types.js';
 
@@ -117,12 +114,12 @@ class OrchestratorServer {
     }));
 
     // Handle tool calls
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
 
       try {
         if (!args) {
-          throw new Error('Missing arguments');
+          throw new MCPError('ORCH_001', { tool: name });
         }
 
         if (name === 'run_workflow') {
@@ -141,10 +138,11 @@ class OrchestratorServer {
           return this.listWorkflows();
         }
 
-        throw new Error(`Unknown tool: ${name}`);
+        throw new MCPError('ORCH_003', { tool: name });
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : String(error);
+        const errorMessage = getErrorMessage(error);
+        const errorCode = error instanceof MCPError ? error.code : 'UNKNOWN';
+
         return {
           content: [
             {
@@ -153,6 +151,8 @@ class OrchestratorServer {
                 {
                   success: false,
                   error: errorMessage,
+                  code: errorCode,
+                  ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
                 },
                 null,
                 2
@@ -168,11 +168,7 @@ class OrchestratorServer {
   /**
    * Run a pre-built workflow
    */
-  private async runWorkflow(
-    workflowName: WorkflowName,
-    files: string[],
-    projectPath: string
-  ) {
+  private async runWorkflow(workflowName: WorkflowName, files: string[], projectPath: string) {
     const pipeline = createWorkflow(workflowName, files, projectPath);
     const result = await pipeline.execute();
 
@@ -185,7 +181,7 @@ class OrchestratorServer {
               workflow: workflowName,
               success: result.success,
               duration: result.totalDuration,
-              steps: result.steps.map((s) => ({
+              steps: result.steps.map(s => ({
                 name: s.name,
                 success: s.result.success,
                 duration: s.duration,
@@ -230,7 +226,7 @@ class OrchestratorServer {
             {
               success: result.success,
               duration: result.totalDuration,
-              steps: result.steps.map((s) => ({
+              steps: result.steps.map(s => ({
                 name: s.name,
                 success: s.result.success,
                 duration: s.duration,

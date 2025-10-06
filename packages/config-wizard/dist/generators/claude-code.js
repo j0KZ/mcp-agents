@@ -9,19 +9,19 @@ const MCP_PACKAGES = {
     'security-scanner': '@j0kz/security-scanner-mcp',
     'refactor-assistant': '@j0kz/refactor-assistant-mcp',
     'api-designer': '@j0kz/api-designer-mcp',
-    'db-schema': '@j0kz/db-schema-mcp'
+    'db-schema': '@j0kz/db-schema-mcp',
 };
 export function generateClaudeCodeConfig(selections) {
     const config = {
-        mcpServers: {}
+        mcpServers: {},
     };
     for (const mcp of selections.mcps) {
         const packageName = MCP_PACKAGES[mcp];
         if (!packageName)
             continue;
         config.mcpServers[mcp] = {
-            command: "npx",
-            args: [`${packageName}@^1.0.0`]
+            command: 'npx',
+            args: [`${packageName}@^1.0.0`],
         };
     }
     return config;

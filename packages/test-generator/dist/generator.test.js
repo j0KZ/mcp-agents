@@ -21,7 +21,7 @@ describe('Test Generator', () => {
     it('should generate tests', async () => {
         const result = await generator.generateTests(testFile, {
             framework: 'vitest',
-            includeEdgeCases: true
+            includeEdgeCases: true,
         });
         expect(result.fullTestCode).toBeDefined();
         expect(result.fullTestCode).toContain('describe');

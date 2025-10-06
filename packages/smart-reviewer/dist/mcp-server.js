@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { CallToolRequestSchema, ListToolsRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { CodeAnalyzer } from './analyzer.js';
-import { validateFilePath } from '@j0kz/shared';
+import { validateFilePath, MCPError, getErrorMessage } from '@j0kz/shared';
 import { AutoFixer } from './auto-fixer.js';
 class SmartReviewerServer {
     server;
@@ -153,7 +153,7 @@ class SmartReviewerServer {
                         const { filePaths, config: _config } = args;
                         // Validate input
                         if (!Array.isArray(filePaths) || filePaths.length === 0) {
-                            throw new Error('filePaths must be a non-empty array');
+                            throw new MCPError('REV_001', { tool: 'batch_review' });
                         }
                         // Validate all file paths
                         const validatedPaths = filePaths.map(fp => validateFilePath(fp));
@@ -203,9 +203,7 @@ class SmartReviewerServer {
                         const content = await readFile(validatedPath, 'utf-8');
                         const fixResult = await this.autoFixer.generateFixes(content, validatedPath);
                         // Filter by safety if requested
-                        const fixes = safeOnly
-                            ? fixResult.fixes.filter(f => f.safe)
-                            : fixResult.fixes;
+                        const fixes = safeOnly ? fixResult.fixes.filter(f => f.safe) : fixResult.fixes;
                         const diff = this.autoFixer.generateDiff(fixes);
                         return {
                             content: [
@@ -245,9 +243,7 @@ class SmartReviewerServer {
                         try {
                             const fixResult = await this.autoFixer.generateFixes(content, validatedPath);
                             // Only apply safe fixes by default
-                            const fixesToApply = safeOnly
-                                ? fixResult.fixes.filter(f => f.safe)
-                                : fixResult.fixes;
+                            const fixesToApply = safeOnly ? fixResult.fixes.filter(f => f.safe) : fixResult.fixes;
                             if (fixesToApply.length === 0) {
                                 return {
                                     content: [
@@ -291,16 +287,22 @@ class SmartReviewerServer {
                         }
                     }
                     default:
-                        throw new Error(`Unknown tool: ${name}`);
+                        throw new MCPError('REV_002', { tool: name });
                 }
             }
             catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
+                const errorMessage = getErrorMessage(error);
+                const errorCode = error instanceof MCPError ? error.code : 'UNKNOWN';
                 return {
                     content: [
                         {
                             type: 'text',
-                            text: JSON.stringify({ error: errorMessage }, null, 2),
+                            text: JSON.stringify({
+                                success: false,
+                                error: errorMessage,
+                                code: errorCode,
+                                ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
+                            }, null, 2),
                         },
                     ],
                     isError: true,

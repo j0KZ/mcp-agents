@@ -3,14 +3,17 @@ import { OpenAPISpec, GraphQLSchema, ClientGenerationOptions } from '../types.js
 /**
  * Generate TypeScript REST client
  */
-export function generateTypeScriptRestClient(spec: OpenAPISpec, options: ClientGenerationOptions): string {
+export function generateTypeScriptRestClient(
+  spec: OpenAPISpec,
+  options: ClientGenerationOptions
+): string {
   const lines: string[] = [];
 
   // Add imports
   if (options.outputFormat === 'axios') {
     lines.push("import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';");
   } else {
-    lines.push("// Using native fetch API");
+    lines.push('// Using native fetch API');
   }
   lines.push('');
 
@@ -75,22 +78,25 @@ export function generateTypeScriptRestClient(spec: OpenAPISpec, options: ClientG
 /**
  * Generate TypeScript GraphQL client
  */
-export function generateTypeScriptGraphQLClient(_schema: GraphQLSchema, _options: ClientGenerationOptions): string {
+export function generateTypeScriptGraphQLClient(
+  _schema: GraphQLSchema,
+  _options: ClientGenerationOptions
+): string {
   const lines: string[] = [];
 
-  lines.push("// GraphQL client");
-  lines.push("export class GraphQLClient {");
-  lines.push("  constructor(private endpoint: string) {}");
-  lines.push("");
-  lines.push("  async query(query: string, variables?: any): Promise<any> {");
-  lines.push("    const response = await fetch(this.endpoint, {");
+  lines.push('// GraphQL client');
+  lines.push('export class GraphQLClient {');
+  lines.push('  constructor(private endpoint: string) {}');
+  lines.push('');
+  lines.push('  async query(query: string, variables?: any): Promise<any> {');
+  lines.push('    const response = await fetch(this.endpoint, {');
   lines.push("      method: 'POST',");
   lines.push("      headers: { 'Content-Type': 'application/json' },");
-  lines.push("      body: JSON.stringify({ query, variables })");
-  lines.push("    });");
-  lines.push("    return response.json();");
-  lines.push("  }");
-  lines.push("}");
+  lines.push('      body: JSON.stringify({ query, variables })');
+  lines.push('    });');
+  lines.push('    return response.json();');
+  lines.push('  }');
+  lines.push('}');
 
   return lines.join('\n');
 }
@@ -98,23 +104,30 @@ export function generateTypeScriptGraphQLClient(_schema: GraphQLSchema, _options
 /**
  * Generate Python REST client
  */
-export function generatePythonRestClient(spec: OpenAPISpec, _options: ClientGenerationOptions): string {
+export function generatePythonRestClient(
+  spec: OpenAPISpec,
+  _options: ClientGenerationOptions
+): string {
   const lines: string[] = [];
 
-  lines.push("import requests");
-  lines.push("from typing import Optional, Dict, Any");
-  lines.push("");
+  lines.push('import requests');
+  lines.push('from typing import Optional, Dict, Any');
+  lines.push('');
   lines.push(`class ${spec.info.title.replace(/\s+/g, '')}Client:`);
-  lines.push("    def __init__(self, base_url: str):");
-  lines.push("        self.base_url = base_url");
-  lines.push("");
+  lines.push('    def __init__(self, base_url: str):');
+  lines.push('        self.base_url = base_url');
+  lines.push('');
 
   for (const [path, methods] of Object.entries(spec.paths)) {
     for (const [method, operation] of Object.entries(methods)) {
       if (typeof operation === 'object' && operation.operationId) {
-        lines.push(`    def ${operation.operationId}(self, params: Optional[Dict[str, Any]] = None):`);
-        lines.push(`        return requests.${method}(f"{{self.base_url}}${path}", json=params).json()`);
-        lines.push("");
+        lines.push(
+          `    def ${operation.operationId}(self, params: Optional[Dict[str, Any]] = None):`
+        );
+        lines.push(
+          `        return requests.${method}(f"{{self.base_url}}${path}", json=params).json()`
+        );
+        lines.push('');
       }
     }
   }

@@ -31,7 +31,8 @@ export function calculateMetrics(content, performanceMonitor) {
     let duplicates = 0;
     for (const line of nonEmptyLines) {
         const hash = line.trim();
-        if (hash.length > 20) { // Only consider substantial lines
+        if (hash.length > 20) {
+            // Only consider substantial lines
             lineHashes.set(hash, (lineHashes.get(hash) || 0) + 1);
         }
     }
@@ -44,7 +45,7 @@ export function calculateMetrics(content, performanceMonitor) {
         maintainability: Math.round(maintainability),
         linesOfCode: nonEmptyLines.length,
         commentDensity: Math.round((comments.length / nonEmptyLines.length) * 100) || 0,
-        duplicateBlocks: duplicates
+        duplicateBlocks: duplicates,
     };
 }
 /**

@@ -9,11 +9,14 @@ describe('Test Generator', () => {
   const testFile = path.join(tmpdir(), 'test-source-' + Date.now() + '.ts');
 
   beforeAll(() => {
-    fs.writeFileSync(testFile, `
+    fs.writeFileSync(
+      testFile,
+      `
       export function add(a: number, b: number): number {
         return a + b;
       }
-    `);
+    `
+    );
   });
 
   afterAll(() => {
@@ -25,7 +28,7 @@ describe('Test Generator', () => {
   it('should generate tests', async () => {
     const result = await generator.generateTests(testFile, {
       framework: 'vitest',
-      includeEdgeCases: true
+      includeEdgeCases: true,
     });
     expect(result.fullTestCode).toBeDefined();
     expect(result.fullTestCode).toContain('describe');

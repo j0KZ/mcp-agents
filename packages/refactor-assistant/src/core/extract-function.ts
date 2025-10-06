@@ -7,11 +7,7 @@ import { CODE_LIMITS, INDEX_CONSTANTS } from '../constants/refactoring-limits.js
  * Extracts a code block into a separate function with automatic parameter detection.
  */
 
-import {
-  RefactoringResult,
-  RefactoringChange,
-  ExtractFunctionOptions,
-} from '../types.js';
+import { RefactoringResult, RefactoringChange, ExtractFunctionOptions } from '../types.js';
 
 /**
  * Analyze a code block to determine parameters and return value
@@ -70,10 +66,7 @@ function getIndentation(line: string): string {
  * });
  * ```
  */
-export function extractFunction(
-  code: string,
-  options: ExtractFunctionOptions
-): RefactoringResult {
+export function extractFunction(code: string, options: ExtractFunctionOptions): RefactoringResult {
   try {
     // Validate inputs
     if (!code || typeof code !== 'string') {
@@ -127,7 +120,11 @@ export function extractFunction(
       };
     }
 
-    if (startLine < INDEX_CONSTANTS.FIRST_LINE_NUMBER || endLine > lines.length || startLine > endLine) {
+    if (
+      startLine < INDEX_CONSTANTS.FIRST_LINE_NUMBER ||
+      endLine > lines.length ||
+      startLine > endLine
+    ) {
       return {
         code,
         changes: [],
@@ -153,8 +150,7 @@ export function extractFunction(
     const indentation = getIndentation(lines[startLine - INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET]);
     const functionBody = extractedLines.map(line => indentation + line).join('\n');
     const returnStatement = returnValue ? `\n${indentation}  return ${returnValue};` : '';
-    const extractedFunction =
-      `${indentation}${functionDeclaration}\n${functionBody}${returnStatement}\n${indentation}}`;
+    const extractedFunction = `${indentation}${functionDeclaration}\n${functionBody}${returnStatement}\n${indentation}}`;
 
     // Generate function call
     const functionCall = returnValue
@@ -163,7 +159,10 @@ export function extractFunction(
 
     // Replace original code with function call
     const newLines = [
-      ...lines.slice(INDEX_CONSTANTS.FIRST_ARRAY_INDEX, startLine - INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET),
+      ...lines.slice(
+        INDEX_CONSTANTS.FIRST_ARRAY_INDEX,
+        startLine - INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET
+      ),
       functionCall,
       ...lines.slice(endLine),
       '',

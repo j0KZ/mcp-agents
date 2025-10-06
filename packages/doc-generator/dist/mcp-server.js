@@ -8,9 +8,10 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { CallToolRequestSchema, ListToolsRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
-import { generateJSDoc, generateReadme, generateApiDocs, generateChangelog, } from './generator.js';
-import { DocError, } from './types.js';
+import { generateJSDoc, generateReadme, generateApiDocs, generateChangelog } from './generator.js';
+import { DocError } from './types.js';
 import * as fs from 'fs';
+import { MCPError, getErrorMessage } from '@j0kz/shared';
 import { validateFilePath, validateDirectoryPath } from '@j0kz/shared';
 /**
  * MCP Server instance
@@ -415,32 +416,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 };
             }
             default:
-                throw new Error(`Unknown tool: ${name}`);
+                throw new MCPError('DOC_005', { tool: name });
         }
     }
     catch (error) {
-        if (error instanceof DocError) {
-            return {
-                content: [
-                    {
-                        type: 'text',
-                        text: JSON.stringify({
-                            error: error.message,
-                            code: error.code,
-                            details: error.details,
-                        }, null, 2),
-                    },
-                ],
-                isError: true,
-            };
-        }
+        const errorMessage = getErrorMessage(error);
+        const errorCode = error instanceof MCPError ? error.code : error instanceof DocError ? error.code : 'UNKNOWN';
         return {
             content: [
                 {
                     type: 'text',
                     text: JSON.stringify({
-                        error: 'Documentation generation failed',
-                        message: String(error),
+                        success: false,
+                        error: errorMessage,
+                        code: errorCode,
+                        ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
+                        ...(error instanceof DocError && error.details ? { details: error.details } : {}),
                     }, null, 2),
                 },
             ],
@@ -456,7 +447,7 @@ async function main() {
     await server.connect(transport);
     console.error('Documentation Generator MCP Server running on stdio');
 }
-main().catch((error) => {
+main().catch(error => {
     console.error('Fatal error in main():', error);
     process.exit(1);
 });

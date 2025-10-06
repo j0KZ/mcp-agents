@@ -23,9 +23,7 @@ export function generateMermaidDiagram(schema, options) {
     // Add relationships
     if (options.includeRelationships) {
         for (const rel of schema.relationships || []) {
-            const cardinality = rel.type === 'ONE_TO_ONE' ? '||--||' :
-                rel.type === 'ONE_TO_MANY' ? '||--o{' :
-                    '}o--o{';
+            const cardinality = rel.type === 'ONE_TO_ONE' ? '||--||' : rel.type === 'ONE_TO_MANY' ? '||--o{' : '}o--o{';
             diagram += `  ${rel.from.table} ${cardinality} ${rel.to.table} : "${rel.name}"\n`;
         }
     }

@@ -118,18 +118,11 @@ describe('MCPClient', () => {
     });
 
     it('should handle timeout', async () => {
-      const invokePromise = client.invoke(
-        'smart-reviewer',
-        'review_file',
-        {},
-        100
-      ); // 100ms timeout
+      const invokePromise = client.invoke('smart-reviewer', 'review_file', {}, 100); // 100ms timeout
 
       // Don't emit any response - let it timeout
 
-      await expect(invokePromise).rejects.toThrow(
-        'MCP invocation timeout (100ms)'
-      );
+      await expect(invokePromise).rejects.toThrow('MCP invocation timeout (100ms)');
       expect(mockChild.kill).toHaveBeenCalled();
     }, 200);
 
@@ -148,10 +141,7 @@ describe('MCPClient', () => {
       const invokePromise = client.invoke('smart-reviewer', 'review_file', {});
 
       setTimeout(() => {
-        mockChild.stdout.emit(
-          'data',
-          JSON.stringify({ jsonrpc: '2.0', id: 1, result: {} }) + '\n'
-        );
+        mockChild.stdout.emit('data', JSON.stringify({ jsonrpc: '2.0', id: 1, result: {} }) + '\n');
         mockChild.emit('close', 0);
       }, 10);
 
@@ -168,8 +158,7 @@ describe('MCPClient', () => {
         mockChild.stdout.emit('data', '{"log":"Starting analysis"}\n');
         mockChild.stdout.emit(
           'data',
-          JSON.stringify({ jsonrpc: '2.0', id: 1, result: { final: true } }) +
-            '\n'
+          JSON.stringify({ jsonrpc: '2.0', id: 1, result: { final: true } }) + '\n'
         );
         mockChild.emit('close', 0);
       }, 10);
@@ -208,10 +197,7 @@ describe('MCPClient', () => {
     it('should increment request ID for each invocation', async () => {
       const invocation1 = client.invoke('smart-reviewer', 'review_file', {});
       setTimeout(() => {
-        mockChild.stdout.emit(
-          'data',
-          JSON.stringify({ jsonrpc: '2.0', id: 1, result: {} }) + '\n'
-        );
+        mockChild.stdout.emit('data', JSON.stringify({ jsonrpc: '2.0', id: 1, result: {} }) + '\n');
         mockChild.emit('close', 0);
       }, 10);
       await invocation1;
@@ -227,10 +213,7 @@ describe('MCPClient', () => {
 
       const invocation2 = client.invoke('smart-reviewer', 'review_file', {});
       setTimeout(() => {
-        mockChild.stdout.emit(
-          'data',
-          JSON.stringify({ jsonrpc: '2.0', id: 2, result: {} }) + '\n'
-        );
+        mockChild.stdout.emit('data', JSON.stringify({ jsonrpc: '2.0', id: 2, result: {} }) + '\n');
         mockChild.emit('close', 0);
       }, 10);
 

@@ -13,7 +13,11 @@ export function generateSQLRecords(table: SQLTable, count: number): Record<strin
     const record: Record<string, any> = {};
 
     for (const col of table.columns) {
-      if (col.autoIncrement || col.defaultValue === 'gen_random_uuid()' || col.defaultValue === 'CURRENT_TIMESTAMP') {
+      if (
+        col.autoIncrement ||
+        col.defaultValue === 'gen_random_uuid()' ||
+        col.defaultValue === 'CURRENT_TIMESTAMP'
+      ) {
         continue; // Skip auto-generated fields
       }
 
@@ -26,7 +30,10 @@ export function generateSQLRecords(table: SQLTable, count: number): Record<strin
   return records;
 }
 
-export function generateMongoRecords(collection: MongoCollection, count: number): Record<string, any>[] {
+export function generateMongoRecords(
+  collection: MongoCollection,
+  count: number
+): Record<string, any>[] {
   const records: Record<string, any>[] = [];
 
   for (let i = 0; i < count; i++) {

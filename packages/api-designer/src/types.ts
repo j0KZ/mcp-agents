@@ -31,7 +31,12 @@ export type ParameterLocation = 'query' | 'path' | 'header' | 'cookie' | 'body';
 /**
  * Response content types
  */
-export type ContentType = 'application/json' | 'application/xml' | 'text/plain' | 'multipart/form-data' | 'application/octet-stream';
+export type ContentType =
+  | 'application/json'
+  | 'application/xml'
+  | 'text/plain'
+  | 'multipart/form-data'
+  | 'application/octet-stream';
 
 /**
  * API parameter definition
@@ -184,11 +189,14 @@ export interface OpenAPISpec {
   servers?: Array<{
     url: string;
     description?: string;
-    variables?: Record<string, {
-      default: string;
-      enum?: string[];
-      description?: string;
-    }>;
+    variables?: Record<
+      string,
+      {
+        default: string;
+        enum?: string[];
+        description?: string;
+      }
+    >;
   }>;
   paths: Record<string, Record<string, any>>;
   components?: {

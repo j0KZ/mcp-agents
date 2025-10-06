@@ -6,14 +6,14 @@ import type { AutoFix } from '../auto-fixer.js';
 import { CONFIDENCE, PARETO_COVERAGE, INDEX } from '../constants/auto-fixer.js';
 
 // Handle both ESM and CJS imports
-const traverse = typeof traverseModule === 'function' ? traverseModule : (traverseModule as any).default;
+const traverse =
+  typeof traverseModule === 'function' ? traverseModule : (traverseModule as any).default;
 
 /**
  * Finds and removes console.log statements
  * Coverage: 15% of common issues
  */
 export class ConsoleLogFixer extends BaseFixer {
-
   getName(): string {
     return 'ConsoleLogFixer';
   }

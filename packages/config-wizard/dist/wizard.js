@@ -20,7 +20,7 @@ export async function runWizard(args) {
     const detected = {
         editor: await detectEditor(),
         project: await detectProject(),
-        testFramework: await detectTestFramework()
+        testFramework: await detectTestFramework(),
     };
     spin.succeed('Environment analyzed');
     // Show detections
@@ -43,12 +43,14 @@ export async function runWizard(args) {
     if (issues.length > 0) {
         logger.warn('\n⚠️  Configuration issues found:');
         issues.forEach(issue => logger.warn(`  - ${issue}`));
-        const { proceed } = await inquirer.prompt([{
+        const { proceed } = await inquirer.prompt([
+            {
                 type: 'confirm',
                 name: 'proceed',
                 message: 'Continue anyway?',
-                default: false
-            }]);
+                default: false,
+            },
+        ]);
         if (!proceed) {
             logger.info('Configuration cancelled');
             process.exit(0);
@@ -93,15 +95,15 @@ async function gatherSelections(args, detected) {
             preferences: {
                 reviewSeverity: 'moderate',
                 testFramework: detected.testFramework,
-                installGlobally: true
-            }
+                installGlobally: true,
+            },
         };
     }
     // Interactive mode
     const answers = await inquirer.prompt([
         editorPrompt(detected.editor),
         mcpPrompt(detected.project),
-        ...preferencesPrompt(detected)
+        ...preferencesPrompt(detected),
     ]);
     return {
         editor: answers.editor,
@@ -109,8 +111,8 @@ async function gatherSelections(args, detected) {
         preferences: {
             reviewSeverity: answers.reviewSeverity || 'moderate',
             testFramework: answers.testFramework || detected.testFramework,
-            installGlobally: answers.installGlobally !== false
-        }
+            installGlobally: answers.installGlobally !== false,
+        },
     };
 }
 async function writeConfig(config, editor, customPath, force) {

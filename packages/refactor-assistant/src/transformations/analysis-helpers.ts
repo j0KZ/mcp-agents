@@ -4,14 +4,18 @@ import { INDEX_CONSTANTS } from '../constants/refactoring-limits.js';
  * Code analysis helpers
  */
 
-export function analyzeFunctionLengths(code: string): Array<{ name: string; startLine: number; lineCount: number }> {
+export function analyzeFunctionLengths(
+  code: string
+): Array<{ name: string; startLine: number; lineCount: number }> {
   const functions: Array<{ name: string; startLine: number; lineCount: number }> = [];
   const lines = code.split('\n');
 
   for (let i = 0; i < lines.length; i++) {
     // Use two separate, simpler regexes to avoid ReDoS vulnerability
     const regularFunctionMatch = lines[i].match(/function\s+(\w+)/);
-    const arrowFunctionMatch = !regularFunctionMatch && lines[i].match(/const\s+(\w+)\s*=\s*(?:async\s+)?(?:\([^)]{0,200}\)|[a-zA-Z_$][\w$]*)\s*=>/);
+    const arrowFunctionMatch =
+      !regularFunctionMatch &&
+      lines[i].match(/const\s+(\w+)\s*=\s*(?:async\s+)?(?:\([^)]{0,200}\)|[a-zA-Z_$][\w$]*)\s*=>/);
     const functionMatch = regularFunctionMatch || arrowFunctionMatch;
 
     if (functionMatch) {

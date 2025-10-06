@@ -13,7 +13,7 @@ vi.mock('./detectors/editor.js', () => ({
     if (editor === 'vscode') return '/home/user/.config/Code/User/globalStorage/claude-mcp.json';
     if (editor === 'cursor') return '/home/user/.cursor/mcp.json';
     return null;
-  })
+  }),
 }));
 
 describe('validateConfig', () => {
@@ -31,8 +31,8 @@ describe('validateConfig', () => {
       preferences: {
         reviewSeverity: 'moderate',
         testFramework: 'vitest',
-        installGlobally: true
-      }
+        installGlobally: true,
+      },
     };
 
     const issues = await validateConfig(selections, {});
@@ -49,8 +49,8 @@ describe('validateConfig', () => {
       mcps: [],
       preferences: {
         reviewSeverity: 'moderate',
-        installGlobally: true
-      }
+        installGlobally: true,
+      },
     };
 
     const issues = await validateConfig(selections, {});
@@ -64,8 +64,8 @@ describe('validateConfig', () => {
       mcps: ['smart-reviewer'],
       preferences: {
         reviewSeverity: 'moderate',
-        installGlobally: true
-      }
+        installGlobally: true,
+      },
     };
 
     const issues = await validateConfig(selections, {});
@@ -82,8 +82,8 @@ describe('validateConfig', () => {
       mcps: ['smart-reviewer'],
       preferences: {
         reviewSeverity: 'moderate',
-        installGlobally: true
-      }
+        installGlobally: true,
+      },
     };
 
     const issues = await validateConfig(selections, {});
@@ -101,8 +101,8 @@ describe('validateConfig', () => {
       mcps: ['smart-reviewer'],
       preferences: {
         reviewSeverity: 'moderate',
-        installGlobally: true
-      }
+        installGlobally: true,
+      },
     };
 
     const issues = await validateConfig(selections, {});
@@ -119,8 +119,8 @@ describe('validateConfig', () => {
       mcps: ['test-generator'],
       preferences: {
         reviewSeverity: 'strict',
-        installGlobally: true
-      }
+        installGlobally: true,
+      },
     };
 
     const issues = await validateConfig(selections, {});

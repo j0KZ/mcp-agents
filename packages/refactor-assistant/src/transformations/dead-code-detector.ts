@@ -52,7 +52,12 @@ export function findUnreachableCode(code: string): Array<{ line: number; code: s
         const nextLine = lines[i + j].trim();
 
         // Ignore closing braces, empty lines, comments
-        if (nextLine && !nextLine.match(/^[}\])]/) && !nextLine.startsWith('//') && !nextLine.startsWith('/*')) {
+        if (
+          nextLine &&
+          !nextLine.match(/^[}\])]/) &&
+          !nextLine.startsWith('//') &&
+          !nextLine.startsWith('/*')
+        ) {
           unreachable.push({ line: i + j + 1, code: nextLine });
         }
       }
@@ -79,7 +84,10 @@ export function removeUnusedVariables(code: string, unusedVars: string[]): strin
     // Escape the variable name to prevent regex injection
     const escapedName = escapeRegExp(varName);
     // Remove declaration lines
-    const declPattern = new RegExp(`\\s*(?:const|let|var)\\s+${escapedName}\\b\\s*=.*?;\\s*\\n`, 'g');
+    const declPattern = new RegExp(
+      `\\s*(?:const|let|var)\\s+${escapedName}\\b\\s*=.*?;\\s*\\n`,
+      'g'
+    );
     result = result.replace(declPattern, '');
   }
 

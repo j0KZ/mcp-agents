@@ -11,8 +11,8 @@ export declare const WORKFLOWS: Record<WorkflowName, WorkflowMetadata>;
  * Create pre-commit workflow
  *
  * Steps:
- * 1. Code review (moderate severity)
- * 2. Security scan
+ * 1. Code review (moderate severity) - reviews ALL files
+ * 2. Security scan - scans ALL files
  *
  * @param files - Files to check
  */

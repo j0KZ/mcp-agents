@@ -1,17 +1,13 @@
 import { parse } from '@babel/parser';
 import { INDEX } from './constants/auto-fixer.js';
-import { UnusedImportFixer, ConsoleLogFixer, NullCheckFixer } from './fixers/index.js';
+import { UnusedImportFixer, ConsoleLogFixer, NullCheckFixer, } from './fixers/index.js';
 /**
  * Core auto-fixer class - implements Pareto 80/20 fixes
  * Orchestrates specialized fixers for modularity
  */
 export class AutoFixer {
     // Specialized fixers - modular architecture
-    fixers = [
-        new UnusedImportFixer(),
-        new ConsoleLogFixer(),
-        new NullCheckFixer(),
-    ];
+    fixers = [new UnusedImportFixer(), new ConsoleLogFixer(), new NullCheckFixer()];
     /**
      * Create fix context from code (single split operation)
      */
@@ -32,7 +28,7 @@ export class AutoFixer {
             return {
                 fixes: [],
                 fixedCode: code,
-                summary: { total: 0, safe: 0, requiresReview: 0 }
+                summary: { total: 0, safe: 0, requiresReview: 0 },
             };
         }
         const fixes = [];

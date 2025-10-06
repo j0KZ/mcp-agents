@@ -1,10 +1,5 @@
 import { CodeIssue, ReviewResult } from './types.js';
-import {
-  FileSystemManager,
-  AnalysisCache,
-  PerformanceMonitor,
-  generateHash,
-} from '@j0kz/shared';
+import { FileSystemManager, AnalysisCache, PerformanceMonitor, generateHash } from '@j0kz/shared';
 import { DEFAULTS } from './constants.js';
 import {
   detectIssues,
@@ -110,11 +105,13 @@ export class CodeAnalyzer {
     return result;
   }
 
-
   /**
    * Analyze multiple files in batch with parallel processing
    */
-  async analyzeFiles(filePaths: string[], concurrency: number = 5): Promise<Map<string, ReviewResult>> {
+  async analyzeFiles(
+    filePaths: string[],
+    concurrency: number = 5
+  ): Promise<Map<string, ReviewResult>> {
     const results = new Map<string, ReviewResult>();
 
     // Use shared batch processing utility
@@ -122,13 +119,18 @@ export class CodeAnalyzer {
 
     const reviews = await batchProcess(
       filePaths,
-      async (filePath) => {
+      async filePath => {
         try {
           return await this.analyzeFile(filePath);
         } catch (error) {
           // Sanitize path to prevent log injection
-          const safePath = String(filePath).replace(/[\r\n]/g, '').substring(0, 500);
-          console.error(`Failed to analyze ${safePath}:`, error instanceof Error ? error.message : String(error));
+          const safePath = String(filePath)
+            .replace(/[\r\n]/g, '')
+            .substring(0, 500);
+          console.error(
+            `Failed to analyze ${safePath}:`,
+            error instanceof Error ? error.message : String(error)
+          );
           return null;
         }
       },

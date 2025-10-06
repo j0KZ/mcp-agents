@@ -6,13 +6,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { execFileSync } from 'child_process';
-import {
-  ReadmeConfig,
-  ApiDocsConfig,
-  ChangelogConfig,
-  DocResult,
-  DocError,
-} from './types.js';
+import { ReadmeConfig, ApiDocsConfig, ChangelogConfig, DocResult, DocError } from './types.js';
 
 // Import extracted modules
 import { parseSourceFile } from './parsers/source-parser.js';
@@ -62,7 +56,9 @@ export async function generateReadme(
       }
 
       if (config.badges?.license !== false && (config.license || packageJson.license)) {
-        badges.push(`![License](https://img.shields.io/badge/license-${config.license || packageJson.license}-green)`);
+        badges.push(
+          `![License](https://img.shields.io/badge/license-${config.license || packageJson.license}-green)`
+        );
       }
 
       if (badges.length > 0) {
@@ -97,7 +93,9 @@ export async function generateReadme(
       sections.push('## Usage');
       sections.push('');
       sections.push('```javascript');
-      sections.push(`const ${packageJson.name?.replace(/[@\/\-]/g, '')} = require('${packageJson.name}');`);
+      sections.push(
+        `const ${packageJson.name?.replace(/[@\/\-]/g, '')} = require('${packageJson.name}');`
+      );
       sections.push('```');
       sections.push('');
     }
@@ -122,7 +120,9 @@ export async function generateReadme(
     if (config.license || packageJson.license) {
       sections.push('## License');
       sections.push('');
-      sections.push(`This project is licensed under the ${config.license || packageJson.license} License.`);
+      sections.push(
+        `This project is licensed under the ${config.license || packageJson.license} License.`
+      );
       sections.push('');
     }
 
@@ -141,11 +141,7 @@ export async function generateReadme(
     if (error instanceof DocError) {
       throw error;
     }
-    throw new DocError(
-      'Failed to generate README',
-      'README_GENERATION_FAILED',
-      error
-    );
+    throw new DocError('Failed to generate README', 'README_GENERATION_FAILED', error);
   }
 }
 
@@ -181,41 +177,45 @@ export async function generateApiDocs(
       sections.push('');
 
       // Document functions
-      functions.filter(f => f.isExported).forEach(func => {
-        sections.push(`### ${func.name}()`);
-        sections.push('');
-
-        if (func.parameters.length > 0) {
-          sections.push('**Parameters:**');
+      functions
+        .filter(f => f.isExported)
+        .forEach(func => {
+          sections.push(`### ${func.name}()`);
           sections.push('');
-          func.parameters.forEach(param => {
-            const typeStr = param.type?.raw || 'any';
-            const optionalStr = param.optional ? ' (optional)' : '';
-            sections.push(`- \`${param.name}\` (\`${typeStr}\`)${optionalStr}`);
-          });
-          sections.push('');
-        }
 
-        if (func.returnType) {
-          sections.push(`**Returns:** \`${func.returnType.raw}\``);
-          sections.push('');
-        }
+          if (func.parameters.length > 0) {
+            sections.push('**Parameters:**');
+            sections.push('');
+            func.parameters.forEach(param => {
+              const typeStr = param.type?.raw || 'any';
+              const optionalStr = param.optional ? ' (optional)' : '';
+              sections.push(`- \`${param.name}\` (\`${typeStr}\`)${optionalStr}`);
+            });
+            sections.push('');
+          }
 
-        itemsDocumented++;
-      });
+          if (func.returnType) {
+            sections.push(`**Returns:** \`${func.returnType.raw}\``);
+            sections.push('');
+          }
+
+          itemsDocumented++;
+        });
 
       // Document classes
-      classes.filter(c => c.isExported).forEach(cls => {
-        sections.push(`### ${cls.name}`);
-        sections.push('');
-
-        if (cls.extends) {
-          sections.push(`Extends: \`${cls.extends}\``);
+      classes
+        .filter(c => c.isExported)
+        .forEach(cls => {
+          sections.push(`### ${cls.name}`);
           sections.push('');
-        }
 
-        itemsDocumented++;
-      });
+          if (cls.extends) {
+            sections.push(`Extends: \`${cls.extends}\``);
+            sections.push('');
+          }
+
+          itemsDocumented++;
+        });
     }
 
     return {
@@ -233,11 +233,7 @@ export async function generateApiDocs(
     if (error instanceof DocError) {
       throw error;
     }
-    throw new DocError(
-      'Failed to generate API documentation',
-      'API_DOCS_GENERATION_FAILED',
-      error
-    );
+    throw new DocError('Failed to generate API documentation', 'API_DOCS_GENERATION_FAILED', error);
   }
 }
 
@@ -269,7 +265,10 @@ export async function generateChangelog(
         maxBuffer: 10 * 1024 * 1024,
       });
 
-      const commits = output.trim().split('\n').filter(line => line);
+      const commits = output
+        .trim()
+        .split('\n')
+        .filter(line => line);
       const grouped: Record<string, string[]> = {
         feat: [],
         fix: [],
@@ -338,11 +337,7 @@ export async function generateChangelog(
     if (error instanceof DocError) {
       throw error;
     }
-    throw new DocError(
-      'Failed to generate changelog',
-      'CHANGELOG_GENERATION_FAILED',
-      error
-    );
+    throw new DocError('Failed to generate changelog', 'CHANGELOG_GENERATION_FAILED', error);
   }
 }
 

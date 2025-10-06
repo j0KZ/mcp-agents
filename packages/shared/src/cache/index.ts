@@ -215,7 +215,10 @@ export class FileCache {
 export class AnalysisCache {
   private cache: MemoryCache<any>;
 
-  constructor(maxSize: number = DEFAULT_ANALYSIS_CACHE_SIZE, ttl: number = DEFAULT_ANALYSIS_TTL_MS) {
+  constructor(
+    maxSize: number = DEFAULT_ANALYSIS_CACHE_SIZE,
+    ttl: number = DEFAULT_ANALYSIS_TTL_MS
+  ) {
     this.cache = new MemoryCache({ max: maxSize, ttl });
   }
 

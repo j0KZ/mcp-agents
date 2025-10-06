@@ -136,7 +136,7 @@ export interface PipelineStep {
   tool: string; // MCP name (e.g., 'smart-reviewer')
   config: MCPConfig & {
     action?: string; // Tool name to call (e.g., 'review_file')
-    params?: any;    // Tool parameters
+    params?: any; // Tool parameters
   };
   input?: any;
   dependsOn?: string[];

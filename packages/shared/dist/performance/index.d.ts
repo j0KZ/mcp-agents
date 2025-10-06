@@ -95,4 +95,5 @@ export declare class ResourcePool<T> {
         total: number;
     };
 }
+export { benchmark, benchmarkSuite, compareBenchmarks, formatBenchmarkResult, type BenchmarkResult, type BenchmarkOptions, } from './benchmark.js';
 //# sourceMappingURL=index.d.ts.map

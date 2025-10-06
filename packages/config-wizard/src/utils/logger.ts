@@ -31,5 +31,5 @@ export const logger = {
 
   dim(message: string) {
     console.log(chalk.dim(message));
-  }
+  },
 };

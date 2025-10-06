@@ -347,7 +347,7 @@ throw err;`;
       const result = wrapInTryCatch(input, errorHandler);
 
       expect(result).toContain('if (err instanceof ValidationError)');
-      expect(result).toContain("return { error: err.message }");
+      expect(result).toContain('return { error: err.message }');
     });
   });
 
@@ -381,7 +381,7 @@ await api.call()
 
       // Should wrap the entire block
       expect(result).toContain('try {');
-      expect(result).toContain('try {');  // Original try
+      expect(result).toContain('try {'); // Original try
       expect(result).toContain('} catch (err) {');
     });
 

@@ -25,26 +25,28 @@ describe('Orchestrator Workflows', () => {
     });
 
     it('should configure code-review step correctly', () => {
-      const files = ['src/auth.ts'];
+      const files = ['src/auth.ts', 'src/db.ts'];
       const workflow = createPreCommitWorkflow(files);
 
       const steps = (workflow as any).steps;
       const reviewStep = steps[0];
 
-      expect(reviewStep.config.action).toBe('review_file');
-      expect(reviewStep.config.params.filePath).toBe('src/auth.ts');
+      // FIXED: Now uses batch_review for ALL files
+      expect(reviewStep.config.action).toBe('batch_review');
+      expect(reviewStep.config.params.filePaths).toEqual(files);
       expect(reviewStep.config.params.config.severity).toBe('moderate');
     });
 
     it('should configure security-scan step correctly', () => {
-      const files = ['src/auth.ts'];
+      const files = ['src/auth.ts', 'src/db.ts'];
       const workflow = createPreCommitWorkflow(files);
 
       const steps = (workflow as any).steps;
       const securityStep = steps[1];
 
-      expect(securityStep.config.action).toBe('scan_file');
-      expect(securityStep.config.params.filePath).toBe('src/auth.ts');
+      // FIXED: Now uses scan_project with file patterns
+      expect(securityStep.config.action).toBe('scan_project');
+      expect(securityStep.config.params.config.includePatterns).toEqual(files);
     });
   });
 
@@ -157,7 +159,7 @@ describe('Orchestrator Workflows', () => {
     it('should throw error for unknown workflow', () => {
       expect(() => {
         createWorkflow('unknown' as any, [], '.');
-      }).toThrow('Unknown workflow: unknown');
+      }).toThrow('Unknown workflow name'); // MCPError message from ERROR_CODES
     });
   });
 

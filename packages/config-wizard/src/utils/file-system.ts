@@ -20,7 +20,7 @@ export async function writeConfigFile(
   }
 
   // Check if file exists
-  if (!force && await fs.pathExists(configPath)) {
+  if (!force && (await fs.pathExists(configPath))) {
     throw new Error(`Config file already exists: ${configPath}. Use --force to overwrite.`);
   }
 
@@ -34,7 +34,7 @@ export async function writeConfigFile(
 }
 
 export async function backupConfigFile(configPath: string): Promise<string | null> {
-  if (!await fs.pathExists(configPath)) {
+  if (!(await fs.pathExists(configPath))) {
     return null;
   }
 

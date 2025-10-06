@@ -112,15 +112,15 @@ export class MCPClient {
                 reject(new Error(`MCP invocation timeout (${timeout}ms)`));
             }, timeout);
             // Read stdout
-            child.stdout?.on('data', (chunk) => {
+            child.stdout?.on('data', chunk => {
                 output += chunk.toString();
             });
             // Read stderr (for debugging, not errors)
-            child.stderr?.on('data', (chunk) => {
+            child.stderr?.on('data', chunk => {
                 errorOutput += chunk.toString();
             });
             // Process exit
-            child.on('close', (code) => {
+            child.on('close', code => {
                 clearTimeout(timer);
                 if (code !== 0 && code !== null) {
                     reject(new Error(`MCP exited with code ${code}: ${errorOutput}`));
@@ -137,7 +137,7 @@ export class MCPClient {
                     reject(new Error(`Invalid MCP response: ${lastLine}`));
                 }
             });
-            child.on('error', (error) => {
+            child.on('error', error => {
                 clearTimeout(timer);
                 reject(error);
             });
@@ -169,7 +169,7 @@ export class MCPClient {
             'api-designer',
             'db-schema',
         ];
-        return allMCPs.filter((mcp) => this.isInstalled(mcp));
+        return allMCPs.filter(mcp => this.isInstalled(mcp));
     }
 }
 //# sourceMappingURL=index.js.map

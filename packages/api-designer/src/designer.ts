@@ -14,14 +14,20 @@ import {
   APIDesignResult,
   GraphQLType,
 } from './types.js';
-import { generateOpenAPISpec, generateRESTEndpointsFromResources } from './generators/openapi-generator.js';
+import {
+  generateOpenAPISpec,
+  generateRESTEndpointsFromResources,
+} from './generators/openapi-generator.js';
 import {
   generateTypeScriptRestClient,
   generateTypeScriptGraphQLClient,
-  generatePythonRestClient
+  generatePythonRestClient,
 } from './generators/client-generator.js';
 import { validateAPIDesign as validateAPI } from './validators/api-validator.js';
-import { generateMockServerCode, createMockServer as createMockServerInstance } from './generators/mock-server-generator.js';
+import {
+  generateMockServerCode,
+  createMockServer as createMockServerInstance,
+} from './generators/mock-server-generator.js';
 
 /**
  * Generate OpenAPI 3.0 specification from configuration
@@ -36,10 +42,7 @@ export function generateOpenAPI(
 /**
  * Design REST API endpoints with best practices
  */
-export function designRESTEndpoints(
-  resources: string[],
-  config: APIDesignConfig
-): APIDesignResult {
+export function designRESTEndpoints(resources: string[], config: APIDesignConfig): APIDesignResult {
   try {
     const endpoints = generateRESTEndpointsFromResources(resources, config);
     return {
@@ -149,9 +152,7 @@ function generateGraphQLSDL(schema: GraphQLSchema): string {
   if (schema.queries && schema.queries.length > 0) {
     lines.push('type Query {');
     for (const query of schema.queries) {
-      const args = query.args
-        ? `(${query.args.map(a => `${a.name}: ${a.type}`).join(', ')})`
-        : '';
+      const args = query.args ? `(${query.args.map(a => `${a.name}: ${a.type}`).join(', ')})` : '';
       lines.push(`  ${query.name}${args}: ${query.type}`);
     }
     lines.push('}');
@@ -184,9 +185,10 @@ export function generateAPIClient(
     let code = '';
 
     if (options.language === 'typescript') {
-      code = 'openapi' in spec
-        ? generateTypeScriptRestClient(spec, options)
-        : generateTypeScriptGraphQLClient(spec, options);
+      code =
+        'openapi' in spec
+          ? generateTypeScriptRestClient(spec, options)
+          : generateTypeScriptGraphQLClient(spec, options);
     } else if (options.language === 'python' && 'openapi' in spec) {
       code = generatePythonRestClient(spec, options);
     } else {

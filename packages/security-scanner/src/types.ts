@@ -11,7 +11,7 @@ export enum SeverityLevel {
   HIGH = 'high',
   MEDIUM = 'medium',
   LOW = 'low',
-  INFO = 'info'
+  INFO = 'info',
 }
 
 /**
@@ -32,7 +32,7 @@ export enum VulnerabilityType {
   SSRF = 'ssrf',
   XXE = 'xxe',
   OPEN_REDIRECT = 'open_redirect',
-  INFORMATION_DISCLOSURE = 'information_disclosure'
+  INFORMATION_DISCLOSURE = 'information_disclosure',
 }
 
 /**
@@ -48,7 +48,7 @@ export enum OWASPCategory {
   A07_AUTH_FAILURES = 'A07:2021 – Identification and Authentication Failures',
   A08_DATA_INTEGRITY_FAILURES = 'A08:2021 – Software and Data Integrity Failures',
   A09_LOGGING_FAILURES = 'A09:2021 – Security Logging and Monitoring Failures',
-  A10_SSRF = 'A10:2021 – Server-Side Request Forgery (SSRF)'
+  A10_SSRF = 'A10:2021 – Server-Side Request Forgery (SSRF)',
 }
 
 /**

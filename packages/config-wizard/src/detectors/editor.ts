@@ -10,13 +10,7 @@ import { execa } from 'execa';
 export type SupportedEditor = 'claude-code' | 'cursor' | 'windsurf' | 'vscode' | 'roo' | null;
 
 export async function detectEditor(): Promise<SupportedEditor> {
-  const detectors = [
-    detectClaudeCode,
-    detectCursor,
-    detectWindsurf,
-    detectVSCode,
-    detectRooCode
-  ];
+  const detectors = [detectClaudeCode, detectCursor, detectWindsurf, detectVSCode, detectRooCode];
 
   for (const detect of detectors) {
     const editor = await detect();
@@ -41,7 +35,7 @@ export async function detectInstalledEditors(): Promise<SupportedEditor[]> {
 async function detectClaudeCode(): Promise<SupportedEditor> {
   const configPaths = [
     path.join(os.homedir(), '.config', 'claude-code', 'mcp_settings.json'),
-    path.join(os.homedir(), '.claude-code', 'mcp_settings.json')
+    path.join(os.homedir(), '.claude-code', 'mcp_settings.json'),
   ];
 
   for (const configPath of configPaths) {
@@ -62,12 +56,20 @@ async function detectClaudeCode(): Promise<SupportedEditor> {
 }
 
 async function detectCursor(): Promise<SupportedEditor> {
-  const configPaths = process.platform === 'win32'
-    ? [path.join(process.env.APPDATA || '', 'Cursor', 'User', 'mcp_config.json')]
-    : [
-        path.join(os.homedir(), '.cursor', 'mcp_config.json'),
-        path.join(os.homedir(), 'Library', 'Application Support', 'Cursor', 'User', 'mcp_config.json')
-      ];
+  const configPaths =
+    process.platform === 'win32'
+      ? [path.join(process.env.APPDATA || '', 'Cursor', 'User', 'mcp_config.json')]
+      : [
+          path.join(os.homedir(), '.cursor', 'mcp_config.json'),
+          path.join(
+            os.homedir(),
+            'Library',
+            'Application Support',
+            'Cursor',
+            'User',
+            'mcp_config.json'
+          ),
+        ];
 
   for (const configPath of configPaths) {
     if (await fs.pathExists(path.dirname(configPath))) {
@@ -87,12 +89,20 @@ async function detectCursor(): Promise<SupportedEditor> {
 }
 
 async function detectWindsurf(): Promise<SupportedEditor> {
-  const configPaths = process.platform === 'win32'
-    ? [path.join(process.env.APPDATA || '', 'Windsurf', 'User', 'mcp_config.json')]
-    : [
-        path.join(os.homedir(), '.windsurf', 'mcp_config.json'),
-        path.join(os.homedir(), 'Library', 'Application Support', 'Windsurf', 'User', 'mcp_config.json')
-      ];
+  const configPaths =
+    process.platform === 'win32'
+      ? [path.join(process.env.APPDATA || '', 'Windsurf', 'User', 'mcp_config.json')]
+      : [
+          path.join(os.homedir(), '.windsurf', 'mcp_config.json'),
+          path.join(
+            os.homedir(),
+            'Library',
+            'Application Support',
+            'Windsurf',
+            'User',
+            'mcp_config.json'
+          ),
+        ];
 
   for (const configPath of configPaths) {
     if (await fs.pathExists(path.dirname(configPath))) {
@@ -104,12 +114,20 @@ async function detectWindsurf(): Promise<SupportedEditor> {
 }
 
 async function detectVSCode(): Promise<SupportedEditor> {
-  const configPaths = process.platform === 'win32'
-    ? [path.join(process.env.APPDATA || '', 'Code', 'User', 'settings.json')]
-    : [
-        path.join(os.homedir(), '.config', 'Code', 'User', 'settings.json'),
-        path.join(os.homedir(), 'Library', 'Application Support', 'Code', 'User', 'settings.json')
-      ];
+  const configPaths =
+    process.platform === 'win32'
+      ? [path.join(process.env.APPDATA || '', 'Code', 'User', 'settings.json')]
+      : [
+          path.join(os.homedir(), '.config', 'Code', 'User', 'settings.json'),
+          path.join(
+            os.homedir(),
+            'Library',
+            'Application Support',
+            'Code',
+            'User',
+            'settings.json'
+          ),
+        ];
 
   for (const configPath of configPaths) {
     if (await fs.pathExists(configPath)) {
@@ -152,14 +170,16 @@ export function getEditorConfigPath(editor: SupportedEditor): string | null {
 
   const paths: Record<string, string> = {
     'claude-code': path.join(home, '.config', 'claude-code', 'mcp_settings.json'),
-    'cursor': process.platform === 'win32'
-      ? path.join(appData, 'Cursor', 'User', 'mcp_config.json')
-      : path.join(home, '.cursor', 'mcp_config.json'),
-    'windsurf': process.platform === 'win32'
-      ? path.join(appData, 'Windsurf', 'User', 'mcp_config.json')
-      : path.join(home, '.windsurf', 'mcp_config.json'),
-    'vscode': path.join(home, '.continue', 'config.json'),
-    'roo': path.join(home, '.roo', 'mcp_config.json')
+    cursor:
+      process.platform === 'win32'
+        ? path.join(appData, 'Cursor', 'User', 'mcp_config.json')
+        : path.join(home, '.cursor', 'mcp_config.json'),
+    windsurf:
+      process.platform === 'win32'
+        ? path.join(appData, 'Windsurf', 'User', 'mcp_config.json')
+        : path.join(home, '.windsurf', 'mcp_config.json'),
+    vscode: path.join(home, '.continue', 'config.json'),
+    roo: path.join(home, '.roo', 'mcp_config.json'),
   };
 
   return paths[editor] || null;

@@ -48,10 +48,13 @@ export function generateMongoUpMigration(schema: DatabaseSchema): string {
 
     // Create indexes
     for (const index of collection.indexes || []) {
-      const keys = index.columns.reduce((obj, col) => {
-        obj[col] = 1;
-        return obj;
-      }, {} as Record<string, number>);
+      const keys = index.columns.reduce(
+        (obj, col) => {
+          obj[col] = 1;
+          return obj;
+        },
+        {} as Record<string, number>
+      );
 
       commands += `db.${collection.name}.createIndex(${JSON.stringify(keys)}, { name: '${index.name}' });\n`;
     }

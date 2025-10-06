@@ -390,7 +390,7 @@ describe('MCP Server Integration', () => {
         'applyDesignPattern',
         'renameVariable',
         'suggestRefactorings',
-        'calculateMetrics'
+        'calculateMetrics',
       ];
 
       expectedTools.forEach(funcName => {

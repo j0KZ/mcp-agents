@@ -6,7 +6,8 @@ export function applyGuardClauses(code: string): { code: string; changed: boolea
   let changed = false;
 
   // Pattern: if (condition) { ... } else { return; } (safe with limits)
-  const guardPattern = /if\s?\(([^)]{1,200})\)\s?\{([^}]{1,500})\}\s?else\s?\{\s?return\s?([^;]*);\s?\}/g;
+  const guardPattern =
+    /if\s?\(([^)]{1,200})\)\s?\{([^}]{1,500})\}\s?else\s?\{\s?return\s?([^;]*);\s?\}/g;
 
   const result = code.replace(guardPattern, (_match, condition, ifBody, returnValue) => {
     changed = true;
@@ -21,7 +22,8 @@ export function combineNestedConditions(code: string): { code: string; changed: 
   let changed = false;
 
   // Pattern: if (a) { if (b) { ... } } (safe with limits)
-  const nestedPattern = /if\s?\(([^)]{1,200})\)\s?\{\s?if\s?\(([^)]{1,200})\)\s?\{([^}]{1,500})\}\s?\}/g;
+  const nestedPattern =
+    /if\s?\(([^)]{1,200})\)\s?\{\s?if\s?\(([^)]{1,200})\)\s?\{([^}]{1,500})\}\s?\}/g;
 
   const result = code.replace(nestedPattern, (_match, cond1, cond2, body) => {
     changed = true;

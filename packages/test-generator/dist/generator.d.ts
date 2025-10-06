@@ -1,6 +1,8 @@
 import { GeneratedTest, TestConfig } from './types.js';
 export declare class TestGenerator {
     private parser;
+    private testCaseGenerator;
+    private cache;
     constructor();
     /**
      * Generate comprehensive tests for a source file
@@ -14,30 +16,6 @@ export declare class TestGenerator {
      * Generate test suite for a class
      */
     private generateClassTestSuite;
-    /**
-     * Generate happy path test
-     */
-    private generateHappyPathTest;
-    /**
-     * Generate edge case tests
-     */
-    private generateEdgeCaseTests;
-    /**
-     * Generate error case tests
-     */
-    private generateErrorCaseTests;
-    /**
-     * Generate constructor test
-     */
-    private generateConstructorTest;
-    /**
-     * Generate method test
-     */
-    private generateMethodTest;
-    /**
-     * Generate method edge cases
-     */
-    private generateMethodEdgeCases;
     /**
      * Generate complete test file
      */

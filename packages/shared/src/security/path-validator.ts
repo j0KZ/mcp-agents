@@ -10,7 +10,10 @@ import * as fs from 'fs';
  * Error thrown when path validation fails
  */
 export class PathValidationError extends Error {
-  constructor(message: string, public readonly attemptedPath: string) {
+  constructor(
+    message: string,
+    public readonly attemptedPath: string
+  ) {
     super(message);
     this.name = 'PathValidationError';
   }
@@ -43,10 +46,7 @@ export function validateNoTraversal(inputPath: string): void {
     // Absolute paths are okay, just ensure no traversal
     const parts = normalized.split(path.sep);
     if (parts.some(part => part === '..')) {
-      throw new PathValidationError(
-        'Path traversal detected in absolute path',
-        inputPath
-      );
+      throw new PathValidationError('Path traversal detected in absolute path', inputPath);
     }
   }
 }
@@ -72,10 +72,7 @@ export function validatePath(inputPath: string, allowedRoot?: string): string {
 
     // If relative path starts with .., it's outside the allowed root
     if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
-      throw new PathValidationError(
-        `Path is outside allowed directory: ${allowedRoot}`,
-        inputPath
-      );
+      throw new PathValidationError(`Path is outside allowed directory: ${allowedRoot}`, inputPath);
     }
   }
 
@@ -93,17 +90,11 @@ export function validateFilePath(filePath: string, allowedRoot?: string): string
   const validated = validatePath(filePath, allowedRoot);
 
   if (!fs.existsSync(validated)) {
-    throw new PathValidationError(
-      'File does not exist',
-      filePath
-    );
+    throw new PathValidationError('File does not exist', filePath);
   }
 
   if (!fs.statSync(validated).isFile()) {
-    throw new PathValidationError(
-      'Path is not a file',
-      filePath
-    );
+    throw new PathValidationError('Path is not a file', filePath);
   }
 
   return validated;
@@ -120,17 +111,11 @@ export function validateDirectoryPath(dirPath: string, allowedRoot?: string): st
   const validated = validatePath(dirPath, allowedRoot);
 
   if (!fs.existsSync(validated)) {
-    throw new PathValidationError(
-      'Directory does not exist',
-      dirPath
-    );
+    throw new PathValidationError('Directory does not exist', dirPath);
   }
 
   if (!fs.statSync(validated).isDirectory()) {
-    throw new PathValidationError(
-      'Path is not a directory',
-      dirPath
-    );
+    throw new PathValidationError('Path is not a directory', dirPath);
   }
 
   return validated;
@@ -143,11 +128,13 @@ export function validateDirectoryPath(dirPath: string, allowedRoot?: string): st
  */
 export function sanitizeFilename(filename: string): string {
   // Remove path separators and null bytes
-  return filename
-    .replace(/[/\\]/g, '')
-    .replace(/\0/g, '')
-    .replace(/\.\./g, '')
-    // Limit to alphanumeric, dots, dashes, underscores
-    .replace(/[^a-zA-Z0-9._-]/g, '_')
-    .substring(0, 255); // Limit length
+  return (
+    filename
+      .replace(/[/\\]/g, '')
+      .replace(/\0/g, '')
+      .replace(/\.\./g, '')
+      // Limit to alphanumeric, dots, dashes, underscores
+      .replace(/[^a-zA-Z0-9._-]/g, '_')
+      .substring(0, 255)
+  ); // Limit length
 }

@@ -6,7 +6,11 @@
 import { DatabaseSchema, ValidationError, ValidationWarning } from '../types.js';
 import { STRING_LIMITS } from '../constants/schema-limits.js';
 
-export function validateSQLSchema(schema: DatabaseSchema, errors: ValidationError[], warnings: ValidationWarning[]) {
+export function validateSQLSchema(
+  schema: DatabaseSchema,
+  errors: ValidationError[],
+  warnings: ValidationWarning[]
+) {
   for (const table of schema.tables || []) {
     // Check for primary key
     const hasPK = table.primaryKey || table.columns.some(c => c.primaryKey);
@@ -35,7 +39,9 @@ export function validateSQLSchema(schema: DatabaseSchema, errors: ValidationErro
     }
 
     // Check for missing timestamps
-    const hasTimestamps = table.columns.some(c => c.name === 'created_at' || c.name === 'updated_at');
+    const hasTimestamps = table.columns.some(
+      c => c.name === 'created_at' || c.name === 'updated_at'
+    );
     if (!hasTimestamps) {
       warnings.push({
         type: 'MISSING_TIMESTAMP',
@@ -60,7 +66,11 @@ export function validateSQLSchema(schema: DatabaseSchema, errors: ValidationErro
   }
 }
 
-export function validateMongoSchema(schema: DatabaseSchema, _errors: ValidationError[], warnings: ValidationWarning[]) {
+export function validateMongoSchema(
+  schema: DatabaseSchema,
+  _errors: ValidationError[],
+  warnings: ValidationWarning[]
+) {
   for (const collection of schema.collections || []) {
     const hasId = collection.fields.some(f => f.name === '_id');
     if (!hasId) {
@@ -74,14 +84,18 @@ export function validateMongoSchema(schema: DatabaseSchema, _errors: ValidationE
   }
 }
 
-export function estimateNormalForm(schema: DatabaseSchema): '1NF' | '2NF' | '3NF' | 'BCNF' | 'DENORMALIZED' {
+export function estimateNormalForm(
+  schema: DatabaseSchema
+): '1NF' | '2NF' | '3NF' | 'BCNF' | 'DENORMALIZED' {
   const tables = schema.tables || [];
 
   // Simple heuristic
   const hasArrays = tables.some(t => t.columns.some(c => c.type === 'ARRAY'));
   if (hasArrays) return '1NF'; // Array columns violate 1NF
 
-  const hasJsonColumns = tables.some(t => t.columns.some(c => c.type === 'JSON' || c.type === 'JSONB'));
+  const hasJsonColumns = tables.some(t =>
+    t.columns.some(c => c.type === 'JSON' || c.type === 'JSONB')
+  );
   if (hasJsonColumns) return 'DENORMALIZED';
 
   const hasCompositePKs = tables.some(t => Array.isArray(t.primaryKey) && t.primaryKey.length > 1);

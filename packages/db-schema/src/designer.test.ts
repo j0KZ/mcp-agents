@@ -6,14 +6,14 @@ import {
   createERDiagram,
   generateSeedData,
   optimizeIndexes,
-  analyzeSchema
+  analyzeSchema,
 } from './designer.js';
 
 describe('DB Schema Designer', () => {
   describe('Schema Design', () => {
     it('should design SQL schema', () => {
       const result = designSchema('Users have many orders', {
-        database: 'postgres'
+        database: 'postgres',
       });
       expect(result.database).toBe('postgres');
       expect(result.tables.length).toBeGreaterThan(0);
@@ -21,16 +21,19 @@ describe('DB Schema Designer', () => {
 
     it('should design MongoDB schema', () => {
       const result = designSchema('Users have posts', {
-        database: 'mongodb'
+        database: 'mongodb',
       });
       expect(result.database).toBe('mongodb');
       expect(result.collections.length).toBeGreaterThan(0);
     });
 
     it('should handle complex relationships', () => {
-      const result = designSchema('Users have many posts. Posts belong to categories. Categories have many posts.', {
-        database: 'postgres'
-      });
+      const result = designSchema(
+        'Users have many posts. Posts belong to categories. Categories have many posts.',
+        {
+          database: 'postgres',
+        }
+      );
       expect(result.tables.length).toBeGreaterThan(0);
       expect(result.tables.some((t: any) => t.name.includes('user'))).toBe(true);
     });
@@ -38,7 +41,7 @@ describe('DB Schema Designer', () => {
     it('should include timestamps when requested', () => {
       const result = designSchema('Products table', {
         database: 'postgres',
-        includeTimestamps: true
+        includeTimestamps: true,
       });
       const table = result.tables[0];
       expect(table.columns.some((c: any) => c.name === 'created_at')).toBe(true);
@@ -107,10 +110,12 @@ describe('DB Schema Designer', () => {
     it('should detect missing primary keys', () => {
       const invalidSchema: any = {
         database: 'postgres',
-        tables: [{
-          name: 'users',
-          columns: [{ name: 'name', type: 'VARCHAR(255)' }]
-        }]
+        tables: [
+          {
+            name: 'users',
+            columns: [{ name: 'name', type: 'VARCHAR(255)' }],
+          },
+        ],
       };
       const validation = validateSchema(invalidSchema);
       expect(validation.valid).toBe(false);

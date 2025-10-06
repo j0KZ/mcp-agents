@@ -3,7 +3,12 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { createPreCommitWorkflow, createPreMergeWorkflow, createQualityAuditWorkflow, WORKFLOWS } from './workflows.js';
+import {
+  createPreCommitWorkflow,
+  createPreMergeWorkflow,
+  createQualityAuditWorkflow,
+  WORKFLOWS,
+} from './workflows.js';
 
 describe('WORKFLOWS metadata', () => {
   it('should define pre-commit workflow metadata', () => {
@@ -38,11 +43,34 @@ describe('createPreCommitWorkflow', () => {
     expect(typeof pipeline.addStep).toBe('function');
   });
 
-  it('should handle multiple files', () => {
+  it('should review ALL files, not just the first one', () => {
     const files = ['src/a.ts', 'src/b.ts', 'src/c.ts'];
     const pipeline = createPreCommitWorkflow(files);
 
-    expect(pipeline).toBeDefined();
+    // Get the steps to verify configuration
+    const steps = (pipeline as any).steps || [];
+
+    // Find the code-review step
+    const reviewStep = steps.find((s: any) => s.name === 'code-review');
+
+    // CRITICAL: Verify it uses batch_review with ALL files
+    expect(reviewStep).toBeDefined();
+    expect(reviewStep.config.action).toBe('batch_review');
+    expect(reviewStep.config.params.filePaths).toEqual(files);
+    expect(reviewStep.config.params.filePaths.length).toBe(3);
+  });
+
+  it('should scan ALL files for security issues', () => {
+    const files = ['src/a.ts', 'src/b.ts'];
+    const pipeline = createPreCommitWorkflow(files);
+
+    const steps = (pipeline as any).steps || [];
+    const securityStep = steps.find((s: any) => s.name === 'security-scan');
+
+    // CRITICAL: Verify security scan includes all files
+    expect(securityStep).toBeDefined();
+    expect(securityStep.config.action).toBe('scan_project');
+    expect(securityStep.config.params.config.includePatterns).toEqual(files);
   });
 });
 

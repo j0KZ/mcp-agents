@@ -9,7 +9,7 @@ import { generateMermaidDiagram, generateDBMLDiagram, generatePlantUMLDiagram, }
 import { COMPLEXITY_THRESHOLDS, ANALYSIS_ESTIMATES, MIGRATION_FORMAT, SEED_DATA_DEFAULTS, } from './constants/schema-limits.js';
 import { suggestForeignKeyIndexes, suggestFilterColumnIndexes, suggestJsonbIndexes, suggestTextSearchIndexes, suggestCompoundIndexes, } from './helpers/index-optimizer.js';
 import { detectRepeatingGroups, detectPartialDependencies, detectTransitiveDependencies, detectRedundantData, detectMissingJunctionTables, } from './helpers/normalization-helper.js';
-import { generateSQLRecords, generateMongoRecords, } from './generators/seed-generator.js';
+import { generateSQLRecords, generateMongoRecords } from './generators/seed-generator.js';
 import { validateSQLSchema, validateMongoSchema, estimateNormalForm, } from './validators/schema-validator.js';
 /**
  * Design a database schema from requirements
@@ -37,7 +37,10 @@ export function designSchema(requirements, options) {
  * @returns Migration object with up/down SQL
  */
 export function generateMigration(schema, description) {
-    const timestamp = new Date().toISOString().replace(/[-:T.]/g, '').slice(0, MIGRATION_FORMAT.TIMESTAMP_LENGTH);
+    const timestamp = new Date()
+        .toISOString()
+        .replace(/[-:T.]/g, '')
+        .slice(0, MIGRATION_FORMAT.TIMESTAMP_LENGTH);
     const version = `${MIGRATION_FORMAT.VERSION_PREFIX}${timestamp}`;
     let upSQL = '';
     let downSQL = '';
@@ -65,7 +68,11 @@ export function generateMigration(schema, description) {
  * @param options - Diagram options
  * @returns Mermaid diagram string
  */
-export function createERDiagram(schema, options = { format: 'mermaid', includeColumns: true, includeRelationships: true }) {
+export function createERDiagram(schema, options = {
+    format: 'mermaid',
+    includeColumns: true,
+    includeRelationships: true,
+}) {
     if (options.format === 'mermaid') {
         return generateMermaidDiagram(schema, options);
     }

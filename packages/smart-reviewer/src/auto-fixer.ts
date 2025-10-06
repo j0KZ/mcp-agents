@@ -5,7 +5,7 @@ import {
   type FixContext,
   UnusedImportFixer,
   ConsoleLogFixer,
-  NullCheckFixer
+  NullCheckFixer,
 } from './fixers/index.js';
 
 /**
@@ -47,13 +47,8 @@ export interface FixResult {
  * Orchestrates specialized fixers for modularity
  */
 export class AutoFixer {
-
   // Specialized fixers - modular architecture
-  private readonly fixers = [
-    new UnusedImportFixer(),
-    new ConsoleLogFixer(),
-    new NullCheckFixer(),
-  ];
+  private readonly fixers = [new UnusedImportFixer(), new ConsoleLogFixer(), new NullCheckFixer()];
 
   /**
    * Create fix context from code (single split operation)
@@ -76,7 +71,7 @@ export class AutoFixer {
       return {
         fixes: [],
         fixedCode: code,
-        summary: { total: 0, safe: 0, requiresReview: 0 }
+        summary: { total: 0, safe: 0, requiresReview: 0 },
       };
     }
 
@@ -98,14 +93,17 @@ export class AutoFixer {
         const fixerFixes = fixer.findFixes(context);
         fixes.push(...fixerFixes);
       }
-
     } catch (error) {
       // Invalid syntax - skip auto-fix
       console.error(`Cannot parse ${filePath} for auto-fixing:`, error);
     }
 
     // Apply safe fixes - reuse context.lines to avoid duplicate split
-    const fixedCode = this.applyFixes(code, fixes.filter(f => f.safe), context);
+    const fixedCode = this.applyFixes(
+      code,
+      fixes.filter(f => f.safe),
+      context
+    );
 
     const summary = {
       total: fixes.length,
@@ -142,8 +140,8 @@ export class AutoFixer {
 
       // Sort by column (descending) to apply right-to-left
       // This prevents column offsets when multiple fixes exist on same line
-      const sortedFixes = lineFixes.sort((a, b) =>
-        (b.column || INDEX.ZERO_BASED) - (a.column || INDEX.ZERO_BASED)
+      const sortedFixes = lineFixes.sort(
+        (a, b) => (b.column || INDEX.ZERO_BASED) - (a.column || INDEX.ZERO_BASED)
       );
 
       for (const fix of sortedFixes) {

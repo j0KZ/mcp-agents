@@ -79,7 +79,7 @@ const xyzabc = 1; // Contains substring but not exact word`;
       const result = removeUnusedImportsFromCode(code);
 
       expect(result.removed).toEqual(['xyz']);
-      expect(result.code).toBe("const xyzabc = 1; // Contains substring but not exact word");
+      expect(result.code).toBe('const xyzabc = 1; // Contains substring but not exact word');
     });
 
     it('should preserve imports used in comments when testing', () => {

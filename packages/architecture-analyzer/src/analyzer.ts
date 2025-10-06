@@ -26,20 +26,23 @@ export class ArchitectureAnalyzer {
     const excludePatterns = config.excludePatterns || ['node_modules', 'dist', '.git', 'tests'];
     const { modules, dependencies } = await this.scanner.scanProject(projectPath, excludePatterns);
 
-    const circularDependencies = config.detectCircular !== false
-      ? this.detectCircularDependencies(modules, dependencies)
-      : [];
+    const circularDependencies =
+      config.detectCircular !== false ? this.detectCircularDependencies(modules, dependencies) : [];
 
     const layerViolations = config.layerRules
       ? this.detectLayerViolations(dependencies, config.layerRules)
       : [];
 
-    const metrics = this.calculateMetrics(modules, dependencies, circularDependencies, layerViolations);
+    const metrics = this.calculateMetrics(
+      modules,
+      dependencies,
+      circularDependencies,
+      layerViolations
+    );
     const suggestions = this.generateSuggestions(metrics, circularDependencies, layerViolations);
 
-    const dependencyGraph = config.generateGraph !== false
-      ? this.generateDependencyGraph(modules, dependencies)
-      : '';
+    const dependencyGraph =
+      config.generateGraph !== false ? this.generateDependencyGraph(modules, dependencies) : '';
 
     return {
       projectPath,
@@ -213,13 +216,11 @@ export class ArchitectureAnalyzer {
       m => dependencies.filter(d => d.from === m.path).length
     );
 
-    const averageDependenciesPerModule = totalModules > 0
-      ? Math.round(totalDependencies / totalModules)
-      : 0;
+    const averageDependenciesPerModule =
+      totalModules > 0 ? Math.round(totalDependencies / totalModules) : 0;
 
-    const maxDependencies = dependenciesPerModule.length > 0
-      ? Math.max(...dependenciesPerModule)
-      : 0;
+    const maxDependencies =
+      dependenciesPerModule.length > 0 ? Math.max(...dependenciesPerModule) : 0;
 
     // Cohesion: how related are modules (simplified)
     const cohesion = this.calculateCohesion(modules, dependencies);

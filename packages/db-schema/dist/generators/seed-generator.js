@@ -8,7 +8,9 @@ export function generateSQLRecords(table, count) {
     for (let i = 0; i < count; i++) {
         const record = {};
         for (const col of table.columns) {
-            if (col.autoIncrement || col.defaultValue === 'gen_random_uuid()' || col.defaultValue === 'CURRENT_TIMESTAMP') {
+            if (col.autoIncrement ||
+                col.defaultValue === 'gen_random_uuid()' ||
+                col.defaultValue === 'CURRENT_TIMESTAMP') {
                 continue; // Skip auto-generated fields
             }
             record[col.name] = generateMockValue(col.name, col.type, i);

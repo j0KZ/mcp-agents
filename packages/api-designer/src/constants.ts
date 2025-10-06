@@ -84,13 +84,7 @@ export const HTTP_METHOD = {
 } as const;
 
 // GraphQL Types
-export const GRAPHQL_SCALAR_TYPES = [
-  'String',
-  'Int',
-  'Float',
-  'Boolean',
-  'ID',
-] as const;
+export const GRAPHQL_SCALAR_TYPES = ['String', 'Int', 'Float', 'Boolean', 'ID'] as const;
 
 // OpenAPI Schema Types
 export const SCHEMA_TYPE = {

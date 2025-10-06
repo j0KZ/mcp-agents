@@ -34,5 +34,8 @@ export * from './security/path-validator.js';
 // Validation utilities
 export * from './validation.js';
 
+// Error handling
+export * from './errors/index.js';
+
 export const VERSION = '1.0.16';
 export const PACKAGE_NAME = '@j0kz/shared';

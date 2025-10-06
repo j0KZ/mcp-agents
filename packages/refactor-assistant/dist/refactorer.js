@@ -2,18 +2,18 @@
  * Core refactoring logic and transformations
  */
 import { REFACTORING_LIMITS, REFACTORING_MESSAGES, PATTERN_CONSTANTS, INDEX_CONSTANTS, } from './constants/refactoring-limits.js';
-import { REGEX_LIMITS, } from './constants/transformation-limits.js';
+import { REGEX_LIMITS } from './constants/transformation-limits.js';
 // Re-export from modular components
 export { extractFunction } from './core/extract-function.js';
 export { calculateMetrics, findDuplicateBlocks } from './analysis/metrics-calculator.js';
 // Import for internal use
 import { findDuplicateBlocks, getNestingDepth } from './analysis/metrics-calculator.js';
-import { applyGuardClauses, combineNestedConditions } from './transformations/conditional-helpers.js';
+import { applyGuardClauses, combineNestedConditions, } from './transformations/conditional-helpers.js';
 import { removeUnusedImportsFromCode, escapeRegExp } from './transformations/import-helpers.js';
 import { analyzeFunctionLengths } from './transformations/analysis-helpers.js';
 import { getErrorMessage } from './utils/error-helpers.js';
-import { convertCallbackToAsync, convertPromiseChainToAsync } from './transformations/async-converter.js';
-import { findUnusedVariables, removeUnusedVariables, removeUnreachableCode } from './transformations/dead-code-detector.js';
+import { convertCallbackToAsync, convertPromiseChainToAsync, } from './transformations/async-converter.js';
+import { findUnusedVariables, removeUnusedVariables, removeUnreachableCode, } from './transformations/dead-code-detector.js';
 import { applyPattern, isValidPattern } from './patterns/pattern-factory.js';
 /**
  * Convert callback-based code to async/await
@@ -57,7 +57,9 @@ export function convertToAsync(options) {
             code: refactoredCode,
             changes,
             success: true,
-            warnings: changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES ? [REFACTORING_MESSAGES.NO_CALLBACKS_FOUND] : undefined,
+            warnings: changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES
+                ? [REFACTORING_MESSAGES.NO_CALLBACKS_FOUND]
+                : undefined,
         };
     }
     catch (error) {
@@ -118,7 +120,9 @@ export function simplifyConditionals(options) {
             code: refactoredCode,
             changes,
             success: true,
-            warnings: changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES ? [REFACTORING_MESSAGES.NO_CONDITIONALS_FOUND] : undefined,
+            warnings: changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES
+                ? [REFACTORING_MESSAGES.NO_CONDITIONALS_FOUND]
+                : undefined,
         };
     }
     catch (error) {
@@ -178,7 +182,9 @@ export function removeDeadCode(options) {
             code: refactoredCode,
             changes,
             success: true,
-            warnings: changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES ? [REFACTORING_MESSAGES.NO_DEAD_CODE_FOUND] : undefined,
+            warnings: changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES
+                ? [REFACTORING_MESSAGES.NO_DEAD_CODE_FOUND]
+                : undefined,
         };
     }
     catch (error) {
@@ -207,12 +213,14 @@ export function applyDesignPattern(options) {
         const refactoredCode = applyPattern(pattern, code, patternOptions);
         return {
             code: refactoredCode,
-            changes: [{
+            changes: [
+                {
                     type: 'apply-pattern',
                     description: `Applied ${pattern} pattern`,
                     before: code,
                     after: refactoredCode,
-                }],
+                },
+            ],
             success: true,
         };
     }
@@ -262,18 +270,20 @@ export function renameVariable(options) {
         refactoredCode = refactoredCode.replace(pattern, newName);
         if (includeComments) {
             const commentPattern = new RegExp(`(//.*?|/\\*[\\s\\S]*?\\*/)`, 'g');
-            refactoredCode = refactoredCode.replace(commentPattern, (match) => {
+            refactoredCode = refactoredCode.replace(commentPattern, match => {
                 return match.replace(new RegExp(oldName, 'g'), newName);
             });
         }
         return {
             code: refactoredCode,
-            changes: [{
+            changes: [
+                {
                     type: 'rename-variable',
                     description: `Renamed '${oldName}' to '${newName}' (${matches} occurrence${matches > PATTERN_CONSTANTS.SINGLE_OCCURRENCE ? 's' : ''})`,
                     before: code,
                     after: refactoredCode,
-                }],
+                },
+            ],
             success: true,
         };
     }

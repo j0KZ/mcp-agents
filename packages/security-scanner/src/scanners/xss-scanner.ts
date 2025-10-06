@@ -2,8 +2,19 @@
  * XSS (Cross-Site Scripting) Scanner Module
  */
 
-import { SecurityFinding, FileScanContext, SeverityLevel, VulnerabilityType, OWASPCategory } from '../types.js';
-import { generateFindingId, extractCodeContext, isScannerFile, shouldSkipXSSLine } from '../utils.js';
+import {
+  SecurityFinding,
+  FileScanContext,
+  SeverityLevel,
+  VulnerabilityType,
+  OWASPCategory,
+} from '../types.js';
+import {
+  generateFindingId,
+  extractCodeContext,
+  isScannerFile,
+  shouldSkipXSSLine,
+} from '../utils.js';
 import { CVSS_SCORES, CWE_IDS } from '../constants/security-thresholds.js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
@@ -18,7 +29,7 @@ const patternsData = JSON.parse(
 
 const XSS_PATTERNS = patternsData.patterns.map((p: any) => ({
   pattern: new RegExp(p.pattern, 'gi'),
-  description: p.description
+  description: p.description,
 }));
 
 /**
@@ -63,8 +74,8 @@ export async function scanForXSS(context: FileScanContext): Promise<SecurityFind
           cweId: CWE_IDS.XSS,
           cvssScore: CVSS_SCORES.XSS,
           metadata: {
-            detectedPattern: description
-          }
+            detectedPattern: description,
+          },
         });
       }
     }

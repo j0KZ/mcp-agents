@@ -24,8 +24,8 @@ function extractJSDoc(fullMatch: string): string | undefined {
 function inferDescription(name: string, type: 'function' | 'class' | 'interface'): string {
   // Convert camelCase/PascalCase to words, preserving acronyms
   let words = name
-    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')  // Split before last cap in acronym
-    .replace(/([a-z\d])([A-Z])/g, '$1 $2')      // Split at lowercase-uppercase boundary
+    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2') // Split before last cap in acronym
+    .replace(/([a-z\d])([A-Z])/g, '$1 $2') // Split at lowercase-uppercase boundary
     .trim();
 
   // Preserve known acronyms BEFORE lowercasing
@@ -81,13 +81,18 @@ function inferDescription(name: string, type: 'function' | 'class' | 'interface'
  * Infer parameter description from name
  */
 function inferParamDescription(paramName: string): string {
-  const words = paramName.replace(/([A-Z])/g, ' $1').trim().toLowerCase();
+  const words = paramName
+    .replace(/([A-Z])/g, ' $1')
+    .trim()
+    .toLowerCase();
 
   // Common parameter patterns
   if (paramName === 'id') return 'Unique identifier';
   if (paramName.endsWith('Id')) return `${words.replace(/\s*id$/, '')} identifier`;
-  if (paramName.endsWith('Path')) return `File or directory path for ${words.replace(/\s*path$/, '')}`;
-  if (paramName.endsWith('Config')) return `Configuration options for ${words.replace(/\s*config$/, '')}`;
+  if (paramName.endsWith('Path'))
+    return `File or directory path for ${words.replace(/\s*path$/, '')}`;
+  if (paramName.endsWith('Config'))
+    return `Configuration options for ${words.replace(/\s*config$/, '')}`;
   if (paramName.endsWith('Options')) return `Options for ${words.replace(/\s*options$/, '')}`;
   if (paramName === 'callback') return 'Callback function';
   if (paramName === 'error' || paramName === 'err') return 'Error object';
@@ -115,9 +120,12 @@ export function parseSourceFile(filePath: string): {
   const interfaces: InterfaceInfo[] = [];
 
   // Enhanced regex patterns with JSDoc extraction
-  const functionRegex = /(?:\/\*\*[\s\S]*?\*\/\s*)?(?:export\s+)?(?:async\s+)?function\s+(\w+)\s*\((.*?)\)(?:\s*:\s*([^{]+))?\s*{/g;
-  const classRegex = /(?:\/\*\*[\s\S]*?\*\/\s*)?(?:export\s+)?(?:abstract\s+)?class\s+(\w+)(?:\s+extends\s+(\w+))?(?:\s+implements\s+([\w,\s]+))?\s*{/g;
-  const interfaceRegex = /(?:\/\*\*[\s\S]*?\*\/\s*)?(?:export\s+)?interface\s+(\w+)(?:\s+extends\s+([\w,\s]+))?\s*{/g;
+  const functionRegex =
+    /(?:\/\*\*[\s\S]*?\*\/\s*)?(?:export\s+)?(?:async\s+)?function\s+(\w+)\s*\((.*?)\)(?:\s*:\s*([^{]+))?\s*{/g;
+  const classRegex =
+    /(?:\/\*\*[\s\S]*?\*\/\s*)?(?:export\s+)?(?:abstract\s+)?class\s+(\w+)(?:\s+extends\s+(\w+))?(?:\s+implements\s+([\w,\s]+))?\s*{/g;
+  const interfaceRegex =
+    /(?:\/\*\*[\s\S]*?\*\/\s*)?(?:export\s+)?interface\s+(\w+)(?:\s+extends\s+([\w,\s]+))?\s*{/g;
 
   let match;
 
@@ -145,7 +153,9 @@ export function parseSourceFile(filePath: string): {
 
         return {
           name: cleanName,
-          type: paramType ? { name: paramType, isArray: paramType.includes('[]'), raw: paramType } : undefined,
+          type: paramType
+            ? { name: paramType, isArray: paramType.includes('[]'), raw: paramType }
+            : undefined,
           optional: isOptional,
           rest: isRest,
           description: inferParamDescription(cleanName),
@@ -156,7 +166,9 @@ export function parseSourceFile(filePath: string): {
       name,
       description,
       parameters,
-      returnType: returnType ? { name: returnType.trim(), isArray: returnType.includes('[]'), raw: returnType.trim() } : undefined,
+      returnType: returnType
+        ? { name: returnType.trim(), isArray: returnType.includes('[]'), raw: returnType.trim() }
+        : undefined,
       isAsync: match[0].includes('async'),
       isExported: match[0].includes('export'),
     });

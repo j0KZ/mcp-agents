@@ -44,12 +44,7 @@ export class MCPClient {
    * @param timeout - Optional timeout in milliseconds
    * @returns Tool result
    */
-  async invoke(
-    mcpName: string,
-    toolName: string,
-    params: any,
-    timeout?: number
-  ): Promise<any> {
+  async invoke(mcpName: string, toolName: string, params: any, timeout?: number): Promise<any> {
     // 1. Resolve MCP binary path
     const mcpPath = this.resolveMCPBinary(mcpName);
 
@@ -75,10 +70,7 @@ export class MCPClient {
       child.stdin.end();
 
       // 4. Read response (with timeout)
-      const response = await this.readResponse(
-        child,
-        timeout || this.defaultTimeout
-      );
+      const response = await this.readResponse(child, timeout || this.defaultTimeout);
 
       // 5. Handle errors
       if (response.error) {
@@ -144,19 +136,14 @@ export class MCPClient {
 
       return resolve(packageDir, binPath);
     } catch (error) {
-      throw new Error(
-        `MCP not installed: ${packageName}. Run: npm install ${packageName}`
-      );
+      throw new Error(`MCP not installed: ${packageName}. Run: npm install ${packageName}`);
     }
   }
 
   /**
    * Read MCP response from stdout (with timeout)
    */
-  private async readResponse(
-    child: ChildProcess,
-    timeout: number
-  ): Promise<MCPResponse> {
+  private async readResponse(child: ChildProcess, timeout: number): Promise<MCPResponse> {
     return new Promise((resolve, reject) => {
       let output = '';
       let errorOutput = '';
@@ -168,23 +155,21 @@ export class MCPClient {
       }, timeout);
 
       // Read stdout
-      child.stdout?.on('data', (chunk) => {
+      child.stdout?.on('data', chunk => {
         output += chunk.toString();
       });
 
       // Read stderr (for debugging, not errors)
-      child.stderr?.on('data', (chunk) => {
+      child.stderr?.on('data', chunk => {
         errorOutput += chunk.toString();
       });
 
       // Process exit
-      child.on('close', (code) => {
+      child.on('close', code => {
         clearTimeout(timer);
 
         if (code !== 0 && code !== null) {
-          reject(
-            new Error(`MCP exited with code ${code}: ${errorOutput}`)
-          );
+          reject(new Error(`MCP exited with code ${code}: ${errorOutput}`));
           return;
         }
 
@@ -200,7 +185,7 @@ export class MCPClient {
         }
       });
 
-      child.on('error', (error) => {
+      child.on('error', error => {
         clearTimeout(timer);
         reject(error);
       });
@@ -234,6 +219,6 @@ export class MCPClient {
       'db-schema',
     ];
 
-    return allMCPs.filter((mcp) => this.isInstalled(mcp));
+    return allMCPs.filter(mcp => this.isInstalled(mcp));
   }
 }

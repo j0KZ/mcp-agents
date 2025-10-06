@@ -1,5 +1,7 @@
 import { readFile } from 'fs/promises';
-import { CodeParser } from './parser.js';
+import { ASTParser } from './ast-parser.js';
+import { TestCaseGenerator } from './test-case-generator.js';
+import { AnalysisCache } from '@j0kz/shared';
 import {
   TestFramework,
   TestCase,
@@ -7,14 +9,18 @@ import {
   GeneratedTest,
   TestConfig,
   FunctionInfo,
-  ClassInfo
+  ClassInfo,
 } from './types.js';
 
 export class TestGenerator {
-  private parser: CodeParser;
+  private parser: ASTParser;
+  private testCaseGenerator: TestCaseGenerator;
+  private cache: AnalysisCache;
 
   constructor() {
-    this.parser = new CodeParser();
+    this.cache = new AnalysisCache();
+    this.parser = new ASTParser(this.cache);
+    this.testCaseGenerator = new TestCaseGenerator();
   }
 
   /**
@@ -23,14 +29,18 @@ export class TestGenerator {
   async generateTests(filePath: string, config: TestConfig = {}): Promise<GeneratedTest> {
     // Validate file path
     if (!filePath || typeof filePath !== 'string') {
-      throw new Error('TEST_GEN_001: Invalid file path. Please provide a valid string path to the source file.');
+      throw new Error(
+        'TEST_GEN_001: Invalid file path. Please provide a valid string path to the source file.'
+      );
     }
 
     // Validate framework
     const framework = config.framework || 'jest';
     const validFrameworks = ['jest', 'vitest', 'mocha', 'ava'];
     if (!validFrameworks.includes(framework)) {
-      throw new Error(`TEST_GEN_002: Unsupported framework '${framework}'. Supported frameworks: ${validFrameworks.join(', ')}`);
+      throw new Error(
+        `TEST_GEN_002: Unsupported framework '${framework}'. Supported frameworks: ${validFrameworks.join(', ')}`
+      );
     }
 
     // Read file with better error handling
@@ -39,29 +49,42 @@ export class TestGenerator {
       content = await readFile(filePath, 'utf-8');
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-        throw new Error(`TEST_GEN_003: File not found: ${filePath}\nPlease check the file path and try again.`);
+        throw new Error(
+          `TEST_GEN_003: File not found: ${filePath}\nPlease check the file path and try again.`
+        );
       }
       if ((error as NodeJS.ErrnoException).code === 'EACCES') {
-        throw new Error(`TEST_GEN_004: Permission denied: ${filePath}\nPlease check file permissions.`);
+        throw new Error(
+          `TEST_GEN_004: Permission denied: ${filePath}\nPlease check file permissions.`
+        );
       }
-      throw new Error(`TEST_GEN_005: Failed to read file: ${filePath}\nReason: ${(error as Error).message}`);
+      throw new Error(
+        `TEST_GEN_005: Failed to read file: ${filePath}\nReason: ${(error as Error).message}`
+      );
     }
 
     // Validate file content
     if (!content || content.trim().length === 0) {
-      throw new Error(`TEST_GEN_006: File is empty: ${filePath}\nCannot generate tests for an empty file.`);
+      throw new Error(
+        `TEST_GEN_006: File is empty: ${filePath}\nCannot generate tests for an empty file.`
+      );
     }
 
     // Check file size
-    if (content.length > 1000000) { // 1MB limit
-      throw new Error(`TEST_GEN_007: File too large: ${filePath} (${(content.length / 1024).toFixed(2)} KB)\nMaximum supported file size is 1000 KB.`);
+    if (content.length > 1000000) {
+      // 1MB limit
+      throw new Error(
+        `TEST_GEN_007: File too large: ${filePath} (${(content.length / 1024).toFixed(2)} KB)\nMaximum supported file size is 1000 KB.`
+      );
     }
 
-    const { functions, classes } = this.parser.parseCode(content);
+    const { functions, classes } = this.parser.parseCode(content, filePath);
 
     // Validate that we found something to test
     if (functions.length === 0 && classes.length === 0) {
-      throw new Error(`TEST_GEN_008: No testable code found in ${filePath}\nThe file must contain at least one function or class to generate tests.`);
+      throw new Error(
+        `TEST_GEN_008: No testable code found in ${filePath}\nThe file must contain at least one function or class to generate tests.`
+      );
     }
 
     const suites: TestSuite[] = [];
@@ -103,18 +126,18 @@ export class TestGenerator {
     tests.push({
       name: `should ${func.name} with valid inputs`,
       type: 'happy-path',
-      code: this.generateHappyPathTest(func),
+      code: this.testCaseGenerator.generateHappyPathTest(func),
       description: `Test ${func.name} with typical valid inputs`,
     });
 
     // Edge cases
     if (config.includeEdgeCases !== false) {
-      tests.push(...this.generateEdgeCaseTests(func));
+      tests.push(...this.testCaseGenerator.generateEdgeCaseTests(func));
     }
 
     // Error cases
     if (config.includeErrorCases !== false) {
-      tests.push(...this.generateErrorCaseTests(func));
+      tests.push(...this.testCaseGenerator.generateErrorCaseTests(func));
     }
 
     return {
@@ -134,7 +157,7 @@ export class TestGenerator {
       tests.push({
         name: `should create instance of ${cls.name}`,
         type: 'happy-path',
-        code: this.generateConstructorTest(cls),
+        code: this.testCaseGenerator.generateConstructorTest(cls),
         description: `Test ${cls.name} instantiation`,
       });
     }
@@ -144,13 +167,13 @@ export class TestGenerator {
       tests.push({
         name: `should ${method.name}`,
         type: 'happy-path',
-        code: this.generateMethodTest(cls, method),
+        code: this.testCaseGenerator.generateMethodTest(cls, method),
         description: `Test ${cls.name}.${method.name}()`,
       });
 
       // Edge cases for methods
       if (config.includeEdgeCases !== false) {
-        tests.push(...this.generateMethodEdgeCases(cls, method));
+        tests.push(...this.testCaseGenerator.generateMethodEdgeCases(cls, method));
       }
     }
 
@@ -161,106 +184,15 @@ export class TestGenerator {
     };
   }
 
-  /**
-   * Generate happy path test
-   */
-  private generateHappyPathTest(func: FunctionInfo): string {
-    const params = func.params.map(p => this.generateMockValue(p)).join(', ');
-    const expectation = func.async
-      ? `await expect(${func.name}(${params})).resolves.toBeDefined()`
-      : `expect(${func.name}(${params})).toBeDefined()`;
-
-    return expectation;
-  }
-
-  /**
-   * Generate edge case tests
-   */
-  private generateEdgeCaseTests(func: FunctionInfo): TestCase[] {
-    const tests: TestCase[] = [];
-
-    // Empty/null parameters
-    if (func.params.length > 0) {
-      tests.push({
-        name: `should handle empty/null parameters`,
-        type: 'edge-case',
-        code: func.async
-          ? `await expect(${func.name}(null)).resolves.not.toThrow()`
-          : `expect(() => ${func.name}(null)).not.toThrow()`,
-        description: `Test ${func.name} with null input`,
-      });
-    }
-
-    // Large inputs
-    tests.push({
-      name: `should handle large inputs`,
-      type: 'edge-case',
-      code: func.async
-        ? `await expect(${func.name}(${'x'.repeat(1000)})).resolves.toBeDefined()`
-        : `expect(${func.name}(${'x'.repeat(1000)})).toBeDefined()`,
-      description: `Test ${func.name} with large input`,
-    });
-
-    return tests;
-  }
-
-  /**
-   * Generate error case tests
-   */
-  private generateErrorCaseTests(func: FunctionInfo): TestCase[] {
-    const tests: TestCase[] = [];
-
-    // Invalid type
-    if (func.params.length > 0) {
-      tests.push({
-        name: `should throw on invalid input type`,
-        type: 'error-case',
-        code: func.async
-          ? `await expect(${func.name}(undefined)).rejects.toThrow()`
-          : `expect(() => ${func.name}(undefined)).toThrow()`,
-        description: `Test ${func.name} error handling with invalid type`,
-      });
-    }
-
-    return tests;
-  }
-
-  /**
-   * Generate constructor test
-   */
-  private generateConstructorTest(cls: ClassInfo): string {
-    const params = cls.constructor?.params.map(p => this.generateMockValue(p)).join(', ') || '';
-    return `const instance = new ${cls.name}(${params});\nexpect(instance).toBeInstanceOf(${cls.name});`;
-  }
-
-  /**
-   * Generate method test
-   */
-  private generateMethodTest(cls: ClassInfo, method: FunctionInfo): string {
-    const params = method.params.map(p => this.generateMockValue(p)).join(', ');
-    const constructorParams = cls.constructor?.params.map(p => this.generateMockValue(p)).join(', ') || '';
-
-    return method.async
-      ? `const instance = new ${cls.name}(${constructorParams});\nawait expect(instance.${method.name}(${params})).resolves.toBeDefined();`
-      : `const instance = new ${cls.name}(${constructorParams});\nexpect(instance.${method.name}(${params})).toBeDefined();`;
-  }
-
-  /**
-   * Generate method edge cases
-   */
-  private generateMethodEdgeCases(cls: ClassInfo, method: FunctionInfo): TestCase[] {
-    return [{
-      name: `should handle edge cases in ${method.name}`,
-      type: 'edge-case',
-      code: `const instance = new ${cls.name}();\nexpect(() => instance.${method.name}()).not.toThrow();`,
-      description: `Test ${method.name} edge cases`,
-    }];
-  }
 
   /**
    * Generate complete test file
    */
-  private generateTestFile(sourceFile: string, suites: TestSuite[], framework: TestFramework): string {
+  private generateTestFile(
+    sourceFile: string,
+    suites: TestSuite[],
+    framework: TestFramework
+  ): string {
     const importPath = sourceFile.replace(/\.(ts|js)$/, '');
     const imports = this.generateImports(framework, importPath);
     const suitesCode = suites.map(s => this.generateSuiteCode(s, framework)).join('\n\n');
@@ -318,7 +250,11 @@ export class TestGenerator {
   /**
    * Estimate test coverage
    */
-  private estimateCoverage(functions: FunctionInfo[], classes: ClassInfo[], suites: TestSuite[]): number {
+  private estimateCoverage(
+    functions: FunctionInfo[],
+    classes: ClassInfo[],
+    suites: TestSuite[]
+  ): number {
     const totalItems = functions.length + classes.reduce((sum, c) => sum + c.methods.length + 1, 0);
     const testedItems = suites.length;
 

@@ -8,7 +8,10 @@ import { PerformanceMonitor } from '@j0kz/shared';
  * @param performanceMonitor - Optional performance monitor for tracking
  * @returns Code metrics object
  */
-export function calculateMetrics(content: string, performanceMonitor?: PerformanceMonitor): CodeMetrics {
+export function calculateMetrics(
+  content: string,
+  performanceMonitor?: PerformanceMonitor
+): CodeMetrics {
   const lines = content.split('\n');
   const nonEmptyLines = lines.filter(l => l.trim().length > 0);
   const comments = lines.filter(l => l.trim().startsWith('//') || l.trim().startsWith('/*'));
@@ -31,16 +34,21 @@ export function calculateMetrics(content: string, performanceMonitor?: Performan
 
   // Maintainability index (simplified formula)
   const volume = nonEmptyLines.length * Math.log2(nonEmptyLines.length || 1);
-  const maintainability = Math.max(0, Math.min(100,
-    171 - 5.2 * Math.log(volume) - 0.23 * complexity - 16.2 * Math.log(nonEmptyLines.length || 1)
-  ));
+  const maintainability = Math.max(
+    0,
+    Math.min(
+      100,
+      171 - 5.2 * Math.log(volume) - 0.23 * complexity - 16.2 * Math.log(nonEmptyLines.length || 1)
+    )
+  );
 
   // Detect duplicate blocks (simplified)
   const lineHashes = new Map<string, number>();
   let duplicates = 0;
   for (const line of nonEmptyLines) {
     const hash = line.trim();
-    if (hash.length > 20) { // Only consider substantial lines
+    if (hash.length > 20) {
+      // Only consider substantial lines
       lineHashes.set(hash, (lineHashes.get(hash) || 0) + 1);
     }
   }
@@ -53,7 +61,7 @@ export function calculateMetrics(content: string, performanceMonitor?: Performan
     maintainability: Math.round(maintainability),
     linesOfCode: nonEmptyLines.length,
     commentDensity: Math.round((comments.length / nonEmptyLines.length) * 100) || 0,
-    duplicateBlocks: duplicates
+    duplicateBlocks: duplicates,
   };
 }
 
@@ -65,25 +73,39 @@ export function calculateMetrics(content: string, performanceMonitor?: Performan
  * @param metrics - Calculated code metrics
  * @returns Array of improvement suggestions
  */
-export function generateSuggestions(content: string, issues: CodeIssue[], metrics: CodeMetrics): string[] {
+export function generateSuggestions(
+  content: string,
+  issues: CodeIssue[],
+  metrics: CodeMetrics
+): string[] {
   const suggestions: string[] = [];
 
   // Adjusted complexity thresholds (more realistic for production code)
   // 1-20: Simple, 21-50: Moderate, 51-100: Complex, 100+: Very Complex
   if (metrics.complexity > 100) {
-    suggestions.push(`Very high complexity (${metrics.complexity}). Urgently refactor into smaller functions.`);
+    suggestions.push(
+      `Very high complexity (${metrics.complexity}). Urgently refactor into smaller functions.`
+    );
   } else if (metrics.complexity > 50) {
-    suggestions.push(`High complexity (${metrics.complexity}). Consider breaking down into smaller functions.`);
+    suggestions.push(
+      `High complexity (${metrics.complexity}). Consider breaking down into smaller functions.`
+    );
   } else if (metrics.complexity > 20) {
-    suggestions.push(`Moderate complexity (${metrics.complexity}). Monitor for future refactoring opportunities.`);
+    suggestions.push(
+      `Moderate complexity (${metrics.complexity}). Monitor for future refactoring opportunities.`
+    );
   }
 
   // Adjusted maintainability thresholds
   // 85-100: Excellent, 65-84: Good, 40-64: Fair, 0-39: Poor
   if (metrics.maintainability < 40) {
-    suggestions.push(`Low maintainability score (${metrics.maintainability}/100). Refactor for better readability.`);
+    suggestions.push(
+      `Low maintainability score (${metrics.maintainability}/100). Refactor for better readability.`
+    );
   } else if (metrics.maintainability < 65) {
-    suggestions.push(`Fair maintainability score (${metrics.maintainability}/100). Consider minor improvements.`);
+    suggestions.push(
+      `Fair maintainability score (${metrics.maintainability}/100). Consider minor improvements.`
+    );
   }
 
   // Comment density suggestions (adjusted for JSDoc/TypeScript)
@@ -93,7 +115,9 @@ export function generateSuggestions(content: string, issues: CodeIssue[], metric
 
   // Duplicate code suggestions (higher threshold)
   if (metrics.duplicateBlocks > 15) {
-    suggestions.push(`Found ${metrics.duplicateBlocks} duplicate code blocks. Consider extracting to functions.`);
+    suggestions.push(
+      `Found ${metrics.duplicateBlocks} duplicate code blocks. Consider extracting to functions.`
+    );
   }
 
   // Issue-based suggestions
@@ -110,9 +134,13 @@ export function generateSuggestions(content: string, issues: CodeIssue[], metric
 
   // File size suggestion (adjusted threshold)
   if (metrics.linesOfCode > 800) {
-    suggestions.push(`File is very large (${metrics.linesOfCode} LOC). Consider splitting into modules.`);
+    suggestions.push(
+      `File is very large (${metrics.linesOfCode} LOC). Consider splitting into modules.`
+    );
   } else if (metrics.linesOfCode > 500) {
-    suggestions.push(`File is large (${metrics.linesOfCode} LOC). Monitor size for future refactoring.`);
+    suggestions.push(
+      `File is large (${metrics.linesOfCode} LOC). Monitor size for future refactoring.`
+    );
   }
 
   return suggestions;
@@ -133,9 +161,9 @@ export function calculateScore(issues: CodeIssue[], metrics: CodeMetrics): numbe
   const warnings = issues.filter(i => i.severity === 'warning').length;
   const infos = issues.filter(i => i.severity === 'info').length;
 
-  score -= errors * 15;      // Critical errors heavily penalized
-  score -= warnings * 2;     // Warnings moderately penalized
-  score -= infos * 0.5;      // Info items lightly penalized
+  score -= errors * 15; // Critical errors heavily penalized
+  score -= warnings * 2; // Warnings moderately penalized
+  score -= infos * 0.5; // Info items lightly penalized
 
   // Factor in metrics (adjusted thresholds and weights)
   // Complexity: penalize above 50 (not 10)

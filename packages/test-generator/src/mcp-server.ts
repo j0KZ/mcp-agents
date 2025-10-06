@@ -2,13 +2,11 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { TestGenerator } from './generator.js';
 import { TestConfig } from './types.js';
 import { writeFile } from 'fs/promises';
+import { MCPError, getErrorMessage } from '@j0kz/shared';
 
 class TestGeneratorServer {
   private server: Server;
@@ -38,7 +36,8 @@ class TestGeneratorServer {
       tools: [
         {
           name: 'generate_tests',
-          description: 'Generate comprehensive test suite for a source file with edge cases and error handling',
+          description:
+            'Generate comprehensive test suite for a source file with edge cases and error handling',
           inputSchema: {
             type: 'object',
             properties: {
@@ -85,7 +84,8 @@ class TestGeneratorServer {
               },
               testFile: {
                 type: 'string',
-                description: 'Path where test file should be written (optional, auto-generated if not provided)',
+                description:
+                  'Path where test file should be written (optional, auto-generated if not provided)',
               },
               config: {
                 type: 'object',
@@ -118,7 +118,7 @@ class TestGeneratorServer {
     }));
 
     // Handle tool calls
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
 
       try {
@@ -131,15 +131,19 @@ class TestGeneratorServer {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify({
-                    ...result,
-                    summary: {
-                      totalTests: result.totalTests,
-                      estimatedCoverage: `${result.estimatedCoverage}%`,
-                      testFile: result.testFile,
-                      framework: result.framework,
+                  text: JSON.stringify(
+                    {
+                      ...result,
+                      summary: {
+                        totalTests: result.totalTests,
+                        estimatedCoverage: `${result.estimatedCoverage}%`,
+                        testFile: result.testFile,
+                        framework: result.framework,
+                      },
                     },
-                  }, null, 2),
+                    null,
+                    2
+                  ),
                 },
               ],
             };
@@ -161,12 +165,16 @@ class TestGeneratorServer {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify({
-                    success: true,
-                    testFile: outputPath,
-                    totalTests: result.totalTests,
-                    estimatedCoverage: `${result.estimatedCoverage}%`,
-                  }, null, 2),
+                  text: JSON.stringify(
+                    {
+                      success: true,
+                      testFile: outputPath,
+                      totalTests: result.totalTests,
+                      estimatedCoverage: `${result.estimatedCoverage}%`,
+                    },
+                    null,
+                    2
+                  ),
                 },
               ],
             };
@@ -212,15 +220,26 @@ class TestGeneratorServer {
           }
 
           default:
-            throw new Error(`Unknown tool: ${name}`);
+            throw new MCPError('TEST_004', { tool: name });
         }
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
+        const errorMessage = getErrorMessage(error);
+        const errorCode = error instanceof MCPError ? error.code : 'UNKNOWN';
+
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify({ error: errorMessage }, null, 2),
+              text: JSON.stringify(
+                {
+                  success: false,
+                  error: errorMessage,
+                  code: errorCode,
+                  ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
+                },
+                null,
+                2
+              ),
             },
           ],
           isError: true,

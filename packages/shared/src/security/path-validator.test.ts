@@ -12,7 +12,7 @@ import {
   validatePath,
   validateFilePath,
   validateDirectoryPath,
-  sanitizeFilename
+  sanitizeFilename,
 } from './path-validator.js';
 
 describe('PathValidationError', () => {
@@ -36,15 +36,12 @@ describe('validateNoTraversal', () => {
   });
 
   it('should reject path traversal with ..', () => {
-    expect(() => validateNoTraversal('../etc/passwd'))
-      .toThrow(PathValidationError);
-    expect(() => validateNoTraversal('foo/../../etc'))
-      .toThrow('Path traversal detected');
+    expect(() => validateNoTraversal('../etc/passwd')).toThrow(PathValidationError);
+    expect(() => validateNoTraversal('foo/../../etc')).toThrow('Path traversal detected');
   });
 
   it('should reject normalized paths that still contain ..', () => {
-    expect(() => validateNoTraversal('./foo/../../../etc'))
-      .toThrow(PathValidationError);
+    expect(() => validateNoTraversal('./foo/../../../etc')).toThrow(PathValidationError);
   });
 
   it('should allow normalized absolute paths', () => {
@@ -61,8 +58,7 @@ describe('validatePath', () => {
   });
 
   it('should throw for traversal attempts', () => {
-    expect(() => validatePath('../../../etc/passwd'))
-      .toThrow(PathValidationError);
+    expect(() => validatePath('../../../etc/passwd')).toThrow(PathValidationError);
   });
 
   it('should validate path is within allowed root', () => {
@@ -72,8 +68,7 @@ describe('validatePath', () => {
 
   it('should reject paths outside allowed root', () => {
     const root = '/home/user';
-    expect(() => validatePath('/etc/passwd', root))
-      .toThrow('Path is outside allowed directory');
+    expect(() => validatePath('/etc/passwd', root)).toThrow('Path is outside allowed directory');
   });
 
   it('should handle Windows paths', () => {
@@ -105,13 +100,11 @@ describe('validateFilePath', () => {
 
   it('should throw for non-existent file', () => {
     const nonExistent = path.join(tempDir, 'does-not-exist.txt');
-    expect(() => validateFilePath(nonExistent))
-      .toThrow('File does not exist');
+    expect(() => validateFilePath(nonExistent)).toThrow('File does not exist');
   });
 
   it('should throw when path is directory not file', () => {
-    expect(() => validateFilePath(tempDir))
-      .toThrow('Path is not a file');
+    expect(() => validateFilePath(tempDir)).toThrow('Path is not a file');
   });
 
   it('should validate file within allowed root', () => {
@@ -121,8 +114,7 @@ describe('validateFilePath', () => {
 
   it('should reject file outside allowed root', () => {
     const otherDir = path.join(os.tmpdir(), 'other-dir');
-    expect(() => validateFilePath(tempFile, otherDir))
-      .toThrow('Path is outside allowed directory');
+    expect(() => validateFilePath(tempFile, otherDir)).toThrow('Path is outside allowed directory');
   });
 });
 
@@ -147,13 +139,11 @@ describe('validateDirectoryPath', () => {
 
   it('should throw for non-existent directory', () => {
     const nonExistent = path.join(tempDir, 'does-not-exist');
-    expect(() => validateDirectoryPath(nonExistent))
-      .toThrow('Directory does not exist');
+    expect(() => validateDirectoryPath(nonExistent)).toThrow('Directory does not exist');
   });
 
   it('should throw when path is file not directory', () => {
-    expect(() => validateDirectoryPath(tempFile))
-      .toThrow('Path is not a directory');
+    expect(() => validateDirectoryPath(tempFile)).toThrow('Path is not a directory');
   });
 
   it('should validate directory within allowed root', () => {
@@ -205,9 +195,7 @@ describe('sanitizeFilename', () => {
 
   it('should handle complex attack patterns', () => {
     // Null bytes are removed (not replaced), slashes and .. are removed
-    expect(sanitizeFilename('../../../../etc/passwd\0.txt'))
-      .toBe('etcpasswd.txt');
-    expect(sanitizeFilename('..\\..\\Windows\\System32\\config'))
-      .toBe('WindowsSystem32config');
+    expect(sanitizeFilename('../../../../etc/passwd\0.txt')).toBe('etcpasswd.txt');
+    expect(sanitizeFilename('..\\..\\Windows\\System32\\config')).toBe('WindowsSystem32config');
   });
 });

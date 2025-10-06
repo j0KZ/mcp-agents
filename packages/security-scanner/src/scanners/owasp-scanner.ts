@@ -11,7 +11,7 @@ import {
   FileScanContext,
   SeverityLevel,
   VulnerabilityType,
-  OWASPCategory
+  OWASPCategory,
 } from '../types.js';
 import { DEPENDENCY_LIMITS, CWE_IDS, CVSS_SCORES } from '../constants/security-thresholds.js';
 import { generateFindingId, extractCodeContext, isScannerFile } from '../utils.js';
@@ -36,7 +36,7 @@ export async function scanOWASP(context: FileScanContext): Promise<SecurityFindi
 
   const weakCryptoPatterns = cryptoPatternsData.weakAlgorithms.map((p: any) => ({
     pattern: new RegExp(p.pattern, 'gi'),
-    algo: p.algo
+    algo: p.algo,
   }));
 
   for (const { pattern, algo } of weakCryptoPatterns) {
@@ -55,10 +55,11 @@ export async function scanOWASP(context: FileScanContext): Promise<SecurityFindi
           filePath: context.filePath,
           line: i + 1,
           codeSnippet: codeContext.issueLine,
-          recommendation: 'Use strong cryptographic algorithms like SHA-256, SHA-384, or SHA-512 for hashing. Use AES-256-GCM for encryption.',
+          recommendation:
+            'Use strong cryptographic algorithms like SHA-256, SHA-384, or SHA-512 for hashing. Use AES-256-GCM for encryption.',
           owaspCategory: OWASPCategory.A02_CRYPTOGRAPHIC_FAILURES,
           cweId: CWE_IDS.WEAK_CRYPTO,
-          metadata: { algorithm: algo }
+          metadata: { algorithm: algo },
         });
       }
     }
@@ -69,7 +70,7 @@ export async function scanOWASP(context: FileScanContext): Promise<SecurityFindi
     /pickle\.loads?\(/gi,
     /yaml\.load\(/gi,
     /unserialize\(/gi,
-    /JSON\.parse\(.{0,200}?(?:localStorage|sessionStorage|location\.)/gi
+    /JSON\.parse\(.{0,200}?(?:localStorage|sessionStorage|location\.)/gi,
   ];
 
   for (const pattern of deserializationPatterns) {
@@ -79,7 +80,11 @@ export async function scanOWASP(context: FileScanContext): Promise<SecurityFindi
         const codeContext = extractCodeContext(context.content, i + 1);
 
         findings.push({
-          id: generateFindingId(context.filePath, i + 1, VulnerabilityType.INSECURE_DESERIALIZATION),
+          id: generateFindingId(
+            context.filePath,
+            i + 1,
+            VulnerabilityType.INSECURE_DESERIALIZATION
+          ),
           type: VulnerabilityType.INSECURE_DESERIALIZATION,
           severity: SeverityLevel.HIGH,
           title: 'Insecure Deserialization',
@@ -87,17 +92,19 @@ export async function scanOWASP(context: FileScanContext): Promise<SecurityFindi
           filePath: context.filePath,
           line: i + 1,
           codeSnippet: codeContext.issueLine,
-          recommendation: 'Validate and sanitize data before deserialization. Use safe deserialization methods or implement integrity checks.',
+          recommendation:
+            'Validate and sanitize data before deserialization. Use safe deserialization methods or implement integrity checks.',
           owaspCategory: OWASPCategory.A08_DATA_INTEGRITY_FAILURES,
           cweId: CWE_IDS.INSECURE_DESERIALIZATION,
-          cvssScore: CVSS_SCORES.INSECURE_DESERIALIZATION
+          cvssScore: CVSS_SCORES.INSECURE_DESERIALIZATION,
         });
       }
     }
   }
 
   // Check for path traversal vulnerabilities
-  const pathTraversalPattern = /(?:readFile|writeFile|open|unlink|rmdir|mkdir|stat)\s?\(.{0,200}?(?:\+|concat|\$\{)/gi;
+  const pathTraversalPattern =
+    /(?:readFile|writeFile|open|unlink|rmdir|mkdir|stat)\s?\(.{0,200}?(?:\+|concat|\$\{)/gi;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -109,14 +116,16 @@ export async function scanOWASP(context: FileScanContext): Promise<SecurityFindi
         type: VulnerabilityType.PATH_TRAVERSAL,
         severity: SeverityLevel.HIGH,
         title: 'Potential Path Traversal Vulnerability',
-        description: 'File path operations with user input can allow attackers to access unauthorized files.',
+        description:
+          'File path operations with user input can allow attackers to access unauthorized files.',
         filePath: context.filePath,
         line: i + 1,
         codeSnippet: codeContext.issueLine,
-        recommendation: 'Validate and sanitize file paths. Use path.join() and check that resolved paths stay within allowed directories.',
+        recommendation:
+          'Validate and sanitize file paths. Use path.join() and check that resolved paths stay within allowed directories.',
         owaspCategory: OWASPCategory.A01_BROKEN_ACCESS_CONTROL,
         cweId: CWE_IDS.PATH_TRAVERSAL,
-        cvssScore: DEPENDENCY_LIMITS.DEFAULT_CVSS
+        cvssScore: DEPENDENCY_LIMITS.DEFAULT_CVSS,
       });
     }
   }

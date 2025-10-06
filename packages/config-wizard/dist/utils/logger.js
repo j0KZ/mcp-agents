@@ -23,6 +23,6 @@ export const logger = {
     },
     dim(message) {
         console.log(chalk.dim(message));
-    }
+    },
 };
 //# sourceMappingURL=logger.js.map

@@ -283,7 +283,12 @@ export interface ValidationResult {
  * Validation error
  */
 export interface ValidationError {
-  type: 'MISSING_PRIMARY_KEY' | 'INVALID_FOREIGN_KEY' | 'DUPLICATE_COLUMN' | 'INVALID_TYPE' | 'NAMING_VIOLATION';
+  type:
+    | 'MISSING_PRIMARY_KEY'
+    | 'INVALID_FOREIGN_KEY'
+    | 'DUPLICATE_COLUMN'
+    | 'INVALID_TYPE'
+    | 'NAMING_VIOLATION';
   table: string;
   column?: string;
   message: string;

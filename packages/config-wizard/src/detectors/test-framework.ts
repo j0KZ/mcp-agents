@@ -11,7 +11,7 @@ export async function detectTestFramework(): Promise<TestFramework> {
   const cwd = process.cwd();
   const pkgPath = path.join(cwd, 'package.json');
 
-  if (!await fs.pathExists(pkgPath)) {
+  if (!(await fs.pathExists(pkgPath))) {
     return null;
   }
 
@@ -31,7 +31,7 @@ export async function detectTestFramework(): Promise<TestFramework> {
     { file: 'jest.config.js', framework: 'jest' as TestFramework },
     { file: 'jest.config.ts', framework: 'jest' as TestFramework },
     { file: '.mocharc.json', framework: 'mocha' as TestFramework },
-    { file: 'ava.config.js', framework: 'ava' as TestFramework }
+    { file: 'ava.config.js', framework: 'ava' as TestFramework },
   ];
 
   for (const { file, framework } of configFiles) {

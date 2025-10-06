@@ -36,9 +36,10 @@ export function validateAPIDesign(spec: OpenAPISpec | GraphQLSchema): Validation
     valid: errors.length === 0,
     errors,
     warnings,
-    suggestions: errors.length === 0 && warnings.length === 0
-      ? ['API design looks good! Consider adding documentation and examples.']
-      : [],
+    suggestions:
+      errors.length === 0 && warnings.length === 0
+        ? ['API design looks good! Consider adding documentation and examples.']
+        : [],
   };
 }
 

@@ -2,7 +2,7 @@
  * Pre-built workflows for common development tasks
  */
 
-import { MCPPipeline } from '@j0kz/shared';
+import { MCPPipeline, MCPError } from '@j0kz/shared';
 import { WorkflowName, WorkflowMetadata } from './types.js';
 
 /**
@@ -11,17 +11,20 @@ import { WorkflowName, WorkflowMetadata } from './types.js';
 export const WORKFLOWS: Record<WorkflowName, WorkflowMetadata> = {
   'pre-commit': {
     name: 'Pre-commit Quality Check',
-    description: 'Fast quality checks for local commits - code review and security scan',
+    description:
+      'Fast quality checks for local commits - batch review and security scan of ALL changed files',
     steps: 2,
   },
   'pre-merge': {
     name: 'Pre-merge Validation',
-    description: 'Comprehensive checks before merging PR - review, architecture, security, and tests',
+    description:
+      'Comprehensive checks before merging PR - review, architecture, security, and tests',
     steps: 4,
   },
   'quality-audit': {
     name: 'Quality Audit',
-    description: 'Deep analysis and reporting - security report, architecture analysis, and documentation',
+    description:
+      'Deep analysis and reporting - security report, architecture analysis, and documentation',
     steps: 3,
   },
 };
@@ -30,34 +33,41 @@ export const WORKFLOWS: Record<WorkflowName, WorkflowMetadata> = {
  * Create pre-commit workflow
  *
  * Steps:
- * 1. Code review (moderate severity)
- * 2. Security scan
+ * 1. Code review (moderate severity) - reviews ALL files
+ * 2. Security scan - scans ALL files
  *
  * @param files - Files to check
  */
 export function createPreCommitWorkflow(files: string[]): MCPPipeline {
   const pipeline = new MCPPipeline();
 
-  // Step 1: Code review
+  // Step 1: Batch code review - reviews ALL files, not just first one
   pipeline.addStep({
     name: 'code-review',
     tool: 'smart-reviewer',
     config: {
-      action: 'review_file',
+      action: 'batch_review',
       params: {
-        filePath: files[0],
+        filePaths: files,
         config: { severity: 'moderate' },
       },
     },
   });
 
-  // Step 2: Security scan
+  // Step 2: Security scan - scans ALL files
   pipeline.addStep({
     name: 'security-scan',
     tool: 'security-scanner',
     config: {
-      action: 'scan_file',
-      params: { filePath: files[0] },
+      action: 'scan_project',
+      params: {
+        projectPath: '.',
+        config: {
+          // Filter to only the files we care about
+          includePatterns: files,
+          minSeverity: 'medium',
+        },
+      },
     },
   });
 
@@ -76,10 +86,7 @@ export function createPreCommitWorkflow(files: string[]): MCPPipeline {
  * @param files - Files changed in PR
  * @param projectPath - Project root path
  */
-export function createPreMergeWorkflow(
-  files: string[],
-  projectPath: string
-): MCPPipeline {
+export function createPreMergeWorkflow(files: string[], projectPath: string): MCPPipeline {
   const pipeline = new MCPPipeline();
 
   // Step 1: Batch code review
@@ -220,6 +227,6 @@ export function createWorkflow(
     case 'quality-audit':
       return createQualityAuditWorkflow(projectPath);
     default:
-      throw new Error(`Unknown workflow: ${name}`);
+      throw new MCPError('ORCH_002', { workflow: name });
   }
 }

@@ -13,7 +13,7 @@ vi.mock('../detectors/editor.js', () => ({
     if (editor === 'vscode') return '/home/user/.config/Code/User/globalStorage/claude-mcp.json';
     if (editor === 'cursor') return '/home/user/.cursor/mcp.json';
     return null;
-  })
+  }),
 }));
 
 describe('writeConfigFile', () => {
@@ -26,15 +26,15 @@ describe('writeConfigFile', () => {
     vi.mocked(fs.ensureDir).mockResolvedValue(undefined);
     vi.mocked(fs.writeJSON).mockResolvedValue(undefined);
 
-    const config = { mcpServers: { 'smart-reviewer': { command: 'npx', args: ['@j0kz/smart-reviewer-mcp'] } } };
+    const config = {
+      mcpServers: { 'smart-reviewer': { command: 'npx', args: ['@j0kz/smart-reviewer-mcp'] } },
+    };
     const result = await writeConfigFile(config, 'vscode');
 
     expect(result).toContain('claude-mcp.json');
-    expect(fs.writeJSON).toHaveBeenCalledWith(
-      expect.stringContaining('claude-mcp.json'),
-      config,
-      { spaces: 2 }
-    );
+    expect(fs.writeJSON).toHaveBeenCalledWith(expect.stringContaining('claude-mcp.json'), config, {
+      spaces: 2,
+    });
   });
 
   it('should write config file to custom path', async () => {
@@ -55,8 +55,9 @@ describe('writeConfigFile', () => {
 
     const config = { mcpServers: {} };
 
-    await expect(writeConfigFile(config, 'vscode', undefined, false))
-      .rejects.toThrow('Config file already exists');
+    await expect(writeConfigFile(config, 'vscode', undefined, false)).rejects.toThrow(
+      'Config file already exists'
+    );
   });
 
   it('should overwrite file if force is true', async () => {
@@ -74,8 +75,9 @@ describe('writeConfigFile', () => {
   it('should throw error if editor config path cannot be determined', async () => {
     const config = { mcpServers: {} };
 
-    await expect(writeConfigFile(config, 'unknown-editor'))
-      .rejects.toThrow('Cannot determine config path for editor: unknown-editor');
+    await expect(writeConfigFile(config, 'unknown-editor')).rejects.toThrow(
+      'Cannot determine config path for editor: unknown-editor'
+    );
   });
 
   it('should ensure directory exists before writing', async () => {

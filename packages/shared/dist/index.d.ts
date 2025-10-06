@@ -13,6 +13,7 @@ export * from './cache/index.js';
 export * from './constants/index.js';
 export * from './security/path-validator.js';
 export * from './validation.js';
+export * from './errors/index.js';
 export declare const VERSION = "1.0.16";
 export declare const PACKAGE_NAME = "@j0kz/shared";
 //# sourceMappingURL=index.d.ts.map

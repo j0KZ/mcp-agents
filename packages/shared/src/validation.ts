@@ -20,16 +20,17 @@ export function validateFilePathInput(filePath: unknown, toolPrefix: string): Va
     };
   }
 
+  // Check for empty path after trimming
   if (filePath.trim().length === 0) {
     return {
       valid: false,
-      errorCode: `${toolPrefix}_002`,
+      errorCode: `${toolPrefix}_001`, // Use 001 for invalid/empty input
       error: 'File path cannot be empty.',
     };
   }
 
-  // Check for path traversal attempts
-  if (filePath.includes('..') && filePath.includes('/')) {
+  // Check for path traversal attempts (both Unix / and Windows \)
+  if (filePath.includes('..') && (filePath.includes('/') || filePath.includes('\\'))) {
     return {
       valid: false,
       errorCode: `${toolPrefix}_003`,
@@ -48,17 +49,17 @@ export function validateFileContent(
   filePath: string,
   maxSizeKB: number = 1000
 ): ValidationResult {
-  if (!content || typeof content !== 'string') {
+  if (typeof content !== 'string') {
     return {
       valid: false,
       error: `Invalid file content from ${filePath}.`,
     };
   }
 
-  if (content.trim().length === 0) {
+  if (content.length === 0 || content.trim().length === 0) {
     return {
       valid: false,
-      error: `File is empty: ${filePath}`,
+      error: `File is empty: ${filePath}. Cannot process empty file.`,
     };
   }
 
@@ -92,7 +93,42 @@ export function validateIdentifier(name: unknown): ValidationResult {
   }
 
   // Check against reserved keywords
-  const reserved = ['break', 'case', 'catch', 'class', 'const', 'continue', 'debugger', 'default', 'delete', 'do', 'else', 'export', 'extends', 'finally', 'for', 'function', 'if', 'import', 'in', 'instanceof', 'let', 'new', 'return', 'super', 'switch', 'this', 'throw', 'try', 'typeof', 'var', 'void', 'while', 'with', 'yield'];
+  const reserved = [
+    'break',
+    'case',
+    'catch',
+    'class',
+    'const',
+    'continue',
+    'debugger',
+    'default',
+    'delete',
+    'do',
+    'else',
+    'export',
+    'extends',
+    'finally',
+    'for',
+    'function',
+    'if',
+    'import',
+    'in',
+    'instanceof',
+    'let',
+    'new',
+    'return',
+    'super',
+    'switch',
+    'this',
+    'throw',
+    'try',
+    'typeof',
+    'var',
+    'void',
+    'while',
+    'with',
+    'yield',
+  ];
 
   if (reserved.includes(name)) {
     return {
@@ -251,4 +287,54 @@ export function createError(
     suggestion,
     details,
   };
+}
+
+/**
+ * Validate project path (similar to file path but used for directories)
+ */
+export function validateProjectPath(projectPath: unknown): ValidationResult {
+  if (!projectPath || typeof projectPath !== 'string') {
+    return {
+      valid: false,
+      error: 'Invalid project path. Please provide a valid string path.',
+    };
+  }
+
+  if (projectPath.trim().length === 0) {
+    return {
+      valid: false,
+      error: 'Project path cannot be empty.',
+    };
+  }
+
+  // Check for path traversal attempts (both Unix / and Windows \)
+  if (projectPath.includes('..') && (projectPath.includes('/') || projectPath.includes('\\'))) {
+    return {
+      valid: false,
+      error: 'Invalid project path. Path traversal detected.',
+    };
+  }
+
+  return { valid: true };
+}
+
+/**
+ * Validate framework/tool name against a list of valid options
+ */
+export function validateFramework(framework: unknown, validFrameworks: string[]): ValidationResult {
+  if (!framework || typeof framework !== 'string') {
+    return {
+      valid: false,
+      error: 'Framework must be a string.',
+    };
+  }
+
+  if (!validFrameworks.includes(framework)) {
+    return {
+      valid: false,
+      error: `Unsupported framework '${framework}'. Valid options: ${validFrameworks.join(', ')}`,
+    };
+  }
+
+  return { valid: true };
 }

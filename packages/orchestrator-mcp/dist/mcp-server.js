@@ -5,8 +5,8 @@
  */
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { CallToolRequestSchema, ListToolsRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
-import { MCPPipeline } from '@j0kz/shared';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import { MCPPipeline, MCPError, getErrorMessage } from '@j0kz/shared';
 import { WORKFLOWS, createWorkflow } from './workflows.js';
 class OrchestratorServer {
     server;
@@ -105,7 +105,7 @@ class OrchestratorServer {
             const { name, arguments: args } = request.params;
             try {
                 if (!args) {
-                    throw new Error('Missing arguments');
+                    throw new MCPError('ORCH_001', { tool: name });
                 }
                 if (name === 'run_workflow') {
                     return await this.runWorkflow(args.workflow, args.files, args.projectPath || '.');
@@ -116,10 +116,11 @@ class OrchestratorServer {
                 if (name === 'list_workflows') {
                     return this.listWorkflows();
                 }
-                throw new Error(`Unknown tool: ${name}`);
+                throw new MCPError('ORCH_003', { tool: name });
             }
             catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
+                const errorMessage = getErrorMessage(error);
+                const errorCode = error instanceof MCPError ? error.code : 'UNKNOWN';
                 return {
                     content: [
                         {
@@ -127,6 +128,8 @@ class OrchestratorServer {
                             text: JSON.stringify({
                                 success: false,
                                 error: errorMessage,
+                                code: errorCode,
+                                ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
                             }, null, 2),
                         },
                     ],
@@ -149,7 +152,7 @@ class OrchestratorServer {
                         workflow: workflowName,
                         success: result.success,
                         duration: result.totalDuration,
-                        steps: result.steps.map((s) => ({
+                        steps: result.steps.map(s => ({
                             name: s.name,
                             success: s.result.success,
                             duration: s.duration,
@@ -186,7 +189,7 @@ class OrchestratorServer {
                     text: JSON.stringify({
                         success: result.success,
                         duration: result.totalDuration,
-                        steps: result.steps.map((s) => ({
+                        steps: result.steps.map(s => ({
                             name: s.name,
                             success: s.result.success,
                             duration: s.duration,

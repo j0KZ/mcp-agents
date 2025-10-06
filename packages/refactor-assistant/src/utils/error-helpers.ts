@@ -18,7 +18,10 @@ export function getErrorMessage(error: unknown, defaultMessage: string): string 
  * @param error - Error message or Error object
  * @returns Failed refactoring result
  */
-export function createFailedResult(code: string, error: string | Error): {
+export function createFailedResult(
+  code: string,
+  error: string | Error
+): {
   code: string;
   changes: never[];
   success: false;

@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   generateTypeScriptRestClient,
   generateTypeScriptGraphQLClient,
-  generatePythonRestClient
+  generatePythonRestClient,
 } from './client-generator.js';
 import { OpenAPISpec, GraphQLSchema, ClientGenerationOptions } from '../types.js';
 
@@ -13,20 +13,20 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
       title: 'Test API',
       version: '1.0.0',
       description: 'Test API description',
-      license: { name: 'MIT' }
+      license: { name: 'MIT' },
     },
     paths: {},
     components: {
       schemas: {},
-      securitySchemes: {}
+      securitySchemes: {},
     },
-    tags: []
+    tags: [],
   };
 
   it('should generate TypeScript client with axios', () => {
     const options: ClientGenerationOptions = {
       language: 'typescript',
-      outputFormat: 'axios'
+      outputFormat: 'axios',
     };
 
     const code = generateTypeScriptRestClient(baseSpec, options);
@@ -38,7 +38,7 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
   it('should generate TypeScript client with fetch', () => {
     const options: ClientGenerationOptions = {
       language: 'typescript',
-      outputFormat: 'fetch'
+      outputFormat: 'fetch',
     };
 
     const code = generateTypeScriptRestClient(baseSpec, options);
@@ -50,7 +50,7 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
   it('should generate client class with correct name', () => {
     const options: ClientGenerationOptions = {
       language: 'typescript',
-      outputFormat: 'axios'
+      outputFormat: 'axios',
     };
 
     const code = generateTypeScriptRestClient(baseSpec, options);
@@ -61,7 +61,7 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
   it('should include baseURL property', () => {
     const options: ClientGenerationOptions = {
       language: 'typescript',
-      outputFormat: 'axios'
+      outputFormat: 'axios',
     };
 
     const code = generateTypeScriptRestClient(baseSpec, options);
@@ -72,7 +72,7 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
   it('should include axios client property when using axios', () => {
     const options: ClientGenerationOptions = {
       language: 'typescript',
-      outputFormat: 'axios'
+      outputFormat: 'axios',
     };
 
     const code = generateTypeScriptRestClient(baseSpec, options);
@@ -83,7 +83,7 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
   it('should generate constructor with config parameter', () => {
     const options: ClientGenerationOptions = {
       language: 'typescript',
-      outputFormat: 'axios'
+      outputFormat: 'axios',
     };
 
     const code = generateTypeScriptRestClient(baseSpec, options);
@@ -98,15 +98,15 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
         '/users': {
           get: {
             operationId: 'listUsers',
-            summary: 'List users'
-          }
-        }
-      }
+            summary: 'List users',
+          },
+        },
+      },
     };
 
     const options: ClientGenerationOptions = {
       language: 'typescript',
-      outputFormat: 'axios'
+      outputFormat: 'axios',
     };
 
     const code = generateTypeScriptRestClient(spec, options);
@@ -121,15 +121,15 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
         '/users': {
           get: {
             operationId: 'getUsers',
-            summary: 'Get users'
-          }
-        }
-      }
+            summary: 'Get users',
+          },
+        },
+      },
     };
 
     const options: ClientGenerationOptions = {
       language: 'typescript',
-      outputFormat: 'axios'
+      outputFormat: 'axios',
     };
 
     const code = generateTypeScriptRestClient(spec, options);
@@ -144,15 +144,15 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
         '/users': {
           post: {
             operationId: 'createUser',
-            summary: 'Create user'
-          }
-        }
-      }
+            summary: 'Create user',
+          },
+        },
+      },
     };
 
     const options: ClientGenerationOptions = {
       language: 'typescript',
-      outputFormat: 'fetch'
+      outputFormat: 'fetch',
     };
 
     const code = generateTypeScriptRestClient(spec, options);
@@ -170,19 +170,19 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
             type: 'object',
             properties: {
               id: { type: 'string' },
-              name: { type: 'string' }
+              name: { type: 'string' },
             },
-            required: ['id']
-          }
+            required: ['id'],
+          },
         },
-        securitySchemes: {}
-      }
+        securitySchemes: {},
+      },
     };
 
     const options: ClientGenerationOptions = {
       language: 'typescript',
       outputFormat: 'axios',
-      includeTypes: true
+      includeTypes: true,
     };
 
     const code = generateTypeScriptRestClient(spec, options);
@@ -202,19 +202,19 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
             properties: {
               id: { type: 'string' },
               name: { type: 'string' },
-              price: { type: 'number' }
+              price: { type: 'number' },
             },
-            required: ['id', 'name']
-          }
+            required: ['id', 'name'],
+          },
         },
-        securitySchemes: {}
-      }
+        securitySchemes: {},
+      },
     };
 
     const options: ClientGenerationOptions = {
       language: 'typescript',
       outputFormat: 'axios',
-      includeTypes: true
+      includeTypes: true,
     };
 
     const code = generateTypeScriptRestClient(spec, options);
@@ -237,17 +237,17 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
               int: { type: 'integer' },
               bool: { type: 'boolean' },
               arr: { type: 'array', items: { type: 'string' } },
-              obj: { type: 'object', additionalProperties: true }
-            }
-          }
+              obj: { type: 'object', additionalProperties: true },
+            },
+          },
         },
-        securitySchemes: {}
-      }
+        securitySchemes: {},
+      },
     };
 
     const options: ClientGenerationOptions = {
       language: 'typescript',
-      includeTypes: true
+      includeTypes: true,
     };
 
     const code = generateTypeScriptRestClient(spec, options);
@@ -270,18 +270,18 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
             properties: {
               status: {
                 type: 'string',
-                enum: ['active', 'inactive', 'pending']
-              }
-            }
-          }
+                enum: ['active', 'inactive', 'pending'],
+              },
+            },
+          },
         },
-        securitySchemes: {}
-      }
+        securitySchemes: {},
+      },
     };
 
     const options: ClientGenerationOptions = {
       language: 'typescript',
-      includeTypes: true
+      includeTypes: true,
     };
 
     const code = generateTypeScriptRestClient(spec, options);
@@ -297,23 +297,23 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
           User: {
             type: 'object',
             properties: {
-              profile: { $ref: '#/components/schemas/Profile' }
-            }
+              profile: { $ref: '#/components/schemas/Profile' },
+            },
           },
           Profile: {
             type: 'object',
             properties: {
-              bio: { type: 'string' }
-            }
-          }
+              bio: { type: 'string' },
+            },
+          },
         },
-        securitySchemes: {}
-      }
+        securitySchemes: {},
+      },
     };
 
     const options: ClientGenerationOptions = {
       language: 'typescript',
-      includeTypes: true
+      includeTypes: true,
     };
 
     const code = generateTypeScriptRestClient(spec, options);
@@ -327,19 +327,19 @@ describe('Client Generator - generateTypeScriptRestClient', () => {
       paths: {
         '/users': {
           get: { operationId: 'listUsers', summary: 'List' },
-          post: { operationId: 'createUser', summary: 'Create' }
+          post: { operationId: 'createUser', summary: 'Create' },
         },
         '/users/{id}': {
           get: { operationId: 'getUser', summary: 'Get' },
           put: { operationId: 'updateUser', summary: 'Update' },
-          delete: { operationId: 'deleteUser', summary: 'Delete' }
-        }
-      }
+          delete: { operationId: 'deleteUser', summary: 'Delete' },
+        },
+      },
     };
 
     const options: ClientGenerationOptions = {
       language: 'typescript',
-      outputFormat: 'fetch'
+      outputFormat: 'fetch',
     };
 
     const code = generateTypeScriptRestClient(spec, options);
@@ -360,17 +360,15 @@ describe('Client Generator - generateTypeScriptGraphQLClient', () => {
         kind: 'object',
         fields: [
           { name: 'id', type: 'ID!' },
-          { name: 'name', type: 'String!' }
-        ]
-      }
+          { name: 'name', type: 'String!' },
+        ],
+      },
     ],
-    queries: [
-      { name: 'getUser', type: 'User' }
-    ]
+    queries: [{ name: 'getUser', type: 'User' }],
   };
 
   const options: ClientGenerationOptions = {
-    language: 'typescript'
+    language: 'typescript',
   };
 
   it('should generate GraphQL client class', () => {
@@ -429,15 +427,15 @@ describe('Client Generator - generatePythonRestClient', () => {
     info: {
       title: 'Test API',
       version: '1.0.0',
-      license: { name: 'MIT' }
+      license: { name: 'MIT' },
     },
     paths: {},
     components: { schemas: {}, securitySchemes: {} },
-    tags: []
+    tags: [],
   };
 
   const options: ClientGenerationOptions = {
-    language: 'python'
+    language: 'python',
   };
 
   it('should import requests library', () => {
@@ -470,9 +468,9 @@ describe('Client Generator - generatePythonRestClient', () => {
       ...baseSpec,
       paths: {
         '/users': {
-          get: { operationId: 'listUsers', summary: 'List users' }
-        }
-      }
+          get: { operationId: 'listUsers', summary: 'List users' },
+        },
+      },
     };
 
     const code = generatePythonRestClient(spec, options);
@@ -486,9 +484,9 @@ describe('Client Generator - generatePythonRestClient', () => {
       paths: {
         '/users': {
           get: { operationId: 'getUsers', summary: 'Get' },
-          post: { operationId: 'createUser', summary: 'Create' }
-        }
-      }
+          post: { operationId: 'createUser', summary: 'Create' },
+        },
+      },
     };
 
     const code = generatePythonRestClient(spec, options);
@@ -502,9 +500,9 @@ describe('Client Generator - generatePythonRestClient', () => {
       ...baseSpec,
       paths: {
         '/users': {
-          get: { operationId: 'getUsers', summary: 'Get' }
-        }
-      }
+          get: { operationId: 'getUsers', summary: 'Get' },
+        },
+      },
     };
 
     const code = generatePythonRestClient(spec, options);
@@ -518,9 +516,9 @@ describe('Client Generator - generatePythonRestClient', () => {
       ...baseSpec,
       paths: {
         '/users': {
-          get: { operationId: 'listUsers', summary: 'List' }
-        }
-      }
+          get: { operationId: 'listUsers', summary: 'List' },
+        },
+      },
     };
 
     const code = generatePythonRestClient(spec, options);
@@ -534,9 +532,9 @@ describe('Client Generator - generatePythonRestClient', () => {
       ...baseSpec,
       paths: {
         '/users': {
-          get: { operationId: 'getUsers', summary: 'Get' }
-        }
-      }
+          get: { operationId: 'getUsers', summary: 'Get' },
+        },
+      },
     };
 
     const code = generatePythonRestClient(spec, options);
@@ -549,12 +547,12 @@ describe('Client Generator - generatePythonRestClient', () => {
       ...baseSpec,
       paths: {
         '/users': {
-          get: { operationId: 'listUsers', summary: 'List' }
+          get: { operationId: 'listUsers', summary: 'List' },
         },
         '/posts': {
-          get: { operationId: 'listPosts', summary: 'List' }
-        }
-      }
+          get: { operationId: 'listPosts', summary: 'List' },
+        },
+      },
     };
 
     const code = generatePythonRestClient(spec, options);
@@ -569,9 +567,9 @@ describe('Client Generator - generatePythonRestClient', () => {
       paths: {
         '/users/{id}': {
           put: { operationId: 'updateUser', summary: 'Update' },
-          delete: { operationId: 'deleteUser', summary: 'Delete' }
-        }
-      }
+          delete: { operationId: 'deleteUser', summary: 'Delete' },
+        },
+      },
     };
 
     const code = generatePythonRestClient(spec, options);

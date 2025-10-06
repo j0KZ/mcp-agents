@@ -43,7 +43,10 @@ export function findUnreachableCode(code) {
             for (let j = 1; j <= DEAD_CODE_LIMITS.UNREACHABLE_CHECK_LINES && i + j < lines.length; j++) {
                 const nextLine = lines[i + j].trim();
                 // Ignore closing braces, empty lines, comments
-                if (nextLine && !nextLine.match(/^[}\])]/) && !nextLine.startsWith('//') && !nextLine.startsWith('/*')) {
+                if (nextLine &&
+                    !nextLine.match(/^[}\])]/) &&
+                    !nextLine.startsWith('//') &&
+                    !nextLine.startsWith('/*')) {
                     unreachable.push({ line: i + j + 1, code: nextLine });
                 }
             }

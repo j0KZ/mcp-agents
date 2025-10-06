@@ -81,7 +81,9 @@ describe('Security Scanner Utils', () => {
     });
 
     it('should calculate entropy for base64-like strings', () => {
-      const entropy = calculateEntropy('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/');
+      const entropy = calculateEntropy(
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+      );
       expect(entropy).toBeGreaterThan(5);
     });
   });

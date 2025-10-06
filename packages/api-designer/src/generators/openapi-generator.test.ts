@@ -6,7 +6,7 @@ describe('OpenAPI Generator - generateOpenAPISpec', () => {
   const baseConfig: APIDesignConfig = {
     name: 'Test API',
     version: '1.0.0',
-    style: 'REST'
+    style: 'REST',
   };
 
   it('should generate valid OpenAPI 3.0.3 specification', () => {
@@ -20,7 +20,7 @@ describe('OpenAPI Generator - generateOpenAPISpec', () => {
   it('should include correct API info', () => {
     const config: APIDesignConfig = {
       ...baseConfig,
-      description: 'My Test API'
+      description: 'My Test API',
     };
 
     const result = generateOpenAPISpec(config);
@@ -55,7 +55,7 @@ describe('OpenAPI Generator - generateOpenAPISpec', () => {
   it('should use provided baseUrl for servers', () => {
     const config: APIDesignConfig = {
       ...baseConfig,
-      baseUrl: 'https://api.mycompany.com/v2'
+      baseUrl: 'https://api.mycompany.com/v2',
     };
 
     const result = generateOpenAPISpec(config);
@@ -75,7 +75,7 @@ describe('OpenAPI Generator - generateOpenAPISpec', () => {
   it('should add bearer authentication scheme', () => {
     const config: APIDesignConfig = {
       ...baseConfig,
-      auth: { type: 'bearer' }
+      auth: { type: 'bearer' },
     };
 
     const result = generateOpenAPISpec(config);
@@ -90,7 +90,7 @@ describe('OpenAPI Generator - generateOpenAPISpec', () => {
   it('should add API key authentication scheme', () => {
     const config: APIDesignConfig = {
       ...baseConfig,
-      auth: { type: 'apiKey' }
+      auth: { type: 'apiKey' },
     };
 
     const result = generateOpenAPISpec(config);
@@ -105,7 +105,7 @@ describe('OpenAPI Generator - generateOpenAPISpec', () => {
   it('should add OAuth2 authentication scheme', () => {
     const config: APIDesignConfig = {
       ...baseConfig,
-      auth: { type: 'oauth2' }
+      auth: { type: 'oauth2' },
     };
 
     const result = generateOpenAPISpec(config);
@@ -120,7 +120,7 @@ describe('OpenAPI Generator - generateOpenAPISpec', () => {
   it('should not add security when auth type is none', () => {
     const config: APIDesignConfig = {
       ...baseConfig,
-      auth: { type: 'none' }
+      auth: { type: 'none' },
     };
 
     const result = generateOpenAPISpec(config);
@@ -131,7 +131,7 @@ describe('OpenAPI Generator - generateOpenAPISpec', () => {
   it('should generate endpoints from resources', () => {
     const config: APIDesignConfig = {
       ...baseConfig,
-      resources: ['users', 'posts']
+      resources: ['users', 'posts'],
     };
 
     const result = generateOpenAPISpec(config);
@@ -143,18 +143,20 @@ describe('OpenAPI Generator - generateOpenAPISpec', () => {
   });
 
   it('should add custom endpoints to paths', () => {
-    const customEndpoints: RESTEndpoint[] = [{
-      path: '/custom/endpoint',
-      method: 'GET',
-      summary: 'Custom endpoint',
-      operationId: 'getCustom',
-      responses: {
-        '200': {
-          statusCode: 200,
-          description: 'Success'
-        }
-      }
-    }];
+    const customEndpoints: RESTEndpoint[] = [
+      {
+        path: '/custom/endpoint',
+        method: 'GET',
+        summary: 'Custom endpoint',
+        operationId: 'getCustom',
+        responses: {
+          '200': {
+            statusCode: 200,
+            description: 'Success',
+          },
+        },
+      },
+    ];
 
     const result = generateOpenAPISpec(baseConfig, customEndpoints);
 
@@ -163,13 +165,15 @@ describe('OpenAPI Generator - generateOpenAPISpec', () => {
   });
 
   it('should add tags from endpoints', () => {
-    const customEndpoints: RESTEndpoint[] = [{
-      path: '/test',
-      method: 'GET',
-      summary: 'Test',
-      tags: ['Testing', 'Custom'],
-      responses: { '200': { statusCode: 200, description: 'OK' } }
-    }];
+    const customEndpoints: RESTEndpoint[] = [
+      {
+        path: '/test',
+        method: 'GET',
+        summary: 'Test',
+        tags: ['Testing', 'Custom'],
+        responses: { '200': { statusCode: 200, description: 'OK' } },
+      },
+    ];
 
     const result = generateOpenAPISpec(baseConfig, customEndpoints);
 
@@ -181,7 +185,7 @@ describe('OpenAPI Generator - generateOpenAPISpec', () => {
   it('should include metadata with endpoint count', () => {
     const config: APIDesignConfig = {
       ...baseConfig,
-      resources: ['users']
+      resources: ['users'],
     };
 
     const result = generateOpenAPISpec(config);
@@ -202,12 +206,14 @@ describe('OpenAPI Generator - generateOpenAPISpec', () => {
   });
 
   it('should prevent prototype pollution in paths', () => {
-    const maliciousEndpoints: RESTEndpoint[] = [{
-      path: '__proto__',
-      method: 'GET',
-      summary: 'Malicious',
-      responses: { '200': { statusCode: 200, description: 'OK' } }
-    }];
+    const maliciousEndpoints: RESTEndpoint[] = [
+      {
+        path: '__proto__',
+        method: 'GET',
+        summary: 'Malicious',
+        responses: { '200': { statusCode: 200, description: 'OK' } },
+      },
+    ];
 
     const result = generateOpenAPISpec(baseConfig, maliciousEndpoints);
 
@@ -217,12 +223,14 @@ describe('OpenAPI Generator - generateOpenAPISpec', () => {
   });
 
   it('should prevent prototype pollution in methods', () => {
-    const maliciousEndpoints: any = [{
-      path: '/test',
-      method: '__proto__',
-      summary: 'Malicious',
-      responses: { '200': { statusCode: 200, description: 'OK' } }
-    }];
+    const maliciousEndpoints: any = [
+      {
+        path: '/test',
+        method: '__proto__',
+        summary: 'Malicious',
+        responses: { '200': { statusCode: 200, description: 'OK' } },
+      },
+    ];
 
     const result = generateOpenAPISpec(baseConfig, maliciousEndpoints);
 
@@ -237,7 +245,7 @@ describe('OpenAPI Generator - generateRESTEndpointsFromResources', () => {
   const baseConfig: APIDesignConfig = {
     name: 'Test API',
     version: '1.0.0',
-    style: 'REST'
+    style: 'REST',
   };
 
   it('should generate 5 CRUD endpoints per resource', () => {
@@ -366,7 +374,10 @@ describe('OpenAPI Generator - generateRESTEndpointsFromResources', () => {
   });
 
   it('should handle multiple resources', () => {
-    const endpoints = generateRESTEndpointsFromResources(['users', 'posts', 'comments'], baseConfig);
+    const endpoints = generateRESTEndpointsFromResources(
+      ['users', 'posts', 'comments'],
+      baseConfig
+    );
 
     expect(endpoints.length).toBe(15); // 5 endpoints × 3 resources
   });
@@ -403,7 +414,9 @@ describe('OpenAPI Generator - generateRESTEndpointsFromResources', () => {
     const listEndpoint = endpoints.find(e => e.method === 'GET' && e.path === '/users');
 
     expect(listEndpoint?.responses['200'].schema).toBeDefined();
-    expect(JSON.stringify(listEndpoint?.responses['200'].schema)).toContain('#/components/schemas/Users');
+    expect(JSON.stringify(listEndpoint?.responses['200'].schema)).toContain(
+      '#/components/schemas/Users'
+    );
   });
 
   it('should include pagination in response schema', () => {

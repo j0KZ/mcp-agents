@@ -3,26 +3,64 @@
 > **9 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
-[![Version](https://img.shields.io/badge/version-1.0.30-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.31-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
+[![Performance](https://img.shields.io/badge/performance-2.18x_faster-brightgreen.svg)](docs/PHASE3_SUMMARY.md)
+[![Tests](https://img.shields.io/badge/tests-853_passing-success.svg)](CHANGELOG.md)
 
-## 🎉 What's New in v1.0.30
+## 🎉 What's New in v1.0.31
 
-### 🔗 MCP Workflow Engine (Orchestrator) - NEW!
+### ⚡ Phase 3: Performance & Optimization (COMPLETE)
 
-**Chain multiple MCP tools into automated workflows:**
+**Major Performance Boost:**
+- 🚀 **2.18x speedup** with intelligent caching (99.9% hit rate)
+- ⚡ AST parsing **73% faster** with content-based cache invalidation
+- 📊 Hash generation: **673K ops/sec** throughput
+- ✅ Zero breaking changes - fully backwards compatible
 
-```bash
-# Example: Run pre-commit workflow
-mcp-orchestrator run_workflow --workflow=pre-commit --files=src/app.ts
+**Key Features:**
+- ✨ Intelligent caching in test-generator, security-scanner, smart-reviewer
+- 📈 Reusable performance benchmark suite
+- 🔄 Content-based automatic cache invalidation
+- 📊 Built-in cache statistics and monitoring
 
-# Result: Automatically runs code review + security scan
-✅ smart-reviewer: 3 issues found (moderate severity)
-✅ security-scanner: No vulnerabilities detected
+**Metrics:**
 ```
+Analysis Cache:  2.18x speedup (99.9% hit rate)
+AST Parsing:     73% faster with cache
+Hash Generation: 673K ops/sec
+Tests:           853 total (+228 from v1.0.30)
+Pass Rate:       100% (853/853)
+```
+
+### 📈 Phase 2: Quality & Test Coverage (COMPLETE)
+
+**Test Expansion:**
+- ✅ Added **225 new tests** (625 → 850)
+- ✅ Smart-reviewer analyzers: 0% → 100% coverage
+- ✅ Strengthened api-designer assertions (removed shallow `toBeDefined()`)
+
+**Code Modernization:**
+- ✅ ESLint 9 + Prettier with flat config
+- ✅ AST parser with `@babel/parser` (eliminated ReDoS vulnerabilities)
+- ✅ Auto-fixed 69 code quality issues
+
+### 🔒 Phase 1: Critical Fixes (COMPLETE)
+
+**Security & Reliability:**
+- ✅ Fixed orchestrator batch operations bug (critical)
+- ✅ 100% validation coverage (32 security tests)
+- ✅ Standardized 58 error codes with `MCPError` class
+- ✅ 20 integration tests for real-world workflows
+
+**See [CHANGELOG.md](CHANGELOG.md) for complete v1.0.31 release notes.**
+- 🏗️ Architecture: Centralized error handling, reduced complexity
+- ✅ Quality: ESLint + Prettier enforced, AST-based parsing
+
+### 🔗 MCP Workflow Engine (Orchestrator)
 
 **3 Pre-built Workflows:**
 - **pre-commit** (2 steps) - Fast local checks: code review + security scan
@@ -33,8 +71,7 @@ mcp-orchestrator run_workflow --workflow=pre-commit --files=src/app.ts
 - 🔗 MCP-to-MCP communication via JSON-RPC
 - 📊 Dependency resolution (steps can depend on other steps)
 - ⚡ Parallel execution where possible
-- 🛠️ Custom workflow creation with `run_sequence` tool
-- ✅ 85/85 tests passing
+- ✅ 48/48 tests passing (includes 20 integration tests)
 
 [Read full orchestrator docs](packages/orchestrator-mcp/README.md)
 

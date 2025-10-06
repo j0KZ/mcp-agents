@@ -31,8 +31,8 @@ export async function detectIssues(content, filePath) {
                 fix: {
                     description: "Replace 'var' with 'const' or 'let'",
                     oldCode: line,
-                    newCode: line.replace(/\bvar\b/, 'const')
-                }
+                    newCode: line.replace(/\bvar\b/, 'const'),
+                },
             });
         }
         // Check for console.log (skip comments, JSDoc, and string literals)
@@ -47,8 +47,8 @@ export async function detectIssues(content, filePath) {
                 fix: {
                     description: 'Remove console.log statement',
                     oldCode: line,
-                    newCode: ''
-                }
+                    newCode: '',
+                },
             });
         }
         // Check for TODO comments using shared regex
@@ -57,7 +57,7 @@ export async function detectIssues(content, filePath) {
                 line: lineNum,
                 severity: 'info',
                 message: 'Unresolved TODO/FIXME comment',
-                rule: 'no-todo'
+                rule: 'no-todo',
             });
         }
         // Check for long lines using shared threshold
@@ -66,7 +66,7 @@ export async function detectIssues(content, filePath) {
                 line: lineNum,
                 severity: 'info',
                 message: `Line too long (${line.length} chars). Consider breaking it up.`,
-                rule: 'max-line-length'
+                rule: 'max-line-length',
             });
         }
         // Check for multiple blank lines
@@ -75,7 +75,7 @@ export async function detectIssues(content, filePath) {
                 line: lineNum,
                 severity: 'info',
                 message: 'Multiple consecutive blank lines',
-                rule: 'no-multiple-empty-lines'
+                rule: 'no-multiple-empty-lines',
             });
         }
         // Check for == instead of ===
@@ -90,8 +90,8 @@ export async function detectIssues(content, filePath) {
                     fix: {
                         description: "Replace '==' with '==='",
                         oldCode: line,
-                        newCode: line.replace(/([^=!])={2}([^=])/, '$1===$2')
-                    }
+                        newCode: line.replace(/([^=!])={2}([^=])/, '$1===$2'),
+                    },
                 });
             }
         }
@@ -104,7 +104,7 @@ export async function detectIssues(content, filePath) {
                     line: lineNum,
                     severity: 'warning',
                     message: `Function has too many parameters (${params.length}). Consider using an options object.`,
-                    rule: 'max-params'
+                    rule: 'max-params',
                 });
             }
         }
@@ -115,7 +115,7 @@ export async function detectIssues(content, filePath) {
                 line: lineNum,
                 severity: 'info',
                 message: 'Avoid magic numbers. Use named constants.',
-                rule: 'no-magic-numbers'
+                rule: 'no-magic-numbers',
             });
         }
         // Check for empty catch blocks (ignore string templates and comments)
@@ -129,7 +129,7 @@ export async function detectIssues(content, filePath) {
                     line: lineNum,
                     severity: 'error',
                     message: 'Empty catch block. Handle errors properly.',
-                    rule: 'no-empty-catch'
+                    rule: 'no-empty-catch',
                 });
             }
         }
@@ -140,7 +140,7 @@ export async function detectIssues(content, filePath) {
                 line: lineNum,
                 severity: 'warning',
                 message: 'Nested ternary operators reduce readability',
-                rule: 'no-nested-ternary'
+                rule: 'no-nested-ternary',
             });
         }
     }

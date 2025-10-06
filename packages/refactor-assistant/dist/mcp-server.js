@@ -8,6 +8,7 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { CallToolRequestSchema, ListToolsRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
 import { extractFunction, convertToAsync, simplifyConditionals, removeDeadCode, applyDesignPattern, renameVariable, suggestRefactorings, calculateMetrics, } from './refactorer.js';
+import { MCPError, getErrorMessage } from '@j0kz/shared';
 /**
  * MCP Tool definitions
  */
@@ -377,14 +378,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         }
     }
     catch (error) {
+        const errorMessage = getErrorMessage(error);
+        const errorCode = error instanceof MCPError ? error.code : 'UNKNOWN';
         return {
             content: [
                 {
                     type: 'text',
                     text: JSON.stringify({
-                        error: error instanceof Error ? error.message : 'Unknown error occurred',
-                        stack: error instanceof Error ? error.stack : undefined,
-                    }),
+                        success: false,
+                        error: errorMessage,
+                        code: errorCode,
+                        ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
+                    }, null, 2),
                 },
             ],
             isError: true,
@@ -399,7 +404,7 @@ async function main() {
     await server.connect(transport);
     console.error('Refactoring Assistant MCP Server running on stdio');
 }
-main().catch((error) => {
+main().catch(error => {
     console.error('Fatal error in main():', error);
     process.exit(1);
 });

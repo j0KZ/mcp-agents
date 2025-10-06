@@ -97,7 +97,9 @@ export function extractFunction(code, options) {
                 error: 'REFACTOR_005: Invalid line range. startLine and endLine must be numbers.',
             };
         }
-        if (startLine < INDEX_CONSTANTS.FIRST_LINE_NUMBER || endLine > lines.length || startLine > endLine) {
+        if (startLine < INDEX_CONSTANTS.FIRST_LINE_NUMBER ||
+            endLine > lines.length ||
+            startLine > endLine) {
             return {
                 code,
                 changes: [],

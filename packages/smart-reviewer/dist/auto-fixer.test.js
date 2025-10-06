@@ -185,10 +185,7 @@ console.log(a);
             expect(unusedFixes).toHaveLength(2);
             // Note: Current implementation removes entire import lines when unused
             // The test verifies that multiple fixes are detected correctly
-            expect(unusedFixes.map(f => f.description)).toEqual(expect.arrayContaining([
-                expect.stringContaining('b'),
-                expect.stringContaining('c')
-            ]));
+            expect(unusedFixes.map(f => f.description)).toEqual(expect.arrayContaining([expect.stringContaining('b'), expect.stringContaining('c')]));
         });
         it('should NOT apply unsafe fixes', async () => {
             const code = `const name = user.name;`;

@@ -64,10 +64,7 @@ import {
   detectMissingJunctionTables,
 } from './helpers/normalization-helper.js';
 
-import {
-  generateSQLRecords,
-  generateMongoRecords,
-} from './generators/seed-generator.js';
+import { generateSQLRecords, generateMongoRecords } from './generators/seed-generator.js';
 
 import {
   validateSQLSchema,
@@ -81,10 +78,7 @@ import {
  * @param options - Schema design options
  * @returns Complete database schema
  */
-export function designSchema(
-  requirements: string,
-  options: SchemaDesignOptions
-): DatabaseSchema {
+export function designSchema(requirements: string, options: SchemaDesignOptions): DatabaseSchema {
   const { database } = options;
 
   // Parse requirements and extract entities
@@ -105,11 +99,11 @@ export function designSchema(
  * @param description - Migration description
  * @returns Migration object with up/down SQL
  */
-export function generateMigration(
-  schema: DatabaseSchema,
-  description: string
-): Migration {
-  const timestamp = new Date().toISOString().replace(/[-:T.]/g, '').slice(0, MIGRATION_FORMAT.TIMESTAMP_LENGTH);
+export function generateMigration(schema: DatabaseSchema, description: string): Migration {
+  const timestamp = new Date()
+    .toISOString()
+    .replace(/[-:T.]/g, '')
+    .slice(0, MIGRATION_FORMAT.TIMESTAMP_LENGTH);
   const version = `${MIGRATION_FORMAT.VERSION_PREFIX}${timestamp}`;
 
   let upSQL = '';
@@ -142,7 +136,11 @@ export function generateMigration(
  */
 export function createERDiagram(
   schema: DatabaseSchema,
-  options: ERDiagramOptions = { format: 'mermaid', includeColumns: true, includeRelationships: true }
+  options: ERDiagramOptions = {
+    format: 'mermaid',
+    includeColumns: true,
+    includeRelationships: true,
+  }
 ): string {
   if (options.format === 'mermaid') {
     return generateMermaidDiagram(schema, options);
@@ -285,11 +283,15 @@ export function analyzeSchema(schema: DatabaseSchema): SchemaAnalysis {
   // Estimate complexity
   let complexity: 'HIGH' | 'MEDIUM' | 'LOW' = 'LOW';
 
-  if (tables.length > COMPLEXITY_THRESHOLDS.HIGH_COMPLEXITY_TABLE_COUNT ||
-      relationships.length > COMPLEXITY_THRESHOLDS.HIGH_COMPLEXITY_RELATIONSHIP_COUNT) {
+  if (
+    tables.length > COMPLEXITY_THRESHOLDS.HIGH_COMPLEXITY_TABLE_COUNT ||
+    relationships.length > COMPLEXITY_THRESHOLDS.HIGH_COMPLEXITY_RELATIONSHIP_COUNT
+  ) {
     complexity = 'HIGH';
-  } else if (tables.length > COMPLEXITY_THRESHOLDS.MEDIUM_COMPLEXITY_TABLE_COUNT ||
-             relationships.length > COMPLEXITY_THRESHOLDS.MEDIUM_COMPLEXITY_RELATIONSHIP_COUNT) {
+  } else if (
+    tables.length > COMPLEXITY_THRESHOLDS.MEDIUM_COMPLEXITY_TABLE_COUNT ||
+    relationships.length > COMPLEXITY_THRESHOLDS.MEDIUM_COMPLEXITY_RELATIONSHIP_COUNT
+  ) {
     complexity = 'MEDIUM';
   }
 

@@ -8,7 +8,10 @@ import { REGEX_LIMITS } from '../constants/transformation-limits.js';
 /**
  * Convert callback-based code to async/await
  */
-export function convertCallbackToAsync(code: string, useTryCatch: boolean): {
+export function convertCallbackToAsync(
+  code: string,
+  useTryCatch: boolean
+): {
   code: string;
   changed: boolean;
 } {
@@ -27,14 +30,11 @@ export function convertCallbackToAsync(code: string, useTryCatch: boolean): {
   callbackPattern.lastIndex = PATTERN_CONSTANTS.REGEX_RESET_INDEX;
 
   // Convert callback pattern to await
-  result = result.replace(
-    callbackPattern,
-    (_match, fn, dataVar) => {
-      return useTryCatch
-        ? `try {\n  const ${dataVar} = await ${fn}();\n`
-        : `const ${dataVar} = await ${fn}();\n`;
-    }
-  );
+  result = result.replace(callbackPattern, (_match, fn, dataVar) => {
+    return useTryCatch
+      ? `try {\n  const ${dataVar} = await ${fn}();\n`
+      : `const ${dataVar} = await ${fn}();\n`;
+  });
 
   // Add catch block if requested
   if (useTryCatch) {
@@ -69,10 +69,7 @@ export function convertPromiseChainToAsync(code: string): {
   result = result.replace(/function\s+(\w+)\s*\(/g, 'async function $1(');
 
   // Convert .then() to await
-  result = result.replace(
-    promisePattern,
-    ';\n  const $1 = await promise;\n  $2'
-  );
+  result = result.replace(promisePattern, ';\n  const $1 = await promise;\n  $2');
 
   return { code: result, changed: true };
 }
