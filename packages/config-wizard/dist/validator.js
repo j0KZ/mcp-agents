@@ -3,11 +3,12 @@
  */
 import semver from 'semver';
 import fs from 'fs-extra';
+import path from 'path';
 import { getEditorConfigPath } from './detectors/editor.js';
 const MIN_NODE_MAJOR_VERSION = 18;
 const MIN_NODE_MINOR_VERSION = 0;
 const MIN_NODE_PATCH_VERSION = 0;
-export async function validateConfig(selections, detected) {
+export async function validateConfig(selections, _detected) {
     const issues = [];
     // Check Node version
     const nodeVersion = process.version;
@@ -18,11 +19,11 @@ export async function validateConfig(selections, detected) {
     // Check if editor config path exists or can be created
     const configPath = getEditorConfigPath(selections.editor);
     if (configPath) {
-        const configDir = require('path').dirname(configPath);
+        const configDir = path.dirname(configPath);
         try {
             await fs.ensureDir(configDir);
         }
-        catch (error) {
+        catch {
             issues.push(`Cannot create config directory: ${configDir}`);
         }
         // Check if config file already exists

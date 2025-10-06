@@ -13,6 +13,7 @@ Convert the getUserData function in examples/refactor-assistant/legacy-code.js f
 ```
 
 ### Before:
+
 ```javascript
 function getUserData(userId, callback) {
   db.findUser(userId, (err, user) => {
@@ -38,6 +39,7 @@ function getUserData(userId, callback) {
 ```
 
 ### After:
+
 ```javascript
 async function getUserData(userId) {
   try {
@@ -62,6 +64,7 @@ Simplify the nested conditionals in processOrder function using guard clauses
 ```
 
 ### Before:
+
 ```javascript
 function processOrder(order) {
   if (order) {
@@ -89,6 +92,7 @@ function processOrder(order) {
 ```
 
 ### After:
+
 ```javascript
 function processOrder(order) {
   // Guard clauses for early returns
@@ -113,6 +117,7 @@ Extract the repeated calculation pattern from calculateUserStats into a reusable
 ```
 
 ### Before:
+
 ```javascript
 function calculateUserStats() {
   const totalPosts = user.posts.length;
@@ -126,12 +131,13 @@ function calculateUserStats() {
   return {
     posts: { total: totalPosts, perDay: postsPerDay },
     comments: { total: totalComments, perDay: commentsPerDay },
-    likes: { total: totalLikes, perDay: likesPerDay }
+    likes: { total: totalLikes, perDay: likesPerDay },
   };
 }
 ```
 
 ### After:
+
 ```javascript
 function calculatePerDay(total, days) {
   return total / days;
@@ -149,7 +155,7 @@ function calculateUserStats() {
   return {
     posts: calculateStat(user.posts, days),
     comments: calculateStat(user.comments, days),
-    likes: calculateStat(user.likes, days)
+    likes: calculateStat(user.likes, days),
   };
 }
 ```
@@ -165,6 +171,7 @@ Remove unused imports from examples/refactor-assistant/legacy-code.js
 ```
 
 ### Before:
+
 ```javascript
 import { oldFunction, deprecatedUtil } from './utils';
 import { helper1, helper2, unusedHelper } from './helpers';
@@ -175,6 +182,7 @@ function activeFunction() {
 ```
 
 ### After:
+
 ```javascript
 import { helper1, helper2 } from './helpers';
 
@@ -192,6 +200,7 @@ Apply singleton pattern to the DatabaseConnection class
 ```
 
 **Before**:
+
 ```javascript
 class DatabaseConnection {
   constructor() {
@@ -205,6 +214,7 @@ class DatabaseConnection {
 ```
 
 **After**:
+
 ```javascript
 class DatabaseConnection {
   private static instance: DatabaseConnection;
@@ -237,6 +247,7 @@ Refactor payment processing to use strategy pattern
 ```
 
 **Before**:
+
 ```javascript
 function processPayment(order, method) {
   if (method === 'credit') {
@@ -250,6 +261,7 @@ function processPayment(order, method) {
 ```
 
 **After**:
+
 ```javascript
 class PaymentStrategy {
   process(order) {
@@ -297,6 +309,7 @@ Calculate complexity metrics for examples/refactor-assistant/legacy-code.js
 ```
 
 ### Expected Output:
+
 ```
 📊 Code Metrics:
 
@@ -315,6 +328,7 @@ Recommendations:
 ## MCP Tool Reference
 
 ### Convert to Async/Await
+
 ```json
 {
   "tool": "convert_to_async",
@@ -326,6 +340,7 @@ Recommendations:
 ```
 
 ### Simplify Conditionals
+
 ```json
 {
   "tool": "simplify_conditionals",
@@ -338,6 +353,7 @@ Recommendations:
 ```
 
 ### Extract Function
+
 ```json
 {
   "tool": "extract_function",
@@ -352,6 +368,7 @@ Recommendations:
 ```
 
 ### Remove Dead Code
+
 ```json
 {
   "tool": "remove_dead_code",
@@ -364,6 +381,7 @@ Recommendations:
 ```
 
 ### Apply Pattern
+
 ```json
 {
   "tool": "apply_pattern",

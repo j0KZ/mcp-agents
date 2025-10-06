@@ -35,7 +35,13 @@ import {
 } from './transformations/conditional-helpers.js';
 import { removeUnusedImportsFromCode, escapeRegExp } from './transformations/import-helpers.js';
 import { analyzeFunctionLengths } from './transformations/analysis-helpers.js';
-import { getErrorMessage } from './utils/error-helpers.js';
+import {
+  createSuccessResult,
+  createErrorResult,
+  createValidationError,
+  createSingleChangeResult,
+  validateCodeSize,
+} from './utils/result-helpers.js';
 import {
   convertCallbackToAsync,
   convertPromiseChainToAsync,
@@ -54,14 +60,9 @@ export function convertToAsync(options: ConvertToAsyncOptions): RefactoringResul
   try {
     const { code, useTryCatch = true } = options;
 
-    if (code.length > REFACTORING_LIMITS.MAX_CODE_SIZE) {
-      return {
-        code,
-        changes: [],
-        success: false,
-        error: REFACTORING_MESSAGES.CODE_TOO_LARGE,
-      };
-    }
+    // Validate code size
+    const sizeError = validateCodeSize(code, REFACTORING_LIMITS.MAX_CODE_SIZE);
+    if (sizeError) return sizeError;
 
     let refactoredCode = code;
     const changes: RefactoringChange[] = [];
@@ -90,22 +91,9 @@ export function convertToAsync(options: ConvertToAsyncOptions): RefactoringResul
       refactoredCode = promiseResult.code;
     }
 
-    return {
-      code: refactoredCode,
-      changes,
-      success: true,
-      warnings:
-        changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES
-          ? [REFACTORING_MESSAGES.NO_CALLBACKS_FOUND]
-          : undefined,
-    };
+    return createSuccessResult(refactoredCode, changes, REFACTORING_MESSAGES.NO_CALLBACKS_FOUND);
   } catch (error) {
-    return {
-      code: options.code,
-      changes: [],
-      success: false,
-      error: getErrorMessage(error, 'Unknown error during async conversion'),
-    };
+    return createErrorResult(options.code, error, 'Unknown error during async conversion');
   }
 }
 
@@ -116,14 +104,9 @@ export function simplifyConditionals(options: SimplifyConditionalsOptions): Refa
   try {
     const { code, useGuardClauses = true, useTernary = true } = options;
 
-    if (code.length > REFACTORING_LIMITS.MAX_CODE_SIZE) {
-      return {
-        code,
-        changes: [],
-        success: false,
-        error: REFACTORING_MESSAGES.CODE_TOO_LARGE,
-      };
-    }
+    // Validate code size
+    const sizeError = validateCodeSize(code, REFACTORING_LIMITS.MAX_CODE_SIZE);
+    if (sizeError) return sizeError;
 
     let refactoredCode = code;
     const changes: RefactoringChange[] = [];
@@ -140,10 +123,16 @@ export function simplifyConditionals(options: SimplifyConditionalsOptions): Refa
     }
 
     if (useTernary) {
+      // Build ternary pattern with line breaks for readability
+      const conditionLimit = REGEX_LIMITS.MAX_CONDITION_LENGTH;
+      const returnLimit = REGEX_LIMITS.MAX_RETURN_VALUE_LENGTH;
       const ternaryPattern = new RegExp(
-        `if\\s?\\(([^)]{1,${REGEX_LIMITS.MAX_CONDITION_LENGTH}})\\)\\s?\\{\\s?return\\s+([^;]{1,${REGEX_LIMITS.MAX_RETURN_VALUE_LENGTH}});\\s?\\}\\s?else\\s?\\{\\s?return\\s+([^;]{1,${REGEX_LIMITS.MAX_RETURN_VALUE_LENGTH}});\\s?\\}`,
+        `if\\s?\\(([^)]{1,${conditionLimit}})\\)\\s?\\{\\s?` +
+          `return\\s+([^;]{1,${returnLimit}});\\s?\\}\\s?` +
+          `else\\s?\\{\\s?return\\s+([^;]{1,${returnLimit}});\\s?\\}`,
         'g'
       );
+
       const originalCode = refactoredCode;
       refactoredCode = refactoredCode.replace(ternaryPattern, 'return $1 ? $2 : $3;');
 
@@ -164,22 +153,13 @@ export function simplifyConditionals(options: SimplifyConditionalsOptions): Refa
       });
     }
 
-    return {
-      code: refactoredCode,
-      changes,
-      success: true,
-      warnings:
-        changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES
-          ? [REFACTORING_MESSAGES.NO_CONDITIONALS_FOUND]
-          : undefined,
-    };
+    return createSuccessResult(refactoredCode, changes, REFACTORING_MESSAGES.NO_CONDITIONALS_FOUND);
   } catch (error) {
-    return {
-      code: options.code,
-      changes: [],
-      success: false,
-      error: getErrorMessage(error, 'Unknown error during conditional simplification'),
-    };
+    return createErrorResult(
+      options.code,
+      error,
+      'Unknown error during conditional simplification'
+    );
   }
 }
 
@@ -196,9 +176,10 @@ export function removeDeadCode(options: RemoveDeadCodeOptions): RefactoringResul
     const unusedVars = findUnusedVariables(refactoredCode);
     if (unusedVars.length > 0) {
       const after = removeUnusedVariables(refactoredCode, unusedVars);
+      const varList = unusedVars.join(', ');
       changes.push({
         type: 'remove-dead-code',
-        description: `Removed ${unusedVars.length} unused variable(s): ${unusedVars.join(', ')}`,
+        description: `Removed ${unusedVars.length} unused variable(s): ${varList}`,
         before: refactoredCode,
         after,
       });
@@ -209,9 +190,10 @@ export function removeDeadCode(options: RemoveDeadCodeOptions): RefactoringResul
     if (removeUnreachable) {
       const unreachableResult = removeUnreachableCode(refactoredCode);
       if (unreachableResult.removed > 0) {
+        const count = unreachableResult.removed;
         changes.push({
           type: 'remove-dead-code',
-          description: `Removed ${unreachableResult.removed} unreachable line(s) after return statements`,
+          description: `Removed ${count} unreachable line(s) after return statements`,
           before: refactoredCode,
           after: unreachableResult.code,
         });
@@ -222,31 +204,21 @@ export function removeDeadCode(options: RemoveDeadCodeOptions): RefactoringResul
     // Remove unused imports
     if (removeUnusedImports) {
       const importResult = removeUnusedImportsFromCode(refactoredCode);
-      if (importResult.removed.length > PATTERN_CONSTANTS.NO_OCCURRENCES) {
+      const hasRemovedImports = importResult.removed.length > PATTERN_CONSTANTS.NO_OCCURRENCES;
+
+      if (hasRemovedImports) {
         refactoredCode = importResult.code;
+        const importList = importResult.removed.join(', ');
         changes.push({
           type: 'remove-dead-code',
-          description: `Removed ${importResult.removed.length} unused import(s): ${importResult.removed.join(', ')}`,
+          description: `Removed ${importResult.removed.length} unused import(s): ${importList}`,
         });
       }
     }
 
-    return {
-      code: refactoredCode,
-      changes,
-      success: true,
-      warnings:
-        changes.length === PATTERN_CONSTANTS.NO_OCCURRENCES
-          ? [REFACTORING_MESSAGES.NO_DEAD_CODE_FOUND]
-          : undefined,
-    };
+    return createSuccessResult(refactoredCode, changes, REFACTORING_MESSAGES.NO_DEAD_CODE_FOUND);
   } catch (error) {
-    return {
-      code: options.code,
-      changes: [],
-      success: false,
-      error: getErrorMessage(error, 'Unknown error during dead code removal'),
-    };
+    return createErrorResult(options.code, error, 'Unknown error during dead code removal');
   }
 }
 
@@ -258,35 +230,19 @@ export function applyDesignPattern(options: ApplyPatternOptions): RefactoringRes
     const { code, pattern, patternOptions = {} } = options;
 
     if (!isValidPattern(pattern)) {
-      return {
-        code,
-        changes: [],
-        success: false,
-        error: REFACTORING_MESSAGES.INVALID_PATTERN,
-      };
+      return createValidationError(code, REFACTORING_MESSAGES.INVALID_PATTERN);
     }
 
     const refactoredCode = applyPattern(pattern, code, patternOptions);
 
-    return {
-      code: refactoredCode,
-      changes: [
-        {
-          type: 'apply-pattern',
-          description: `Applied ${pattern} pattern`,
-          before: code,
-          after: refactoredCode,
-        },
-      ],
-      success: true,
-    };
+    return createSingleChangeResult(
+      code,
+      refactoredCode,
+      'apply-pattern',
+      `Applied ${pattern} pattern`
+    );
   } catch (error) {
-    return {
-      code: options.code,
-      changes: [],
-      success: false,
-      error: getErrorMessage(error, 'Unknown error during pattern application'),
-    };
+    return createErrorResult(options.code, error, 'Unknown error during pattern application');
   }
 }
 
@@ -298,21 +254,11 @@ export function renameVariable(options: RenameVariableOptions): RefactoringResul
     const { code, oldName, newName, includeComments = false } = options;
 
     if (!oldName || !newName) {
-      return {
-        code,
-        changes: [],
-        success: false,
-        error: 'Old name and new name are required',
-      };
+      return createValidationError(code, 'Old name and new name are required');
     }
 
     if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(newName)) {
-      return {
-        code,
-        changes: [],
-        success: false,
-        error: REFACTORING_MESSAGES.INVALID_VARIABLE_NAME,
-      };
+      return createValidationError(code, REFACTORING_MESSAGES.INVALID_VARIABLE_NAME);
     }
 
     const wordBoundary = `\\b${escapeRegExp(oldName)}\\b`;
@@ -322,12 +268,7 @@ export function renameVariable(options: RenameVariableOptions): RefactoringResul
     const matches = (code.match(pattern) || []).length;
 
     if (matches === PATTERN_CONSTANTS.NO_OCCURRENCES) {
-      return {
-        code,
-        changes: [],
-        success: false,
-        error: REFACTORING_MESSAGES.VARIABLE_NOT_FOUND,
-      };
+      return createValidationError(code, REFACTORING_MESSAGES.VARIABLE_NOT_FOUND);
     }
 
     refactoredCode = refactoredCode.replace(pattern, newName);
@@ -339,25 +280,13 @@ export function renameVariable(options: RenameVariableOptions): RefactoringResul
       });
     }
 
-    return {
-      code: refactoredCode,
-      changes: [
-        {
-          type: 'rename-variable',
-          description: `Renamed '${oldName}' to '${newName}' (${matches} occurrence${matches > PATTERN_CONSTANTS.SINGLE_OCCURRENCE ? 's' : ''})`,
-          before: code,
-          after: refactoredCode,
-        },
-      ],
-      success: true,
-    };
+    // Build description with proper pluralization
+    const occurrenceSuffix = matches > PATTERN_CONSTANTS.SINGLE_OCCURRENCE ? 's' : '';
+    const description = `Renamed '${oldName}' to '${newName}' (${matches} occurrence${occurrenceSuffix})`;
+
+    return createSingleChangeResult(code, refactoredCode, 'rename-variable', description);
   } catch (error) {
-    return {
-      code: options.code,
-      changes: [],
-      success: false,
-      error: getErrorMessage(error, 'Unknown error during variable renaming'),
-    };
+    return createErrorResult(options.code, error, 'Unknown error during variable renaming');
   }
 }
 

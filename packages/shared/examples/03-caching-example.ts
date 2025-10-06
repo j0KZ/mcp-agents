@@ -116,7 +116,9 @@ async function demonstrateCaching() {
   const batchDuration2 = Date.now() - batchStart2;
 
   console.log(`Re-loaded ${contents2.size} files in ${batchDuration2}ms (cached)`);
-  console.log(`⚡ Batch improvement: ${(((batchDuration - batchDuration2) / batchDuration) * 100).toFixed(1)}%`);
+  console.log(
+    `⚡ Batch improvement: ${(((batchDuration - batchDuration2) / batchDuration) * 100).toFixed(1)}%`
+  );
 
   // Final cache stats
   console.log('\n📊 Final Cache Statistics:');

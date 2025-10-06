@@ -8,6 +8,7 @@ import {
   ArchitectureAnalysis,
   AnalysisConfig,
 } from './types.js';
+import { CIRCULAR_DEPENDENCY_THRESHOLDS } from './constants/thresholds.js';
 
 export class ArchitectureAnalyzer {
   private scanner: ProjectScanner;
@@ -78,7 +79,8 @@ export class ArchitectureAnalyzer {
 
     return uniqueCycles.map(cycle => ({
       cycle,
-      severity: cycle.length > 3 ? 'error' : 'warning',
+      severity:
+        cycle.length > CIRCULAR_DEPENDENCY_THRESHOLDS.LONG_CYCLE_LENGTH ? 'error' : 'warning',
     }));
   }
 

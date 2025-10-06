@@ -115,7 +115,7 @@ export declare class MCPEventBus {
     /**
      * Subscribe to an event
      */
-    on(event: string, callback: Function): () => void;
+    on(event: string, callback: (...args: any[]) => void): () => void;
     /**
      * Emit an event
      */
@@ -123,7 +123,7 @@ export declare class MCPEventBus {
     /**
      * Subscribe to event once
      */
-    once(event: string, callback: Function): void;
+    once(event: string, callback: (...args: any[]) => void): void;
     /**
      * Remove all listeners for an event
      */

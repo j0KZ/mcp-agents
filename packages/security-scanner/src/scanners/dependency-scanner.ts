@@ -55,7 +55,7 @@ export async function scanDependencies(projectPath: string): Promise<DependencyV
         const isVulnerable = vuln.versions.some(range => {
           try {
             return semver.satisfies(version as string, range);
-          } catch (error) {
+          } catch {
             // If version parsing fails, report as potentially vulnerable
             return true;
           }
@@ -73,7 +73,7 @@ export async function scanDependencies(projectPath: string): Promise<DependencyV
         }
       }
     }
-  } catch (error) {
+  } catch {
     // package.json not found or invalid
   }
 

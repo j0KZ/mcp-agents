@@ -9,6 +9,7 @@ Analyze src/ directory for circular dependencies
 ```
 
 ### Expected Output:
+
 ```
 🔍 Architecture Analysis
 
@@ -39,6 +40,7 @@ Check for architecture layer violations in src/ with layers: [presentation, busi
 ```
 
 ### Output:
+
 ```
 ❌ Layer Violations Found: 3
 
@@ -63,6 +65,7 @@ Generate dependency graph for src/ in Mermaid format
 ```
 
 ### Output:
+
 ```mermaid
 graph TD
     A[UserService] --> B[UserRepository]
@@ -80,6 +83,7 @@ Analyze src/ for architectural code smells
 ```
 
 ### Output:
+
 ```
 📊 Code Smell Report
 

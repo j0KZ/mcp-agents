@@ -44,9 +44,7 @@ class SmartReviewer {
       this.eventBus.emit(EVENT_TYPE.ANALYSIS_COMPLETED, {
         tool: 'smart-reviewer',
         filePath: data.filePath,
-        issues: [
-          { severity: 'medium', message: 'Consider extracting function' },
-        ],
+        issues: [{ severity: 'medium', message: 'Consider extracting function' }],
       });
     }
   }
@@ -109,12 +107,14 @@ async function demonstrateEventBus() {
   // Event bus statistics
   console.log('\n📊 Event Bus Statistics:');
   console.log(`  file:changed listeners: ${eventBus.listenerCount(EVENT_TYPE.FILE_CHANGED)}`);
-  console.log(`  analysis:completed listeners: ${eventBus.listenerCount(EVENT_TYPE.ANALYSIS_COMPLETED)}`);
+  console.log(
+    `  analysis:completed listeners: ${eventBus.listenerCount(EVENT_TYPE.ANALYSIS_COMPLETED)}`
+  );
   console.log(`  tests:generated listeners: ${eventBus.listenerCount('tests:generated')}`);
 
   // Demonstrate one-time listener
   console.log('\n\n🎯 Demonstrating one-time listener:');
-  eventBus.once('special:event', (data) => {
+  eventBus.once('special:event', data => {
     console.log('✨ One-time handler executed:', data);
   });
 

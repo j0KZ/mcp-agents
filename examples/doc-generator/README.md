@@ -9,6 +9,7 @@ Generate JSDoc comments for all functions in src/calculator.js
 ```
 
 ### Before:
+
 ```javascript
 function calculateDiscount(price, percentage) {
   return price * (percentage / 100);
@@ -16,6 +17,7 @@ function calculateDiscount(price, percentage) {
 ```
 
 ### After:
+
 ```javascript
 /**
  * Calculate discount amount based on percentage
@@ -53,20 +55,24 @@ Generate changelog from git commits between v1.0.0 and v1.1.0
 ```
 
 ### Output:
+
 ```markdown
 # Changelog
 
 ## [1.1.0] - 2025-10-03
 
 ### Added
+
 - New discount calculation feature
 - Support for bulk operations
 
 ### Fixed
+
 - Division by zero error
 - Rounding precision issues
 
 ### Changed
+
 - Improved performance by 40%
 ```
 

@@ -13,8 +13,6 @@ import type {
   ClassMethod,
   ArrowFunctionExpression,
   FunctionExpression,
-  Identifier,
-  Node,
 } from '@babel/types';
 
 export class ASTParser {
@@ -27,7 +25,10 @@ export class ASTParser {
   /**
    * Parse source code to extract functions and classes using AST
    */
-  parseCode(content: string, filePath: string = 'unknown'): { functions: FunctionInfo[]; classes: ClassInfo[] } {
+  parseCode(
+    content: string,
+    filePath: string = 'unknown'
+  ): { functions: FunctionInfo[]; classes: ClassInfo[] } {
     // Check cache if available
     if (this.cache) {
       const contentHash = generateHash(content);
@@ -40,13 +41,7 @@ export class ASTParser {
     try {
       const ast = parse(content, {
         sourceType: 'module',
-        plugins: [
-          'typescript',
-          'jsx',
-          'decorators-legacy',
-          'classProperties',
-          'objectRestSpread',
-        ],
+        plugins: ['typescript', 'jsx', 'decorators-legacy', 'classProperties', 'objectRestSpread'],
         errorRecovery: true,
       });
 

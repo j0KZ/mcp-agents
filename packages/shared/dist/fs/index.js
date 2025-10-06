@@ -47,7 +47,7 @@ export class FileSystemManager {
             try {
                 return await this.readFile(filePath, useCache);
             }
-            catch (error) {
+            catch {
                 return null;
             }
         }, { concurrency });

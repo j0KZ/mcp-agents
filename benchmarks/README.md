@@ -29,25 +29,28 @@ npm run bench:all
 ## Performance Targets
 
 ### Test Generator
-| File Size | Target | Description |
-|-----------|--------|-------------|
-| Small (100 lines) | >1000 ops/sec | Quick parsing |
-| Medium (500 lines) | >200 ops/sec | Typical files |
-| Large (2000 lines) | >50 ops/sec | Large modules |
+
+| File Size          | Target        | Description   |
+| ------------------ | ------------- | ------------- |
+| Small (100 lines)  | >1000 ops/sec | Quick parsing |
+| Medium (500 lines) | >200 ops/sec  | Typical files |
+| Large (2000 lines) | >50 ops/sec   | Large modules |
 
 ### Refactor Assistant
-| Operation | Target | Description |
-|-----------|--------|-------------|
-| Callback→Async | >100 ops/sec | Convert callbacks |
-| Simplify Conditionals | >200 ops/sec | Guard clauses |
-| Extract Function | >150 ops/sec | Code extraction |
+
+| Operation             | Target       | Description       |
+| --------------------- | ------------ | ----------------- |
+| Callback→Async        | >100 ops/sec | Convert callbacks |
+| Simplify Conditionals | >200 ops/sec | Guard clauses     |
+| Extract Function      | >150 ops/sec | Code extraction   |
 
 ### Security Scanner
-| File Size | Target | Description |
-|-----------|--------|-------------|
-| Small | >500 ops/sec | Fast scanning |
-| Medium | >100 ops/sec | Thorough check |
-| Large | >25 ops/sec | Deep analysis |
+
+| File Size | Target       | Description    |
+| --------- | ------------ | -------------- |
+| Small     | >500 ops/sec | Fast scanning  |
+| Medium    | >100 ops/sec | Thorough check |
+| Large     | >25 ops/sec  | Deep analysis  |
 
 ## Results Format
 
@@ -82,6 +85,7 @@ node --expose-gc --trace-gc bench.js
 ## CI Integration
 
 Benchmarks run automatically on:
+
 - Every push to main
 - Pull requests
 - Weekly scheduled runs
@@ -96,6 +100,7 @@ Results are tracked over time to detect performance regressions.
 4. Add to `run-benchmarks.js`
 
 Example:
+
 ```javascript
 import Benchmark from 'benchmark';
 
@@ -105,7 +110,7 @@ suite
   .add('Operation name', () => {
     // Code to benchmark
   })
-  .on('cycle', (event) => {
+  .on('cycle', event => {
     console.log(String(event.target));
   })
   .run({ async: true });
@@ -114,16 +119,19 @@ suite
 ## Performance Tips
 
 ### Test Generator
+
 - Use bounded quantifiers in regex
 - Add input length limits
 - Cache parsing results
 
 ### Refactor Assistant
+
 - Process files in parallel
 - Use streaming for large files
 - Implement incremental updates
 
 ### Security Scanner
+
 - Cache vulnerability patterns
 - Skip unchanged files
 - Parallel file scanning
@@ -131,6 +139,7 @@ suite
 ## Historical Data
 
 Performance trends tracked in `benchmarks/history/`:
+
 - Daily snapshots
 - Release comparisons
 - Regression detection
@@ -138,6 +147,7 @@ Performance trends tracked in `benchmarks/history/`:
 ## Contributing
 
 When adding features:
+
 1. Run benchmarks before changes
 2. Run benchmarks after changes
 3. Ensure no >10% regression

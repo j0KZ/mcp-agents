@@ -4,6 +4,7 @@
 
 import semver from 'semver';
 import fs from 'fs-extra';
+import path from 'path';
 import { getEditorConfigPath } from './detectors/editor.js';
 import type { WizardSelections } from './wizard.js';
 
@@ -13,7 +14,7 @@ const MIN_NODE_PATCH_VERSION = 0;
 
 export async function validateConfig(
   selections: WizardSelections,
-  detected: any
+  _detected: any
 ): Promise<string[]> {
   const issues: string[] = [];
 
@@ -27,11 +28,11 @@ export async function validateConfig(
   // Check if editor config path exists or can be created
   const configPath = getEditorConfigPath(selections.editor as any);
   if (configPath) {
-    const configDir = require('path').dirname(configPath);
+    const configDir = path.dirname(configPath);
 
     try {
       await fs.ensureDir(configDir);
-    } catch (error) {
+    } catch {
       issues.push(`Cannot create config directory: ${configDir}`);
     }
 

@@ -17,6 +17,7 @@ Design a REST API based on examples/api-designer/user-api-requirements.txt
 The API Designer will generate:
 
 **Endpoints**:
+
 ```
 POST   /api/v1/users          - Create a new user
 GET    /api/v1/users          - List all users (paginated)
@@ -27,6 +28,7 @@ GET    /api/v1/users/search   - Search users
 ```
 
 **Request/Response Examples**:
+
 ```json
 POST /api/v1/users
 {
@@ -216,6 +218,7 @@ Create a GraphQL schema for user management with queries, mutations, and subscri
 ## MCP Tool Reference
 
 ### Design REST Endpoints
+
 ```json
 {
   "tool": "design_rest_api",
@@ -231,6 +234,7 @@ Create a GraphQL schema for user management with queries, mutations, and subscri
 ```
 
 ### Generate OpenAPI Spec
+
 ```json
 {
   "tool": "generate_openapi",
@@ -249,11 +253,14 @@ Create a GraphQL schema for user management with queries, mutations, and subscri
 ```
 
 ### Generate Client
+
 ```json
 {
   "tool": "generate_client",
   "arguments": {
-    "spec": { /* OpenAPI spec */ },
+    "spec": {
+      /* OpenAPI spec */
+    },
     "options": {
       "language": "typescript",
       "outputFormat": "axios"

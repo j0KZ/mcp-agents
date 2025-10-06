@@ -39,7 +39,7 @@ export async function benchmark(fn, options = {}) {
  */
 export function compareBenchmarks(baseline, optimized) {
     const speedup = baseline.averageTime / optimized.averageTime;
-    const percentFaster = ((speedup - 1) * 100);
+    const percentFaster = (speedup - 1) * 100;
     const timeSaved = baseline.averageTime - optimized.averageTime;
     let verdict = '';
     if (speedup >= 2) {

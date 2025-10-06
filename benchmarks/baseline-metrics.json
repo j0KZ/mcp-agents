@@ -28,9 +28,7 @@
       "duplicateBlocks": 2,
       "nestedTernaries": 0,
       "functions": 6,
-      "exports": [
-        "CodeAnalyzer"
-      ]
+      "exports": ["CodeAnalyzer"]
     },
     "scanner.ts": {
       "path": "packages/security-scanner/src/scanner.ts",
@@ -39,10 +37,7 @@
       "duplicateBlocks": 35,
       "nestedTernaries": 3,
       "functions": 12,
-      "exports": [
-        "scanFile",
-        "scanProject"
-      ]
+      "exports": ["scanFile", "scanProject"]
     }
   },
   "totals": {

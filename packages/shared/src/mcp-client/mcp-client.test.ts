@@ -173,7 +173,7 @@ describe('MCPClient', () => {
   describe('resolveMCPBinary', () => {
     it('should throw error for unknown MCP', () => {
       expect(() => {
-        // @ts-ignore - accessing private method for testing
+        // @ts-expect-error - accessing private method for testing
         client.resolveMCPBinary('unknown-mcp');
       }).toThrow('Unknown MCP: unknown-mcp');
     });

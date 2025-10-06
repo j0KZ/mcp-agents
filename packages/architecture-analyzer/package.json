@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/architecture-analyzer-mcp",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "Architecture Analyzer MCP - Detect circular dependencies, layer violations, and generate dependency graphs. Works with Claude Code, Cursor, Windsurf, Roo Code, and any MCP-compatible editor.",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,7 +22,7 @@
     "start": "node dist/mcp-server.js"
   },
   "dependencies": {
-    "@j0kz/shared": "^1.0.31",
+    "@j0kz/shared": "^1.0.32",
     "@modelcontextprotocol/sdk": "^1.19.1",
     "typescript": "^5.3.3"
   },

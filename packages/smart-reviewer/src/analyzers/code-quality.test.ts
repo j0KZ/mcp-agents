@@ -82,8 +82,6 @@ describe('detectIssues', () => {
       expect(todoIssue).toBeDefined();
       expect(todoIssue?.severity).toBe('info');
     });
-
-
   });
 
   describe('line length detection', () => {

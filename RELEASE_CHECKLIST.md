@@ -62,6 +62,7 @@ npm run publish-all
 ```
 
 **Packages to Publish:**
+
 1. @j0kz/shared@1.0.31
 2. @j0kz/smart-reviewer-mcp@1.0.31
 3. @j0kz/test-generator-mcp@1.0.31
@@ -182,18 +183,21 @@ npm list -g @j0kz/mcp-config-wizard
 **Release Date:** October 5, 2025
 
 **Performance:**
+
 - 2.18x speedup with caching
 - 99.9% cache hit rate
 - 73% faster AST parsing
 - 673K ops/sec hash generation
 
 **Quality:**
+
 - 853 tests (100% pass rate)
 - 42 test files
 - Zero breaking changes
 - 11 packages published
 
 **Documentation:**
+
 - CHANGELOG.md updated
 - README.md updated
 - PHASE3_SUMMARY.md created
@@ -211,15 +215,18 @@ None identified for this release.
 ## 📝 Notes
 
 **npm Credentials Required:**
+
 - Must be logged in to npm (`npm login`)
 - Must have publish access to `@j0kz` scope
 - 2FA may be required for publishing
 
 **Git Credentials Required:**
+
 - Must have push access to main branch
 - Must have permission to create tags
 
 **Important:**
+
 - Always run `npm run build` before publishing
 - Always run `npm test` to verify
 - Use `--dry-run` for first publish attempt
@@ -252,6 +259,7 @@ git push origin main
 ## ✅ Final Checklist
 
 Before publishing:
+
 - [ ] All builds successful
 - [ ] All tests passing (853/853)
 - [ ] Documentation updated

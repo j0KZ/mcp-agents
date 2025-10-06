@@ -14,7 +14,7 @@ import { REGEX, QUALITY_THRESHOLDS } from '@j0kz/shared';
  * @param filePath - File path for context in error messages
  * @returns Array of detected issues with severity and fix suggestions
  */
-export async function detectIssues(content, filePath) {
+export async function detectIssues(content, _filePath) {
     const issues = [];
     const lines = content.split('\n');
     for (let i = 0; i < lines.length; i++) {

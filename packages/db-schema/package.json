@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/db-schema-mcp",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "Database Schema Designer MCP - Design schemas, generate migrations, create ER diagrams, optimize indexes. Supports Postgres, MySQL, MongoDB. Works with Claude Code, Cursor, Windsurf, Roo Code, and any MCP-compatible editor.",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,7 +22,7 @@
     "start": "node dist/mcp-server.js"
   },
   "dependencies": {
-    "@j0kz/shared": "^1.0.31",
+    "@j0kz/shared": "^1.0.32",
     "@modelcontextprotocol/sdk": "^1.19.1",
     "typescript": "^5.3.3"
   },

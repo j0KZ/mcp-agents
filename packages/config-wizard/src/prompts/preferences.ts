@@ -2,8 +2,6 @@
  * Preferences prompts
  */
 
-import type { TestFramework } from '../detectors/test-framework.js';
-
 export function preferencesPrompt(detected: any) {
   const prompts: any[] = [];
 

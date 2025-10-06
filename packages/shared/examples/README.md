@@ -5,15 +5,18 @@ This directory contains practical examples demonstrating how to use the `@mcp-to
 ## Examples Overview
 
 ### 01. Pipeline Example
+
 **File**: `01-pipeline-example.ts`
 
 Demonstrates using `MCPPipeline` to chain multiple MCP tools in sequence:
+
 - Architecture Analyzer → Smart Reviewer → Refactor Assistant
 - Shows dependency management between steps
 - Demonstrates accessing step results
 - Includes performance monitoring
 
 **Key concepts**:
+
 - Sequential processing with dependencies
 - Error handling in pipelines
 - Performance metrics collection
@@ -23,15 +26,18 @@ npm run example:pipeline
 ```
 
 ### 02. Workflow Example
+
 **File**: `02-workflow-example.ts`
 
 Shows `MCPWorkflow` with conditional execution:
+
 - Security Scanner → Test Generator → Documentation Generator
 - Conditional step execution based on previous results
 - Tool registration and integration
 - Result caching
 
 **Key concepts**:
+
 - Conditional workflow steps
 - Tool registration pattern
 - MCPIntegration usage
@@ -41,15 +47,18 @@ npm run example:workflow
 ```
 
 ### 03. Caching Example
+
 **File**: `03-caching-example.ts`
 
 Demonstrates caching strategies for performance optimization:
+
 - FileCache for file content caching
 - AnalysisCache for expensive computation results
 - Batch operations with caching
 - Cache statistics and monitoring
 
 **Key concepts**:
+
 - LRU cache with TTL
 - Hash-based cache invalidation
 - Performance improvements (typically 90%+ on cache hits)
@@ -60,15 +69,18 @@ npm run example:caching
 ```
 
 ### 04. Event Bus Example
+
 **File**: `04-event-bus-example.ts`
 
 Shows real-time communication between MCPs using events:
+
 - Loosely coupled tool communication
 - File watcher integration with event bus
 - Cascading analysis pipeline triggered by file changes
 - One-time and persistent listeners
 
 **Key concepts**:
+
 - Event-driven architecture
 - Pub/sub pattern
 - Real-time file watching
@@ -122,8 +134,21 @@ import { MCPPipeline } from '@mcp-tools/shared';
 const pipeline = new MCPPipeline();
 
 pipeline
-  .addStep({ name: 'step1', tool: 'tool1', execute: async () => { /*...*/ } })
-  .addStep({ name: 'step2', tool: 'tool2', dependsOn: ['step1'], execute: async () => { /*...*/ } });
+  .addStep({
+    name: 'step1',
+    tool: 'tool1',
+    execute: async () => {
+      /*...*/
+    },
+  })
+  .addStep({
+    name: 'step2',
+    tool: 'tool2',
+    dependsOn: ['step1'],
+    execute: async () => {
+      /*...*/
+    },
+  });
 
 const result = await pipeline.execute();
 ```
@@ -171,7 +196,7 @@ const eventBus = new MCPEventBus();
 eventBus.emit(EVENT_TYPE.ANALYSIS_COMPLETED, { data });
 
 // Tool 2: Listens for events
-eventBus.on(EVENT_TYPE.ANALYSIS_COMPLETED, (data) => {
+eventBus.on(EVENT_TYPE.ANALYSIS_COMPLETED, data => {
   // React to analysis completion
 });
 ```
@@ -203,18 +228,15 @@ eventBus.on(EVENT_TYPE.ANALYSIS_COMPLETED, (data) => {
 ### Chaining Tool Outputs
 
 ```typescript
-const result = await integration.chain(
-  initialInput,
-  [
-    { tool: 'architecture-analyzer', method: 'analyze' },
-    {
-      tool: 'smart-reviewer',
-      method: 'review',
-      transform: (data) => data.files // Transform output before next step
-    },
-    { tool: 'refactor-assistant', method: 'suggest' },
-  ]
-);
+const result = await integration.chain(initialInput, [
+  { tool: 'architecture-analyzer', method: 'analyze' },
+  {
+    tool: 'smart-reviewer',
+    method: 'review',
+    transform: data => data.files, // Transform output before next step
+  },
+  { tool: 'refactor-assistant', method: 'suggest' },
+]);
 ```
 
 ### Error Handling in Pipelines

@@ -65,7 +65,7 @@ async function runBenchmarks() {
         // Simulate expensive analysis
         const lines = sampleCode.split('\n');
         const complexity = lines.filter(l => l.includes('if') || l.includes('for')).length;
-        void ({ complexity, lines: lines.length }); // Use result
+        void { complexity, lines: lines.length }; // Use result
     }, { iterations: 1000, warmup: 100, name: 'Analysis without cache' });
     const withCache = await benchmark(() => {
         const cached = cache.get('test.ts', 'analysis', contentHash);
@@ -90,7 +90,9 @@ async function runBenchmarks() {
     // Benchmark 2: Hash generation performance
     console.log('\n\n2. HASH GENERATION PERFORMANCE');
     console.log('-'.repeat(80));
-    const hashBenchmark = await benchmark(() => { void generateHash(sampleCode); }, { iterations: 10000, warmup: 1000, name: 'Hash generation' });
+    const hashBenchmark = await benchmark(() => {
+        void generateHash(sampleCode);
+    }, { iterations: 10000, warmup: 1000, name: 'Hash generation' });
     console.log(`Average: ${hashBenchmark.averageTime.toFixed(3)}ms/op`);
     console.log(`Throughput: ${hashBenchmark.opsPerSecond.toFixed(0)} ops/sec`);
     // Benchmark 3: FileSystemManager caching

@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/orchestrator-mcp",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "MCP workflow orchestrator - chain multiple MCP tools together into powerful workflows",
   "type": "module",
   "main": "dist/mcp-server.js",
@@ -22,8 +22,8 @@
     "start": "node dist/mcp-server.js"
   },
   "dependencies": {
-    "@j0kz/shared": "^1.0.31",
-    "@modelcontextprotocol/sdk": "^1.18.2"
+    "@j0kz/shared": "^1.0.32",
+    "@modelcontextprotocol/sdk": "^1.19.1"
   },
   "devDependencies": {
     "@types/node": "^24.6.2",

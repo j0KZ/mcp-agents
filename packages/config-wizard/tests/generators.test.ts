@@ -14,8 +14,8 @@ describe('Config Generators', () => {
     preferences: {
       reviewSeverity: 'moderate',
       testFramework: 'vitest',
-      installGlobally: true
-    }
+      installGlobally: true,
+    },
   };
 
   describe('Claude Code Generator', () => {

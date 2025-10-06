@@ -62,11 +62,14 @@ describe('Argument Parser', () => {
 
   it('should parse multiple flags together', () => {
     process.argv = [
-      'node', 'script.js',
-      '--editor', 'cursor',
-      '--mcps', 'smart-reviewer',
+      'node',
+      'script.js',
+      '--editor',
+      'cursor',
+      '--mcps',
+      'smart-reviewer',
       '--force',
-      '--verbose'
+      '--verbose',
     ];
     const args = parseArgs();
 

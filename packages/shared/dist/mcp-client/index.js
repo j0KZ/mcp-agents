@@ -5,6 +5,7 @@
 import { spawn } from 'child_process';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { readFileSync } from 'fs';
 /**
  * Client for invoking MCP tools via stdio
  */
@@ -89,13 +90,13 @@ export class MCPClient {
                 packageJsonPath = resolve(__dirname, '../../../..', 'node_modules', packageName, 'package.json');
             }
             const packageDir = dirname(packageJsonPath);
-            const packageJson = require(packageJsonPath);
+            const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
             // Get binary path from package.json bin field
             const binName = Object.keys(packageJson.bin)[0];
             const binPath = packageJson.bin[binName];
             return resolve(packageDir, binPath);
         }
-        catch (error) {
+        catch {
             throw new Error(`MCP not installed: ${packageName}. Run: npm install ${packageName}`);
         }
     }
@@ -133,7 +134,7 @@ export class MCPClient {
                     const response = JSON.parse(lastLine);
                     resolve(response);
                 }
-                catch (error) {
+                catch {
                     reject(new Error(`Invalid MCP response: ${lastLine}`));
                 }
             });

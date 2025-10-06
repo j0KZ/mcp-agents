@@ -7,9 +7,9 @@ const suite = new Benchmark.Suite();
 const parser = new CodeParser();
 
 // Test data of varying sizes
-const smallCode = readFileSync('../test-data/small.js', 'utf8');      // 100 lines
-const mediumCode = readFileSync('../test-data/medium.js', 'utf8');    // 500 lines
-const largeCode = readFileSync('../test-data/large.js', 'utf8');      // 2000 lines
+const smallCode = readFileSync('../test-data/small.js', 'utf8'); // 100 lines
+const mediumCode = readFileSync('../test-data/medium.js', 'utf8'); // 500 lines
+const largeCode = readFileSync('../test-data/large.js', 'utf8'); // 2000 lines
 
 console.log('🔬 Test Generator Benchmarks\n');
 
@@ -23,10 +23,10 @@ suite
   .add('Parse large file (2000 lines)', () => {
     parser.parseCode(largeCode);
   })
-  .on('cycle', (event) => {
+  .on('cycle', event => {
     console.log(String(event.target));
   })
-  .on('complete', function() {
+  .on('complete', function () {
     console.log('\n✅ Fastest: ' + this.filter('fastest').map('name'));
 
     // Performance targets
@@ -41,14 +41,20 @@ suite
 
     // Check against targets
     const targets = {
-      small: 1000,   // Should parse > 1000 small files/sec
-      medium: 200,   // Should parse > 200 medium files/sec
-      large: 50      // Should parse > 50 large files/sec
+      small: 1000, // Should parse > 1000 small files/sec
+      medium: 200, // Should parse > 200 medium files/sec
+      large: 50, // Should parse > 50 large files/sec
     };
 
     console.log('\n🎯 Target Comparison:');
-    console.log(`  Small:  ${smallOpsPerSec >= targets.small ? '✅' : '❌'} (target: ${targets.small} ops/sec)`);
-    console.log(`  Medium: ${mediumOpsPerSec >= targets.medium ? '✅' : '❌'} (target: ${targets.medium} ops/sec)`);
-    console.log(`  Large:  ${largeOpsPerSec >= targets.large ? '✅' : '❌'} (target: ${targets.large} ops/sec)`);
+    console.log(
+      `  Small:  ${smallOpsPerSec >= targets.small ? '✅' : '❌'} (target: ${targets.small} ops/sec)`
+    );
+    console.log(
+      `  Medium: ${mediumOpsPerSec >= targets.medium ? '✅' : '❌'} (target: ${targets.medium} ops/sec)`
+    );
+    console.log(
+      `  Large:  ${largeOpsPerSec >= targets.large ? '✅' : '❌'} (target: ${targets.large} ops/sec)`
+    );
   })
   .run({ async: true });

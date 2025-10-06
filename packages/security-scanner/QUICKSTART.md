@@ -30,9 +30,9 @@ Create `test-vulnerable.js`:
 
 ```javascript
 // Hardcoded secrets (CRITICAL)
-const apiKey = "sk_live_abc123xyz789";
-const awsKey = "AKIAIOSFODNN7EXAMPLE";
-const password = "admin123";
+const apiKey = 'sk_live_abc123xyz789';
+const awsKey = 'AKIAIOSFODNN7EXAMPLE';
+const password = 'admin123';
 
 // SQL Injection (CRITICAL)
 function getUser(userId) {
@@ -154,6 +154,7 @@ The scanner calculates a security score (0-100):
 - Low: -1 point each
 
 With the vulnerabilities above:
+
 - Criticals: 4 × -10 = -40
 - Highs: 2 × -5 = -10
 - Mediums: 1 × -2 = -2
@@ -175,7 +176,7 @@ const config = {
   minSeverity: 'medium',
   excludePatterns: ['node_modules', '.git', 'dist', 'test'],
   maxFileSize: 1048576, // 1MB
-  verbose: true
+  verbose: true,
 };
 
 const results = await scanProject('./your-project', config);

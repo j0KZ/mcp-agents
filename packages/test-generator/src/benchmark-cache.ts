@@ -96,7 +96,9 @@ function benchmark() {
 
   console.log('\n' + '='.repeat(60));
   console.log('\nConclusion:');
-  console.log(`  ✓ Caching reduces parsing time by ~${((timeSaved / uncachedTime) * 100).toFixed(0)}%`);
+  console.log(
+    `  ✓ Caching reduces parsing time by ~${((timeSaved / uncachedTime) * 100).toFixed(0)}%`
+  );
   console.log(`  ✓ Cache hit rate: ${stats.hitRate.toFixed(0)}%`);
   console.log(`  ✓ Average speedup: ${speedup}%\n`);
 }

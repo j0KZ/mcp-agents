@@ -42,7 +42,7 @@ export declare class PerformanceMonitor {
 /**
  * Measure execution time of a function
  */
-export declare function measure<T>(fn: () => Promise<T>, label?: string): Promise<{
+export declare function measure<T>(fn: () => Promise<T>, _label?: string): Promise<{
     result: T;
     duration: number;
 }>;

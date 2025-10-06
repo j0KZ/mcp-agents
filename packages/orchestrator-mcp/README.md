@@ -69,6 +69,7 @@ Returns:
 **When to use:** Before every commit
 **Duration:** ~2-5 seconds
 **Steps:**
+
 - Code review (moderate severity)
 - Security scan
 
@@ -95,6 +96,7 @@ Returns:
 **When to use:** Before merging pull requests
 **Duration:** ~10-30 seconds
 **Steps:**
+
 - Batch code review (strict)
 - Architecture analysis (circular dependency detection)
 - Security audit (project-wide)
@@ -125,6 +127,7 @@ Returns:
 **When to use:** Weekly/monthly quality reviews
 **Duration:** ~30-60 seconds
 **Steps:**
+
 - Security report generation (saved to `reports/security.md`)
 - Architecture analysis with dependency graph
 - Documentation generation
@@ -206,6 +209,7 @@ Build your own workflows with `run_sequence`:
 ```
 
 **Config location:**
+
 - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
@@ -237,18 +241,19 @@ orchestrator-mcp
 
 The orchestrator can coordinate these MCP tools:
 
-| MCP | Tool Examples | Purpose |
-|-----|---------------|---------|
-| `smart-reviewer` | `review_file`, `batch_review` | Code quality analysis |
-| `security-scanner` | `scan_file`, `scan_project`, `generate_security_report` | Vulnerability detection |
-| `test-generator` | `generate_tests`, `batch_generate` | Test suite generation |
-| `architecture-analyzer` | `analyze_architecture` | Dependency & architecture analysis |
-| `refactor-assistant` | `suggest_refactorings`, `extract_function` | Code refactoring |
-| `doc-generator` | `generate_jsdoc`, `generate_full_docs` | Documentation generation |
-| `api-designer` | `generate_openapi`, `design_rest_api` | API design |
-| `db-schema` | `design_schema`, `generate_migration` | Database schema design |
+| MCP                     | Tool Examples                                           | Purpose                            |
+| ----------------------- | ------------------------------------------------------- | ---------------------------------- |
+| `smart-reviewer`        | `review_file`, `batch_review`                           | Code quality analysis              |
+| `security-scanner`      | `scan_file`, `scan_project`, `generate_security_report` | Vulnerability detection            |
+| `test-generator`        | `generate_tests`, `batch_generate`                      | Test suite generation              |
+| `architecture-analyzer` | `analyze_architecture`                                  | Dependency & architecture analysis |
+| `refactor-assistant`    | `suggest_refactorings`, `extract_function`              | Code refactoring                   |
+| `doc-generator`         | `generate_jsdoc`, `generate_full_docs`                  | Documentation generation           |
+| `api-designer`          | `generate_openapi`, `design_rest_api`                   | API design                         |
+| `db-schema`             | `design_schema`, `generate_migration`                   | Database schema design             |
 
 **Install MCPs:**
+
 ```bash
 npm install -g @j0kz/smart-reviewer-mcp
 npm install -g @j0kz/security-scanner-mcp
@@ -303,6 +308,7 @@ npx husky add .husky/pre-commit "npx orchestrator-cli pre-commit"
 ```
 
 **`.husky/pre-commit`:**
+
 ```bash
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
@@ -325,6 +331,7 @@ npm test
 ```
 
 **Test coverage:**
+
 - MCP-to-MCP communication
 - Workflow execution
 - Dependency resolution
@@ -339,11 +346,13 @@ npm test
 Execute a pre-built workflow.
 
 **Parameters:**
+
 - `workflow` (required): `'pre-commit' | 'pre-merge' | 'quality-audit'`
 - `files` (required): Array of file paths
 - `projectPath` (optional): Project root path (defaults to `'.'`)
 
 **Returns:**
+
 ```typescript
 {
   workflow: string;
@@ -367,9 +376,11 @@ Execute a pre-built workflow.
 Execute a custom sequence of MCP tools.
 
 **Parameters:**
+
 - `steps` (required): Array of workflow steps
 
 **Step schema:**
+
 ```typescript
 {
   name: string;          // Step identifier
@@ -391,6 +402,7 @@ List all available workflows with metadata.
 **Parameters:** None
 
 **Returns:**
+
 ```typescript
 {
   workflows: Array<{
@@ -409,6 +421,7 @@ List all available workflows with metadata.
 ### "MCP not installed" error
 
 Install the required MCPs:
+
 ```bash
 npx @j0kz/mcp-agents@latest
 ```

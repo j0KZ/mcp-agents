@@ -22,6 +22,16 @@ export default [
         NodeJS: 'readonly',
         __dirname: 'readonly',
         __filename: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+        setImmediate: 'readonly',
+        clearImmediate: 'readonly',
+        performance: 'readonly',
+        fetch: 'readonly',
+        require: 'readonly',
+        global: 'readonly',
       },
     },
     plugins: {
@@ -46,7 +56,7 @@ export default [
       'no-debugger': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
-      'eqeqeq': ['error', 'always'],
+      eqeqeq: ['error', 'always'],
 
       // Prettier integration
       'prettier/prettier': 'error',

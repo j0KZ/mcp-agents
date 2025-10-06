@@ -13,9 +13,11 @@ Intelligent code review agent with learning capabilities that detects anti-patte
 ## Tools Available
 
 ### `review_file`
+
 Review a single code file and get detailed analysis.
 
 **Parameters:**
+
 - `filePath` (string, required): Path to the file to review
 - `config` (object, optional): Review configuration
   - `severity`: 'strict' | 'moderate' | 'lenient'
@@ -23,51 +25,59 @@ Review a single code file and get detailed analysis.
   - `includeMetrics`: boolean
 
 **Example:**
+
 ```bash
 claude code "Review src/app.js with smart-reviewer"
 ```
 
 **Response includes:**
+
 - Issues found (line number, severity, message, suggested fix)
 - Code metrics (complexity, maintainability, LOC, comment density)
 - Improvement suggestions
 - Overall quality score
 
 ### `batch_review`
+
 Review multiple files at once.
 
 **Parameters:**
+
 - `filePaths` (array, required): Array of file paths
 - `config` (object, optional): Review configuration
 
 **Example:**
+
 ```bash
 claude code "Review all files in src/ with smart-reviewer"
 ```
 
 ### `apply_fixes`
+
 Automatically apply fixes to a file.
 
 **Parameters:**
+
 - `filePath` (string, required): Path to the file to fix
 
 **Example:**
+
 ```bash
 claude code "Apply smart-reviewer fixes to src/utils.js"
 ```
 
 ## Issues Detected
 
-| Rule | Severity | Description |
-|------|----------|-------------|
-| `no-var` | warning | Use const/let instead of var |
-| `no-console` | info | Remove console.log before production |
-| `eqeqeq` | warning | Use === instead of == |
-| `max-params` | warning | Function has too many parameters |
-| `no-magic-numbers` | info | Avoid magic numbers, use constants |
-| `no-empty-catch` | error | Empty catch blocks |
-| `no-nested-ternary` | warning | Nested ternary operators |
-| `max-line-length` | info | Lines longer than 120 characters |
+| Rule                | Severity | Description                          |
+| ------------------- | -------- | ------------------------------------ |
+| `no-var`            | warning  | Use const/let instead of var         |
+| `no-console`        | info     | Remove console.log before production |
+| `eqeqeq`            | warning  | Use === instead of ==                |
+| `max-params`        | warning  | Function has too many parameters     |
+| `no-magic-numbers`  | info     | Avoid magic numbers, use constants   |
+| `no-empty-catch`    | error    | Empty catch blocks                   |
+| `no-nested-ternary` | warning  | Nested ternary operators             |
+| `max-line-length`   | info     | Lines longer than 120 characters     |
 
 ## Code Metrics
 

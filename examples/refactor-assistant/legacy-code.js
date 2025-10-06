@@ -61,7 +61,7 @@ function calculateUserStats() {
   return {
     posts: { total: totalPosts, perDay: postsPerDay },
     comments: { total: totalComments, perDay: commentsPerDay },
-    likes: { total: totalLikes, perDay: likesPerDay }
+    likes: { total: totalLikes, perDay: likesPerDay },
   };
 }
 

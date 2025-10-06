@@ -4,7 +4,7 @@
  * Demonstrates caching improvements across the monorepo
  */
 
-import { benchmark, benchmarkSuite, compareBenchmarks } from './performance/benchmark.js';
+import { benchmark, compareBenchmarks } from './performance/benchmark.js';
 import { AnalysisCache } from './cache/index.js';
 import { FileSystemManager } from './fs/index.js';
 import { generateHash } from './utils/index.js';
@@ -72,7 +72,7 @@ async function runBenchmarks() {
       // Simulate expensive analysis
       const lines = sampleCode.split('\n');
       const complexity = lines.filter(l => l.includes('if') || l.includes('for')).length;
-      void ({ complexity, lines: lines.length }); // Use result
+      void { complexity, lines: lines.length }; // Use result
     },
     { iterations: 1000, warmup: 100, name: 'Analysis without cache' }
   );
@@ -96,7 +96,9 @@ async function runBenchmarks() {
   console.log(`\nWithout cache: ${withoutCache.averageTime.toFixed(3)}ms/op`);
   console.log(`With cache:    ${withCache.averageTime.toFixed(3)}ms/op`);
   console.log(`${cacheComparison.verdict}`);
-  console.log(`Speedup: ${cacheComparison.speedup.toFixed(2)}x (${cacheComparison.percentFaster.toFixed(1)}% faster)`);
+  console.log(
+    `Speedup: ${cacheComparison.speedup.toFixed(2)}x (${cacheComparison.percentFaster.toFixed(1)}% faster)`
+  );
 
   const stats = cache.getStats();
   console.log(`\nCache stats:`);
@@ -108,7 +110,9 @@ async function runBenchmarks() {
   console.log('-'.repeat(80));
 
   const hashBenchmark = await benchmark(
-    () => { void generateHash(sampleCode); },
+    () => {
+      void generateHash(sampleCode);
+    },
     { iterations: 10000, warmup: 1000, name: 'Hash generation' }
   );
 
@@ -140,12 +144,16 @@ async function runBenchmarks() {
   console.log(`\nWithout cache: ${fsWithoutCache.averageTime.toFixed(3)}ms/op`);
   console.log(`With cache:    ${fsWithCache.averageTime.toFixed(3)}ms/op`);
   console.log(`${fsComparison.verdict}`);
-  console.log(`Speedup: ${fsComparison.speedup.toFixed(2)}x (${fsComparison.percentFaster.toFixed(1)}% faster)`);
+  console.log(
+    `Speedup: ${fsComparison.speedup.toFixed(2)}x (${fsComparison.percentFaster.toFixed(1)}% faster)`
+  );
 
   // Summary
   console.log('\n\n📈 PERFORMANCE SUMMARY');
   console.log('='.repeat(80));
-  console.log('✅ AnalysisCache provides significant performance improvements for repeated operations');
+  console.log(
+    '✅ AnalysisCache provides significant performance improvements for repeated operations'
+  );
   console.log('✅ Hash-based cache invalidation is fast and reliable');
   console.log('✅ FileSystemManager caching reduces I/O overhead dramatically');
   console.log('\n💡 Key Takeaways:');

@@ -119,11 +119,13 @@ export function add(a, b) {
 ```
 
 Then ask Claude:
+
 ```
 Generate tests for math.js using vitest
 ```
 
 You'll get:
+
 ```javascript
 import { describe, it, expect } from 'vitest';
 import { add } from './math.js';
@@ -146,6 +148,7 @@ describe('add', () => {
 ### 2. Design Your First API
 
 Ask Claude:
+
 ```
 Design a REST API for a blog with posts and comments
 ```
@@ -155,6 +158,7 @@ You'll get complete endpoint specifications, request/response examples, and Open
 ### 3. Scan for Security Issues
 
 Ask Claude:
+
 ```
 Scan my project for security vulnerabilities
 ```
@@ -204,6 +208,7 @@ Get instant feedback on SQL injection, XSS, hardcoded secrets, and more.
 ## Troubleshooting
 
 ### Tool Not Found
+
 ```bash
 # Verify installation
 npm list -g | grep j0kz
@@ -213,12 +218,14 @@ npm install -g @j0kz/test-generator-mcp --force
 ```
 
 ### Permission Issues
+
 ```bash
 # On macOS/Linux, use sudo
 sudo npm install -g @j0kz/test-generator-mcp
 ```
 
 ### MCP Server Won't Start
+
 - Check that Node.js 18+ is installed: `node --version`
 - Verify the tool is in your PATH: `which test-generator-mcp`
 - Check MCP settings JSON syntax

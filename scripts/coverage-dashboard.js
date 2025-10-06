@@ -32,7 +32,14 @@ let totalLines = 0;
 let packagesWithCoverage = 0;
 
 for (const pkg of packages) {
-  const coverageFile = path.join(__dirname, '..', 'packages', pkg, 'coverage', 'coverage-summary.json');
+  const coverageFile = path.join(
+    __dirname,
+    '..',
+    'packages',
+    pkg,
+    'coverage',
+    'coverage-summary.json'
+  );
 
   if (!fs.existsSync(coverageFile)) {
     console.log(`| ${pkg.padEnd(25)} | N/A | N/A | N/A | N/A | ⚠️ No tests |`);
@@ -53,7 +60,7 @@ for (const pkg of packages) {
   totalLines += lines;
   packagesWithCoverage++;
 
-  const status = statements >= 60 ? '✅ Pass' : (statements >= 40 ? '⚠️ Low' : '❌ Fail');
+  const status = statements >= 60 ? '✅ Pass' : statements >= 40 ? '⚠️ Low' : '❌ Fail';
 
   console.log(
     `| ${pkg.padEnd(25)} | ${statements.toFixed(1).padStart(6)}% | ${branches.toFixed(1).padStart(6)}% | ${functions.toFixed(1).padStart(7)}% | ${lines.toFixed(1).padStart(5)}% | ${status} |`
@@ -68,7 +75,7 @@ if (packagesWithCoverage > 0) {
   const avgFunctions = totalFunctions / packagesWithCoverage;
   const avgLines = totalLines / packagesWithCoverage;
 
-  const avgStatus = avgStatements >= 60 ? '✅ Pass' : (avgStatements >= 40 ? '⚠️ Low' : '❌ Fail');
+  const avgStatus = avgStatements >= 60 ? '✅ Pass' : avgStatements >= 40 ? '⚠️ Low' : '❌ Fail';
 
   console.log(
     `| ${'**AVERAGE**'.padEnd(25)} | ${avgStatements.toFixed(1).padStart(6)}% | ${avgBranches.toFixed(1).padStart(6)}% | ${avgFunctions.toFixed(1).padStart(7)}% | ${avgLines.toFixed(1).padStart(5)}% | ${avgStatus} |`

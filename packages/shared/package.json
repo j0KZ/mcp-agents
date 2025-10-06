@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/shared",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "Shared utilities and types for MCP tools - enables modularity and integration",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,7 +25,7 @@
   "author": "MCP Tools",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.18.2",
+    "@modelcontextprotocol/sdk": "^1.19.1",
     "fast-glob": "^3.3.2",
     "lru-cache": "^11.0.2"
   },

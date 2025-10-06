@@ -14,9 +14,11 @@ Architecture analysis and visualization agent that detects circular dependencies
 ## Tools Available
 
 ### `analyze_architecture`
+
 Analyze complete project architecture.
 
 **Parameters:**
+
 - `projectPath` (string, required): Path to project root
 - `config` (object, optional): Analysis configuration
   - `maxDepth`: number (directory traversal depth)
@@ -26,11 +28,13 @@ Analyze complete project architecture.
   - `layerRules`: object (layer dependency rules)
 
 **Example:**
+
 ```bash
 claude code "Analyze project architecture with architecture-analyzer"
 ```
 
 **Response includes:**
+
 - Module inventory
 - Dependency relationships
 - Circular dependencies
@@ -40,24 +44,30 @@ claude code "Analyze project architecture with architecture-analyzer"
 - Dependency graph (Mermaid format)
 
 ### `get_module_info`
+
 Get detailed information about a specific module.
 
 **Parameters:**
+
 - `projectPath` (string, required): Path to project root
 - `modulePath` (string, required): Relative path to module
 
 **Example:**
+
 ```bash
 claude code "Get info for src/api/auth.js with architecture-analyzer"
 ```
 
 ### `find_circular_deps`
+
 Find all circular dependencies in the project.
 
 **Parameters:**
+
 - `projectPath` (string, required): Path to project root
 
 **Example:**
+
 ```bash
 claude code "Find circular dependencies with architecture-analyzer"
 ```
@@ -65,18 +75,23 @@ claude code "Find circular dependencies with architecture-analyzer"
 ## Architecture Metrics
 
 ### Cohesion (0-100)
+
 Measures how related modules are within the project.
+
 - **High (70-100)**: Well-organized, focused modules
 - **Medium (40-70)**: Acceptable organization
 - **Low (0-40)**: Scattered, unfocused modules
 
 ### Coupling (0-100)
+
 Measures interdependence between modules.
+
 - **Low (0-30)**: Loosely coupled, easy to modify
 - **Medium (30-60)**: Moderate coupling
 - **High (60-100)**: Tightly coupled, hard to change
 
 ### Other Metrics
+
 - **Total Modules**: Number of source files
 - **Total Dependencies**: Number of import relationships
 - **Average Dependencies**: Dependencies per module
@@ -87,15 +102,18 @@ Measures interdependence between modules.
 ## Circular Dependencies
 
 ### What Are They?
+
 A circular dependency occurs when Module A depends on Module B, which depends on Module A (directly or indirectly).
 
 ### Why Are They Bad?
+
 - Make code harder to understand
 - Complicate testing and mocking
 - Can cause initialization issues
 - Increase coupling
 
 ### Example Detection
+
 ```json
 {
   "circularDependencies": [
@@ -113,6 +131,7 @@ A circular dependency occurs when Module A depends on Module B, which depends on
 ```
 
 ### How to Fix
+
 1. **Extract Interface**: Create a common interface/module
 2. **Dependency Injection**: Pass dependencies as parameters
 3. **Event System**: Use pub/sub to decouple
@@ -134,12 +153,14 @@ Define architectural layers and enforce dependencies:
 ```
 
 This ensures:
+
 - Presentation layer can only use Business and Common
 - Business layer can only use Data and Common
 - Data layer can only use Common
 - Common layer has no dependencies
 
 ### Violation Example
+
 ```json
 {
   "layerViolations": [
@@ -215,6 +236,7 @@ graph TD
 ## Integration with Claude Code
 
 ### Architecture Review
+
 ```bash
 # Initial architecture analysis
 claude code "Analyze the architecture and identify issues"
@@ -227,6 +249,7 @@ claude code "Analyze dependencies for src/services/api.js"
 ```
 
 ### Refactoring Guidance
+
 ```bash
 # Before major refactor
 claude code "Analyze architecture and suggest refactoring opportunities"
@@ -236,6 +259,7 @@ claude code "Verify architecture improvements after refactor"
 ```
 
 ### CI/CD Integration
+
 ```bash
 # In GitHub Actions or CI pipeline
 - name: Architecture Check
@@ -274,12 +298,14 @@ Create `~/.config/claude-code/agents.config.json`:
 ## Common Patterns Detected
 
 ### 🚫 Anti-patterns
+
 - **God Module**: Single module with too many dependencies
 - **Circular Dependencies**: Mutual dependencies
 - **Layer Jumping**: Skipping architectural layers
 - **Scattered Functionality**: Low cohesion
 
 ### ✅ Good Patterns
+
 - **Clear Layers**: Defined architectural boundaries
 - **High Cohesion**: Related code grouped together
 - **Low Coupling**: Minimal cross-module dependencies

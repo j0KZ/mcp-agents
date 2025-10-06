@@ -86,7 +86,7 @@ export class PerformanceMonitor {
  */
 export async function measure<T>(
   fn: () => Promise<T>,
-  label?: string
+  _label?: string
 ): Promise<{ result: T; duration: number }> {
   const start = Date.now();
   const result = await fn();

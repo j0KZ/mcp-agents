@@ -9,6 +9,7 @@ Version 1.0.15 represents a significant milestone in the maturity and security o
 ## 🔒 Security Improvements
 
 ### ReDoS Vulnerability Fixes
+
 All Regular Expression Denial of Service (ReDoS) vulnerabilities have been resolved across the toolkit:
 
 - **test-generator**: Added line length validation (1000 char limit) and bounded quantifiers `{0,500}` to prevent regex backtracking
@@ -16,6 +17,7 @@ All Regular Expression Denial of Service (ReDoS) vulnerabilities have been resol
 - **Enhanced Input Validation**: All packages now validate input size, format, and content before processing
 
 ### Security Best Practices
+
 - Path traversal validation in all file operations
 - Maximum file size limits (1MB for most operations)
 - Structured error codes that don't expose sensitive information
@@ -24,6 +26,7 @@ All Regular Expression Denial of Service (ReDoS) vulnerabilities have been resol
 ## 📚 Documentation & Examples
 
 ### New Examples Directory
+
 Created comprehensive example files for all 8 tools (19 files total):
 
 ```
@@ -59,7 +62,9 @@ examples/
 ```
 
 ### Tutorial Series
+
 Four comprehensive tutorials covering:
+
 1. **Getting Started** - First steps with the toolkit
 2. **Common Workflows** - Real-world usage patterns
 3. **Advanced Usage** - Power user techniques
@@ -68,6 +73,7 @@ Four comprehensive tutorials covering:
 ## ⚡ Performance Benchmarking
 
 ### New Benchmarking Infrastructure
+
 Added performance benchmarking using Benchmark.js:
 
 ```
@@ -83,6 +89,7 @@ benchmarks/
 ```
 
 Performance targets:
+
 - Small files (< 100 LOC): > 100 ops/sec
 - Medium files (100-500 LOC): > 50 ops/sec
 - Large files (500-1000 LOC): > 10 ops/sec
@@ -90,9 +97,11 @@ Performance targets:
 ## 🎯 Improved Error Handling
 
 ### Structured Error Codes
+
 All tools now use structured error codes with actionable messages:
 
 #### test-generator Error Codes
+
 - `TEST_GEN_001`: Invalid file path
 - `TEST_GEN_002`: Unsupported framework
 - `TEST_GEN_003`: File not found
@@ -103,6 +112,7 @@ All tools now use structured error codes with actionable messages:
 - `TEST_GEN_008`: No testable code found
 
 #### refactor-assistant Error Codes
+
 - `REFACTOR_001`: Invalid code input
 - `REFACTOR_002`: Code too large
 - `REFACTOR_003`: Invalid function name
@@ -111,6 +121,7 @@ All tools now use structured error codes with actionable messages:
 - `REFACTOR_006`: Line range out of bounds
 
 ### Better User Experience
+
 - Clear, actionable error messages
 - Specific suggestions for fixing issues
 - Detailed context (file sizes, valid ranges, etc.)
@@ -119,6 +130,7 @@ All tools now use structured error codes with actionable messages:
 ## 🔧 Shared Utilities
 
 ### New Validation Module
+
 Created `packages/shared/src/validation.ts` with reusable validation functions:
 
 - `validateFilePathInput()` - File path validation with security checks
@@ -134,22 +146,25 @@ Created `packages/shared/src/validation.ts` with reusable validation functions:
 ## 📦 Package Updates
 
 ### Unified Versioning
+
 All packages updated to v1.0.15 for consistency:
 
-| Package | Previous Version | New Version |
-|---------|-----------------|-------------|
-| @j0kz/api-designer-mcp | 1.0.11 | **1.0.15** |
-| @j0kz/architecture-analyzer-mcp | 1.0.11 | **1.0.15** |
-| @j0kz/db-schema-mcp | 1.0.11 | **1.0.15** |
-| @j0kz/doc-generator-mcp | 1.0.11 | **1.0.15** |
-| @j0kz/refactor-assistant-mcp | 1.0.12 | **1.0.15** |
-| @j0kz/security-scanner-mcp | 1.0.11 | **1.0.15** |
-| @j0kz/shared | 1.0.11 | **1.0.15** |
-| @j0kz/smart-reviewer-mcp | 1.0.11 | **1.0.15** |
-| @j0kz/test-generator-mcp | 1.0.13 | **1.0.15** |
+| Package                         | Previous Version | New Version |
+| ------------------------------- | ---------------- | ----------- |
+| @j0kz/api-designer-mcp          | 1.0.11           | **1.0.15**  |
+| @j0kz/architecture-analyzer-mcp | 1.0.11           | **1.0.15**  |
+| @j0kz/db-schema-mcp             | 1.0.11           | **1.0.15**  |
+| @j0kz/doc-generator-mcp         | 1.0.11           | **1.0.15**  |
+| @j0kz/refactor-assistant-mcp    | 1.0.12           | **1.0.15**  |
+| @j0kz/security-scanner-mcp      | 1.0.11           | **1.0.15**  |
+| @j0kz/shared                    | 1.0.11           | **1.0.15**  |
+| @j0kz/smart-reviewer-mcp        | 1.0.11           | **1.0.15**  |
+| @j0kz/test-generator-mcp        | 1.0.13           | **1.0.15**  |
 
 ### Updated Documentation
+
 All package READMEs now include:
+
 - Version 1.0.15 badge
 - "What's New in v1.0.15" section
 - Links to examples and tutorials
@@ -184,6 +199,7 @@ npm install -g @j0kz/architecture-analyzer-mcp
 ## 🙏 Acknowledgments
 
 Special thanks to:
+
 - CodeQL security analysis for identifying vulnerabilities
 - The Model Context Protocol community
 - All users who provided feedback and bug reports

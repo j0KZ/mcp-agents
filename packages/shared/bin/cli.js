@@ -19,7 +19,7 @@ const TOOLS = [
   '@j0kz/api-designer-mcp',
   '@j0kz/db-schema-mcp',
   '@j0kz/doc-generator-mcp',
-  '@j0kz/security-scanner-mcp'
+  '@j0kz/security-scanner-mcp',
 ];
 
 const TOOL_NAMES = {
@@ -30,7 +30,7 @@ const TOOL_NAMES = {
   '@j0kz/api-designer-mcp': 'api-designer',
   '@j0kz/db-schema-mcp': 'db-schema',
   '@j0kz/doc-generator-mcp': 'doc-generator',
-  '@j0kz/security-scanner-mcp': 'security-scanner'
+  '@j0kz/security-scanner-mcp': 'security-scanner',
 };
 
 console.log(`\n🚀 MCP Agents Installer v${VERSION}\n`);
@@ -42,9 +42,29 @@ const editor = args[0] || 'claude'; // Default to Claude Code
 
 let configPath;
 if (process.platform === 'win32') {
-  configPath = join(homedir(), 'AppData', 'Roaming', 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json');
+  configPath = join(
+    homedir(),
+    'AppData',
+    'Roaming',
+    'Code',
+    'User',
+    'globalStorage',
+    'saoudrizwan.claude-dev',
+    'settings',
+    'cline_mcp_settings.json'
+  );
 } else {
-  configPath = join(homedir(), 'Library', 'Application Support', 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json');
+  configPath = join(
+    homedir(),
+    'Library',
+    'Application Support',
+    'Code',
+    'User',
+    'globalStorage',
+    'saoudrizwan.claude-dev',
+    'settings',
+    'cline_mcp_settings.json'
+  );
 }
 
 // Step 1: Clear cache
@@ -88,7 +108,7 @@ if (existsSync(configPath)) {
       const name = TOOL_NAMES[tool];
       config.mcpServers[name] = {
         command: 'npx',
-        args: [tool]
+        args: [tool],
       };
     }
 

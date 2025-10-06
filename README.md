@@ -1,6 +1,6 @@
 # @j0kz MCP Development Toolkit
 
-> **9 powerful AI development tools for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
+> **9 powerful MCP agents + shared utilities for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
 [![Version](https://img.shields.io/badge/version-1.0.31-blue.svg)](CHANGELOG.md)
@@ -9,41 +9,46 @@
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
 [![Performance](https://img.shields.io/badge/performance-2.18x_faster-brightgreen.svg)](docs/PHASE3_SUMMARY.md)
-[![Tests](https://img.shields.io/badge/tests-853_passing-success.svg)](CHANGELOG.md)
+[![Tests](https://img.shields.io/badge/tests-713_passing-success.svg)](CHANGELOG.md)
 
 ## 🎉 What's New in v1.0.31
 
 ### ⚡ Phase 3: Performance & Optimization (COMPLETE)
 
 **Major Performance Boost:**
-- 🚀 **2.18x speedup** with intelligent caching (99.9% hit rate)
-- ⚡ AST parsing **73% faster** with content-based cache invalidation
-- 📊 Hash generation: **673K ops/sec** throughput
+
+- 🚀 **2.18x speedup** with intelligent caching (synthetic benchmark)
+- ⚡ AST parsing **73% faster** with content-based cache invalidation (cached vs uncached)
+- 📊 Hash generation: **673K ops/sec** throughput (benchmark)
 - ✅ Zero breaking changes - fully backwards compatible
 
 **Key Features:**
+
 - ✨ Intelligent caching in test-generator, security-scanner, smart-reviewer
 - 📈 Reusable performance benchmark suite
 - 🔄 Content-based automatic cache invalidation
 - 📊 Built-in cache statistics and monitoring
 
-**Metrics:**
+**Metrics (from benchmarks):**
+
 ```
-Analysis Cache:  2.18x speedup (99.9% hit rate)
+Analysis Cache:  2.18x speedup (cached vs uncached)
 AST Parsing:     73% faster with cache
 Hash Generation: 673K ops/sec
-Tests:           853 total (+228 from v1.0.30)
-Pass Rate:       100% (853/853)
+Tests:           713 total (100% pass rate)
+Coverage:        61.69% statements, 76% branches, 74.63% functions
 ```
 
 ### 📈 Phase 2: Quality & Test Coverage (COMPLETE)
 
 **Test Expansion:**
-- ✅ Added **225 new tests** (625 → 850)
+
+- ✅ Added **88 new tests** (625 → 713)
 - ✅ Smart-reviewer analyzers: 0% → 100% coverage
 - ✅ Strengthened api-designer assertions (removed shallow `toBeDefined()`)
 
 **Code Modernization:**
+
 - ✅ ESLint 9 + Prettier with flat config
 - ✅ AST parser with `@babel/parser` (eliminated ReDoS vulnerabilities)
 - ✅ Auto-fixed 69 code quality issues
@@ -51,23 +56,27 @@ Pass Rate:       100% (853/853)
 ### 🔒 Phase 1: Critical Fixes (COMPLETE)
 
 **Security & Reliability:**
+
 - ✅ Fixed orchestrator batch operations bug (critical)
 - ✅ 100% validation coverage (32 security tests)
 - ✅ Standardized 58 error codes with `MCPError` class
 - ✅ 20 integration tests for real-world workflows
 
 **See [CHANGELOG.md](CHANGELOG.md) for complete v1.0.31 release notes.**
+
 - 🏗️ Architecture: Centralized error handling, reduced complexity
 - ✅ Quality: ESLint + Prettier enforced, AST-based parsing
 
 ### 🔗 MCP Workflow Engine (Orchestrator)
 
 **3 Pre-built Workflows:**
+
 - **pre-commit** (2 steps) - Fast local checks: code review + security scan
 - **pre-merge** (4 steps) - Comprehensive PR validation with dependency resolution
 - **quality-audit** (3 steps) - Deep analysis: security report + architecture + docs
 
 **Key Features:**
+
 - 🔗 MCP-to-MCP communication via JSON-RPC
 - 📊 Dependency resolution (steps can depend on other steps)
 - ⚡ Parallel execution where possible
@@ -80,30 +89,35 @@ Pass Rate:       100% (853/853)
 ### 🧪 Test Coverage Enforcement & Expansion
 
 **CI Coverage Enforcement - Actual Metrics:**
-- ✅ Coverage (deduplicated): **59% statements, 67% branches, 74% functions**
+
+- ✅ Coverage (deduplicated): **61.69% statements, 76% branches, 74.63% functions**
 - ✅ Enforced thresholds: 55% statements, 65% branches, 72% functions
 - ✅ Automated validation with `check-coverage.js` (proper deduplication)
 - ✅ Visual coverage dashboard with `coverage-dashboard.js`
-- ✅ All 622 tests passing (100% pass rate)
+- ✅ All 713 tests passing (100% pass rate)
 
 **342 New Tests Added (+46% growth):**
+
 - **API Designer**: 3 → 140 tests (+4567%) - OpenAPI, GraphQL, client generation, validation
 - **Refactor Assistant**: 170 → 311 tests (+83%) - async conversion, dead code, design patterns
 - **Security Scanner**: 8 → 64 tests (+700%) - secrets, SQL injection, XSS, utilities
 
 **Refactor Assistant Improvements:**
+
 - Created modular transformation utilities (async-converter, dead-code-detector)
 - Extracted pattern factory to eliminate 50-line switch statement
 - Reduced complexity from 78 → 71 (-9%)
 - Code size reduced from 462 → 410 lines (-11%)
 
 **Overall:**
-- ✅ 622 passing tests (100% pass rate)
-- ✅ Coverage: 59% statements, 67% branches, 74% functions (verified, deduplicated)
+
+- ✅ 713 passing tests (100% pass rate)
+- ✅ Coverage: 61.69% statements, 76% branches, 74.63% functions (verified, deduplicated)
 - ✅ Comprehensive test coverage across all packages
 - ✅ Enforced quality standards in CI/CD pipeline
 
 **Previous Release (v1.0.28):**
+
 - 📚 Complete documentation restructuring
 - 📁 7 organized categories with central index
 - ✅ Improved navigation and discoverability
@@ -113,6 +127,7 @@ Pass Rate:       100% (853/853)
 ### 🎯 Major Code Quality Improvements - MCP-Validated!
 
 **Security Scanner** - **Perfect Score** 100/100 ⭐
+
 - Score improved from 57 → **100/100** (+75%)
 - Complexity reduced by 54% (71 → 33)
 - Maintainability increased 245% (11 → 38)
@@ -120,6 +135,7 @@ Pass Rate:       100% (853/853)
 - 47% smaller codebase (395 → 209 lines)
 
 **DB Schema Designer** - **Near Perfect** 97/100 ⭐
+
 - Score improved from 75 → **97/100** (+29%)
 - Complexity reduced by 49% (83 → 42)
 - Maintainability increased 121% (14 → 31)
@@ -127,16 +143,19 @@ Pass Rate:       100% (853/853)
 - 36% smaller codebase (411 → 262 lines)
 
 **Refactor Assistant** - Stable 67/100
+
 - Complexity reduced 7% (84 → 78)
 - Constants extraction and error handling improvements
 
 **CodeRabbit Review - All Clear ✅**
+
 - ✅ 9/9 issues resolved (3 critical, 3 major, 3 minor)
 - ✅ SQL injection prevention with input validation
 - ✅ Dependency scanner false positive fixes
 - ✅ Semver upgraded to v7.7.2
 
 **Overall Impact:**
+
 - ✅ +33% average score improvement (66 → 88)
 - ✅ -36% complexity reduction
 - ✅ +122% maintainability improvement
@@ -145,6 +164,7 @@ Pass Rate:       100% (853/853)
 - ✅ 100% test pass rate (68/68 tests)
 
 **Previous Updates:**
+
 - **🚀 CI/CD Templates** - GitHub Actions, GitLab CI, pre-commit hooks
 - **🎯 Global Version Management** - `version.json` single source of truth
 
@@ -169,6 +189,7 @@ npx @j0kz/mcp-agents@latest trae       # Trae
 ```
 
 **That's it!** The installer will:
+
 - ✅ Clear npm cache
 - ✅ Fix malformed config files automatically
 - ✅ Configure MCP settings with `@latest` versions
@@ -192,9 +213,11 @@ npx @j0kz/mcp-agents help
 ```
 
 **Supported Editors:**
+
 - Claude Code, Cursor, Windsurf, VS Code, Roo Code, Trae
 
 Or use the [manual installation guide](#-installation) below.
+
 </details>
 
 ---
@@ -206,6 +229,7 @@ Add MCP quality checks to your pipeline in **< 1 minute**:
 ### GitHub Actions
 
 **Quick Start:**
+
 ```bash
 # Basic quality check on PRs
 curl -o .github/workflows/mcp-basic.yml \
@@ -213,6 +237,7 @@ curl -o .github/workflows/mcp-basic.yml \
 ```
 
 **Available Templates:**
+
 - **mcp-basic.yml** - Quick code review + security scan
 - **mcp-quality-gate.yml** - Comprehensive 5-job pipeline
 - **mcp-pre-merge.yml** - Strict enforcement before merge
@@ -220,6 +245,7 @@ curl -o .github/workflows/mcp-basic.yml \
 ### Pre-commit Hooks
 
 **Install locally:**
+
 ```bash
 npx @j0kz/mcp-hooks-generator basic
 ```
@@ -241,26 +267,31 @@ include:
 ## 📜 Previous Releases
 
 ### v1.0.19 - Dist Rebuild
+
 - Rebuilt dist files with correct @j0kz/shared imports
 - Fixed ERR_MODULE_NOT_FOUND errors completely
 
 ### v1.0.18 - Shared Package Published
+
 - Published @j0kz/shared package to npm
 - Updated all package.json dependencies
 - Fixed ERR_MODULE_NOT_FOUND error
 
 ### v1.0.17 - Code Quality Improvements
+
 - Major complexity reduction in API Designer (67% reduction)
 - Enhanced accuracy in Smart Reviewer
 - All 37 tests passing with zero breaking changes
 - Better maintainability with modular architecture
 
 ### v1.0.16 - Dependency Updates
+
 - Major dependency updates (Anthropic SDK, MCP SDK, Vitest)
 - Zero vulnerabilities
 - Enhanced test infrastructure
 
 ### v1.0.15 - Security & Examples
+
 - Security hardened with ReDoS vulnerability fixes
 - 19 comprehensive examples and tutorials
 - Performance benchmarking infrastructure
@@ -276,11 +307,13 @@ Choose your AI-powered code editor below and follow the simple installation step
 ### Automatic Installation (Recommended)
 
 **Mac/Linux:**
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/j0KZ/mcp-agents/main/install-all.sh | bash
 ```
 
 **Windows (PowerShell):**
+
 ```powershell
 irm https://raw.githubusercontent.com/j0KZ/mcp-agents/main/install-all.ps1 | iex
 ```
@@ -301,6 +334,7 @@ claude mcp add orchestrator "npx @j0kz/orchestrator-mcp" --scope user
 ```
 
 **✅ Verify Installation:**
+
 ```bash
 claude mcp list
 ```
@@ -315,11 +349,13 @@ You should see all 9 tools marked as "✓ Connected"
 ### Option 1: Automatic Setup
 
 **Mac/Linux:**
+
 ```bash
 curl -o ~/.cursor/mcp_config.json https://raw.githubusercontent.com/j0KZ/mcp-agents/main/mcp_config_all.json
 ```
 
 **Windows (PowerShell):**
+
 ```powershell
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/j0KZ/mcp-agents/main/mcp_config_all.json" -OutFile "$env:APPDATA\Cursor\User\mcp_config.json"
 ```
@@ -380,11 +416,13 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/j0KZ/mcp-agents/main/m
 ### Option 1: Automatic Setup
 
 **Mac/Linux:**
+
 ```bash
 curl -o ~/.windsurf/mcp_config.json https://raw.githubusercontent.com/j0KZ/mcp-agents/main/mcp_config_all.json
 ```
 
 **Windows (PowerShell):**
+
 ```powershell
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/j0KZ/mcp-agents/main/mcp_config_all.json" -OutFile "$env:APPDATA\Windsurf\User\mcp_config.json"
 ```
@@ -546,6 +584,7 @@ roo mcp add db-schema npx @j0kz/db-schema-mcp
 4. Add this configuration:
 
 **Configuration Format:**
+
 ```json
 {
   "mcpServers": {
@@ -653,9 +692,11 @@ If your editor supports MCP but isn't listed above:
 ### 🎯 Code Quality Suite
 
 #### [@j0kz/smart-reviewer-mcp](https://www.npmjs.com/package/@j0kz/smart-reviewer-mcp)
+
 AI-powered code review with quality metrics and automated fixes
 
 **Example:**
+
 ```
 💬 "Review the auth.js file"
 🤖 Found 3 issues: unused variable on line 42, missing error handling,
@@ -663,9 +704,11 @@ AI-powered code review with quality metrics and automated fixes
 ```
 
 #### [@j0kz/test-generator-mcp](https://www.npmjs.com/package/@j0kz/test-generator-mcp)
+
 Generate comprehensive test suites with edge cases and mocks
 
 **Example:**
+
 ```
 💬 "Generate tests for calculatePrice function"
 🤖 Generated 15 tests covering: happy path, edge cases (negative prices,
@@ -673,9 +716,11 @@ Generate comprehensive test suites with edge cases and mocks
 ```
 
 #### [@j0kz/refactor-assistant-mcp](https://www.npmjs.com/package/@j0kz/refactor-assistant-mcp)
+
 Intelligent code refactoring with pattern detection
 
 **Example:**
+
 ```
 💬 "Refactor this function to be more readable"
 🤖 Suggestions: Extract 3 methods, rename variables (x→userId),
@@ -687,9 +732,11 @@ Intelligent code refactoring with pattern detection
 ### 🏗️ Architecture & Design
 
 #### [@j0kz/architecture-analyzer-mcp](https://www.npmjs.com/package/@j0kz/architecture-analyzer-mcp)
+
 Detect circular dependencies, layer violations, and generate dependency graphs
 
 **Example:**
+
 ```
 💬 "Analyze project architecture"
 🤖 Found: 2 circular dependencies (auth ↔ user),
@@ -697,9 +744,11 @@ Detect circular dependencies, layer violations, and generate dependency graphs
 ```
 
 #### [@j0kz/api-designer-mcp](https://www.npmjs.com/package/@j0kz/api-designer-mcp)
+
 Design REST and GraphQL APIs with OpenAPI generation
 
 **Example:**
+
 ```
 💬 "Design a REST API for user management"
 🤖 Created design: GET/POST /users, GET/PUT/DELETE /users/:id,
@@ -707,9 +756,11 @@ Design REST and GraphQL APIs with OpenAPI generation
 ```
 
 #### [@j0kz/db-schema-mcp](https://www.npmjs.com/package/@j0kz/db-schema-mcp)
+
 Database schema design with migrations and relationship analysis
 
 **Example:**
+
 ```
 💬 "Design a schema for an e-commerce app"
 🤖 Created schema: users, products, orders, order_items
@@ -721,9 +772,11 @@ Database schema design with migrations and relationship analysis
 ### 📚 Documentation & Security
 
 #### [@j0kz/doc-generator-mcp](https://www.npmjs.com/package/@j0kz/doc-generator-mcp)
+
 Auto-generate JSDoc, README, and API documentation from code
 
 **Example:**
+
 ```
 💬 "Document the API endpoints in server.js"
 🤖 Generated OpenAPI spec with 12 endpoints, parameters,
@@ -731,9 +784,11 @@ Auto-generate JSDoc, README, and API documentation from code
 ```
 
 #### [@j0kz/security-scanner-mcp](https://www.npmjs.com/package/@j0kz/security-scanner-mcp)
+
 Scan for vulnerabilities, OWASP issues, and security best practices
 
 **Example:**
+
 ```
 💬 "Scan for security vulnerabilities"
 🤖 Found: SQL injection risk in query builder, XSS in template,
@@ -814,14 +869,14 @@ Each tool has dedicated examples with sample code and expected outputs!
 
 ## 🔧 Editor Support
 
-| Editor | Status | Installation Method |
-|--------|--------|---------------------|
+| Editor          | Status          | Installation Method              |
+| --------------- | --------------- | -------------------------------- |
 | **Claude Code** | ✅ Full support | Use install script (recommended) |
-| **Cursor** | ✅ Full support | Download mcp_config_all.json |
-| **Windsurf** | ✅ Full support | Download mcp_config_all.json |
-| **Roo Code** | ✅ Full support | MCP-compatible config |
-| **Continue** | ✅ Full support | MCP plugin support |
-| **Zed** | ✅ Full support | Native MCP support |
+| **Cursor**      | ✅ Full support | Download mcp_config_all.json     |
+| **Windsurf**    | ✅ Full support | Download mcp_config_all.json     |
+| **Roo Code**    | ✅ Full support | MCP-compatible config            |
+| **Continue**    | ✅ Full support | MCP plugin support               |
+| **Zed**         | ✅ Full support | Native MCP support               |
 
 **Any MCP-compatible editor works!**
 
@@ -850,6 +905,7 @@ For Cursor/Windsurf, add individual entries to `mcp_config.json` - [see config t
 ## ✅ Verify Installation
 
 **Claude Code:**
+
 ```bash
 claude mcp list
 ```
@@ -898,17 +954,20 @@ Visit our [**Wiki**](https://github.com/j0KZ/mcp-agents/wiki) for complete docum
 ## ❓ Troubleshooting
 
 ### MCPs not showing up?
+
 1. **Restart your editor** after installation
 2. **Check Node.js** is installed: `node --version`
 3. **Verify installation**: `claude mcp list` (Claude Code)
 4. **See [Troubleshooting Guide](https://github.com/j0KZ/mcp-agents/wiki/Troubleshooting)** for detailed solutions
 
 ### Commands not working?
+
 1. Make sure you restarted the editor
 2. Try asking more specific questions
 3. Check MCP connection status
 
 ### Still stuck?
+
 - [Open an issue](https://github.com/j0KZ/mcp-agents/issues)
 - Check individual package READMEs for detailed docs
 

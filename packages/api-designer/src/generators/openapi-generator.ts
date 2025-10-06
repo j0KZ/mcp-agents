@@ -182,7 +182,7 @@ function capitalize(str: string): string {
  */
 export function generateRESTEndpointsFromResources(
   resources: string[],
-  config: APIDesignConfig
+  _config: APIDesignConfig
 ): RESTEndpoint[] {
   const endpoints: RESTEndpoint[] = [];
 

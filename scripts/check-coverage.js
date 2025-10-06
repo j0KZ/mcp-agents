@@ -40,7 +40,9 @@ if (fs.existsSync(istanbulCoverageFile)) {
     if (normalizedFiles.has(normalized)) {
       const existing = normalizedFiles.get(normalized);
       const existingCovered = existing.s ? Object.values(existing.s).filter(v => v > 0).length : 0;
-      const newCovered = fileCoverage.s ? Object.values(fileCoverage.s).filter(v => v > 0).length : 0;
+      const newCovered = fileCoverage.s
+        ? Object.values(fileCoverage.s).filter(v => v > 0).length
+        : 0;
 
       if (newCovered > existingCovered) {
         normalizedFiles.set(normalized, fileCoverage);
@@ -52,11 +54,13 @@ if (fs.existsSync(istanbulCoverageFile)) {
 
   for (const [filePath, fileCoverage] of normalizedFiles.entries()) {
     // Skip .test.ts, .spec.ts, mcp-server.ts, node_modules, dist
-    if (filePath.includes('.test.') ||
-        filePath.includes('.spec.') ||
-        filePath.includes('mcp-server.ts') ||
-        filePath.includes('node_modules') ||
-        filePath.includes('dist')) {
+    if (
+      filePath.includes('.test.') ||
+      filePath.includes('.spec.') ||
+      filePath.includes('mcp-server.ts') ||
+      filePath.includes('node_modules') ||
+      filePath.includes('dist')
+    ) {
       continue;
     }
 
@@ -81,22 +85,22 @@ if (fs.existsSync(istanbulCoverageFile)) {
     statements: {
       total: statements.total,
       covered: statements.covered,
-      pct: statements.total > 0 ? (statements.covered / statements.total) * 100 : 0
+      pct: statements.total > 0 ? (statements.covered / statements.total) * 100 : 0,
     },
     branches: {
       total: branches.total,
       covered: branches.covered,
-      pct: branches.total > 0 ? (branches.covered / branches.total) * 100 : 0
+      pct: branches.total > 0 ? (branches.covered / branches.total) * 100 : 0,
     },
     functions: {
       total: functions.total,
       covered: functions.covered,
-      pct: functions.total > 0 ? (functions.covered / functions.total) * 100 : 0
+      pct: functions.total > 0 ? (functions.covered / functions.total) * 100 : 0,
     },
     lines: {
       total: statements.total,
       covered: statements.covered,
-      pct: statements.total > 0 ? (statements.covered / statements.total) * 100 : 0
+      pct: statements.total > 0 ? (statements.covered / statements.total) * 100 : 0,
     },
   };
 } else {
@@ -120,7 +124,9 @@ for (const [metric, threshold] of Object.entries(thresholds)) {
   const status = actual >= threshold ? '✅' : '❌';
   const trend = actual >= threshold ? '' : ` (need +${(threshold - actual).toFixed(2)}%)`;
 
-  console.log(`${status} ${metric.padEnd(12)}: ${actual.toFixed(2)}% (threshold: ${threshold}%)${trend}`);
+  console.log(
+    `${status} ${metric.padEnd(12)}: ${actual.toFixed(2)}% (threshold: ${threshold}%)${trend}`
+  );
 
   if (actual < threshold) {
     failed = true;

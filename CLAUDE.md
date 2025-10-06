@@ -4,9 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a **TypeScript monorepo** containing 9 Model Context Protocol (MCP) tools for AI-powered code analysis and generation. Each package is independently published to npm under the `@j0kz` scope and works with Claude Code, Cursor, Windsurf, and other MCP-compatible editors.
+This is a **TypeScript monorepo** containing **11 packages** for AI-powered code analysis and generation. Each package is independently published to npm under the `@j0kz` scope (except `shared` which is private) and works with Claude Code, Cursor, Windsurf, and other MCP-compatible editors.
 
-**The 9 MCP Tools:**
+**The 9 Core MCP Tools:**
+
 1. `smart-reviewer` - Code review and quality analysis
 2. `test-generator` - Test suite generation
 3. `architecture-analyzer` - Dependency and architecture analysis
@@ -17,11 +18,15 @@ This is a **TypeScript monorepo** containing 9 Model Context Protocol (MCP) tool
 8. `security-scanner` - Security vulnerability scanning
 9. `orchestrator-mcp` - MCP workflow orchestration and chaining
 
-**Shared Package:** `@j0kz/shared` (private) - Common utilities used by all tools including caching, performance monitoring, file system operations, and inter-MCP communication.
+**Supporting Packages:**
+
+- `@j0kz/shared` (private) - Common utilities used by all tools including caching, performance monitoring, file system operations, and inter-MCP communication
+- `config-wizard` - Installation and configuration wizard for MCP tools
 
 ## Architecture & Code Organization
 
 ### Monorepo Structure
+
 - **Root** manages workspace dependencies and shared build/test scripts
 - **packages/** contains 9 published tools + 1 private shared package
 - Each package has: `src/` (TypeScript), `dist/` (compiled), tests, and `mcp-server.ts` entrypoint
@@ -32,6 +37,7 @@ This is a **TypeScript monorepo** containing 9 Model Context Protocol (MCP) tool
 **Phase 1-3** systematic refactoring completed with MCP-validated improvements:
 
 **Security Scanner (Perfect Score 100/100 ⭐):**
+
 - **Before**: Score 57/100, Complexity 71, Maintainability 11, 35 duplicate blocks
 - **After**: Score 100/100, Complexity 33, Maintainability 38, 2 duplicate blocks
 - **Improvements**: +75% score, -54% complexity, +245% maintainability, -94% duplicates
@@ -43,6 +49,7 @@ This is a **TypeScript monorepo** containing 9 Model Context Protocol (MCP) tool
   - Reduced from 395 to 209 lines (-47%)
 
 **DB Schema Designer (Near Perfect 97/100 ⭐):**
+
 - **Before**: Score 75/100, Complexity 83, Maintainability 14, 22 duplicate blocks
 - **After**: Score 97/100, Complexity 42, Maintainability 31, 13 duplicate blocks
 - **Improvements**: +29% score, -49% complexity, +121% maintainability, -41% duplicates
@@ -54,6 +61,7 @@ This is a **TypeScript monorepo** containing 9 Model Context Protocol (MCP) tool
   - Reduced from 411 to 262 lines (-36%)
 
 **Refactor Assistant (Stable 67/100):**
+
 - **Before**: Score 67/100, Complexity 84, Maintainability 12, 24 duplicate blocks
 - **After**: Score 67/100, Complexity 78, Maintainability 13, 24 duplicate blocks
 - **Improvements**: -7% complexity, +8% maintainability
@@ -64,6 +72,7 @@ This is a **TypeScript monorepo** containing 9 Model Context Protocol (MCP) tool
   - Reduced from 456 to 407 lines (-11%)
 
 **Overall Phase 1-3 Impact:**
+
 - ✅ +33% average score (66 → 88)
 - ✅ -36% complexity reduction (79 → 51)
 - ✅ +122% maintainability (12 → 27)
@@ -98,6 +107,7 @@ Three major packages were refactored to reduce complexity by extracting logic in
 ### Shared Package Integration
 
 Each tool imports from `@j0kz/shared` for common functionality:
+
 - **FileSystemManager** - File operations with caching
 - **AnalysisCache** - LRU cache for analysis results (30min TTL)
 - **PerformanceMonitor** - Performance tracking and metrics
@@ -105,6 +115,7 @@ Each tool imports from `@j0kz/shared` for common functionality:
 - **Path validation** - Security utilities for preventing traversal attacks
 
 Example usage:
+
 ```typescript
 import { FileSystemManager, AnalysisCache, PerformanceMonitor } from '@j0kz/shared';
 ```
@@ -112,6 +123,7 @@ import { FileSystemManager, AnalysisCache, PerformanceMonitor } from '@j0kz/shar
 ### MCP Server Pattern
 
 Every tool follows the same MCP server structure:
+
 - `src/mcp-server.ts` - Entrypoint that implements MCP protocol
 - Exposes tools via `@modelcontextprotocol/sdk`
 - Main logic in separate files (e.g., `analyzer.ts`, `generator.ts`, `scanner.ts`)
@@ -120,6 +132,7 @@ Every tool follows the same MCP server structure:
 ## Development Commands
 
 ### Building
+
 ```bash
 # Build all packages
 npm run build
@@ -134,6 +147,7 @@ npm run build -w packages/smart-reviewer
 ```
 
 ### Testing
+
 ```bash
 # Run all tests (uses vitest for each package)
 npm test
@@ -149,12 +163,14 @@ npm run test:coverage
 ```
 
 **Test Configuration:** Each package uses Vitest with the root `vitest.config.ts`:
+
 - 30-second timeout per test
 - Parallel execution (max 4 threads)
 - v8 coverage provider
 - Excludes: node_modules, dist, mcp-server.ts
 
 ### Development
+
 ```bash
 # Watch mode for development
 npm run dev
@@ -164,6 +180,7 @@ npm run dev -w packages/smart-reviewer
 ```
 
 ### Publishing
+
 ```bash
 # Build and publish all packages (requires npm auth)
 npm run publish-all
@@ -206,11 +223,13 @@ git push && git push --tags
 ```
 
 **Adding new MCP packages:**
+
 1. Create in `packages/your-package/`
 2. Run `npm run version:sync` - it will automatically get the global version
 3. No manual version management needed!
 
 **Never:**
+
 - ❌ Manually edit version in package.json files
 - ❌ Use different versions across packages
 - ❌ Forget to run `npm run version:sync` after updating version.json
@@ -218,33 +237,40 @@ git push && git push --tags
 ## Important Patterns & Conventions
 
 ### Import/Export Style
+
 - **ES Modules only** (`"type": "module"` in all package.json)
 - Import TypeScript files with `.js` extension: `import { foo } from './bar.js'`
 - This is required for TypeScript ESM compilation
 
 ### Security Considerations
+
 - **Input validation**: All file paths validated to prevent traversal attacks
 - **ReDoS protection**: Regex patterns use bounded quantifiers (e.g., `{1,500}`)
 - **Size limits**: Input code limited to 100KB in refactoring operations
 - **Line length checks**: Skip lines >1000 chars to prevent ReDoS
 
 ### Error Handling Pattern
+
 All tools return structured results with success/failure indicators:
+
 ```typescript
 return {
   success: true,
   data: result,
-  metadata: { /* ... */ }
+  metadata: {
+    /* ... */
+  },
 };
 
 // Or on error:
 return {
   success: false,
-  errors: [errorMessage]
+  errors: [errorMessage],
 };
 ```
 
 ### Dependency Versions (as of v1.0.16)
+
 - `@anthropic-ai/sdk`: ^0.64.0
 - `@modelcontextprotocol/sdk`: ^1.18.2
 - `lru-cache`: ^11.0.2 (in shared package)
@@ -254,6 +280,7 @@ return {
 ## Working with the Codebase
 
 ### Adding a New MCP Tool
+
 1. Create directory in `packages/`
 2. Add `package.json` with proper bin/main/types fields
 3. Create `src/mcp-server.ts` implementing MCP protocol
@@ -263,6 +290,7 @@ return {
 7. Add to root workspace in root `package.json`
 
 ### Modifying Existing Tools
+
 - Keep main files focused on orchestration
 - Extract complex logic into separate modules (see refactoring pattern above)
 - Use shared utilities instead of duplicating code
@@ -270,6 +298,7 @@ return {
 - Update tests to verify changes
 
 ### Code Quality Targets
+
 - Keep individual files under 500 LOC when possible
 - Complexity threshold: aim for <50 per file
 - Extract duplicate code blocks into shared functions
@@ -279,6 +308,7 @@ return {
 ## Recent Changes (refactor/complexity-reduction)
 
 The latest work reduced code complexity by 31.8% across three packages:
+
 - Extracted specialized modules for generation, patterns, and analysis
 - Updated dependencies to latest stable versions
 - All 23 tests passing

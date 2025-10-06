@@ -23,7 +23,7 @@ export default defineConfig({
 
       // Coverage thresholds - disabled in favor of check-coverage.js
       // Vitest doesn't deduplicate properly (shows duplicates from src/ and dist/)
-      // Real coverage: 59% statements, 67% branches, 74% functions
+      // Real coverage: 61.69% statements, 76% branches, 74.63% functions
       // Enforced by scripts/check-coverage.js with proper deduplication
       thresholds: {
         statements: 0,
@@ -46,7 +46,6 @@ export default defineConfig({
         '**/index.ts', // Re-exports only
         '**/constants/**', // Constant definitions
         'packages/*/src/constants.ts',
-        'packages/orchestrator-mcp/**', // Not yet fully tested
         'installer/**', // Standalone package
       ],
 

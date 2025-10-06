@@ -9,7 +9,6 @@ import {
   validateFileContent,
   validateProjectPath,
   validateFramework,
-  ValidationResult,
 } from './validation.js';
 
 describe('validateFilePathInput (Security Critical)', () => {

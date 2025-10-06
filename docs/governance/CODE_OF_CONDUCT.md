@@ -7,12 +7,14 @@ We are committed to providing a welcoming and inspiring community for all.
 ## Our Standards
 
 **Positive behavior includes:**
+
 - Being respectful and inclusive
 - Accepting constructive criticism
 - Focusing on what's best for the community
 - Showing empathy towards others
 
 **Unacceptable behavior includes:**
+
 - Harassment or discrimination
 - Trolling or insulting comments
 - Personal or political attacks

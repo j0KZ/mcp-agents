@@ -17,18 +17,18 @@ const packages = [
   {
     name: 'smart-reviewer',
     npm: '@j0kz/smart-reviewer-mcp',
-    description: 'AI-powered code review'
+    description: 'AI-powered code review',
   },
   {
     name: 'test-generator',
     npm: '@j0kz/test-generator-mcp',
-    description: 'Automated test generation'
+    description: 'Automated test generation',
   },
   {
     name: 'architecture-analyzer',
     npm: '@j0kz/architecture-analyzer-mcp',
-    description: 'Architecture analysis and dependency graphs'
-  }
+    description: 'Architecture analysis and dependency graphs',
+  },
 ];
 
 // Detect available editors and install
@@ -65,7 +65,7 @@ if (editors.includes('claude-code')) {
     try {
       console.log(`  Installing ${pkg.name}...`);
       execSync(`claude mcp add ${pkg.name} "npx ${pkg.npm}" --scope user`, {
-        stdio: 'inherit'
+        stdio: 'inherit',
       });
       console.log(`  ✅ ${pkg.name} installed\n`);
     } catch (error) {
@@ -93,7 +93,7 @@ if (editors.includes('cursor')) {
   for (const pkg of packages) {
     config.mcpServers[pkg.name] = {
       command: 'npx',
-      args: [pkg.npm]
+      args: [pkg.npm],
     };
     console.log(`  ✅ ${pkg.name} configured`);
   }
@@ -117,7 +117,7 @@ if (editors.includes('windsurf')) {
 
   for (const pkg of packages) {
     config.mcp.servers[pkg.name] = {
-      command: `npx ${pkg.npm}`
+      command: `npx ${pkg.npm}`,
     };
     console.log(`  ✅ ${pkg.name} configured`);
   }
@@ -130,16 +130,22 @@ if (editors.includes('windsurf')) {
 if (editors.length === 0) {
   console.log('⚠️  No supported editors detected automatically.\n');
   console.log('📖 Manual installation for your editor:\n');
-  console.log('Add this to your editor\'s MCP configuration:\n');
-  console.log(JSON.stringify({
-    mcpServers: packages.reduce((acc, pkg) => {
-      acc[pkg.name] = {
-        command: 'npx',
-        args: [pkg.npm]
-      };
-      return acc;
-    }, {})
-  }, null, 2));
+  console.log("Add this to your editor's MCP configuration:\n");
+  console.log(
+    JSON.stringify(
+      {
+        mcpServers: packages.reduce((acc, pkg) => {
+          acc[pkg.name] = {
+            command: 'npx',
+            args: [pkg.npm],
+          };
+          return acc;
+        }, {}),
+      },
+      null,
+      2
+    )
+  );
   console.log('\n');
 }
 

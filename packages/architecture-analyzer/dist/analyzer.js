@@ -1,4 +1,5 @@
 import { ProjectScanner } from './scanner.js';
+import { CIRCULAR_DEPENDENCY_THRESHOLDS } from './constants/thresholds.js';
 export class ArchitectureAnalyzer {
     scanner;
     constructor() {
@@ -44,7 +45,7 @@ export class ArchitectureAnalyzer {
         const uniqueCycles = this.deduplicateCycles(cycles);
         return uniqueCycles.map(cycle => ({
             cycle,
-            severity: cycle.length > 3 ? 'error' : 'warning',
+            severity: cycle.length > CIRCULAR_DEPENDENCY_THRESHOLDS.LONG_CYCLE_LENGTH ? 'error' : 'warning',
         }));
     }
     /**

@@ -20,6 +20,7 @@
 Get the complete suite with ONE command:
 
 **Claude Code:**
+
 ```bash
 # Mac/Linux
 curl -fsSL https://raw.githubusercontent.com/j0kz/mcp-agents/main/install-all.sh | bash
@@ -29,6 +30,7 @@ irm https://raw.githubusercontent.com/j0kz/mcp-agents/main/install-all.ps1 | iex
 ```
 
 **Cursor/Windsurf:**
+
 ```bash
 # Download complete config
 curl -o ~/.cursor/mcp_config.json https://raw.githubusercontent.com/j0kz/mcp-agents/main/mcp_config_all.json
@@ -40,11 +42,13 @@ curl -o ~/.windsurf/mcp_config.json https://raw.githubusercontent.com/j0kz/mcp-a
 ### Option 2: Install Only This Tool
 
 **Claude Code:**
+
 ```bash
 claude mcp add refactor-assistant "npx @j0kz/refactor-assistant-mcp" --scope user
 ```
 
 **Cursor/Windsurf:** Add to `mcp_config.json`:
+
 ```json
 {
   "mcpServers": {
@@ -111,28 +115,31 @@ No configuration files, no complex setup, no API keys needed!
 
 ## 🔧 Editor Support
 
-| Editor | Status | Notes |
-|--------|--------|-------|
-| **Claude Code** | ✅ Full support | Recommended |
-| **Cursor** | ✅ Full support | Native MCP |
-| **Windsurf** | ✅ Full support | Built-in MCP |
-| **Roo Code** | ✅ Full support | MCP compatible |
-| **Continue** | ✅ Full support | MCP plugin |
-| **Zed** | ✅ Full support | MCP support |
+| Editor          | Status          | Notes          |
+| --------------- | --------------- | -------------- |
+| **Claude Code** | ✅ Full support | Recommended    |
+| **Cursor**      | ✅ Full support | Native MCP     |
+| **Windsurf**    | ✅ Full support | Built-in MCP   |
+| **Roo Code**    | ✅ Full support | MCP compatible |
+| **Continue**    | ✅ Full support | MCP plugin     |
+| **Zed**         | ✅ Full support | MCP support    |
 
 Any MCP-compatible editor works!
 
 ## ❓ Troubleshooting
 
 **MCP not showing up?**
+
 - Restart your editor after installation
 - Check: `claude mcp list` (Claude Code) to verify connection
 
 **Commands not working?**
+
 - Make sure Node.js is installed (`node --version`)
 - Try reinstalling: Remove and re-add the MCP
 
 **Still stuck?**
+
 - [Open an issue](https://github.com/j0KZ/mcp-agents/issues)
 - [Check full documentation](https://github.com/j0KZ/mcp-agents)
 

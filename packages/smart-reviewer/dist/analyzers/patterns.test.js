@@ -13,9 +13,9 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Replace var with const',
                         oldCode: 'var x = 5;',
-                        newCode: 'const x = 5;'
-                    }
-                }
+                        newCode: 'const x = 5;',
+                    },
+                },
             ];
             const fixed = await applyFixes(code, issues);
             expect(fixed).toBe('const x = 5;\nconst y = 10;');
@@ -31,8 +31,8 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Replace var with const',
                         oldCode: 'var x = 5;',
-                        newCode: 'const x = 5;'
-                    }
+                        newCode: 'const x = 5;',
+                    },
                 },
                 {
                     line: 2,
@@ -42,9 +42,9 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Replace var with const',
                         oldCode: 'var y = 10;',
-                        newCode: 'const y = 10;'
-                    }
-                }
+                        newCode: 'const y = 10;',
+                    },
+                },
             ];
             const fixed = await applyFixes(code, issues);
             expect(fixed).toBe('const x = 5;\nconst y = 10;');
@@ -60,9 +60,9 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Replace var with const',
                         oldCode: '  var x = 5;',
-                        newCode: '  const x = 5;'
-                    }
-                }
+                        newCode: '  const x = 5;',
+                    },
+                },
             ];
             const fixed = await applyFixes(code, issues);
             expect(fixed).toBe('  const x = 5;\n  const y = 10;');
@@ -80,9 +80,9 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Remove console.log',
                         oldCode: 'console.log(x);',
-                        newCode: ''
-                    }
-                }
+                        newCode: '',
+                    },
+                },
             ];
             const fixed = await applyFixes(code, issues);
             expect(fixed).toBe('const x = 5;\nconst y = 10;');
@@ -98,8 +98,8 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Remove console.log',
                         oldCode: 'console.log(x);',
-                        newCode: ''
-                    }
+                        newCode: '',
+                    },
                 },
                 {
                     line: 3,
@@ -109,9 +109,9 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Remove console.log',
                         oldCode: "console.log('test');",
-                        newCode: ''
-                    }
-                }
+                        newCode: '',
+                    },
+                },
             ];
             const fixed = await applyFixes(code, issues);
             expect(fixed).toBe('const x = 5;\nconst y = 10;');
@@ -129,8 +129,8 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Replace var',
                         oldCode: 'var x = 5;',
-                        newCode: 'const x = 5;'
-                    }
+                        newCode: 'const x = 5;',
+                    },
                 },
                 {
                     line: 2,
@@ -140,8 +140,8 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Remove console.log',
                         oldCode: 'console.log(x);',
-                        newCode: ''
-                    }
+                        newCode: '',
+                    },
                 },
                 {
                     line: 3,
@@ -151,9 +151,9 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Replace var',
                         oldCode: 'var y = 10;',
-                        newCode: 'const y = 10;'
-                    }
-                }
+                        newCode: 'const y = 10;',
+                    },
+                },
             ];
             const fixed = await applyFixes(code, issues);
             expect(fixed).toBe('const x = 5;\nconst y = 10;');
@@ -176,8 +176,8 @@ describe('applyFixes', () => {
                     line: 1,
                     severity: 'info',
                     message: 'Some info',
-                    rule: 'test'
-                }
+                    rule: 'test',
+                },
             ];
             const fixed = await applyFixes(code, issues);
             expect(fixed).toBe(code);
@@ -193,9 +193,9 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Fix',
                         oldCode: 'const x = 5;',
-                        newCode: 'let x = 5;'
-                    }
-                }
+                        newCode: 'let x = 5;',
+                    },
+                },
             ];
             const fixed = await applyFixes(code, issues);
             expect(fixed).toBe(code);
@@ -211,9 +211,9 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Fix',
                         oldCode: 'something',
-                        newCode: 'something else'
-                    }
-                }
+                        newCode: 'something else',
+                    },
+                },
             ];
             const fixed = await applyFixes(code, issues);
             expect(fixed).toBe(code);
@@ -229,9 +229,9 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Replace var',
                         oldCode: 'var x = 5;',
-                        newCode: 'const x = 5;'
-                    }
-                }
+                        newCode: 'const x = 5;',
+                    },
+                },
             ];
             const fixed = await applyFixes(code, issues);
             expect(fixed).toBe('const x = 5;');
@@ -247,8 +247,8 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Remove',
                         oldCode: "console.log('a');",
-                        newCode: ''
-                    }
+                        newCode: '',
+                    },
                 },
                 {
                     line: 2,
@@ -258,9 +258,9 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Remove',
                         oldCode: "console.log('b');",
-                        newCode: ''
-                    }
-                }
+                        newCode: '',
+                    },
+                },
             ];
             const fixed = await applyFixes(code, issues);
             expect(fixed).toBe('');
@@ -276,8 +276,8 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Fix 1',
                         oldCode: 'var x = 5;',
-                        newCode: 'const x = 5;'
-                    }
+                        newCode: 'const x = 5;',
+                    },
                 },
                 {
                     line: 1,
@@ -287,9 +287,9 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Fix 2',
                         oldCode: 'var x = 5;',
-                        newCode: 'let x = 5;'
-                    }
-                }
+                        newCode: 'let x = 5;',
+                    },
+                },
             ];
             const fixed = await applyFixes(code, issues);
             // Last fix wins due to Map.set() overwriting
@@ -311,9 +311,9 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Replace var',
                         oldCode: 'var x = 5;',
-                        newCode: 'const x = 5;'
-                    }
-                }
+                        newCode: 'const x = 5;',
+                    },
+                },
             ];
             const fixed = await applyFixes(code, issues);
             expect(fixed).toBe('const x = 5;\n');
@@ -331,8 +331,8 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Replace var',
                         oldCode: '  var x = 5;',
-                        newCode: '  const x = 5;'
-                    }
+                        newCode: '  const x = 5;',
+                    },
                 },
                 {
                     line: 3,
@@ -342,9 +342,9 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Replace var',
                         oldCode: '  var y = 10;',
-                        newCode: '  const y = 10;'
-                    }
-                }
+                        newCode: '  const y = 10;',
+                    },
+                },
             ];
             const fixed = await applyFixes(code, issues);
             expect(fixed).toBe(`function test() {\n  const x = 5;\n  const y = 10;\n  return x + y;\n}`);
@@ -360,9 +360,9 @@ describe('applyFixes', () => {
                     fix: {
                         description: 'Replace ==',
                         oldCode: 'if (x == 5) {',
-                        newCode: 'if (x === 5) {'
-                    }
-                }
+                        newCode: 'if (x === 5) {',
+                    },
+                },
             ];
             const fixed = await applyFixes(code, issues);
             expect(fixed).toBe(`if (x === 5) {\n  return true;\n}`);

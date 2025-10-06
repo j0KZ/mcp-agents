@@ -1,6 +1,7 @@
 /**
  * Pretty console logging utilities
  */
+/* eslint-disable no-console */
 import chalk from 'chalk';
 export const logger = {
     header(message) {

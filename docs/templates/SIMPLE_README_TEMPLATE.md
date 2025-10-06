@@ -10,15 +10,19 @@
 ### Install & Use
 
 **Option 1: Claude Code** (recommended)
+
 ```bash
 npx @j0kz/{PACKAGE_NAME}
 ```
+
 Then in Claude Code chat:
+
 ```
 "Help me {EXAMPLE_USAGE}"
 ```
 
 **Option 2: Install Globally**
+
 ```bash
 # Claude Code
 claude mcp add {PACKAGE_NAME} "npx @j0kz/{PACKAGE_NAME}" --scope user
@@ -87,6 +91,7 @@ npx @j0kz/security-scanner-mcp    # Security scanning
 ## Troubleshooting
 
 **Not working?**
+
 1. Make sure you're using an MCP-compatible editor
 2. Check connection: `claude mcp list` (for Claude Code)
 3. Restart your editor after installation

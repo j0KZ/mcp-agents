@@ -63,7 +63,7 @@ export function designRESTEndpoints(resources: string[], config: APIDesignConfig
  */
 export function createGraphQLSchema(
   configOrTypes: APIDesignConfig | GraphQLType[],
-  optionalConfig?: Partial<APIDesignConfig>
+  _optionalConfig?: Partial<APIDesignConfig>
 ): APIDesignResult {
   try {
     let types: GraphQLType[];

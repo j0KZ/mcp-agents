@@ -22,9 +22,9 @@ function displayUserComment(comment) {
 }
 
 // Hardcoded secrets
-const API_KEY = "sk_live_1234567890abcdef";
-const DB_PASSWORD = "MySecretPassword123!";
-const AWS_SECRET = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+const API_KEY = 'sk_live_1234567890abcdef';
+const DB_PASSWORD = 'MySecretPassword123!';
+const AWS_SECRET = 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY';
 
 // Command injection
 const exec = require('child_process').exec;
@@ -58,7 +58,7 @@ function createUser(req, res) {
   const user = {
     username: req.body.username,
     email: req.body.email,
-    role: req.body.role  // User can set their own role!
+    role: req.body.role, // User can set their own role!
   };
   return db.insert(user);
 }

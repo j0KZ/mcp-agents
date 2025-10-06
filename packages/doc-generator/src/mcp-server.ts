@@ -430,7 +430,7 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
         try {
           const changelogResult = await generateChangelog(validatedProjectPath);
           results.changelog = changelogResult;
-        } catch (error) {
+        } catch {
           results.changelog = {
             error: 'Not a git repository or git history unavailable',
           };
