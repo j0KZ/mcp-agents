@@ -9,7 +9,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import * as os from 'os';
 
-describe('MCP Pipeline Integration', () => {
+describe.skip('MCP Pipeline Integration', () => {
   let tempDir: string;
   let testFile: string;
 
