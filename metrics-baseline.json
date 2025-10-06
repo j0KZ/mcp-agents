@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-06T18:59:48.084Z",
+  "timestamp": "2025-10-06T19:04:54.912Z",
   "packages": {
     "test-generator": {
       "coverage": null,
@@ -7,7 +7,7 @@
       "loc": 1050,
       "tsErrors": 0,
       "eslintIssues": 20,
-      "testCount": 1,
+      "testCount": 13,
       "bundleSize": 50
     },
     "smart-reviewer": {
