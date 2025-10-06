@@ -15,7 +15,8 @@ export function convertCallbackToAsync(
   code: string;
   changed: boolean;
 } {
-  const callbackPattern = /(\w+)\s?\(\s?\(err,\s?(\w+)\)\s?=>\s?\{/g;
+  // Limited length to prevent ReDoS - function names and params shouldn't be > 50 chars
+  const callbackPattern = /(\w{1,50})\s{0,3}\(\s{0,3}\(err,\s{0,3}(\w{1,50})\)\s{0,3}=>\s{0,3}\{/g;
 
   if (!callbackPattern.test(code)) {
     return { code, changed: false };
@@ -23,8 +24,8 @@ export function convertCallbackToAsync(
 
   let result = code;
 
-  // Make functions async
-  result = result.replace(/function\s+(\w+)\s*\(/g, 'async function $1(');
+  // Make functions async (bounded to prevent ReDoS)
+  result = result.replace(/function\s+(\w{1,50})\s*\(/g, 'async function $1(');
 
   // Reset regex index after test
   callbackPattern.lastIndex = PATTERN_CONSTANTS.REGEX_RESET_INDEX;
@@ -52,7 +53,7 @@ export function convertPromiseChainToAsync(code: string): {
   changed: boolean;
 } {
   const promisePattern = new RegExp(
-    `\\.then\\s?\\(\\s?\\((\\w+)\\)\\s?=>\\s?\\{([^}]{1,${REGEX_LIMITS.MAX_PROMISE_CALLBACK_LENGTH}})\\}\\s?\\)`,
+    `\\.then\\s?\\(\\s?\\((\\w{1,50})\\)\\s?=>\\s?\\{([^}]{1,${REGEX_LIMITS.MAX_PROMISE_CALLBACK_LENGTH}})\\}\\s?\\)`,
     'g'
   );
 
@@ -65,8 +66,8 @@ export function convertPromiseChainToAsync(code: string): {
   // Reset regex index after test
   promisePattern.lastIndex = PATTERN_CONSTANTS.REGEX_RESET_INDEX;
 
-  // Make functions async
-  result = result.replace(/function\s+(\w+)\s*\(/g, 'async function $1(');
+  // Make functions async (bounded to prevent ReDoS)
+  result = result.replace(/function\s+(\w{1,50})\s*\(/g, 'async function $1(');
 
   // Convert .then() to await
   result = result.replace(promisePattern, ';\n  const $1 = await promise;\n  $2');
