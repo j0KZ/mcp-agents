@@ -216,4 +216,6 @@ export class ResourcePool {
 }
 // Export benchmark utilities
 export { benchmark, benchmarkSuite, compareBenchmarks, formatBenchmarkResult, } from './benchmark.js';
+// Export memory profiling utilities
+export { MemoryProfiler, globalProfiler, profileMemory, } from './memory-profiler.js';
 //# sourceMappingURL=index.js.map

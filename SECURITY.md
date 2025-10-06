@@ -25,6 +25,7 @@ If you discover a security vulnerability within this project, please follow thes
 ## Recent Security Updates (v1.0.32)
 
 ### Fixed Vulnerabilities
+
 - **ReDoS (CVE-2025-XXXXX)**: Fixed unbounded regex patterns that could cause catastrophic backtracking
   - Affected files: `async-converter.ts`, `conditional-helpers.ts`
   - Resolution: Added bounded quantifiers to all regex patterns
@@ -35,6 +36,7 @@ If you discover a security vulnerability within this project, please follow thes
   - Fixed unused imports and potential vulnerabilities
 
 ### Security Scanning
+
 - ✅ GitGuardian: All checks passing
 - ✅ CodeQL: No security alerts
 - ✅ GitHub Security: All vulnerabilities resolved
@@ -45,22 +47,26 @@ If you discover a security vulnerability within this project, please follow thes
 This project implements several security measures:
 
 ### Input Validation
+
 - All file paths are validated to prevent directory traversal attacks
 - Input size limits are enforced (100KB max for code inputs)
 - Regex patterns use bounded quantifiers to prevent ReDoS attacks (fixed in v1.0.32)
 
 ### Secret Detection
+
 - The security-scanner package actively detects hardcoded secrets
 - 20+ patterns for common API keys and tokens
 - Safe pattern generation for testing (using repeated characters)
 - GitGuardian integration for continuous monitoring
 
 ### Dependencies
+
 - Regular dependency updates
 - Security audits via `npm audit`
 - Minimal production dependencies
 
 ### Code Quality
+
 - TypeScript for type safety
 - Comprehensive test coverage (68%+ statements)
 - ESLint for code quality enforcement
@@ -99,6 +105,7 @@ When using these MCP tools:
 ## Security Tools Included
 
 This monorepo includes a comprehensive security scanner (`@j0kz/security-scanner-mcp`) that can:
+
 - Detect hardcoded secrets and API keys
 - Find SQL injection vulnerabilities
 - Identify XSS vulnerabilities
@@ -108,12 +115,14 @@ This monorepo includes a comprehensive security scanner (`@j0kz/security-scanner
 ## Contact
 
 For security concerns, please contact the maintainer through:
+
 - npm: https://www.npmjs.com/~j0kz
 - GitHub Issues (for non-sensitive matters only)
 
 ## Acknowledgments
 
 We appreciate responsible disclosure and will acknowledge security researchers who:
+
 - Follow responsible disclosure practices
 - Provide clear reproduction steps
 - Allow reasonable time for fixes

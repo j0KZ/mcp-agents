@@ -4,7 +4,7 @@
 
 import inquirer from 'inquirer';
 import { detectEditor } from './detectors/editor.js';
-import { detectProject } from './detectors/project.js';
+import { detectProject, type ProjectInfo } from './detectors/project.js';
 import { detectTestFramework } from './detectors/test-framework.js';
 import { editorPrompt, mcpPrompt, preferencesPrompt } from './prompts/index.js';
 import { generateConfig } from './generators/index.js';
@@ -24,6 +24,26 @@ export interface WizardArgs {
   version?: boolean;
 }
 
+export interface WizardDeps {
+  spinner?: (text: string) => any;
+  detectEditor?: () => Promise<string | null>;
+  detectProject?: () => Promise<ProjectInfo>;
+  detectTestFramework?: () => Promise<string | null>;
+  generateConfig?: (selections: WizardSelections) => Promise<any>;
+  validateConfig?: (selections: WizardSelections, detected: any) => Promise<string[]>;
+  installMCPs?: (mcps: string[], verbose?: boolean) => Promise<void>;
+  writeConfigFile?: (
+    config: any,
+    editor: string,
+    path?: string,
+    force?: boolean
+  ) => Promise<string>;
+  inquirerPrompt?: (questions: any) => Promise<any>;
+  editorPrompt?: (defaultEditor: string | null) => any;
+  mcpPrompt?: (project: any) => any;
+  preferencesPrompt?: (detected: any) => any[];
+}
+
 export interface WizardSelections {
   editor: string;
   mcps: string[];
@@ -34,18 +54,61 @@ export interface WizardSelections {
   };
 }
 
-export async function runWizard(args: WizardArgs): Promise<void> {
+export async function runWizard(args: WizardArgs, deps: WizardDeps = {}): Promise<void> {
+  // Use injected dependencies or defaults
+  const {
+    spinner: createSpinner = spinner,
+    detectEditor: detectEditorFn = detectEditor,
+    detectProject: detectProjectFn = detectProject,
+    detectTestFramework: detectTestFrameworkFn = detectTestFramework,
+    generateConfig: generateConfigFn = generateConfig,
+    validateConfig: validateConfigFn = validateConfig,
+    installMCPs: installMCPsFn = installMCPs,
+    writeConfigFile: writeConfigFileFn = (await import('./utils/file-system.js')).writeConfigFile,
+    inquirerPrompt = inquirer.prompt,
+  } = deps;
+
   // Welcome message
   logger.header('🎯 MCP Agents Configuration Wizard');
   logger.divider();
 
   // Step 1: Detect environment
-  const spin = spinner('Analyzing environment...');
-  const detected = {
-    editor: await detectEditor(),
-    project: await detectProject(),
-    testFramework: await detectTestFramework(),
+  const detected: {
+    editor: string | null;
+    project: ProjectInfo;
+    testFramework: string | null;
+  } = {
+    editor: null,
+    project: {
+      language: 'unknown',
+      framework: undefined,
+      packageManager: 'npm',
+      hasTests: false,
+    },
+    testFramework: null,
   };
+
+  const spin = createSpinner('Analyzing environment...');
+
+  // Try to detect, but continue if detection fails
+  try {
+    detected.editor = await detectEditorFn();
+  } catch (e) {
+    logger.warn('Editor detection failed, will prompt for selection');
+  }
+
+  try {
+    detected.project = await detectProjectFn();
+  } catch (e) {
+    logger.warn('Project detection failed, will use defaults');
+  }
+
+  try {
+    detected.testFramework = await detectTestFrameworkFn();
+  } catch (e) {
+    logger.warn('Test framework detection failed, will prompt for selection');
+  }
+
   spin.succeed('Environment analyzed');
 
   // Show detections
@@ -63,17 +126,17 @@ export async function runWizard(args: WizardArgs): Promise<void> {
   logger.divider();
 
   // Step 2: Interactive prompts (or use args)
-  const selections = await gatherSelections(args, detected);
+  const selections = await gatherSelections(args, detected, deps);
 
   // Step 3: Validate selections
   logger.info('\nValidating configuration...');
-  const issues = await validateConfig(selections, detected);
+  const issues = await validateConfigFn(selections, detected);
 
   if (issues.length > 0) {
     logger.warn('\n⚠️  Configuration issues found:');
     issues.forEach(issue => logger.warn(`  - ${issue}`));
 
-    const { proceed } = await inquirer.prompt([
+    const { proceed } = await inquirerPrompt([
       {
         type: 'confirm',
         name: 'proceed',
@@ -92,7 +155,7 @@ export async function runWizard(args: WizardArgs): Promise<void> {
 
   // Step 4: Generate config
   logger.info('\nGenerating configuration...');
-  const config = await generateConfig(selections);
+  const config = await generateConfigFn(selections);
 
   if (args.dryRun) {
     logger.info('\n📄 Generated configuration (dry run):');
@@ -103,12 +166,12 @@ export async function runWizard(args: WizardArgs): Promise<void> {
 
   // Step 5: Install MCPs
   if (selections.preferences.installGlobally) {
-    await installMCPs(selections.mcps, args.verbose);
+    await installMCPsFn(selections.mcps, args.verbose);
   }
 
   // Step 6: Write config
   logger.info('\nWriting configuration file...');
-  const configPath = await writeConfig(config, selections.editor, args.output, args.force);
+  const configPath = await writeConfigFileFn(config, selections.editor, args.output, args.force);
   logger.success(`✓ Configuration written to: ${configPath}`);
 
   // Success summary
@@ -123,7 +186,18 @@ export async function runWizard(args: WizardArgs): Promise<void> {
   logger.info('  2. Try asking: "Review my code" or "Scan for vulnerabilities"');
 }
 
-async function gatherSelections(args: WizardArgs, detected: any): Promise<WizardSelections> {
+export async function gatherSelections(
+  args: WizardArgs,
+  detected: any,
+  deps: WizardDeps = {}
+): Promise<WizardSelections> {
+  const {
+    inquirerPrompt = inquirer.prompt,
+    editorPrompt: editorPromptFn = editorPrompt,
+    mcpPrompt: mcpPromptFn = mcpPrompt,
+    preferencesPrompt: preferencesPromptFn = preferencesPrompt,
+  } = deps;
+
   // Non-interactive mode
   if (args.editor && args.mcps) {
     return {
@@ -138,10 +212,10 @@ async function gatherSelections(args: WizardArgs, detected: any): Promise<Wizard
   }
 
   // Interactive mode
-  const answers = await inquirer.prompt([
-    editorPrompt(detected.editor),
-    mcpPrompt(detected.project),
-    ...preferencesPrompt(detected),
+  const answers = await inquirerPrompt([
+    editorPromptFn(detected.editor),
+    mcpPromptFn(detected.project),
+    ...preferencesPromptFn(detected),
   ]);
 
   return {
@@ -153,14 +227,4 @@ async function gatherSelections(args: WizardArgs, detected: any): Promise<Wizard
       installGlobally: answers.installGlobally !== false,
     },
   };
-}
-
-async function writeConfig(
-  config: any,
-  editor: string,
-  customPath?: string,
-  force?: boolean
-): Promise<string> {
-  const { writeConfigFile } = await import('./utils/file-system.js');
-  return writeConfigFile(config, editor, customPath, force);
 }

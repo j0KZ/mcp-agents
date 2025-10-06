@@ -11,10 +11,23 @@ export declare class MCPPipeline {
     private results;
     private performance;
     private mcpClient;
+    private subPipelines;
+    private executionOrder;
+    private retryAttempts;
     /**
      * Add a step to the pipeline
      */
     addStep(step: PipelineStep): this;
+    /**
+     * Add a sub-pipeline
+     */
+    addSubPipeline(name: string, pipeline: MCPPipeline): this;
+    /**
+     * Add conditional step
+     */
+    addConditionalStep(step: PipelineStep & {
+        condition?: () => boolean;
+    }): this;
     /**
      * Execute the pipeline
      */
@@ -35,6 +48,10 @@ export declare class MCPPipeline {
      * Clear pipeline
      */
     clear(): void;
+    /**
+     * Topological sort for dependency resolution
+     */
+    private topologicalSort;
 }
 /**
  * MCP Integration Manager - manages MCP tool interactions

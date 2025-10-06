@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/shared",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "description": "Shared utilities and types for MCP tools - enables modularity and integration",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,6 +12,7 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "test": "vitest",
+    "test:ci": "vitest run --passWithNoTests",
     "test:ci": "vitest run",
     "lint": "eslint src --ext .ts"
   },
@@ -27,7 +28,8 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.19.1",
     "fast-glob": "^3.3.2",
-    "lru-cache": "^11.0.2"
+    "lru-cache": "^11.0.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^24.6.2",

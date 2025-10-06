@@ -93,6 +93,7 @@ git push -u origin main
 Add to your README.md:
 
 markdown
+
 ## Installation
 
 ### For Users
@@ -103,6 +104,7 @@ markdown
 git clone https://github.com/YOUR-USERNAME/my-claude-agents.git
 cd my-claude-agents
 ```
+
 ````
 
 2. Install dependencies and build:
@@ -142,7 +144,7 @@ npm install && npm run build
 
 # Add to Claude Code
 claude mcp add smart-reviewer node "~/my-claude-agents/packages/smart-reviewer/dist/mcp-server.js" --scope user
-````
+```
 
 ---
 

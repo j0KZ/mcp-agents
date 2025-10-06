@@ -1,1 +1,1 @@
-{"version":3,"file":"preferences.d.ts","sourceRoot":"","sources":["../../src/prompts/preferences.ts"],"names":[],"mappings":"AAAA;;GAEG;AAEH,wBAAgB,iBAAiB,CAAC,SAAS,EAAE,GAAG,SA2C/C"}
+{"version":3,"file":"preferences.d.ts","sourceRoot":"","sources":["../../src/prompts/preferences.ts"],"names":[],"mappings":"AAAA;;GAEG;AAEH,wBAAgB,iBAAiB,CAAC,QAAQ,EAAE,GAAG,SA2C9C"}

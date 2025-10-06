@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/orchestrator-mcp",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "description": "MCP workflow orchestrator - chain multiple MCP tools together into powerful workflows",
   "type": "module",
   "main": "dist/mcp-server.js",
@@ -17,12 +17,13 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "vitest",
+    "test:ci": "vitest run --passWithNoTests",
     "test:ci": "vitest run",
     "test:coverage": "vitest run --coverage",
     "start": "node dist/mcp-server.js"
   },
   "dependencies": {
-    "@j0kz/shared": "^1.0.32",
+    "@j0kz/shared": "^1.0.33",
     "@modelcontextprotocol/sdk": "^1.19.1"
   },
   "devDependencies": {

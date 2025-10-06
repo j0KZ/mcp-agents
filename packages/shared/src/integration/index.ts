@@ -15,12 +15,33 @@ export class MCPPipeline {
   private results: Map<string, MCPResult> = new Map();
   private performance: PerformanceMonitor = new PerformanceMonitor();
   private mcpClient: MCPClient = new MCPClient();
+  private subPipelines: Map<string, MCPPipeline> = new Map();
+  private executionOrder: string[] = [];
+  private retryAttempts = new Map<string, number>();
 
   /**
    * Add a step to the pipeline
    */
   addStep(step: PipelineStep): this {
     this.steps.push(step);
+    return this;
+  }
+
+  /**
+   * Add a sub-pipeline
+   */
+  addSubPipeline(name: string, pipeline: MCPPipeline): this {
+    this.subPipelines.set(name, pipeline);
+    return this;
+  }
+
+  /**
+   * Add conditional step
+   */
+  addConditionalStep(step: PipelineStep & { condition?: () => boolean }): this {
+    if (!step.condition || step.condition()) {
+      this.addStep(step);
+    }
     return this;
   }
 
@@ -32,7 +53,12 @@ export class MCPPipeline {
     const stepResults: PipelineResult['steps'] = [];
     const errors: string[] = [];
 
-    for (const step of this.steps) {
+    // Sort steps by dependencies
+    const sortedSteps = this.topologicalSort(this.steps);
+
+    for (const step of sortedSteps) {
+      this.executionOrder.push(step.name);
+
       // Check dependencies
       if (step.dependsOn) {
         const missingDeps = step.dependsOn.filter(dep => !this.results.has(dep));
@@ -43,24 +69,49 @@ export class MCPPipeline {
         }
       }
 
-      // Execute step
+      // Execute step with retries
       const stepStart = Date.now();
       this.performance.mark(`step-${step.name}-start`);
 
-      try {
-        const result = await this.executeStep(step);
-        this.results.set(step.name, result);
+      let attempts = 0;
+      const maxRetries = (step as any).retryCount || 0;
 
-        stepResults.push({
-          name: step.name,
-          tool: step.tool,
-          result,
-          duration: Date.now() - stepStart,
-        });
+      while (attempts <= maxRetries) {
+        try {
+          const result = await this.executeStep(step);
+          this.results.set(step.name, result);
 
-        this.performance.mark(`step-${step.name}-end`);
-      } catch (error) {
-        errors.push(`Step "${step.name}" failed: ${(error as Error).message}`);
+          stepResults.push({
+            name: step.name,
+            tool: step.tool,
+            result,
+            duration: Date.now() - stepStart,
+          });
+
+          this.performance.mark(`step-${step.name}-end`);
+          break;
+        } catch (error) {
+          attempts++;
+          this.retryAttempts.set(step.name, attempts);
+
+          if (attempts > maxRetries) {
+            if ((step as any).continueOnError) {
+              stepResults.push({
+                name: step.name,
+                tool: step.tool,
+                result: {
+                  success: false,
+                  error: (error as Error).message,
+                  timestamp: new Date().toISOString(),
+                },
+                duration: Date.now() - stepStart,
+              });
+            } else {
+              errors.push(`Step "${step.name}" failed: ${(error as Error).message}`);
+            }
+            break;
+          }
+        }
       }
     }
 
@@ -71,7 +122,15 @@ export class MCPPipeline {
       totalDuration: metrics.duration,
       success: errors.length === 0,
       errors,
-    };
+      results: stepResults.length > 0 ? stepResults.map(s => s.result) : undefined,
+      metadata: {
+        duration: metrics.duration,
+        executionOrder: this.executionOrder,
+        failedStep:
+          errors.length > 0 ? this.executionOrder[this.executionOrder.length - 1] : undefined,
+        retryAttempts: Object.fromEntries(this.retryAttempts),
+      },
+    } as any;
   }
 
   /**
@@ -126,6 +185,46 @@ export class MCPPipeline {
     this.steps = [];
     this.results.clear();
     this.performance.reset();
+    this.executionOrder = [];
+    this.retryAttempts.clear();
+  }
+
+  /**
+   * Topological sort for dependency resolution
+   */
+  private topologicalSort(steps: PipelineStep[]): PipelineStep[] {
+    const sorted: PipelineStep[] = [];
+    const visited = new Set<string>();
+    const visiting = new Set<string>();
+
+    const visit = (stepName: string) => {
+      if (visited.has(stepName)) return;
+      if (visiting.has(stepName)) {
+        throw new Error(`Circular dependency detected: ${stepName}`);
+      }
+
+      visiting.add(stepName);
+      const step = steps.find(s => s.name === stepName);
+
+      if (step?.dependsOn) {
+        for (const dep of step.dependsOn) {
+          visit(dep);
+        }
+      }
+
+      visiting.delete(stepName);
+      visited.add(stepName);
+
+      if (step) {
+        sorted.push(step);
+      }
+    };
+
+    for (const step of steps) {
+      visit(step.name);
+    }
+
+    return sorted;
   }
 }
 

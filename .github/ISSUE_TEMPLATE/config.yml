@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/j0KZ/mcp-agents/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: Discord Community
+    url: https://discord.gg/mcp-agents
+    about: Join our Discord for real-time help and discussions
+  - name: Documentation
+    url: https://github.com/j0KZ/mcp-agents/wiki
+    about: Check our comprehensive documentation first
+  - name: Security Contact
+    url: mailto:security@example.com
+    about: Report critical security vulnerabilities privately
