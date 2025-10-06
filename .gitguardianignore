@@ -1,0 +1,51 @@
+# GitGuardian ignore file
+# This file tells GitGuardian to ignore specific patterns and files
+
+# Ignore all documentation files
+docs/**
+*.md
+README.md
+CHANGELOG.md
+LICENSE
+
+# Ignore test files
+**/*.test.ts
+**/*.test.js
+**/*.spec.ts
+**/*.spec.js
+**/test/**
+**/tests/**
+**/__tests__/**
+
+# Ignore example and benchmark files
+examples/**
+benchmarks/**
+**/example*
+**/sample*
+
+# Ignore build and generated files
+dist/**
+coverage/**
+*.map
+*.d.ts
+
+# Ignore configuration files
+.github/**
+.vscode/**
+*.json
+*.yml
+*.yaml
+*.toml
+
+# Ignore specific false positive patterns
+# Patterns with repeated characters
+**/AKIA[X]+
+**/ghp_[X]+
+**/ghs_[Y]+
+**/sk_live_[Z]+
+**/AIza[Z]+
+
+# Known false positive files
+packages/security-scanner/src/scanners/secret-scanner.test.ts
+packages/security-scanner/src/constants/secret-patterns.ts
+packages/shared/src/benchmark-performance.ts
