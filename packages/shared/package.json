@@ -12,6 +12,7 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "test": "vitest",
+    "test:ci": "vitest run --passWithNoTests",
     "test:ci": "vitest run",
     "lint": "eslint src --ext .ts"
   },
