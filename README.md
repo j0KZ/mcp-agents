@@ -3,15 +3,31 @@
 > **9 powerful MCP agents + shared utilities for Claude Code, Cursor, Windsurf, and all MCP-compatible editors**
 
 [![npm](https://img.shields.io/badge/npm-%40j0kz-red)](https://www.npmjs.com/~j0kz)
-[![Version](https://img.shields.io/badge/version-1.0.31-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.32-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
 [![GitHub](https://img.shields.io/badge/github-mcp--agents-black)](https://github.com/j0KZ/mcp-agents)
 [![Performance](https://img.shields.io/badge/performance-2.18x_faster-brightgreen.svg)](docs/PHASE3_SUMMARY.md)
 [![Tests](https://img.shields.io/badge/tests-713_passing-success.svg)](CHANGELOG.md)
+[![Security](https://img.shields.io/badge/security-hardened-shield.svg)](SECURITY.md)
 
-## 🎉 What's New in v1.0.31
+## 🎉 What's New in v1.0.32
+
+### 🔒 Security Hardening Update
+
+**Critical Security Fixes:**
+- ✅ Fixed all ReDoS (Regular Expression Denial of Service) vulnerabilities
+- ✅ Resolved GitGuardian secret detection warnings
+- ✅ Fixed CodeQL security alerts
+- ✅ Added bounded quantifiers to all regex patterns
+- ✅ Removed hardcoded JWT tokens from tests
+
+**Security Improvements:**
+- 🛡️ Added `.gitguardian.yml` configuration for false positive handling
+- 🛡️ Implemented regex pattern bounds to prevent catastrophic backtracking
+- 🛡️ Enhanced test security with mock token patterns
+- 🛡️ All security scans now passing (GitGuardian, CodeQL, GitHub Security)
 
 ### ⚡ Phase 3: Performance & Optimization (COMPLETE)
 

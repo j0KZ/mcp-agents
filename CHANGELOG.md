@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.32] - 2025-10-06
+
+### 🔒 Security Hardening Update
+
+**Critical Security Fixes:**
+
+- ✅ **ReDoS Vulnerabilities Fixed:** Resolved all Regular Expression Denial of Service issues
+  - Fixed unbounded patterns in `async-converter.ts`
+  - Fixed unbounded patterns in `conditional-helpers.ts`
+  - Added length bounds to all regex quantifiers
+- ✅ **Secret Detection:** Resolved GitGuardian and GitHub security warnings
+  - Removed real JWT token from `scanner.test.ts`
+  - Replaced with mock patterns using repeated characters
+  - Added `.gitguardian.yml` configuration
+- ✅ **CodeQL Alerts:** Fixed all static analysis security warnings
+  - Removed unused imports in `benchmark-performance.ts`
+  - Added bounds to prevent catastrophic backtracking
+
+**Files Modified:**
+- `packages/refactor-assistant/src/transformations/async-converter.ts`
+- `packages/refactor-assistant/src/transformations/conditional-helpers.ts`
+- `packages/security-scanner/src/scanner.test.ts`
+- `packages/shared/src/benchmark-performance.ts`
+
+**Security Configuration:**
+- Added `.gitguardian.yml` for false positive management
+- Added `.gitleaks.toml` for additional secret scanning
+- Created `.gitguardianignore` for comprehensive path exclusions
+
 ## [1.0.31] - 2025-10-05
 
 ### 🚀 Phase 3: Performance & Optimization (COMPLETE)

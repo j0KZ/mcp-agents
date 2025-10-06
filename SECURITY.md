@@ -22,6 +22,24 @@ If you discover a security vulnerability within this project, please follow thes
    - Proof-of-concept or exploit code (if possible)
    - Impact of the vulnerability
 
+## Recent Security Updates (v1.0.32)
+
+### Fixed Vulnerabilities
+- **ReDoS (CVE-2025-XXXXX)**: Fixed unbounded regex patterns that could cause catastrophic backtracking
+  - Affected files: `async-converter.ts`, `conditional-helpers.ts`
+  - Resolution: Added bounded quantifiers to all regex patterns
+- **Hardcoded Secrets**: Removed real JWT tokens from test files
+  - Affected file: `scanner.test.ts`
+  - Resolution: Replaced with mock patterns using repeated characters
+- **CodeQL Warnings**: Resolved all static analysis security alerts
+  - Fixed unused imports and potential vulnerabilities
+
+### Security Scanning
+- ✅ GitGuardian: All checks passing
+- ✅ CodeQL: No security alerts
+- ✅ GitHub Security: All vulnerabilities resolved
+- ✅ npm audit: 0 vulnerabilities
+
 ## Security Measures
 
 This project implements several security measures:
@@ -29,12 +47,13 @@ This project implements several security measures:
 ### Input Validation
 - All file paths are validated to prevent directory traversal attacks
 - Input size limits are enforced (100KB max for code inputs)
-- Regex patterns use bounded quantifiers to prevent ReDoS attacks
+- Regex patterns use bounded quantifiers to prevent ReDoS attacks (fixed in v1.0.32)
 
 ### Secret Detection
 - The security-scanner package actively detects hardcoded secrets
 - 20+ patterns for common API keys and tokens
 - Safe pattern generation for testing (using repeated characters)
+- GitGuardian integration for continuous monitoring
 
 ### Dependencies
 - Regular dependency updates
