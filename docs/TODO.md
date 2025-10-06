@@ -1,8 +1,8 @@
 # MCP Agents Toolkit - Development Roadmap
 
 > **Last Updated:** October 5, 2025
-> **Current Version:** v1.0.30
-> **Status:** 9 stable MCPs (added orchestrator), metrics verified & corrected, 622 tests passing (100% pass rate), 62% coverage ✅
+> **Current Version:** v1.0.31
+> **Status:** 9 stable MCPs (added orchestrator), 853 tests passing (100% pass rate), Phase 2 & 3 complete, 2.18x performance boost ✅
 
 ---
 
@@ -16,7 +16,8 @@
   - api-designer, db-schema, **orchestrator-mcp** (NEW)
 - [x] **Shared utilities package** with caching, performance monitoring, validation
 - [x] **Modular architecture** (31.8% complexity reduction)
-- [x] **622 tests across 9 packages** (100% pass rate), verified October 5, 2025 ✨ **CORRECTED v1.0.30**
+- [x] **853 tests across 9 packages** (100% pass rate), verified October 5, 2025 ✨ **v1.0.31**
+- [x] **Performance optimization** (2.18x speedup with caching, 99.9% hit rate) ✨ **v1.0.31**
 - [x] **Global version management** system (version.json)
 - [x] **Multi-editor support** (Claude Code, Cursor, Windsurf, Roo, Continue, Zed, Trae)
 - [x] **Zero vulnerabilities**, all dependencies up-to-date
@@ -31,15 +32,17 @@
   - Clean architecture: 0 circular dependencies
   - Average code quality: 93/100
   - All builds passing
-- [x] **Test Coverage Enforcement & Expansion** ✨ **v1.0.29-30**
+- [x] **Test Coverage Enforcement & Expansion** ✨ **v1.0.29-31**
   - CI coverage enforcement with actual coverage: 62% statements, 67% branches, 75% functions
   - Fixed coverage reporting (was showing 0%, now works correctly)
-  - 622 total tests verified (October 5, 2025)
-  - Pass rate: 100% (622/622 passing)
+  - 853 total tests verified (October 5, 2025)
+  - Pass rate: 100% (853/853 passing)
   - api-designer: 140 tests
   - refactor-assistant: 311 tests
   - security-scanner: 64 tests
-  - orchestrator-mcp: 17 tests (NEW)
+  - smart-reviewer: 100 tests (analyzers coverage 0% → 100%)
+  - test-generator: 85 tests (added AST cache tests)
+  - orchestrator-mcp: 17 tests
 
 ### 🎯 Current Capabilities
 
@@ -721,12 +724,48 @@
 
 This roadmap is a living document - expect changes based on technical requirements and implementation priorities.
 
-**Last Major Update:** October 4, 2025 (Phase 1-3 + CI/CD + Audit + Test Expansion completed)
-**Next Review:** October 11, 2025
+**Last Major Update:** October 5, 2025 (v1.0.31 - Phase 2 & 3 Performance/Quality complete)
+**Next Review:** October 12, 2025
 
 ---
 
-## 📋 Recent Completions (October 4, 2025)
+## 📋 Recent Completions
+
+### ✅ v1.0.31 - Performance & Test Quality (October 5, 2025)
+
+**Completed:** October 5, 2025
+**Branch:** feature/60-percent-coverage
+**Status:** Released
+
+**Phase 2: Quality & Test Coverage (COMPLETE)**
+- ✅ P2-1: Improved test coverage (added 228 tests, 625 → 853)
+- ✅ P2-2: Improved test quality (strengthened api-designer assertions)
+- ✅ Smart-reviewer analyzers: 0% → 100% coverage
+- ✅ Test-generator: Added AST parser tests
+- ✅ All 853 tests passing (100% pass rate)
+
+**Phase 3: Performance & Optimization (COMPLETE)**
+- ✅ P3-1: AST parsing cache (73% faster, content-based invalidation)
+- ✅ P3-2: Performance benchmark suite (comprehensive metrics)
+- ✅ P3-3: Security scanner caching (config-aware)
+
+**Impact:**
+- 📈 **Tests:** 625 → 853 (+36.5%, +228 tests)
+- ⚡ **Performance:** 2.18x speedup with caching (99.9% hit rate)
+- 🔒 **Security:** Content-based cache invalidation
+- 📊 **Metrics:** Hash generation at 673K ops/sec
+- ✅ **Quality:** Stronger assertions, removed shallow checks
+
+**Deliverables:**
+- New files: `packages/shared/src/performance/benchmark.ts` (140 LOC)
+- New files: `packages/shared/src/benchmark-performance.ts` (150 LOC)
+- Modified: AST parser with AnalysisCache integration
+- Modified: Security scanner with config-aware caching
+- Documentation: CHANGELOG, README, ROADMAP, TODO updated
+
+---
+
+### ✅ v1.0.30 - Critical Fixes & Code Modernization (October 4, 2025)
 
 ### Phase 1-3 Code Quality Improvements (PR #5) ✅
 
