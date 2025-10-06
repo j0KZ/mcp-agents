@@ -86,7 +86,11 @@ export class MCPPipeline {
                             stepResults.push({
                                 name: step.name,
                                 tool: step.tool,
-                                result: { success: false, error: error.message, timestamp: new Date().toISOString() },
+                                result: {
+                                    success: false,
+                                    error: error.message,
+                                    timestamp: new Date().toISOString(),
+                                },
                                 duration: Date.now() - stepStart,
                             });
                         }
@@ -110,7 +114,7 @@ export class MCPPipeline {
                 executionOrder: this.executionOrder,
                 failedStep: errors.length > 0 ? this.executionOrder[this.executionOrder.length - 1] : undefined,
                 retryAttempts: Object.fromEntries(this.retryAttempts),
-            }
+            },
         };
     }
     /**

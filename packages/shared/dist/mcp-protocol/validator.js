@@ -7,14 +7,17 @@ import { z } from 'zod';
  * MCP Tool Schema definition based on Model Context Protocol spec
  */
 export const MCPToolSchema = z.object({
-    name: z.string().min(1).regex(/^[a-z][a-z0-9_]*$/),
+    name: z
+        .string()
+        .min(1)
+        .regex(/^[a-z][a-z0-9_]*$/),
     description: z.string().min(1),
     inputSchema: z.object({
         type: z.literal('object'),
         properties: z.record(z.any()),
         required: z.array(z.string()).optional(),
-        additionalProperties: z.boolean().optional()
-    })
+        additionalProperties: z.boolean().optional(),
+    }),
 });
 /**
  * MCP Request Schema
@@ -24,9 +27,9 @@ export const MCPRequestSchema = z.object({
     method: z.string(),
     params: z.object({
         name: z.string(),
-        arguments: z.record(z.any()).optional()
+        arguments: z.record(z.any()).optional(),
     }),
-    id: z.union([z.string(), z.number()])
+    id: z.union([z.string(), z.number()]),
 });
 /**
  * MCP Response Schema
@@ -34,12 +37,14 @@ export const MCPRequestSchema = z.object({
 export const MCPResponseSchema = z.object({
     jsonrpc: z.literal('2.0'),
     result: z.any().optional(),
-    error: z.object({
+    error: z
+        .object({
         code: z.number(),
         message: z.string(),
-        data: z.any().optional()
-    }).optional(),
-    id: z.union([z.string(), z.number()])
+        data: z.any().optional(),
+    })
+        .optional(),
+    id: z.union([z.string(), z.number()]),
 });
 /**
  * MCP Protocol Validator
@@ -68,7 +73,8 @@ export class MCPProtocolValidator {
             if (parsed.description.length < 20) {
                 warnings.push('Tool description should be more detailed (20+ characters)');
             }
-            if (!parsed.inputSchema.properties || Object.keys(parsed.inputSchema.properties).length === 0) {
+            if (!parsed.inputSchema.properties ||
+                Object.keys(parsed.inputSchema.properties).length === 0) {
                 warnings.push('Tool has no input parameters defined');
             }
             // Validate parameter naming conventions
@@ -83,19 +89,19 @@ export class MCPProtocolValidator {
             }
             return {
                 valid: true,
-                warnings: warnings.length > 0 ? warnings : undefined
+                warnings: warnings.length > 0 ? warnings : undefined,
             };
         }
         catch (error) {
             if (error instanceof z.ZodError) {
                 return {
                     valid: false,
-                    errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+                    errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`),
                 };
             }
             return {
                 valid: false,
-                errors: [`Unknown validation error: ${error}`]
+                errors: [`Unknown validation error: ${error}`],
             };
         }
     }
@@ -110,7 +116,7 @@ export class MCPProtocolValidator {
                 if (!this.knownTools.has(parsed.params.name)) {
                     return {
                         valid: false,
-                        errors: [`Unknown tool: ${parsed.params.name}`]
+                        errors: [`Unknown tool: ${parsed.params.name}`],
                     };
                 }
                 // Validate arguments against tool schema
@@ -126,12 +132,12 @@ export class MCPProtocolValidator {
             if (error instanceof z.ZodError) {
                 return {
                     valid: false,
-                    errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+                    errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`),
                 };
             }
             return {
                 valid: false,
-                errors: [`Unknown validation error: ${error}`]
+                errors: [`Unknown validation error: ${error}`],
             };
         }
     }
@@ -168,7 +174,7 @@ export class MCPProtocolValidator {
         }
         return {
             valid: errors.length === 0,
-            errors: errors.length > 0 ? errors : undefined
+            errors: errors.length > 0 ? errors : undefined,
         };
     }
     /**
@@ -242,20 +248,20 @@ export class MCPProtocolValidator {
             if (parsed.result !== undefined && parsed.error !== undefined) {
                 return {
                     valid: false,
-                    errors: ['Response cannot have both result and error']
+                    errors: ['Response cannot have both result and error'],
                 };
             }
             if (parsed.result === undefined && parsed.error === undefined) {
                 return {
                     valid: false,
-                    errors: ['Response must have either result or error']
+                    errors: ['Response must have either result or error'],
                 };
             }
             // Validate ID matches request
             if (requestId !== undefined && parsed.id !== requestId) {
                 return {
                     valid: false,
-                    errors: [`Response ID ${parsed.id} does not match request ID ${requestId}`]
+                    errors: [`Response ID ${parsed.id} does not match request ID ${requestId}`],
                 };
             }
             return { valid: true };
@@ -264,12 +270,12 @@ export class MCPProtocolValidator {
             if (error instanceof z.ZodError) {
                 return {
                     valid: false,
-                    errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+                    errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`),
                 };
             }
             return {
                 valid: false,
-                errors: [`Unknown validation error: ${error}`]
+                errors: [`Unknown validation error: ${error}`],
             };
         }
     }

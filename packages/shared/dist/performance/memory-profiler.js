@@ -46,7 +46,7 @@ export class MemoryProfiler extends EventEmitter {
             rssDelta: current.rss - this.baseline.rss,
             percentChange: ((current.heapUsed - this.baseline.heapUsed) / this.baseline.heapUsed) * 100,
             label,
-            duration: performance.now() - this.startTime
+            duration: performance.now() - this.startTime,
         };
         this.emit('checkpoint', delta);
         // Store snapshot for leak detection
@@ -72,7 +72,7 @@ export class MemoryProfiler extends EventEmitter {
             rssDelta: final.rss - this.baseline.rss,
             percentChange: ((final.heapUsed - this.baseline.heapUsed) / this.baseline.heapUsed) * 100,
             label: 'total',
-            duration
+            duration,
         };
         // Calculate deltas for all checkpoints
         const checkpointDeltas = new Map();
@@ -82,7 +82,7 @@ export class MemoryProfiler extends EventEmitter {
                 rssDelta: snapshot.rss - this.baseline.rss,
                 percentChange: ((snapshot.heapUsed - this.baseline.heapUsed) / this.baseline.heapUsed) * 100,
                 label,
-                duration: snapshot.timestamp - this.baseline.timestamp
+                duration: snapshot.timestamp - this.baseline.timestamp,
             });
         }
         // Detect potential memory leaks
@@ -90,14 +90,14 @@ export class MemoryProfiler extends EventEmitter {
         this.emit('profile:end', {
             totalDelta,
             checkpoints: checkpointDeltas,
-            leakReport
+            leakReport,
         });
         // Clean up
         this.reset();
         return {
             totalDelta,
             checkpoints: checkpointDeltas,
-            leakReport
+            leakReport,
         };
     }
     /**
@@ -110,7 +110,7 @@ export class MemoryProfiler extends EventEmitter {
                 suspected: false,
                 growthRate: 0,
                 samples: snapshots,
-                recommendation: 'Not enough samples for leak detection'
+                recommendation: 'Not enough samples for leak detection',
             };
         }
         // Calculate linear regression for heap growth
@@ -133,7 +133,7 @@ export class MemoryProfiler extends EventEmitter {
             suspected,
             growthRate: slope * 1000, // Convert to bytes/second
             samples: snapshots.slice(-10), // Last 10 samples
-            recommendation
+            recommendation,
         };
     }
     /**
@@ -146,7 +146,7 @@ export class MemoryProfiler extends EventEmitter {
         }
         else {
             this.emit('gc:unavailable', {
-                message: 'Garbage collection not available. Run with --expose-gc flag.'
+                message: 'Garbage collection not available. Run with --expose-gc flag.',
             });
         }
     }
@@ -161,7 +161,7 @@ export class MemoryProfiler extends EventEmitter {
             heapTotal: mem.heapTotal,
             rss: mem.rss,
             external: mem.external,
-            arrayBuffers: mem.arrayBuffers
+            arrayBuffers: mem.arrayBuffers,
         };
     }
     /**
@@ -187,7 +187,7 @@ export class MemoryProfiler extends EventEmitter {
             const predicted = slope * x[i] + intercept;
             return sum + Math.pow(yi - predicted, 2);
         }, 0);
-        const r2 = 1 - (ssResidual / ssTotal);
+        const r2 = 1 - ssResidual / ssTotal;
         return { slope, r2 };
     }
     /**

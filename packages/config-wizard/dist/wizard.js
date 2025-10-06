@@ -13,22 +13,22 @@ import { logger } from './utils/logger.js';
 import { spinner } from './utils/spinner.js';
 export async function runWizard(args, deps = {}) {
     // Use injected dependencies or defaults
-    const { spinner: createSpinner = spinner, detectEditor: detectEditorFn = detectEditor, detectProject: detectProjectFn = detectProject, detectTestFramework: detectTestFrameworkFn = detectTestFramework, generateConfig: generateConfigFn = generateConfig, validateConfig: validateConfigFn = validateConfig, installMCPs: installMCPsFn = installMCPs, writeConfigFile: writeConfigFileFn = (await import('./utils/file-system.js')).writeConfigFile, inquirerPrompt = inquirer.prompt } = deps;
+    const { spinner: createSpinner = spinner, detectEditor: detectEditorFn = detectEditor, detectProject: detectProjectFn = detectProject, detectTestFramework: detectTestFrameworkFn = detectTestFramework, generateConfig: generateConfigFn = generateConfig, validateConfig: validateConfigFn = validateConfig, installMCPs: installMCPsFn = installMCPs, writeConfigFile: writeConfigFileFn = (await import('./utils/file-system.js')).writeConfigFile, inquirerPrompt = inquirer.prompt, } = deps;
     // Welcome message
     logger.header('🎯 MCP Agents Configuration Wizard');
     logger.divider();
     // Step 1: Detect environment
-    const spin = createSpinner('Analyzing environment...');
     const detected = {
         editor: null,
         project: {
             language: 'unknown',
             framework: undefined,
             packageManager: 'npm',
-            hasTests: false
+            hasTests: false,
         },
         testFramework: null,
     };
+    const spin = createSpinner('Analyzing environment...');
     // Try to detect, but continue if detection fails
     try {
         detected.editor = await detectEditorFn();
@@ -113,7 +113,7 @@ export async function runWizard(args, deps = {}) {
     logger.info('  2. Try asking: "Review my code" or "Scan for vulnerabilities"');
 }
 export async function gatherSelections(args, detected, deps = {}) {
-    const { inquirerPrompt = inquirer.prompt, editorPrompt: editorPromptFn = editorPrompt, mcpPrompt: mcpPromptFn = mcpPrompt, preferencesPrompt: preferencesPromptFn = preferencesPrompt } = deps;
+    const { inquirerPrompt = inquirer.prompt, editorPrompt: editorPromptFn = editorPrompt, mcpPrompt: mcpPromptFn = mcpPrompt, preferencesPrompt: preferencesPromptFn = preferencesPrompt, } = deps;
     // Non-interactive mode
     if (args.editor && args.mcps) {
         return {

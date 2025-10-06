@@ -10,7 +10,7 @@ export function successResult(data, metadata) {
     return {
         success: true,
         data,
-        metadata
+        metadata,
     };
 }
 /**
@@ -22,7 +22,7 @@ export function errorResult(error, code) {
     return {
         success: false,
         error: message,
-        errorCode
+        errorCode,
     };
 }
 /**
@@ -45,9 +45,9 @@ export function createToolResponse(result) {
         content: [
             {
                 type: 'text',
-                text: JSON.stringify(result, null, 2)
-            }
-        ]
+                text: JSON.stringify(result, null, 2),
+            },
+        ],
     };
 }
 /**
@@ -59,15 +59,18 @@ export async function safeFileOperation(operation, filePath) {
         return successResult(result, { filePath });
     }
     catch (error) {
-        const errorCode = error.code === 'ENOENT' ? 'FILE_NOT_FOUND' :
-            error.code === 'EACCES' ? 'PERMISSION_DENIED' :
-                error.code === 'EISDIR' ? 'IS_DIRECTORY' :
-                    'FILE_ERROR';
+        const errorCode = error.code === 'ENOENT'
+            ? 'FILE_NOT_FOUND'
+            : error.code === 'EACCES'
+                ? 'PERMISSION_DENIED'
+                : error.code === 'EISDIR'
+                    ? 'IS_DIRECTORY'
+                    : 'FILE_ERROR';
         return {
             success: false,
             error: `File operation failed for ${filePath}: ${getErrorMessage(error)}`,
             errorCode,
-            metadata: { filePath }
+            metadata: { filePath },
         };
     }
 }
@@ -80,7 +83,7 @@ export function validateRequiredParams(params, required) {
         return {
             success: false,
             error: `Missing required parameters: ${missing.join(', ')}`,
-            errorCode: 'MISSING_PARAMS'
+            errorCode: 'MISSING_PARAMS',
         };
     }
     return { success: true };
@@ -99,7 +102,7 @@ export async function executeWithDependencies(steps) {
                 return {
                     success: false,
                     error: `Step '${step.name}' has unmet dependencies: ${missingDeps.join(', ')}`,
-                    errorCode: 'DEPENDENCY_ERROR'
+                    errorCode: 'DEPENDENCY_ERROR',
                 };
             }
         }
@@ -114,7 +117,7 @@ export async function executeWithDependencies(steps) {
                 success: false,
                 error: `Step '${step.name}' failed: ${getErrorMessage(error)}`,
                 errorCode: 'STEP_FAILED',
-                metadata: { failedStep: step.name }
+                metadata: { failedStep: step.name },
             };
         }
     }
@@ -135,13 +138,13 @@ export async function batchOperation(items, operation, batchSize = 10) {
             catch (error) {
                 errors.push({
                     index: i + index,
-                    error: getErrorMessage(error)
+                    error: getErrorMessage(error),
                 });
                 return null;
             }
         });
         const batchResults = await Promise.all(batchPromises);
-        results.push(...batchResults.filter((r) => r !== null));
+        results.push(...batchResults.filter(r => r !== null));
     }
     if (errors.length > 0) {
         return {
@@ -149,7 +152,7 @@ export async function batchOperation(items, operation, batchSize = 10) {
             error: `Batch operation had ${errors.length} failures`,
             errorCode: 'BATCH_PARTIAL_FAILURE',
             data: results,
-            metadata: { errors }
+            metadata: { errors },
         };
     }
     return successResult(results);
@@ -175,7 +178,7 @@ export async function retryOperation(operation, maxRetries = 3, initialDelay = 1
     return {
         success: false,
         error: `Operation failed after ${maxRetries} retries: ${getErrorMessage(lastError)}`,
-        errorCode: 'MAX_RETRIES_EXCEEDED'
+        errorCode: 'MAX_RETRIES_EXCEEDED',
     };
 }
 /**
@@ -187,7 +190,7 @@ export function validateFileSize(size, maxSize = 100 * 1024 * 1024 // 100MB defa
         return {
             success: false,
             error: `File size ${size} bytes exceeds maximum of ${maxSize} bytes`,
-            errorCode: 'FILE_TOO_LARGE'
+            errorCode: 'FILE_TOO_LARGE',
         };
     }
     return { success: true };
@@ -203,13 +206,11 @@ export function mergeResults(results) {
             error: `${errors.length} operations failed`,
             errorCode: 'MULTIPLE_FAILURES',
             metadata: {
-                errors: errors.map(e => ({ error: e.error, code: e.errorCode }))
-            }
+                errors: errors.map(e => ({ error: e.error, code: e.errorCode })),
+            },
         };
     }
-    const data = results
-        .filter(r => r.success && r.data !== undefined)
-        .map(r => r.data);
+    const data = results.filter(r => r.success && r.data !== undefined).map(r => r.data);
     return successResult(data);
 }
 //# sourceMappingURL=common-patterns.js.map
