@@ -26,7 +26,10 @@
     "clean": "npm run clean --workspaces --if-present && rm -rf node_modules",
     "format": "prettier --write \"**/*.{js,ts,json,md}\"",
     "lint": "eslint \"packages/*/src/**/*.{ts,js}\"",
-    "lint:fix": "eslint \"packages/*/src/**/*.{ts,js}\" --fix"
+    "lint:fix": "eslint \"packages/*/src/**/*.{ts,js}\" --fix",
+    "validate:baseline": "node scripts/validate-improvements.js --baseline",
+    "validate:check": "node scripts/validate-improvements.js --validate",
+    "mutation:test": "node scripts/mutation-test.js"
   },
   "devDependencies": {
     "@types/node": "^24.6.2",

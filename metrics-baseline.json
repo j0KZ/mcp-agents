@@ -1,0 +1,95 @@
+{
+  "timestamp": "2025-10-06T18:59:48.084Z",
+  "packages": {
+    "test-generator": {
+      "coverage": null,
+      "complexity": 118,
+      "loc": 1050,
+      "tsErrors": 0,
+      "eslintIssues": 20,
+      "testCount": 1,
+      "bundleSize": 50
+    },
+    "smart-reviewer": {
+      "coverage": null,
+      "complexity": 132,
+      "loc": 1369,
+      "tsErrors": 0,
+      "eslintIssues": 8,
+      "testCount": 1,
+      "bundleSize": 101
+    },
+    "security-scanner": {
+      "coverage": null,
+      "complexity": 130,
+      "loc": 1868,
+      "tsErrors": 0,
+      "eslintIssues": 5,
+      "testCount": 1,
+      "bundleSize": 60
+    },
+    "architecture-analyzer": {
+      "coverage": null,
+      "complexity": 60,
+      "loc": 800,
+      "tsErrors": 0,
+      "eslintIssues": 2,
+      "testCount": 1,
+      "bundleSize": 29
+    },
+    "refactor-assistant": {
+      "coverage": null,
+      "complexity": 167,
+      "loc": 2170,
+      "tsErrors": 0,
+      "eslintIssues": 13,
+      "testCount": 1,
+      "bundleSize": 182
+    },
+    "api-designer": {
+      "coverage": null,
+      "complexity": 102,
+      "loc": 1835,
+      "tsErrors": 0,
+      "eslintIssues": 39,
+      "testCount": 1,
+      "bundleSize": 56
+    },
+    "db-schema": {
+      "coverage": null,
+      "complexity": 178,
+      "loc": 2119,
+      "tsErrors": 0,
+      "eslintIssues": 20,
+      "testCount": 1,
+      "bundleSize": 63
+    },
+    "doc-generator": {
+      "coverage": null,
+      "complexity": 153,
+      "loc": 1614,
+      "tsErrors": 0,
+      "eslintIssues": 3,
+      "testCount": 1,
+      "bundleSize": 44
+    },
+    "orchestrator-mcp": {
+      "coverage": null,
+      "complexity": 12,
+      "loc": 502,
+      "tsErrors": 0,
+      "eslintIssues": 2,
+      "testCount": 38,
+      "bundleSize": 15
+    },
+    "config-wizard": {
+      "coverage": null,
+      "complexity": 113,
+      "loc": 895,
+      "tsErrors": 0,
+      "eslintIssues": 29,
+      "testCount": 32,
+      "bundleSize": 29
+    }
+  }
+}
