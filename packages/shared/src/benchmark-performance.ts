@@ -4,7 +4,7 @@
  * Demonstrates caching improvements across the monorepo
  */
 
-import { benchmark, benchmarkSuite, compareBenchmarks } from './performance/benchmark.js';
+import { benchmark, compareBenchmarks } from './performance/benchmark.js';
 import { AnalysisCache } from './cache/index.js';
 import { FileSystemManager } from './fs/index.js';
 import { generateHash } from './utils/index.js';
