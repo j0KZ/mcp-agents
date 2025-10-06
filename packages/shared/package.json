@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/shared",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "Shared utilities and types for MCP tools - enables modularity and integration",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/api-designer-mcp",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "API Designer MCP - Generate OpenAPI/Swagger specs, design REST endpoints, create GraphQL schemas, and generate API clients. Works with Claude Code, Cursor, Windsurf, Roo Code, and any MCP-compatible editor.",
   "type": "module",
   "main": "./dist/index.js",
