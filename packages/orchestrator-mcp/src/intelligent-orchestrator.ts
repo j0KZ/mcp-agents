@@ -15,7 +15,6 @@ import {
   PerformanceTracker,
   SemanticAnalyzer,
   DomainKnowledgeBase,
-  ExecutionSandbox,
   ExplanationEngine
 } from '@j0kz/shared';
 
@@ -429,7 +428,7 @@ export class IntelligentOrchestrator extends EventEmitter {
   /**
    * Select optimal tools based on analysis
    */
-  private selectTools(analysis: any, requirements: any): string[] {
+  private selectTools(analysis: any, _requirements: any): string[] {
     const selectedTools = new Set<string>();
 
     // Add tools that match required capabilities
@@ -530,7 +529,6 @@ export class IntelligentOrchestrator extends EventEmitter {
       if (processed.has(tool)) continue;
 
       const group = [tool];
-      const cap = this.toolCapabilities.get(tool)!;
 
       // Add tools that depend on this one
       for (const other of tools) {
@@ -1216,7 +1214,7 @@ export class IntelligentOrchestrator extends EventEmitter {
    */
   private determineSuccess(results: Map<string, any>, requirements: any): boolean {
     // Check if all expected results are present
-    for (const [key, value] of results.entries()) {
+    for (const [, value] of results.entries()) {
       if (value.error) {
         return false;
       }
@@ -1321,7 +1319,7 @@ export class IntelligentOrchestrator extends EventEmitter {
   private async attemptRecovery(
     plan: OrchestrationPlan,
     error: any,
-    partialResults: Map<string, any>
+    _partialResults: Map<string, any>
   ): Promise<OrchestrationResult | null> {
     // Check if we have alternatives
     if (plan.alternatives && plan.alternatives.length > 0) {
@@ -1346,7 +1344,7 @@ export class IntelligentOrchestrator extends EventEmitter {
 
       try {
         return await this.execute(recoveryPlan);
-      } catch (recoveryError) {
+      } catch {
         // Recovery also failed
         return null;
       }
@@ -1413,14 +1411,6 @@ export class IntelligentOrchestrator extends EventEmitter {
    * Process insights from tools for learning
    */
   private async processInsight(message: any): Promise<void> {
-    // Store insights for pattern recognition
-    const insight = {
-      tool: message.from,
-      type: message.data.type,
-      confidence: message.confidence,
-      timestamp: new Date()
-    };
-
     // Update tool performance metrics based on insights
     const cap = this.toolCapabilities.get(message.from);
     if (cap && message.confidence > 0.8) {

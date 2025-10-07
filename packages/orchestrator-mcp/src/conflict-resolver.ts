@@ -274,7 +274,7 @@ export class ConflictResolver extends EventEmitter {
 
       return resolution;
 
-    } catch (error: any) {
+    } catch {
       // Resolution failed - escalate
       return await this.escalate(conflict);
     }
@@ -387,7 +387,7 @@ export class ConflictResolver extends EventEmitter {
   private async executeMediationStep(
     step: string,
     positions: Position[],
-    conflict: Conflict
+    _conflict: Conflict
   ): Promise<{
     description: string;
     positions?: Position[];
@@ -639,7 +639,6 @@ export class ConflictResolver extends EventEmitter {
   private synthesizeOutcome(positions: Position[]): any {
     // Weight by confidence and flexibility
     const weights = positions.map(p => p.confidence * (1 + p.flexibility));
-    const totalWeight = weights.reduce((sum, w) => sum + w, 0);
 
     // Find highest weighted position
     let bestIndex = 0;

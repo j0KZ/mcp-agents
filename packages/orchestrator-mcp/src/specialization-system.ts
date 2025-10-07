@@ -684,7 +684,7 @@ export class SpecializationSystem extends EventEmitter {
   /**
    * Calculate tool availability
    */
-  private calculateAvailability(toolId: string): number {
+  private calculateAvailability(_toolId: string): number {
     // In real system, would check current workload
     // For now, simulate with random availability
     return 0.7 + Math.random() * 0.3;
@@ -754,7 +754,7 @@ export class SpecializationSystem extends EventEmitter {
   /**
    * Score candidate for final selection
    */
-  private scoreCandidateForSelection(candidate: ToolCandidate, requirements: TaskRequirements): number {
+  private scoreCandidateForSelection(candidate: ToolCandidate, _requirements: TaskRequirements): number {
     // Weighted scoring
     const matchWeight = 0.35;
     const successWeight = 0.30;
@@ -856,7 +856,7 @@ export class SpecializationSystem extends EventEmitter {
    * Update specializations based on task outcome
    */
   private async updateSpecializations(profile: ToolProfile, task: any): Promise<void> {
-    for (const [id, spec] of profile.specializations.entries()) {
+    for (const [, spec] of profile.specializations.entries()) {
       if (spec.domain === task.domain) {
         // Update experience
         spec.experience++;
@@ -927,7 +927,7 @@ export class SpecializationSystem extends EventEmitter {
    * Check for new certifications
    */
   private async checkCertifications(profile: ToolProfile): Promise<void> {
-    for (const [certId, program] of this.certificationPrograms.entries()) {
+    for (const [, program] of this.certificationPrograms.entries()) {
       // Check if already certified
       const hasCert = Array.from(profile.specializations.values()).some(spec =>
         spec.certifications.some(c => c.name === program.name)
