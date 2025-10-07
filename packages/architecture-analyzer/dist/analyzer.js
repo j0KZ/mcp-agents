@@ -1,5 +1,9 @@
 import { ProjectScanner } from './scanner.js';
 import { CIRCULAR_DEPENDENCY_THRESHOLDS } from './constants/thresholds.js';
+import { calculateCohesion } from './helpers/cohesion-calculator.js';
+import { calculateCoupling } from './helpers/coupling-calculator.js';
+import { generateSuggestions } from './helpers/suggestions-generator.js';
+import { DEPENDENCY_THRESHOLDS } from './constants/metrics-thresholds.js';
 export class ArchitectureAnalyzer {
     scanner;
     constructor() {
@@ -16,7 +20,7 @@ export class ArchitectureAnalyzer {
             ? this.detectLayerViolations(dependencies, config.layerRules)
             : [];
         const metrics = this.calculateMetrics(modules, dependencies, circularDependencies, layerViolations);
-        const suggestions = this.generateSuggestions(metrics, circularDependencies, layerViolations);
+        const suggestions = generateSuggestions(metrics, circularDependencies, layerViolations);
         const dependencyGraph = config.generateGraph !== false ? this.generateDependencyGraph(modules, dependencies) : '';
         return {
             projectPath,
@@ -150,9 +154,9 @@ export class ArchitectureAnalyzer {
         const averageDependenciesPerModule = totalModules > 0 ? Math.round(totalDependencies / totalModules) : 0;
         const maxDependencies = dependenciesPerModule.length > 0 ? Math.max(...dependenciesPerModule) : 0;
         // Cohesion: how related are modules (simplified)
-        const cohesion = this.calculateCohesion(modules, dependencies);
+        const cohesion = calculateCohesion(modules, dependencies);
         // Coupling: how interdependent are modules (simplified)
-        const coupling = this.calculateCoupling(modules, dependencies);
+        const coupling = calculateCoupling(modules, dependencies);
         return {
             totalModules,
             totalDependencies,
@@ -163,78 +167,6 @@ export class ArchitectureAnalyzer {
             cohesion,
             coupling,
         };
-    }
-    /**
-     * Calculate cohesion score (0-100, higher is better)
-     * Measures how well modules work together within the same package
-     */
-    calculateCohesion(modules, dependencies) {
-        if (modules.length === 0)
-            return 0;
-        // Identify modules that are part of the same package/directory
-        const packageGroups = new Map();
-        modules.forEach(m => {
-            const packagePath = m.path.split('/').slice(0, -1).join('/');
-            if (!packageGroups.has(packagePath)) {
-                packageGroups.set(packagePath, []);
-            }
-            packageGroups.get(packagePath).push(m);
-        });
-        // Calculate cohesion: dependencies within same package vs cross-package
-        let intraPackageDeps = 0;
-        dependencies.forEach(d => {
-            const fromPackage = d.from.split('/').slice(0, -1).join('/');
-            const toPackage = d.to.split('/').slice(0, -1).join('/');
-            if (fromPackage === toPackage) {
-                intraPackageDeps++;
-            }
-        });
-        const totalDeps = dependencies.length || 1;
-        return Math.round((intraPackageDeps / totalDeps) * 100);
-    }
-    /**
-     * Calculate coupling score (0-100, lower is better)
-     * Measures interdependence between modules
-     */
-    calculateCoupling(modules, dependencies) {
-        if (modules.length <= 1)
-            return 0;
-        // Average dependencies per module (normalized to 0-100 scale)
-        // Threshold: 5+ deps per module = high coupling (80+)
-        const avgDeps = dependencies.length / modules.length;
-        const couplingScore = Math.min(100, (avgDeps / 5) * 80);
-        return Math.round(couplingScore);
-    }
-    /**
-     * Generate improvement suggestions
-     */
-    generateSuggestions(metrics, _circularDependencies, _layerViolations) {
-        const suggestions = [];
-        // Circular dependencies
-        if (metrics.circularDependencies > 0) {
-            suggestions.push(`Found ${metrics.circularDependencies} circular dependencies. Break cycles by introducing interfaces or dependency injection.`);
-        }
-        // Layer violations
-        if (metrics.layerViolations > 0) {
-            suggestions.push(`Found ${metrics.layerViolations} layer violations. Review architecture boundaries and refactor dependencies.`);
-        }
-        // High coupling
-        if (metrics.coupling > 70) {
-            suggestions.push(`High coupling detected (${metrics.coupling}/100). Consider reducing dependencies between modules.`);
-        }
-        // Low cohesion
-        if (metrics.cohesion < 50) {
-            suggestions.push(`Low cohesion detected (${metrics.cohesion}/100). Group related functionality into modules.`);
-        }
-        // Too many dependencies
-        if (metrics.maxDependencies > 10) {
-            suggestions.push(`Some modules have too many dependencies (max: ${metrics.maxDependencies}). Consider breaking them down.`);
-        }
-        // Large codebase
-        if (metrics.totalModules > 100) {
-            suggestions.push(`Large codebase (${metrics.totalModules} modules). Consider organizing into packages or workspaces.`);
-        }
-        return suggestions;
     }
     /**
      * Generate dependency graph in Mermaid format
@@ -248,14 +180,14 @@ export class ArchitectureAnalyzer {
             lines.push(`  ${nodeId}["${label}"]`);
         }
         // Add edges (limit to avoid overwhelming graph)
-        const limitedDeps = dependencies.slice(0, 50);
+        const limitedDeps = dependencies.slice(0, DEPENDENCY_THRESHOLDS.MAX_GRAPH_EDGES);
         for (const dep of limitedDeps) {
             const fromId = this.sanitizeNodeId(dep.from);
             const toId = this.sanitizeNodeId(dep.to);
             lines.push(`  ${fromId} --> ${toId}`);
         }
-        if (dependencies.length > 50) {
-            lines.push(`  note["... and ${dependencies.length - 50} more dependencies"]`);
+        if (dependencies.length > DEPENDENCY_THRESHOLDS.MAX_GRAPH_EDGES) {
+            lines.push(`  note["... and ${dependencies.length - DEPENDENCY_THRESHOLDS.MAX_GRAPH_EDGES} more dependencies"]`);
         }
         return lines.join('\n');
     }
