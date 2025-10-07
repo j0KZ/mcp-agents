@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import { TestGenerator } from './packages/test-generator/dist/generator.js';
-import { readFileSync } from 'fs';
 
 async function debug() {
   console.log('🔍 Debugging test-generator...\n');

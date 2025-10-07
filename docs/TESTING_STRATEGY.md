@@ -3,7 +3,7 @@
 ## Current State (v1.0.34)
 
 **Test Coverage:**
-- 255 passing tests across 28 test files
+- 244 passing tests across all test files
 - Statement coverage: 14.09% (target: 55%)
 - Branch coverage: 66.25% (target: 65%) ✅
 - Function coverage: 65.56% (target: 72%)

@@ -9,7 +9,7 @@
 ## What's Changed
 
 ### 🧪 Test Coverage Improvements
-- **Tests added:** +97 tests (158 → 255 passing)
+- **Current tests:** 244 passing tests across all packages
 - **Coverage:** 14.09% statements, 66.25% branches, 65.56% functions
 - **Quality:** Functional but shallow (see [TESTING_STRATEGY.md](TESTING_STRATEGY.md))
 
@@ -152,7 +152,7 @@ gh pr create \
   --title "test: Add 97 comprehensive tests across all packages" \
   --body "$(cat <<'EOF'
 ## Summary
-Added 97 new tests across 6 packages, bringing total to 255 passing tests.
+Added comprehensive tests across packages, current total: 244 passing tests.
 
 ## Coverage Improvements
 - **Before:** 158 tests, 13.28% statement coverage
