@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/mcp-config-wizard",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "description": "Interactive CLI wizard for configuring MCP tools",
   "type": "module",
   "bin": {

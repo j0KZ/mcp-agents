@@ -214,3 +214,8 @@ credentials/
 .tokens
 auth.json
 credentials.json
+
+# Experimental features (WIP - not ready for production)
+# See packages/*/experimental/README.md for details
+**/experimental/
+!**/experimental/README.md

@@ -11,9 +11,10 @@ import { installMCPs } from './installer.js';
 import { validateConfig } from './validator.js';
 import { logger } from './utils/logger.js';
 import { spinner } from './utils/spinner.js';
+import { writeConfigFile } from './utils/file-system.js';
 export async function runWizard(args, deps = {}) {
     // Use injected dependencies or defaults
-    const { spinner: createSpinner = spinner, detectEditor: detectEditorFn = detectEditor, detectProject: detectProjectFn = detectProject, detectTestFramework: detectTestFrameworkFn = detectTestFramework, generateConfig: generateConfigFn = generateConfig, validateConfig: validateConfigFn = validateConfig, installMCPs: installMCPsFn = installMCPs, writeConfigFile: writeConfigFileFn = (await import('./utils/file-system.js')).writeConfigFile, inquirerPrompt = inquirer.prompt, } = deps;
+    const { spinner: createSpinner = spinner, detectEditor: detectEditorFn = detectEditor, detectProject: detectProjectFn = detectProject, detectTestFramework: detectTestFrameworkFn = detectTestFramework, generateConfig: generateConfigFn = generateConfig, validateConfig: validateConfigFn = validateConfig, installMCPs: installMCPsFn = installMCPs, writeConfigFile: writeConfigFileFn = writeConfigFile, inquirerPrompt = inquirer.prompt, } = deps;
     // Welcome message
     logger.header('🎯 MCP Agents Configuration Wizard');
     logger.divider();

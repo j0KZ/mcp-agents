@@ -9,6 +9,10 @@ import { DocError } from './types.js';
 // Import extracted modules
 import { parseSourceFile } from './parsers/source-parser.js';
 import { generateJSDoc } from './generators/jsdoc-generator.js';
+import { GIT_LIMITS } from './constants/doc-limits.js';
+import { findSourceFiles } from './helpers/file-helpers.js';
+import { groupCommitsByType, buildChangelogSections } from './helpers/changelog-builder.js';
+import { buildTitleSection, buildBadgesSection, buildTOCSection, buildInstallationSection, buildUsageSection, buildAPISection, buildContributingSection, buildLicenseSection, } from './helpers/readme-builder.js';
 // Re-export for backward compatibility
 export { generateJSDoc };
 /**
@@ -26,79 +30,15 @@ export async function generateReadme(projectPath, config = {}) {
         }
         const sections = [];
         const warnings = [];
-        // Title
-        sections.push(`# ${config.projectName || packageJson.name || 'Project'}`);
-        sections.push('');
-        // Description
-        if (packageJson.description) {
-            sections.push(packageJson.description);
-            sections.push('');
-        }
-        // Badges
-        if (config.includeBadges !== false) {
-            const badges = [];
-            if (config.badges?.version !== false && packageJson.version) {
-                badges.push(`![Version](https://img.shields.io/badge/version-${packageJson.version}-blue)`);
-            }
-            if (config.badges?.license !== false && (config.license || packageJson.license)) {
-                badges.push(`![License](https://img.shields.io/badge/license-${config.license || packageJson.license}-green)`);
-            }
-            if (badges.length > 0) {
-                sections.push(badges.join(' '));
-                sections.push('');
-            }
-        }
-        // Table of Contents
-        if (config.includeTOC) {
-            sections.push('## Table of Contents');
-            sections.push('');
-            sections.push('- [Installation](#installation)');
-            sections.push('- [Usage](#usage)');
-            if (config.includeAPI)
-                sections.push('- [API](#api)');
-            if (config.includeContributing)
-                sections.push('- [Contributing](#contributing)');
-            sections.push('');
-        }
-        // Installation
-        if (config.includeInstallation !== false) {
-            sections.push('## Installation');
-            sections.push('');
-            sections.push('```bash');
-            sections.push(`npm install ${packageJson.name || 'package-name'}`);
-            sections.push('```');
-            sections.push('');
-        }
-        // Usage
-        if (config.includeUsage !== false) {
-            sections.push('## Usage');
-            sections.push('');
-            sections.push('```javascript');
-            sections.push(`const ${packageJson.name?.replace(/[@/-]/g, '')} = require('${packageJson.name}');`);
-            sections.push('```');
-            sections.push('');
-        }
-        // API Reference
-        if (config.includeAPI) {
-            sections.push('## API');
-            sections.push('');
-            sections.push('Documentation coming soon...');
-            sections.push('');
-        }
-        // Contributing
-        if (config.includeContributing) {
-            sections.push('## Contributing');
-            sections.push('');
-            sections.push('Contributions are welcome! Please feel free to submit a Pull Request.');
-            sections.push('');
-        }
-        // License
-        if (config.license || packageJson.license) {
-            sections.push('## License');
-            sections.push('');
-            sections.push(`This project is licensed under the ${config.license || packageJson.license} License.`);
-            sections.push('');
-        }
+        // Build all sections using helper functions
+        sections.push(...buildTitleSection(projectPath, packageJson, config));
+        sections.push(...buildBadgesSection(packageJson, config));
+        sections.push(...buildTOCSection(config));
+        sections.push(...buildInstallationSection(packageJson, config));
+        sections.push(...buildUsageSection(packageJson, config));
+        sections.push(...buildAPISection(config));
+        sections.push(...buildContributingSection(config));
+        sections.push(...buildLicenseSection(packageJson, config));
         return {
             content: sections.join('\n'),
             filePath: path.join(projectPath, 'README.md'),
@@ -207,63 +147,20 @@ export async function generateChangelog(projectPath, config = {}) {
         sections.push('# Changelog');
         sections.push('');
         try {
-            const commitLimit = config.commitLimit || 100;
+            const commitLimit = config.commitLimit || GIT_LIMITS.DEFAULT_COMMIT_LIMIT;
             const gitArgs = ['log', `--max-count=${commitLimit}`, '--pretty=format:%H|%s|%an|%ai'];
             const output = execFileSync('git', gitArgs, {
                 cwd: projectPath,
                 encoding: 'utf-8',
-                maxBuffer: 10 * 1024 * 1024,
+                maxBuffer: GIT_LIMITS.MAX_GIT_BUFFER,
             });
             const commits = output
                 .trim()
                 .split('\n')
                 .filter(line => line);
-            const grouped = {
-                feat: [],
-                fix: [],
-                docs: [],
-                other: [],
-            };
-            commits.forEach(line => {
-                const [hash, message] = line.split('|');
-                const shortHash = hash.substring(0, 7);
-                if (message.startsWith('feat:')) {
-                    grouped.feat.push(`- ${message.replace('feat:', '').trim()} (\`${shortHash}\`)`);
-                }
-                else if (message.startsWith('fix:')) {
-                    grouped.fix.push(`- ${message.replace('fix:', '').trim()} (\`${shortHash}\`)`);
-                }
-                else if (message.startsWith('docs:')) {
-                    grouped.docs.push(`- ${message.replace('docs:', '').trim()} (\`${shortHash}\`)`);
-                }
-                else {
-                    grouped.other.push(`- ${message} (\`${shortHash}\`)`);
-                }
-            });
-            if (grouped.feat.length > 0) {
-                sections.push('## Features');
-                sections.push('');
-                sections.push(...grouped.feat);
-                sections.push('');
-            }
-            if (grouped.fix.length > 0) {
-                sections.push('## Bug Fixes');
-                sections.push('');
-                sections.push(...grouped.fix);
-                sections.push('');
-            }
-            if (grouped.docs.length > 0) {
-                sections.push('## Documentation');
-                sections.push('');
-                sections.push(...grouped.docs);
-                sections.push('');
-            }
-            if (grouped.other.length > 0) {
-                sections.push('## Other Changes');
-                sections.push('');
-                sections.push(...grouped.other);
-                sections.push('');
-            }
+            const grouped = groupCommitsByType(commits);
+            const changelogSections = buildChangelogSections(grouped);
+            sections.push(...changelogSections);
         }
         catch {
             warnings.push('Failed to read git history');
@@ -286,22 +183,5 @@ export async function generateChangelog(projectPath, config = {}) {
         }
         throw new DocError('Failed to generate changelog', 'CHANGELOG_GENERATION_FAILED', error);
     }
-}
-// Helper functions
-function findSourceFiles(dirPath, fileList = []) {
-    const files = fs.readdirSync(dirPath);
-    files.forEach(file => {
-        const filePath = path.join(dirPath, file);
-        const stat = fs.statSync(filePath);
-        if (stat.isDirectory()) {
-            if (!file.startsWith('.') && file !== 'node_modules' && file !== 'dist') {
-                findSourceFiles(filePath, fileList);
-            }
-        }
-        else if (file.match(/\.(ts|js|tsx|jsx)$/) && !file.match(/\.test\.|\.spec\./)) {
-            fileList.push(filePath);
-        }
-    });
-    return fileList;
 }
 //# sourceMappingURL=generator.js.map

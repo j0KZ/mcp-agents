@@ -39,20 +39,6 @@ export declare class ArchitectureAnalyzer {
      */
     private calculateMetrics;
     /**
-     * Calculate cohesion score (0-100, higher is better)
-     * Measures how well modules work together within the same package
-     */
-    private calculateCohesion;
-    /**
-     * Calculate coupling score (0-100, lower is better)
-     * Measures interdependence between modules
-     */
-    private calculateCoupling;
-    /**
-     * Generate improvement suggestions
-     */
-    private generateSuggestions;
-    /**
      * Generate dependency graph in Mermaid format
      */
     private generateDependencyGraph;
