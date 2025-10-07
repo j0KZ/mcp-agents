@@ -22,7 +22,7 @@ import { EventEmitter } from 'events';
 interface IntuitionRequest {
   code: string;
   context?: CodeContext;
-  question?: string;           // What to intuit about
+  question?: string; // What to intuit about
 }
 
 interface CodeContext {
@@ -35,30 +35,30 @@ interface CodeContext {
 
 interface Intuition {
   feeling: Feeling;
-  confidence: number;           // 0-1: How strong is the hunch
+  confidence: number; // 0-1: How strong is the hunch
   reasoning: string;
   similar: SimilarExample[];
-  warning?: string;             // If gut feeling says something is wrong
-  suggestion?: string;          // What the intuition suggests doing
+  warning?: string; // If gut feeling says something is wrong
+  suggestion?: string; // What the intuition suggests doing
 }
 
 type Feeling =
-  | 'good'                      // This looks right
-  | 'bad'                       // Something feels wrong
-  | 'excellent'                 // This is really well done
-  | 'terrible'                  // This is going to cause problems
-  | 'suspicious'                // This might be a problem
-  | 'elegant'                   // Beautiful solution
-  | 'clumsy'                    // Works but feels awkward
-  | 'dangerous'                 // High risk of bugs/security issues
-  | 'solid'                     // Reliable and maintainable
-  | 'fragile';                  // Will break easily
+  | 'good' // This looks right
+  | 'bad' // Something feels wrong
+  | 'excellent' // This is really well done
+  | 'terrible' // This is going to cause problems
+  | 'suspicious' // This might be a problem
+  | 'elegant' // Beautiful solution
+  | 'clumsy' // Works but feels awkward
+  | 'dangerous' // High risk of bugs/security issues
+  | 'solid' // Reliable and maintainable
+  | 'fragile'; // Will break easily
 
 interface SimilarExample {
   code: string;
   outcome: 'success' | 'failure' | 'bug' | 'security-issue' | 'performance-problem';
   description: string;
-  similarity: number;           // 0-1
+  similarity: number; // 0-1
 }
 
 interface DeepLearningModel {
@@ -79,13 +79,13 @@ interface Neuron {
   id: string;
   weights: number[];
   bias: number;
-  activation: number;           // Current activation value
-  specialization?: string;      // What this neuron has learned to detect
+  activation: number; // Current activation value
+  specialization?: string; // What this neuron has learned to detect
 }
 
 interface TrainingExample {
-  input: number[];              // Code features
-  output: number[];             // Expected feeling
+  input: number[]; // Code features
+  output: number[]; // Expected feeling
   features: FeatureVector;
   label: Feeling;
   outcome: string;
@@ -105,13 +105,13 @@ interface FeatureVector {
   coupling: number;
 
   // Pattern features
-  designPatterns: number[];     // One-hot encoding of patterns
-  antiPatterns: number[];       // One-hot encoding of anti-patterns
+  designPatterns: number[]; // One-hot encoding of patterns
+  antiPatterns: number[]; // One-hot encoding of anti-patterns
 
   // Style features
-  naming: number;               // Quality of names
-  comments: number;             // Comment density
-  consistency: number;          // Style consistency
+  naming: number; // Quality of names
+  comments: number; // Comment density
+  consistency: number; // Style consistency
 
   // Risk features
   errorHandling: number;
@@ -121,16 +121,16 @@ interface FeatureVector {
   // Emotional features (learned from human reactions)
   elegance: number;
   clarity: number;
-  surprise: number;             // Unexpected patterns
+  surprise: number; // Unexpected patterns
 }
 
 interface SubconsciousPattern {
   id: string;
-  trigger: number[];            // Feature pattern that triggers this
+  trigger: number[]; // Feature pattern that triggers this
   response: Feeling;
-  strength: number;             // How strong is this pattern
-  examples: number;             // How many times observed
-  accuracy: number;             // How often is it right
+  strength: number; // How strong is this pattern
+  examples: number; // How many times observed
+  accuracy: number; // How often is it right
 }
 
 // ============================================================================
@@ -146,7 +146,7 @@ export class IntuitionEngine extends EventEmitter {
   private readonly LAYERS = 100;
   private readonly NEURONS_PER_LAYER = 10000;
   private readonly EPOCHS = 1000;
-  private readonly TARGET_ACCURACY = 0.90;
+  private readonly TARGET_ACCURACY = 0.9;
 
   // Simplified for actual implementation (full deep learning would use external library)
   private readonly PRACTICAL_LAYERS = 10;
@@ -177,9 +177,9 @@ export class IntuitionEngine extends EventEmitter {
 
     // Deep learning for pattern extraction (from plan)
     await this.trainSubconscious(examples, {
-      layers: this.PRACTICAL_LAYERS,    // Practical: 10 instead of 100
-      neurons: this.PRACTICAL_NEURONS,  // Practical: 100 instead of 10000
-      epochs: this.PRACTICAL_EPOCHS     // Practical: 100 instead of 1000
+      layers: this.PRACTICAL_LAYERS, // Practical: 10 instead of 100
+      neurons: this.PRACTICAL_NEURONS, // Practical: 100 instead of 10000
+      epochs: this.PRACTICAL_EPOCHS, // Practical: 100 instead of 1000
     });
 
     // Now can have "hunches" (from plan)
@@ -192,9 +192,9 @@ export class IntuitionEngine extends EventEmitter {
           reasoning: 'Subconscious pattern match',
           similar: feeling.similarExamples,
           warning: feeling.warning,
-          suggestion: feeling.suggestion
+          suggestion: feeling.suggestion,
         };
-      }
+      },
     };
   }
 
@@ -219,7 +219,7 @@ export class IntuitionEngine extends EventEmitter {
       reasoning: this.explainIntuition(feeling, features),
       similar,
       warning: this.generateWarning(feeling, features),
-      suggestion: this.generateSuggestion(feeling, features)
+      suggestion: this.generateSuggestion(feeling, features),
     };
   }
 
@@ -282,7 +282,7 @@ export class IntuitionEngine extends EventEmitter {
       id: 0,
       neurons: this.createNeurons(this.FEATURE_DIM, 'input'),
       type: 'input',
-      activation: 'relu'
+      activation: 'relu',
     });
 
     // Hidden layers
@@ -291,7 +291,7 @@ export class IntuitionEngine extends EventEmitter {
         id: i,
         neurons: this.createNeurons(neuronsPerLayer, `hidden-${i}`),
         type: 'hidden',
-        activation: 'leaky-relu'
+        activation: 'leaky-relu',
       });
     }
 
@@ -300,7 +300,7 @@ export class IntuitionEngine extends EventEmitter {
       id: numLayers - 1,
       neurons: this.createNeurons(10, 'output'),
       type: 'output',
-      activation: 'softmax'
+      activation: 'softmax',
     });
 
     return layers;
@@ -314,7 +314,7 @@ export class IntuitionEngine extends EventEmitter {
         id: `${prefix}-${i}`,
         weights: this.initializeWeights(this.FEATURE_DIM),
         bias: Math.random() * 0.01,
-        activation: 0
+        activation: 0,
       });
     }
 
@@ -324,9 +324,7 @@ export class IntuitionEngine extends EventEmitter {
   private initializeWeights(size: number): number[] {
     // Xavier initialization
     const limit = Math.sqrt(6 / (size + size));
-    return Array.from({ length: size }, () =>
-      (Math.random() * 2 - 1) * limit
-    );
+    return Array.from({ length: size }, () => (Math.random() * 2 - 1) * limit);
   }
 
   private feedForward(input: number[]): { values: number[]; confidence: number } {
@@ -462,7 +460,7 @@ export class IntuitionEngine extends EventEmitter {
       layers: this.subconscious.layers.length,
       specializedNeurons: this.subconscious.layers.flatMap(l =>
         l.neurons.filter(n => n.specialization)
-      ).length
+      ).length,
     });
   }
 
@@ -562,7 +560,7 @@ export class IntuitionEngine extends EventEmitter {
     // Simplified: ratio of private to public methods
     const total = (code.match(/function|const.*=.*=>/g) || []).length;
     const exported = (code.match(/export/g) || []).length;
-    return total > 0 ? 1 - (exported / total) : 0.5;
+    return total > 0 ? 1 - exported / total : 0.5;
   }
 
   private detectPatterns(code: string): boolean[] {
@@ -576,7 +574,7 @@ export class IntuitionEngine extends EventEmitter {
       /async.*await/.test(code),
       /\.map\(/.test(code),
       /\.filter\(/.test(code),
-      /\.reduce\(/.test(code)
+      /\.reduce\(/.test(code),
     ];
   }
 
@@ -591,7 +589,7 @@ export class IntuitionEngine extends EventEmitter {
       /\/\/\s*TODO/.test(code), // TODOs
       /\/\/\s*HACK/.test(code), // HACKs
       /function\s+\w+\s*\([^)]{50,}/.test(code), // Long param lists
-      code.includes('God') || code.includes('Manager') || code.includes('Helper') // God classes
+      code.includes('God') || code.includes('Manager') || code.includes('Helper'), // God classes
     ];
   }
 
@@ -599,7 +597,7 @@ export class IntuitionEngine extends EventEmitter {
     // Simplified: check for descriptive names
     const names = code.match(/\b[a-z][a-zA-Z0-9]{2,}\b/g) || [];
     const shortNames = names.filter(n => n.length < 3).length;
-    return names.length > 0 ? 1 - (shortNames / names.length) : 0.5;
+    return names.length > 0 ? 1 - shortNames / names.length : 0.5;
   }
 
   private measureCommentDensity(code: string): number {
@@ -680,8 +678,16 @@ export class IntuitionEngine extends EventEmitter {
 
   private interpretResponse(response: { values: number[]; confidence: number }): Feeling {
     const feelings: Feeling[] = [
-      'good', 'bad', 'excellent', 'terrible', 'suspicious',
-      'elegant', 'clumsy', 'dangerous', 'solid', 'fragile'
+      'good',
+      'bad',
+      'excellent',
+      'terrible',
+      'suspicious',
+      'elegant',
+      'clumsy',
+      'dangerous',
+      'solid',
+      'fragile',
     ];
 
     const maxIndex = response.values.indexOf(Math.max(...response.values));
@@ -690,16 +696,16 @@ export class IntuitionEngine extends EventEmitter {
 
   private explainIntuition(feeling: Feeling, features: number[]): string {
     const explanations: Record<Feeling, string> = {
-      'good': 'Code shows healthy patterns and reasonable complexity',
-      'bad': 'Something about this code triggers concern',
-      'excellent': 'Exceptionally well-structured and elegant',
-      'terrible': 'Multiple red flags detected',
-      'suspicious': 'Unusual patterns that warrant investigation',
-      'elegant': 'Clean, functional approach with good style',
-      'clumsy': 'Gets the job done but feels awkward',
-      'dangerous': 'High risk of bugs or security issues',
-      'solid': 'Reliable and maintainable implementation',
-      'fragile': 'Likely to break under edge cases'
+      good: 'Code shows healthy patterns and reasonable complexity',
+      bad: 'Something about this code triggers concern',
+      excellent: 'Exceptionally well-structured and elegant',
+      terrible: 'Multiple red flags detected',
+      suspicious: 'Unusual patterns that warrant investigation',
+      elegant: 'Clean, functional approach with good style',
+      clumsy: 'Gets the job done but feels awkward',
+      dangerous: 'High risk of bugs or security issues',
+      solid: 'Reliable and maintainable implementation',
+      fragile: 'Likely to break under edge cases',
     };
 
     return explanations[feeling] || 'Subconscious pattern match';
@@ -750,7 +756,7 @@ export class IntuitionEngine extends EventEmitter {
       code: 'Similar code pattern...',
       outcome: this.mapFeelingToOutcome(s.example.label),
       description: `Pattern led to ${s.example.outcome}`,
-      similarity: 1 - s.distance
+      similarity: 1 - s.distance,
     }));
   }
 
@@ -782,8 +788,16 @@ export class IntuitionEngine extends EventEmitter {
 
     const examples: TrainingExample[] = [];
     const feelings: Feeling[] = [
-      'good', 'bad', 'excellent', 'terrible', 'suspicious',
-      'elegant', 'clumsy', 'dangerous', 'solid', 'fragile'
+      'good',
+      'bad',
+      'excellent',
+      'terrible',
+      'suspicious',
+      'elegant',
+      'clumsy',
+      'dangerous',
+      'solid',
+      'fragile',
     ];
 
     // Generate 10,000 synthetic examples
@@ -804,8 +818,8 @@ export class IntuitionEngine extends EventEmitter {
         context: {
           language: 'TypeScript',
           domain: 'general',
-          fileType: 'component'
-        }
+          fileType: 'component',
+        },
       });
     }
 
@@ -866,7 +880,7 @@ export class IntuitionEngine extends EventEmitter {
       testCoverage: 0.5,
       elegance: features[31],
       clarity: features[32],
-      surprise: features[33]
+      surprise: features[33],
     };
   }
 
@@ -879,7 +893,7 @@ export class IntuitionEngine extends EventEmitter {
       layers: [],
       trained: false,
       trainingExamples: 0,
-      accuracy: 0
+      accuracy: 0,
     };
   }
 
@@ -888,7 +902,7 @@ export class IntuitionEngine extends EventEmitter {
     await this.trainSubconscious(examples.slice(0, 1000), {
       layers: 5,
       neurons: 50,
-      epochs: 50
+      epochs: 50,
     });
   }
 
@@ -918,7 +932,7 @@ export class IntuitionEngine extends EventEmitter {
       strength: response.confidence,
       similarExamples: similar,
       warning: this.generateWarning(feeling, features),
-      suggestion: this.generateSuggestion(feeling, features)
+      suggestion: this.generateSuggestion(feeling, features),
     };
   }
 }
@@ -929,5 +943,5 @@ export type {
   Feeling,
   SimilarExample,
   DeepLearningModel,
-  SubconsciousPattern
+  SubconsciousPattern,
 };

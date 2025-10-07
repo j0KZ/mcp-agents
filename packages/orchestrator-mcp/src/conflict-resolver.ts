@@ -39,13 +39,13 @@ export interface Evidence {
 }
 
 export type ConflictType =
-  | 'value-disagreement'      // Different values for same thing
-  | 'interpretation'          // Different interpretations of data
-  | 'methodology'             // Different approaches to solve problem
-  | 'priority'                // Different priorities/importance
-  | 'scope'                   // Different understanding of scope
-  | 'definition'              // Different definitions of terms
-  | 'prediction';             // Different predictions of outcomes
+  | 'value-disagreement' // Different values for same thing
+  | 'interpretation' // Different interpretations of data
+  | 'methodology' // Different approaches to solve problem
+  | 'priority' // Different priorities/importance
+  | 'scope' // Different understanding of scope
+  | 'definition' // Different definitions of terms
+  | 'prediction'; // Different predictions of outcomes
 
 export interface ConflictContext {
   importance: number; // 0-1
@@ -73,15 +73,15 @@ export interface Resolution {
 }
 
 export type ResolutionMethod =
-  | 'mediation'               // Facilitate agreement
-  | 'arbitration'             // Third party decides
-  | 'synthesis'               // Combine positions
-  | 'voting'                  // Democratic decision
-  | 'deferral'                // Postpone decision
-  | 'escalation'              // Human decides
-  | 'evidence-evaluation'     // Best evidence wins
-  | 'compromise'              // Find middle ground
-  | 'partition';              // Split into sub-decisions
+  | 'mediation' // Facilitate agreement
+  | 'arbitration' // Third party decides
+  | 'synthesis' // Combine positions
+  | 'voting' // Democratic decision
+  | 'deferral' // Postpone decision
+  | 'escalation' // Human decides
+  | 'evidence-evaluation' // Best evidence wins
+  | 'compromise' // Find middle ground
+  | 'partition'; // Split into sub-decisions
 
 export interface Dissent {
   participant: string;
@@ -130,13 +130,8 @@ export class ConflictResolver extends EventEmitter {
     // Value disagreement - use evidence and expertise
     this.mediationStrategies.set('value-disagreement', {
       type: 'value-disagreement',
-      steps: [
-        'clarify-values',
-        'evaluate-evidence',
-        'weight-by-expertise',
-        'seek-compromise'
-      ],
-      preferredMethod: 'evidence-evaluation'
+      steps: ['clarify-values', 'evaluate-evidence', 'weight-by-expertise', 'seek-compromise'],
+      preferredMethod: 'evidence-evaluation',
     });
 
     // Interpretation - facilitate understanding
@@ -146,9 +141,9 @@ export class ConflictResolver extends EventEmitter {
         'clarify-interpretations',
         'identify-common-ground',
         'synthesize-perspectives',
-        'validate-synthesis'
+        'validate-synthesis',
       ],
-      preferredMethod: 'synthesis'
+      preferredMethod: 'synthesis',
     });
 
     // Methodology - respect different valid approaches
@@ -158,21 +153,16 @@ export class ConflictResolver extends EventEmitter {
         'document-approaches',
         'evaluate-trade-offs',
         'consider-context',
-        'select-or-combine'
+        'select-or-combine',
       ],
-      preferredMethod: 'compromise'
+      preferredMethod: 'compromise',
     });
 
     // Priority - balance importance
     this.mediationStrategies.set('priority', {
       type: 'priority',
-      steps: [
-        'list-priorities',
-        'weight-by-impact',
-        'consider-constraints',
-        'rank-consensus'
-      ],
-      preferredMethod: 'voting'
+      steps: ['list-priorities', 'weight-by-impact', 'consider-constraints', 'rank-consensus'],
+      preferredMethod: 'voting',
     });
 
     // Scope - define boundaries
@@ -182,9 +172,9 @@ export class ConflictResolver extends EventEmitter {
         'define-boundaries',
         'identify-overlaps',
         'partition-responsibilities',
-        'document-agreement'
+        'document-agreement',
       ],
-      preferredMethod: 'partition'
+      preferredMethod: 'partition',
     });
 
     // Definition - standardize terms
@@ -194,9 +184,9 @@ export class ConflictResolver extends EventEmitter {
         'gather-definitions',
         'identify-differences',
         'consult-authority',
-        'establish-standard'
+        'establish-standard',
       ],
-      preferredMethod: 'arbitration'
+      preferredMethod: 'arbitration',
     });
 
     // Prediction - evaluate forecasts
@@ -206,9 +196,9 @@ export class ConflictResolver extends EventEmitter {
         'state-predictions',
         'examine-assumptions',
         'weight-by-track-record',
-        'aggregate-forecast'
+        'aggregate-forecast',
       ],
-      preferredMethod: 'evidence-evaluation'
+      preferredMethod: 'evidence-evaluation',
     });
   }
 
@@ -269,11 +259,10 @@ export class ConflictResolver extends EventEmitter {
       this.emit('conflict:resolved', {
         conflictId: conflict.id,
         method: resolution.method,
-        agreement: resolution.agreementLevel
+        agreement: resolution.agreementLevel,
       });
 
       return resolution;
-
     } catch {
       // Resolution failed - escalate
       return await this.escalate(conflict);
@@ -355,7 +344,7 @@ export class ConflictResolver extends EventEmitter {
             dissent: this.identifyDissent(currentPositions),
             compromises,
             duration: 0,
-            confidence: agreementLevel
+            confidence: agreementLevel,
           };
         }
       }
@@ -366,7 +355,9 @@ export class ConflictResolver extends EventEmitter {
 
     // Mediation didn't reach threshold - return best result
     const agreementLevel = this.calculateAgreement(currentPositions);
-    explanation.push(`\nMediation ended after ${round} rounds with ${(agreementLevel * 100).toFixed(0)}% agreement`);
+    explanation.push(
+      `\nMediation ended after ${round} rounds with ${(agreementLevel * 100).toFixed(0)}% agreement`
+    );
 
     return {
       conflictId: conflict.id,
@@ -377,7 +368,7 @@ export class ConflictResolver extends EventEmitter {
       dissent: this.identifyDissent(currentPositions),
       compromises,
       duration: 0,
-      confidence: agreementLevel
+      confidence: agreementLevel,
     };
   }
 
@@ -400,29 +391,32 @@ export class ConflictResolver extends EventEmitter {
           description: 'Clarified positions and underlying assumptions',
           positions: positions.map(p => ({
             ...p,
-            rationale: [...p.rationale, 'Clarified in mediation']
-          }))
+            rationale: [...p.rationale, 'Clarified in mediation'],
+          })),
         };
 
       case 'evaluate-evidence':
         const evidenceScores = positions.map(p => ({
           participant: p.participant,
-          score: this.scoreEvidence(p.evidence)
+          score: this.scoreEvidence(p.evidence),
         }));
         return {
-          description: `Evaluated evidence quality: ${evidenceScores.map(s => `${s.participant}=${s.score.toFixed(2)}`).join(', ')}`
+          description: `Evaluated evidence quality: ${evidenceScores.map(s => `${s.participant}=${s.score.toFixed(2)}`).join(', ')}`,
         };
 
       case 'identify-common-ground':
         const common = this.findCommonGround(positions);
         return {
           description: `Found ${common.length} areas of agreement`,
-          compromise: common.length > 0 ? {
-            aspect: 'common-ground',
-            original: positions.map(p => p.stance),
-            compromised: common,
-            participants: positions.map(p => p.participant)
-          } : undefined
+          compromise:
+            common.length > 0
+              ? {
+                  aspect: 'common-ground',
+                  original: positions.map(p => p.stance),
+                  compromised: common,
+                  participants: positions.map(p => p.participant),
+                }
+              : undefined,
         };
 
       case 'seek-compromise':
@@ -432,14 +426,14 @@ export class ConflictResolver extends EventEmitter {
           description: 'Proposed compromise position',
           positions: positions.map(p => ({
             ...p,
-            stance: this.adjustTowardMiddle(p.stance, middle, p.flexibility)
+            stance: this.adjustTowardMiddle(p.stance, middle, p.flexibility),
           })),
           compromise: {
             aspect: 'compromise',
             original: positions.map(p => p.stance),
             compromised: middle,
-            participants: positions.map(p => p.participant)
-          }
+            participants: positions.map(p => p.participant),
+          },
         };
 
       default:
@@ -487,10 +481,18 @@ export class ConflictResolver extends EventEmitter {
 
       // Type weighting
       switch (e.type) {
-        case 'empirical': score *= 1.2; break;
-        case 'logical': score *= 1.0; break;
-        case 'authoritative': score *= 0.9; break;
-        case 'experiential': score *= 0.8; break;
+        case 'empirical':
+          score *= 1.2;
+          break;
+        case 'logical':
+          score *= 1.0;
+          break;
+        case 'authoritative':
+          score *= 0.9;
+          break;
+        case 'experiential':
+          score *= 0.8;
+          break;
       }
 
       // Verifiability bonus
@@ -551,7 +553,10 @@ export class ConflictResolver extends EventEmitter {
     // Check if all stances are numbers
     if (stances.every(s => typeof s === 'number')) {
       const totalWeight = positions.reduce((sum, p) => sum + p.confidence, 0);
-      const weightedSum = positions.reduce((sum, p) => sum + (p.stance as number) * p.confidence, 0);
+      const weightedSum = positions.reduce(
+        (sum, p) => sum + (p.stance as number) * p.confidence,
+        0
+      );
       return weightedSum / totalWeight;
     }
 
@@ -604,7 +609,12 @@ export class ConflictResolver extends EventEmitter {
     }
 
     // For objects, selectively adopt middle values
-    if (typeof stance === 'object' && typeof middle === 'object' && stance !== null && middle !== null) {
+    if (
+      typeof stance === 'object' &&
+      typeof middle === 'object' &&
+      stance !== null &&
+      middle !== null
+    ) {
       const adjusted = { ...stance };
       for (const key of Object.keys(middle)) {
         if (Math.random() < flexibility) {
@@ -629,7 +639,7 @@ export class ConflictResolver extends EventEmitter {
     return positions.map(p => ({
       ...p,
       flexibility: Math.min(1, p.flexibility * 1.1), // Increase flexibility each round
-      confidence: p.confidence * 0.95 // Slightly reduce confidence
+      confidence: p.confidence * 0.95, // Slightly reduce confidence
     }));
   }
 
@@ -677,7 +687,7 @@ export class ConflictResolver extends EventEmitter {
         return {
           participant: p.participant,
           reason: p.rationale.join('; '),
-          severity
+          severity,
         };
       });
   }
@@ -720,11 +730,11 @@ export class ConflictResolver extends EventEmitter {
         .map(p => ({
           participant: p.participant,
           reason: 'Overruled by arbitration',
-          severity: 'accepts' as const
+          severity: 'accepts' as const,
         })),
       compromises: [],
       duration: 0,
-      confidence: bestScore
+      confidence: bestScore,
     };
   }
 
@@ -746,7 +756,7 @@ export class ConflictResolver extends EventEmitter {
           synthesis[key].push({
             value,
             confidence: position.confidence,
-            participant: position.participant
+            participant: position.participant,
           });
         }
       }
@@ -758,7 +768,9 @@ export class ConflictResolver extends EventEmitter {
       // Select highest confidence option
       options.sort((a, b) => b.confidence - a.confidence);
       result[key] = options[0].value;
-      explanation.push(`${key}: Selected from ${options[0].participant} (confidence: ${options[0].confidence.toFixed(2)})`);
+      explanation.push(
+        `${key}: Selected from ${options[0].participant} (confidence: ${options[0].confidence.toFixed(2)})`
+      );
     }
 
     return {
@@ -768,14 +780,16 @@ export class ConflictResolver extends EventEmitter {
       explanation,
       agreementLevel: 0.8, // Synthesis typically gets good agreement
       dissent: [],
-      compromises: [{
-        aspect: 'full-synthesis',
-        original: conflict.positions.map(p => p.stance),
-        compromised: result,
-        participants: conflict.positions.map(p => p.participant)
-      }],
+      compromises: [
+        {
+          aspect: 'full-synthesis',
+          original: conflict.positions.map(p => p.stance),
+          compromised: result,
+          participants: conflict.positions.map(p => p.participant),
+        },
+      ],
       duration: 0,
-      confidence: 0.75
+      confidence: 0.75,
     };
   }
 
@@ -792,8 +806,7 @@ export class ConflictResolver extends EventEmitter {
     }
 
     // Find winner
-    const [winningStance, voteCount] = Array.from(votes.entries())
-      .sort((a, b) => b[1] - a[1])[0];
+    const [winningStance, voteCount] = Array.from(votes.entries()).sort((a, b) => b[1] - a[1])[0];
 
     const totalVotes = Array.from(votes.values()).reduce((sum, v) => sum + v, 0);
     const agreementLevel = voteCount / totalVotes;
@@ -805,7 +818,7 @@ export class ConflictResolver extends EventEmitter {
       explanation: [
         `Voting completed`,
         `Winner received ${voteCount.toFixed(2)} weighted votes out of ${totalVotes.toFixed(2)}`,
-        `Agreement level: ${(agreementLevel * 100).toFixed(1)}%`
+        `Agreement level: ${(agreementLevel * 100).toFixed(1)}%`,
       ],
       agreementLevel,
       dissent: conflict.positions
@@ -813,11 +826,11 @@ export class ConflictResolver extends EventEmitter {
         .map(p => ({
           participant: p.participant,
           reason: 'Minority position',
-          severity: 'accepts' as const
+          severity: 'accepts' as const,
         })),
       compromises: [],
       duration: 0,
-      confidence: agreementLevel
+      confidence: agreementLevel,
     };
   }
 
@@ -828,7 +841,7 @@ export class ConflictResolver extends EventEmitter {
     const scores = conflict.positions.map(position => ({
       position,
       evidenceScore: this.scoreEvidence(position.evidence),
-      totalScore: this.scoreEvidence(position.evidence) * position.confidence
+      totalScore: this.scoreEvidence(position.evidence) * position.confidence,
     }));
 
     scores.sort((a, b) => b.totalScore - a.totalScore);
@@ -843,17 +856,17 @@ export class ConflictResolver extends EventEmitter {
         `Winner: ${winner.position.participant}`,
         `Evidence score: ${winner.evidenceScore.toFixed(2)}`,
         `Total score: ${winner.totalScore.toFixed(2)}`,
-        `Evidence types: ${winner.position.evidence.map(e => e.type).join(', ')}`
+        `Evidence types: ${winner.position.evidence.map(e => e.type).join(', ')}`,
       ],
       agreementLevel: winner.totalScore / scores[0].totalScore,
       dissent: scores.slice(1).map(s => ({
         participant: s.position.participant,
         reason: `Lower evidence score: ${s.evidenceScore.toFixed(2)}`,
-        severity: 'accepts' as const
+        severity: 'accepts' as const,
       })),
       compromises: [],
       duration: 0,
-      confidence: winner.totalScore
+      confidence: winner.totalScore,
     };
   }
 
@@ -871,7 +884,7 @@ export class ConflictResolver extends EventEmitter {
           aspect: conflict.topic,
           original: position.stance,
           compromised: middle,
-          participants: [position.participant]
+          participants: [position.participant],
         });
       }
     }
@@ -883,13 +896,13 @@ export class ConflictResolver extends EventEmitter {
       explanation: [
         'Compromise position found',
         `${compromises.length} participants compromised`,
-        'Solution balances all positions'
+        'Solution balances all positions',
       ],
       agreementLevel: 0.7,
       dissent: [],
       compromises,
       duration: 0,
-      confidence: 0.7
+      confidence: 0.7,
     };
   }
 
@@ -905,7 +918,7 @@ export class ConflictResolver extends EventEmitter {
       const partitionKey = `partition_${index++}`;
       partitions[partitionKey] = {
         assignedTo: position.participant,
-        decision: position.stance
+        decision: position.stance,
       };
     }
 
@@ -916,13 +929,13 @@ export class ConflictResolver extends EventEmitter {
       explanation: [
         'Decision partitioned among participants',
         `${conflict.positions.length} partitions created`,
-        'Each participant handles their domain'
+        'Each participant handles their domain',
       ],
       agreementLevel: 1.0, // No conflict since partitioned
       dissent: [],
       compromises: [],
       duration: 0,
-      confidence: 0.8
+      confidence: 0.8,
     };
   }
 
@@ -937,18 +950,20 @@ export class ConflictResolver extends EventEmitter {
       explanation: [
         'Decision deferred',
         'Conflict severity does not require immediate resolution',
-        'Will revisit when more information available'
+        'Will revisit when more information available',
       ],
       agreementLevel: 0,
       dissent: [],
       compromises: [],
       duration: 0,
       confidence: 0,
-      followUp: [{
-        action: 'revisit-conflict',
-        assignedTo: 'orchestrator',
-        reason: 'Gather more information or wait for context change'
-      }]
+      followUp: [
+        {
+          action: 'revisit-conflict',
+          assignedTo: 'orchestrator',
+          reason: 'Gather more information or wait for context change',
+        },
+      ],
     };
   }
 
@@ -961,30 +976,33 @@ export class ConflictResolver extends EventEmitter {
       method: 'escalation',
       outcome: {
         status: 'escalated',
-        reason: conflict.severity === 'critical'
-          ? 'Critical decision requires human judgment'
-          : 'Automated resolution failed'
+        reason:
+          conflict.severity === 'critical'
+            ? 'Critical decision requires human judgment'
+            : 'Automated resolution failed',
       },
       explanation: [
         'Conflict escalated to human decision-maker',
         `Severity: ${conflict.severity}`,
         `Participants: ${conflict.participants.join(', ')}`,
-        'Automated resolution methods exhausted'
+        'Automated resolution methods exhausted',
       ],
       agreementLevel: 0,
       dissent: conflict.positions.map(p => ({
         participant: p.participant,
         reason: 'Awaiting human decision',
-        severity: 'accepts' as const
+        severity: 'accepts' as const,
       })),
       compromises: [],
       duration: 0,
       confidence: 0,
-      followUp: [{
-        action: 'await-human-decision',
-        assignedTo: 'human',
-        reason: 'Conflict requires human judgment'
-      }]
+      followUp: [
+        {
+          action: 'await-human-decision',
+          assignedTo: 'human',
+          reason: 'Conflict requires human judgment',
+        },
+      ],
     };
   }
 
@@ -1004,10 +1022,7 @@ export class ConflictResolver extends EventEmitter {
     let escalations = 0;
 
     for (const resolution of this.resolutionHistory) {
-      methodCounts.set(
-        resolution.method,
-        (methodCounts.get(resolution.method) || 0) + 1
-      );
+      methodCounts.set(resolution.method, (methodCounts.get(resolution.method) || 0) + 1);
       totalAgreement += resolution.agreementLevel;
       totalDuration += resolution.duration;
       if (resolution.method === 'escalation') escalations++;
@@ -1020,7 +1035,7 @@ export class ConflictResolver extends EventEmitter {
       methodDistribution: methodCounts,
       averageAgreement: totalAgreement / count,
       averageDuration: totalDuration / count,
-      escalationRate: escalations / count
+      escalationRate: escalations / count,
     };
   }
 }

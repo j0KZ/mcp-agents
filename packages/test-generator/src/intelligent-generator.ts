@@ -6,13 +6,7 @@
 import { parse } from '@babel/parser';
 import _traverse from '@babel/traverse';
 import path from 'path';
-import {
-  FunctionInfo,
-  ClassInfo,
-  TestCase,
-  TestSuite,
-  TestFramework
-} from './types.js';
+import { FunctionInfo, ClassInfo, TestCase, TestSuite, TestFramework } from './types.js';
 
 const traverse = (_traverse as any).default || _traverse;
 
@@ -37,7 +31,7 @@ const FUNCTION_PATTERNS = {
 
   // Utilities
   helper: /^(helper|util|format|build|make)/i,
-  comparison: /^(compare|equals|matches|diff)/i
+  comparison: /^(compare|equals|matches|diff)/i,
 };
 
 /**
@@ -54,7 +48,7 @@ const TYPE_PATTERNS = {
   count: /count|number|amount|total/i,
   flag: /^is|^has|^can|enabled|active/i,
   array: /list|items|array/i,
-  object: /data|config|options|settings/i
+  object: /data|config|options|settings/i,
 };
 
 export class IntelligentTestGenerator {
@@ -62,7 +56,7 @@ export class IntelligentTestGenerator {
     generated: 0,
     successful: 0,
     failed: 0,
-    patterns: new Map<string, number>()
+    patterns: new Map<string, number>(),
   };
 
   /**
@@ -82,7 +76,7 @@ export class IntelligentTestGenerator {
     const ast = parse(content, {
       sourceType: 'module',
       plugins: ['typescript', 'jsx'],
-      errorRecovery: true
+      errorRecovery: true,
     });
 
     const functions: FunctionInfo[] = [];
@@ -104,7 +98,7 @@ export class IntelligentTestGenerator {
           const func = this.extractFunctionContext(init, id.name);
           if (func) functions.push(func);
         }
-      }
+      },
     });
 
     // Generate intelligent test suites
@@ -132,7 +126,7 @@ export class IntelligentTestGenerator {
       code: testCode,
       suite: suites[0] || { describe: 'Empty', tests: [] },
       confidence,
-      explanation: this.explainGeneration(functions, classes, suites)
+      explanation: this.explainGeneration(functions, classes, suites),
     };
   }
 
@@ -159,7 +153,7 @@ export class IntelligentTestGenerator {
       async: isAsync,
       line: node.loc?.start.line || 0,
       purpose, // Added context
-      complexity: this.calculateComplexity(node) // Added metric
+      complexity: this.calculateComplexity(node), // Added metric
     } as any;
   }
 
@@ -199,7 +193,7 @@ export class IntelligentTestGenerator {
     return {
       describe: `${func.name}()`,
       tests,
-      setup: this.generateSetup(func)
+      setup: this.generateSetup(func),
     };
   }
 
@@ -216,7 +210,7 @@ export class IntelligentTestGenerator {
       code: `
     const validInput = ${this.generateValidInput(func)};
     expect(${funcName}(validInput)).toBe(true);`,
-      description: 'Test valid case'
+      description: 'Test valid case',
     });
 
     tests.push({
@@ -225,7 +219,7 @@ export class IntelligentTestGenerator {
       code: `
     const invalidInput = ${this.generateInvalidInput(func)};
     expect(${funcName}(invalidInput)).toBe(false);`,
-      description: 'Test invalid case'
+      description: 'Test invalid case',
     });
 
     tests.push({
@@ -234,7 +228,7 @@ export class IntelligentTestGenerator {
       code: `
     expect(${funcName}(null)).toBe(false);
     expect(${funcName}(undefined)).toBe(false);`,
-      description: 'Test null safety'
+      description: 'Test null safety',
     });
 
     return tests;
@@ -253,7 +247,7 @@ export class IntelligentTestGenerator {
       code: `
     const result = ${funcName}(10, 20);
     expect(result).toBe(30);`,
-      description: 'Test basic calculation'
+      description: 'Test basic calculation',
     });
 
     tests.push({
@@ -262,7 +256,7 @@ export class IntelligentTestGenerator {
       code: `
     const result = ${funcName}(-10, 20);
     expect(result).toBe(10);`,
-      description: 'Test with negatives'
+      description: 'Test with negatives',
     });
 
     tests.push({
@@ -271,7 +265,7 @@ export class IntelligentTestGenerator {
       code: `
     const result = ${funcName}(0.1, 0.2);
     expect(result).toBeCloseTo(0.3, 10);`,
-      description: 'Test floating point'
+      description: 'Test floating point',
     });
 
     return tests;
@@ -291,7 +285,7 @@ export class IntelligentTestGenerator {
     const result = await ${funcName}(${this.generateMockParams(func)});
     expect(result).toBeDefined();
     expect(result).toHaveProperty('success');`,
-      description: 'Test async resolution'
+      description: 'Test async resolution',
     });
 
     tests.push({
@@ -299,7 +293,7 @@ export class IntelligentTestGenerator {
       type: 'error-case',
       code: `
     await expect(${funcName}(null)).rejects.toThrow();`,
-      description: 'Test error handling'
+      description: 'Test error handling',
     });
 
     tests.push({
@@ -311,7 +305,7 @@ export class IntelligentTestGenerator {
       promise,
       new Promise(resolve => setTimeout(() => resolve('timeout'), 5000))
     ])).resolves.not.toBe('timeout');`,
-      description: 'Test timeout behavior'
+      description: 'Test timeout behavior',
     });
 
     return tests;
@@ -327,17 +321,28 @@ export class IntelligentTestGenerator {
     for (const [pattern, regex] of Object.entries(TYPE_PATTERNS)) {
       if (regex.test(name)) {
         switch (pattern) {
-          case 'id': return '1';
-          case 'email': return '"test@example.com"';
-          case 'url': return '"https://example.com"';
-          case 'date': return 'new Date("2024-01-01")';
-          case 'phone': return '"+1234567890"';
-          case 'password': return '"SecurePass123!"';
-          case 'token': return '"mock-token-123"';
-          case 'count': return '42';
-          case 'flag': return 'true';
-          case 'array': return '[]';
-          case 'object': return '{}';
+          case 'id':
+            return '1';
+          case 'email':
+            return '"test@example.com"';
+          case 'url':
+            return '"https://example.com"';
+          case 'date':
+            return 'new Date("2024-01-01")';
+          case 'phone':
+            return '"+1234567890"';
+          case 'password':
+            return '"SecurePass123!"';
+          case 'token':
+            return '"mock-token-123"';
+          case 'count':
+            return '42';
+          case 'flag':
+            return 'true';
+          case 'array':
+            return '[]';
+          case 'object':
+            return '{}';
         }
       }
     }
@@ -369,9 +374,7 @@ export class IntelligentTestGenerator {
     const imports = this.generateImports(framework, importPath);
 
     // Generate test suites
-    const suitesCode = suites
-      .map(suite => this.generateSuiteCode(suite, framework))
-      .join('\n\n');
+    const suitesCode = suites.map(suite => this.generateSuiteCode(suite, framework)).join('\n\n');
 
     return `${imports}\n\n${suitesCode}`;
   }
@@ -392,7 +395,7 @@ import { expect } from 'chai';
 import * as target from '${importPath}';`,
 
       ava: `import test from 'ava';
-import * as target from '${importPath}';`
+import * as target from '${importPath}';`,
     };
 
     return imports[framework];
@@ -431,7 +434,7 @@ import * as target from '${importPath}';`
       SwitchCase: () => complexity++,
       CatchClause: () => complexity++,
       ConditionalExpression: () => complexity++,
-      LogicalExpression: () => complexity++
+      LogicalExpression: () => complexity++,
     });
     return complexity;
   }
@@ -478,7 +481,7 @@ import * as target from '${importPath}';`
         name: 'should handle empty parameters',
         type: 'edge-case',
         code: `expect(() => ${func.name}()).not.toThrow();`,
-        description: 'Test missing params'
+        description: 'Test missing params',
       });
     }
 
@@ -492,21 +495,23 @@ import * as target from '${importPath}';`
       name: 'should handle invalid input types',
       type: 'error-case',
       code: `expect(() => ${func.name}(Symbol('test'))).toThrow();`,
-      description: 'Test type safety'
+      description: 'Test type safety',
     });
 
     return tests;
   }
 
   private generateGenericTests(func: FunctionInfo): TestCase[] {
-    return [{
-      name: `should execute ${func.name} successfully`,
-      type: 'happy-path',
-      code: `
+    return [
+      {
+        name: `should execute ${func.name} successfully`,
+        type: 'happy-path',
+        code: `
     const result = ${func.async ? 'await ' : ''}${func.name}(${this.generateMockParams(func)});
     expect(result).toBeDefined();`,
-      description: 'Basic execution test'
-    }];
+        description: 'Basic execution test',
+      },
+    ];
   }
 
   private generateCrudTests(func: FunctionInfo): TestCase[] {
@@ -521,7 +526,7 @@ import * as target from '${importPath}';`
     const result = await ${func.name}({ name: 'test' });
     expect(result).toHaveProperty('id');
     expect(result.name).toBe('test');`,
-        description: 'Test creation'
+        description: 'Test creation',
       });
     }
 
@@ -533,7 +538,7 @@ import * as target from '${importPath}';`
     const result = await ${func.name}(1);
     expect(result).toBeDefined();
     expect(result.id).toBe(1);`,
-        description: 'Test retrieval'
+        description: 'Test retrieval',
       });
     }
 
@@ -555,7 +560,7 @@ import * as target from '${importPath}';`
       name: className,
       methods,
       constructor: undefined,
-      line: node.loc?.start.line || 0
+      line: node.loc?.start.line || 0,
     };
   }
 
@@ -569,7 +574,7 @@ import * as target from '${importPath}';`
       code: `
     const instance = new target.${cls.name}();
     expect(instance).toBeInstanceOf(target.${cls.name});`,
-      description: 'Test instantiation'
+      description: 'Test instantiation',
     });
 
     // Method tests
@@ -581,7 +586,7 @@ import * as target from '${importPath}';`
     const instance = new target.${cls.name}();
     const result = ${method.async ? 'await ' : ''}instance.${method.name}(${this.generateMockParams(method)});
     expect(result).toBeDefined();`,
-        description: `Test ${method.name} method`
+        description: `Test ${method.name} method`,
       });
     }
 
@@ -592,22 +597,26 @@ import * as target from '${importPath}';`
 
   beforeEach(() => {
     instance = new target.${cls.name}();
-  });`
+  });`,
     };
   }
 
   private generateSuiteCode(suite: TestSuite, framework: TestFramework): string {
     if (framework === 'ava') {
       return suite.tests
-        .map(test => `test('${test.name}', async t => {${test.code}
-});`)
+        .map(
+          test => `test('${test.name}', async t => {${test.code}
+});`
+        )
         .join('\n\n');
     }
 
     const setup = suite.setup ? `\n  ${suite.setup}\n` : '';
     const tests = suite.tests
-      .map(test => `  it('${test.name}', async () => {${test.code}
-  });`)
+      .map(
+        test => `  it('${test.name}', async () => {${test.code}
+  });`
+      )
       .join('\n\n');
 
     return `describe('${suite.describe}', () => {${setup}
@@ -658,9 +667,8 @@ Added edge cases and error handling tests.`;
   getMetrics() {
     return {
       ...this.metrics,
-      successRate: this.metrics.generated > 0
-        ? this.metrics.successful / this.metrics.generated
-        : 0
+      successRate:
+        this.metrics.generated > 0 ? this.metrics.successful / this.metrics.generated : 0,
     };
   }
 }

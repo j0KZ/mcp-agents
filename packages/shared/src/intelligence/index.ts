@@ -6,7 +6,13 @@
  */
 
 export { SemanticAnalyzer } from './semantic-analyzer.js';
-export type { CodeIntent, DataFlow, SideEffect, Dependency, ComplexityAnalysis } from './semantic-analyzer.js';
+export type {
+  CodeIntent,
+  DataFlow,
+  SideEffect,
+  Dependency,
+  ComplexityAnalysis,
+} from './semantic-analyzer.js';
 
 export { ExecutionSandbox } from './execution-sandbox.js';
 export type { ExecutionResult, TestCase, Learning } from './execution-sandbox.js';
@@ -20,7 +26,7 @@ export type {
   BestPractice,
   PerformanceTip,
   SecurityConsideration,
-  DomainConcept
+  DomainConcept,
 } from './domain-knowledge.js';
 
 export { ExplanationEngine } from './explanation-engine.js';
@@ -29,7 +35,7 @@ export type {
   Evidence,
   AlternativeApproach,
   Visualization,
-  ExplanationContext
+  ExplanationContext,
 } from './explanation-engine.js';
 
 // Classes already exported above, no default exports needed

@@ -75,7 +75,10 @@ export type ConsensusMethod =
 
 export interface ConsensusStrategy {
   method: ConsensusMethod;
-  apply(request: ConsensusRequest, participants: Map<string, ConsensusParticipant>): ConsensusResult;
+  apply(
+    request: ConsensusRequest,
+    participants: Map<string, ConsensusParticipant>
+  ): ConsensusResult;
 }
 
 export class ConsensusEngine extends EventEmitter {
@@ -97,43 +100,43 @@ export class ConsensusEngine extends EventEmitter {
     // Unanimous consensus - all must agree
     this.strategies.set('unanimous', {
       method: 'unanimous',
-      apply: (request, participants) => this.unanimousConsensus(request, participants)
+      apply: (request, participants) => this.unanimousConsensus(request, participants),
     });
 
     // Weighted majority - weight by expertise and reliability
     this.strategies.set('weighted-majority', {
       method: 'weighted-majority',
-      apply: (request, participants) => this.weightedMajorityConsensus(request, participants)
+      apply: (request, participants) => this.weightedMajorityConsensus(request, participants),
     });
 
     // Expert-led - defer to domain experts
     this.strategies.set('expert-led', {
       method: 'expert-led',
-      apply: (request, participants) => this.expertLedConsensus(request, participants)
+      apply: (request, participants) => this.expertLedConsensus(request, participants),
     });
 
     // Evidence-based - strongest evidence wins
     this.strategies.set('evidence-based', {
       method: 'evidence-based',
-      apply: (request, participants) => this.evidenceBasedConsensus(request, participants)
+      apply: (request, participants) => this.evidenceBasedConsensus(request, participants),
     });
 
     // Byzantine fault tolerant - resistant to malicious actors
     this.strategies.set('byzantine-fault-tolerant', {
       method: 'byzantine-fault-tolerant',
-      apply: (request, participants) => this.byzantineConsensus(request, participants)
+      apply: (request, participants) => this.byzantineConsensus(request, participants),
     });
 
     // Delphi method - iterative refinement
     this.strategies.set('delphi-method', {
       method: 'delphi-method',
-      apply: (request, participants) => this.delphiMethodConsensus(request, participants)
+      apply: (request, participants) => this.delphiMethodConsensus(request, participants),
     });
 
     // Hybrid - combines multiple strategies
     this.strategies.set('hybrid', {
       method: 'hybrid',
-      apply: (request, participants) => this.hybridConsensus(request, participants)
+      apply: (request, participants) => this.hybridConsensus(request, participants),
     });
   }
 
@@ -149,10 +152,10 @@ export class ConsensusEngine extends EventEmitter {
       confidence: 0.85,
       specialization: new Map([
         ['code-quality', 0.95],
-        ['patterns', 0.90],
-        ['security', 0.60],
-        ['testing', 0.70]
-      ])
+        ['patterns', 0.9],
+        ['security', 0.6],
+        ['testing', 0.7],
+      ]),
     });
 
     // Security Scanner
@@ -160,13 +163,13 @@ export class ConsensusEngine extends EventEmitter {
       id: 'security-scanner',
       expertise: ['security', 'vulnerabilities', 'compliance', 'owasp'],
       reliability: 0.94,
-      confidence: 0.90,
+      confidence: 0.9,
       specialization: new Map([
         ['security', 0.98],
         ['compliance', 0.92],
         ['code-quality', 0.65],
-        ['patterns', 0.60]
-      ])
+        ['patterns', 0.6],
+      ]),
     });
 
     // Test Generator
@@ -174,13 +177,13 @@ export class ConsensusEngine extends EventEmitter {
       id: 'test-generator',
       expertise: ['testing', 'coverage', 'edge-cases', 'mocking'],
       reliability: 0.88,
-      confidence: 0.80,
+      confidence: 0.8,
       specialization: new Map([
         ['testing', 0.95],
-        ['coverage', 0.90],
-        ['code-quality', 0.70],
-        ['patterns', 0.65]
-      ])
+        ['coverage', 0.9],
+        ['code-quality', 0.7],
+        ['patterns', 0.65],
+      ]),
     });
 
     // Architecture Analyzer
@@ -193,8 +196,8 @@ export class ConsensusEngine extends EventEmitter {
         ['architecture', 0.96],
         ['patterns', 0.85],
         ['code-quality', 0.75],
-        ['testing', 0.50]
-      ])
+        ['testing', 0.5],
+      ]),
     });
 
     // Refactor Assistant
@@ -207,8 +210,8 @@ export class ConsensusEngine extends EventEmitter {
         ['refactoring', 0.94],
         ['patterns', 0.88],
         ['code-quality', 0.85],
-        ['architecture', 0.70]
-      ])
+        ['architecture', 0.7],
+      ]),
     });
   }
 
@@ -238,7 +241,7 @@ export class ConsensusEngine extends EventEmitter {
       topic: request.topic,
       method: result.method,
       agreement: result.agreementLevel,
-      duration: Date.now() - startTime
+      duration: Date.now() - startTime,
     });
 
     return result;
@@ -341,7 +344,7 @@ export class ConsensusEngine extends EventEmitter {
         participants: request.opinions.map(o => o.participant),
         dissenting: [],
         explanation: ['All participants agreed on the same value'],
-        evidence: this.aggregateEvidence(request.opinions)
+        evidence: this.aggregateEvidence(request.opinions),
       };
     }
 
@@ -405,7 +408,7 @@ export class ConsensusEngine extends EventEmitter {
             participant: opinion.participant,
             value: JSON.parse(value),
             reasoning: opinion.reasoning.join(' '),
-            weight: weight / totalWeight
+            weight: weight / totalWeight,
           });
         }
       }
@@ -422,9 +425,11 @@ export class ConsensusEngine extends EventEmitter {
       explanation: [
         `Weighted majority consensus reached with ${(agreementLevel * 100).toFixed(1)}% agreement`,
         `Winning opinion had weight of ${maxWeight.toFixed(2)}`,
-        dissenting.length > 0 ? `${dissenting.length} dissenting opinions recorded` : 'No dissenting opinions'
+        dissenting.length > 0
+          ? `${dissenting.length} dissenting opinions recorded`
+          : 'No dissenting opinions',
       ],
-      evidence: this.aggregateEvidence(opinionMap.get(winner) || [])
+      evidence: this.aggregateEvidence(opinionMap.get(winner) || []),
     };
   }
 
@@ -461,8 +466,9 @@ export class ConsensusEngine extends EventEmitter {
     // Apply expertise weight if specified
     if (request.requirements.expertiseWeight !== undefined) {
       const expertiseBonus = participant.expertise.length / 10; // Max 1.0 for 10 expertise areas
-      weight = weight * (1 - request.requirements.expertiseWeight) +
-               weight * expertiseBonus * request.requirements.expertiseWeight;
+      weight =
+        weight * (1 - request.requirements.expertiseWeight) +
+        weight * expertiseBonus * request.requirements.expertiseWeight;
     }
 
     return weight;
@@ -480,17 +486,31 @@ export class ConsensusEngine extends EventEmitter {
 
       // Type scoring
       switch (e.type) {
-        case 'empirical': score = 1.0; break;
-        case 'experiential': score = 0.8; break;
-        case 'referenced': score = 0.7; break;
-        case 'theoretical': score = 0.6; break;
+        case 'empirical':
+          score = 1.0;
+          break;
+        case 'experiential':
+          score = 0.8;
+          break;
+        case 'referenced':
+          score = 0.7;
+          break;
+        case 'theoretical':
+          score = 0.6;
+          break;
       }
 
       // Strength modifier
       switch (e.strength) {
-        case 'strong': score *= 1.0; break;
-        case 'moderate': score *= 0.8; break;
-        case 'weak': score *= 0.6; break;
+        case 'strong':
+          score *= 1.0;
+          break;
+        case 'moderate':
+          score *= 0.8;
+          break;
+        case 'weak':
+          score *= 0.6;
+          break;
       }
 
       totalScore += score;
@@ -528,9 +548,7 @@ export class ConsensusEngine extends EventEmitter {
     }
 
     // Get expert opinions
-    const expertOpinions = request.opinions.filter(o =>
-      experts.some(e => e.id === o.participant)
-    );
+    const expertOpinions = request.opinions.filter(o => experts.some(e => e.id === o.participant));
 
     if (expertOpinions.length === 0) {
       return this.weightedMajorityConsensus(request, participants);
@@ -542,7 +560,7 @@ export class ConsensusEngine extends EventEmitter {
       ...o,
       confidence: experts.some(e => e.id === o.participant)
         ? o.confidence * expertWeight
-        : o.confidence
+        : o.confidence,
     }));
 
     // Use weighted consensus with expert bias
@@ -556,8 +574,8 @@ export class ConsensusEngine extends EventEmitter {
         `Expert-led consensus in domain: ${request.domain}`,
         `${experts.length} experts identified with expertise > 0.7`,
         `Top expert: ${experts[0].id} (expertise: ${experts[0].expertise.toFixed(2)})`,
-        ...result.explanation
-      ]
+        ...result.explanation,
+      ],
     };
   }
 
@@ -571,7 +589,7 @@ export class ConsensusEngine extends EventEmitter {
     // Score each opinion by evidence quality
     const scoredOpinions = request.opinions.map(opinion => ({
       opinion,
-      score: this.scoreEvidence(opinion.evidence) * opinion.confidence
+      score: this.scoreEvidence(opinion.evidence) * opinion.confidence,
     }));
 
     // Sort by score
@@ -595,7 +613,7 @@ export class ConsensusEngine extends EventEmitter {
         participant: s.opinion.participant,
         value: s.opinion.value,
         reasoning: `Evidence score: ${s.score.toFixed(2)}`,
-        weight: s.score / winner.score
+        weight: s.score / winner.score,
       }));
 
     return {
@@ -610,9 +628,9 @@ export class ConsensusEngine extends EventEmitter {
         `Evidence-based consensus selected opinion with strongest evidence`,
         `Winner evidence score: ${winner.score.toFixed(2)}`,
         `Evidence types: ${winner.opinion.evidence.map(e => e.type).join(', ')}`,
-        `Agreement level: ${(agreementLevel * 100).toFixed(1)}%`
+        `Agreement level: ${(agreementLevel * 100).toFixed(1)}%`,
       ],
-      evidence: winner.opinion.evidence
+      evidence: winner.opinion.evidence,
     };
   }
 
@@ -667,9 +685,9 @@ export class ConsensusEngine extends EventEmitter {
           explanation: [
             `Byzantine consensus reached with ${opinions.length}/${request.opinions.length} agreement`,
             `Tolerance: up to ${f} faulty participants`,
-            `Required agreement: ${requiredAgreement} participants`
+            `Required agreement: ${requiredAgreement} participants`,
           ],
-          evidence: this.aggregateEvidence(opinions)
+          evidence: this.aggregateEvidence(opinions),
         };
       }
     }
@@ -708,8 +726,8 @@ export class ConsensusEngine extends EventEmitter {
           explanation: [
             `Delphi method consensus after ${rounds} rounds`,
             `Final agreement: ${(interim.agreementLevel * 100).toFixed(1)}%`,
-            ...interim.explanation
-          ]
+            ...interim.explanation,
+          ],
         };
       }
 
@@ -727,10 +745,7 @@ export class ConsensusEngine extends EventEmitter {
     return {
       ...finalResult,
       method: 'delphi-method',
-      explanation: [
-        `Delphi method consensus after ${rounds} rounds`,
-        ...finalResult.explanation
-      ]
+      explanation: [`Delphi method consensus after ${rounds} rounds`, ...finalResult.explanation],
     };
   }
 
@@ -740,7 +755,8 @@ export class ConsensusEngine extends EventEmitter {
   private refineOpinions(opinions: Opinion[], interim: ConsensusResult): Opinion[] {
     return opinions.map(opinion => {
       // Participants adjust confidence based on consensus
-      const agreesWithConsensus = JSON.stringify(opinion.value) === JSON.stringify(interim.finalValue);
+      const agreesWithConsensus =
+        JSON.stringify(opinion.value) === JSON.stringify(interim.finalValue);
 
       const adjustedConfidence = agreesWithConsensus
         ? Math.min(opinion.confidence * 1.1, 1.0) // Increase if agrees
@@ -751,8 +767,8 @@ export class ConsensusEngine extends EventEmitter {
         confidence: adjustedConfidence,
         reasoning: [
           ...opinion.reasoning,
-          `Adjusted after round (agreement: ${interim.agreementLevel.toFixed(2)})`
-        ]
+          `Adjusted after round (agreement: ${interim.agreementLevel.toFixed(2)})`,
+        ],
       };
     });
   }
@@ -815,11 +831,11 @@ export class ConsensusEngine extends EventEmitter {
         `Hybrid consensus using ${methods.join(', ')}`,
         `${results.length} methods agreed on final value`,
         `Average confidence: ${((totalConfidence / results.length) * 100).toFixed(1)}%`,
-        `Average agreement: ${((totalAgreement / results.length) * 100).toFixed(1)}%`
+        `Average agreement: ${((totalAgreement / results.length) * 100).toFixed(1)}%`,
       ],
-      evidence: this.aggregateEvidence(request.opinions.filter(o =>
-        JSON.stringify(o.value) === bestValue
-      ))
+      evidence: this.aggregateEvidence(
+        request.opinions.filter(o => JSON.stringify(o.value) === bestValue)
+      ),
     };
   }
 
@@ -882,9 +898,11 @@ export class ConsensusEngine extends EventEmitter {
    * Compare evidence strength
    */
   private compareEvidenceStrength(a: string, b: string): number {
-    const strengthOrder = { 'weak': 0, 'moderate': 1, 'strong': 2 };
-    return (strengthOrder[a as keyof typeof strengthOrder] || 0) -
-           (strengthOrder[b as keyof typeof strengthOrder] || 0);
+    const strengthOrder = { weak: 0, moderate: 1, strong: 2 };
+    return (
+      (strengthOrder[a as keyof typeof strengthOrder] || 0) -
+      (strengthOrder[b as keyof typeof strengthOrder] || 0)
+    );
   }
 
   /**
@@ -897,7 +915,7 @@ export class ConsensusEngine extends EventEmitter {
         participant: o.participant,
         value: o.value,
         reasoning: o.reasoning.join(' '),
-        weight: o.confidence
+        weight: o.confidence,
       }));
   }
 
@@ -950,11 +968,10 @@ export class ConsensusEngine extends EventEmitter {
 
     return {
       totalConsensusReached: this.consensusHistory.length,
-      averageAgreement: this.consensusHistory.length > 0
-        ? totalAgreement / this.consensusHistory.length
-        : 0,
+      averageAgreement:
+        this.consensusHistory.length > 0 ? totalAgreement / this.consensusHistory.length : 0,
       methodDistribution: methodCounts,
-      participantPerformance
+      participantPerformance,
     };
   }
 }

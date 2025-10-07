@@ -15,7 +15,7 @@ import {
   PerformanceTracker,
   SemanticAnalyzer,
   DomainKnowledgeBase,
-  ExplanationEngine
+  ExplanationEngine,
 } from '@j0kz/shared';
 
 export interface OrchestrationTask {
@@ -159,10 +159,10 @@ export class IntelligentOrchestrator extends EventEmitter {
       performance: {
         averageTime: 500,
         successRate: 0.95,
-        qualityScore: 85
+        qualityScore: 85,
       },
       specializations: ['code-review', 'quality-metrics', 'refactoring-suggestions'],
-      dependencies: ['refactor-assistant']
+      dependencies: ['refactor-assistant'],
     });
 
     // Test Generator
@@ -173,52 +173,67 @@ export class IntelligentOrchestrator extends EventEmitter {
       performance: {
         averageTime: 800,
         successRate: 0.88,
-        qualityScore: 80
+        qualityScore: 80,
       },
       specializations: ['unit-tests', 'edge-cases', 'mock-generation'],
-      dependencies: ['smart-reviewer']
+      dependencies: ['smart-reviewer'],
     });
 
     // Security Scanner
     this.toolCapabilities.set('security-scanner', {
       tool: 'security-scanner',
-      strengths: ['vulnerability detection', 'OWASP compliance', 'secret scanning', 'dependency audit'],
+      strengths: [
+        'vulnerability detection',
+        'OWASP compliance',
+        'secret scanning',
+        'dependency audit',
+      ],
       weaknesses: ['performance optimization', 'code style'],
       performance: {
         averageTime: 1200,
         successRate: 0.92,
-        qualityScore: 90
+        qualityScore: 90,
       },
       specializations: ['security-audit', 'compliance', 'vulnerability-assessment'],
-      dependencies: []
+      dependencies: [],
     });
 
     // Refactor Assistant
     this.toolCapabilities.set('refactor-assistant', {
       tool: 'refactor-assistant',
-      strengths: ['code transformation', 'pattern application', 'complexity reduction', 'async conversion'],
+      strengths: [
+        'code transformation',
+        'pattern application',
+        'complexity reduction',
+        'async conversion',
+      ],
       weaknesses: ['security analysis', 'test generation'],
       performance: {
         averageTime: 600,
-        successRate: 0.90,
-        qualityScore: 82
+        successRate: 0.9,
+        qualityScore: 82,
       },
       specializations: ['refactoring', 'pattern-application', 'code-cleanup'],
-      dependencies: ['smart-reviewer']
+      dependencies: ['smart-reviewer'],
     });
 
     // Architecture Analyzer
     this.toolCapabilities.set('architecture-analyzer', {
       tool: 'architecture-analyzer',
-      strengths: ['dependency analysis', 'circular detection', 'layer validation', 'module coupling'],
+      strengths: [
+        'dependency analysis',
+        'circular detection',
+        'layer validation',
+        'module coupling',
+      ],
       weaknesses: ['code generation', 'security'],
       performance: {
         averageTime: 1000,
         successRate: 0.94,
-        qualityScore: 88
+        qualityScore: 88,
       },
       specializations: ['architecture-review', 'dependency-graph', 'module-analysis'],
-      dependencies: []
+      dependencies: [],
     });
 
     // Doc Generator
@@ -229,10 +244,10 @@ export class IntelligentOrchestrator extends EventEmitter {
       performance: {
         averageTime: 400,
         successRate: 0.96,
-        qualityScore: 85
+        qualityScore: 85,
       },
       specializations: ['documentation', 'api-reference', 'markdown-generation'],
-      dependencies: []
+      dependencies: [],
     });
 
     // API Designer
@@ -243,10 +258,10 @@ export class IntelligentOrchestrator extends EventEmitter {
       performance: {
         averageTime: 700,
         successRate: 0.91,
-        qualityScore: 87
+        qualityScore: 87,
       },
       specializations: ['api-design', 'openapi', 'graphql'],
-      dependencies: ['doc-generator']
+      dependencies: ['doc-generator'],
     });
 
     // DB Schema Designer
@@ -257,10 +272,10 @@ export class IntelligentOrchestrator extends EventEmitter {
       performance: {
         averageTime: 900,
         successRate: 0.89,
-        qualityScore: 84
+        qualityScore: 84,
       },
       specializations: ['database-design', 'sql-generation', 'migration-scripts'],
-      dependencies: []
+      dependencies: [],
     });
   }
 
@@ -313,7 +328,7 @@ export class IntelligentOrchestrator extends EventEmitter {
       estimatedTime: estimation.time,
       confidence: estimation.confidence,
       reasoning: this.explainPlanReasoning(taskAnalysis, toolSelection, stages),
-      alternatives
+      alternatives,
     };
 
     // Track planning performance
@@ -327,13 +342,13 @@ export class IntelligentOrchestrator extends EventEmitter {
       input: {
         type: 'workflow',
         size: JSON.stringify(task).length,
-        complexity: stages.length
+        complexity: stages.length,
       },
       output: {
         type: 'execution-plan',
         size: stages.length,
-        quality: plan.confidence * 100
-      }
+        quality: plan.confidence * 100,
+      },
     });
 
     // Store active plan
@@ -351,13 +366,17 @@ export class IntelligentOrchestrator extends EventEmitter {
       complexity: this.assessComplexity(task),
       requiredCapabilities: [] as string[],
       preferredTools: [] as string[],
-      constraints: [] as string[]
+      constraints: [] as string[],
     };
 
     // Determine required capabilities based on task type
     switch (task.type) {
       case 'analysis':
-        analysis.requiredCapabilities.push('code-review', 'metrics-calculation', 'pattern-detection');
+        analysis.requiredCapabilities.push(
+          'code-review',
+          'metrics-calculation',
+          'pattern-detection'
+        );
         analysis.preferredTools.push('smart-reviewer', 'architecture-analyzer');
         break;
       case 'generation':
@@ -365,11 +384,19 @@ export class IntelligentOrchestrator extends EventEmitter {
         analysis.preferredTools.push('test-generator', 'doc-generator', 'api-designer');
         break;
       case 'refactoring':
-        analysis.requiredCapabilities.push('code-transformation', 'pattern-application', 'quality-improvement');
+        analysis.requiredCapabilities.push(
+          'code-transformation',
+          'pattern-application',
+          'quality-improvement'
+        );
         analysis.preferredTools.push('refactor-assistant', 'smart-reviewer');
         break;
       case 'security':
-        analysis.requiredCapabilities.push('vulnerability-detection', 'compliance-check', 'secret-scanning');
+        analysis.requiredCapabilities.push(
+          'vulnerability-detection',
+          'compliance-check',
+          'secret-scanning'
+        );
         analysis.preferredTools.push('security-scanner');
         break;
       case 'testing':
@@ -452,12 +479,18 @@ export class IntelligentOrchestrator extends EventEmitter {
       const cap = this.toolCapabilities.get(tool)!;
 
       // Speed constraint
-      if (analysis.constraints.includes('prefer-fast-tools') && cap.performance.averageTime > 1000) {
+      if (
+        analysis.constraints.includes('prefer-fast-tools') &&
+        cap.performance.averageTime > 1000
+      ) {
         return false;
       }
 
       // Quality constraint
-      if (analysis.constraints.includes('require-high-quality-tools') && cap.performance.qualityScore < 85) {
+      if (
+        analysis.constraints.includes('require-high-quality-tools') &&
+        cap.performance.qualityScore < 85
+      ) {
         return false;
       }
 
@@ -510,8 +543,8 @@ export class IntelligentOrchestrator extends EventEmitter {
         retryStrategy: {
           maxAttempts: task.requirements.quality && task.requirements.quality > 80 ? 3 : 2,
           backoff: 'exponential',
-          fallbackTool: this.selectFallbackTool(group[0])
-        }
+          fallbackTool: this.selectFallbackTool(group[0]),
+        },
       });
     }
 
@@ -653,9 +686,7 @@ export class IntelligentOrchestrator extends EventEmitter {
       if (tool === primaryTool) continue;
 
       // Calculate similarity score
-      const commonStrengths = cap.strengths.filter(s =>
-        primaryCap.strengths.includes(s)
-      ).length;
+      const commonStrengths = cap.strengths.filter(s => primaryCap.strengths.includes(s)).length;
 
       const score = commonStrengths / primaryCap.strengths.length;
 
@@ -698,7 +729,7 @@ export class IntelligentOrchestrator extends EventEmitter {
 
     return {
       time: totalTime,
-      confidence: totalConfidence / stages.length
+      confidence: totalConfidence / stages.length,
     };
   }
 
@@ -716,8 +747,8 @@ export class IntelligentOrchestrator extends EventEmitter {
         stages: this.createExecutionStages(essential, {} as any),
         tradeoffs: {
           pros: ['50% faster execution', 'Lower resource usage'],
-          cons: ['Less comprehensive analysis', 'May miss edge cases']
-        }
+          cons: ['Less comprehensive analysis', 'May miss edge cases'],
+        },
       });
     }
 
@@ -732,8 +763,8 @@ export class IntelligentOrchestrator extends EventEmitter {
         stages: this.createExecutionStages([...selectedTools, ...additionalTools], {} as any),
         tradeoffs: {
           pros: ['Higher confidence results', 'Better coverage'],
-          cons: ['2x slower execution', 'Higher resource usage']
-        }
+          cons: ['2x slower execution', 'Higher resource usage'],
+        },
       });
     }
 
@@ -806,7 +837,7 @@ export class IntelligentOrchestrator extends EventEmitter {
         this.emit('stage:complete', {
           planId: plan.id,
           stageId: stage.id,
-          duration: stageDuration
+          duration: stageDuration,
         });
 
         // Learn from stage execution
@@ -842,10 +873,10 @@ export class IntelligentOrchestrator extends EventEmitter {
         performance: {
           totalTime: Date.now() - startTime,
           stageTimings,
-          toolTimings
+          toolTimings,
         },
         learnings,
-        explanation
+        explanation,
       };
 
       // Store for learning
@@ -862,19 +893,18 @@ export class IntelligentOrchestrator extends EventEmitter {
         input: {
           type: 'execution-plan',
           size: plan.stages.length,
-          complexity: plan.stages.length
+          complexity: plan.stages.length,
         },
         output: {
           type: 'orchestration-result',
           size: results.size,
-          quality: (consensus?.confidence || 0.8) * 100
-        }
+          quality: (consensus?.confidence || 0.8) * 100,
+        },
       });
 
       this.emit('orchestration:complete', { planId: plan.id, result });
 
       return result;
-
     } catch (error: any) {
       // Intelligent error handling
       const recovery = await this.attemptRecovery(plan, error, results);
@@ -973,7 +1003,7 @@ export class IntelligentOrchestrator extends EventEmitter {
           type: 'request',
           subject: 'execute',
           data: { input, context: Object.fromEntries(context) },
-          confidence: 1
+          confidence: 1,
         });
 
         // Validate response - check if data contains result
@@ -982,15 +1012,13 @@ export class IntelligentOrchestrator extends EventEmitter {
         } else {
           throw new Error('Tool execution failed');
         }
-
       } catch (error) {
         lastError = error;
 
         if (attempt < maxAttempts) {
           // Apply backoff strategy
-          const delay = retryStrategy?.backoff === 'exponential'
-            ? Math.pow(2, attempt) * 100
-            : attempt * 100;
+          const delay =
+            retryStrategy?.backoff === 'exponential' ? Math.pow(2, attempt) * 100 : attempt * 100;
 
           await new Promise(resolve => setTimeout(resolve, delay));
         }
@@ -1031,7 +1059,7 @@ export class IntelligentOrchestrator extends EventEmitter {
           conflicts.push({
             aspect,
             toolOpinions: opinions,
-            resolution: resolution.method
+            resolution: resolution.method,
           });
           agreements.set(aspect, resolution.value);
         } else {
@@ -1051,7 +1079,7 @@ export class IntelligentOrchestrator extends EventEmitter {
       agreement: agreementLevel,
       conflicts,
       resolution: Object.fromEntries(agreements),
-      confidence: this.calculateConsensusConfidence(agreementLevel, results.size)
+      confidence: this.calculateConsensusConfidence(agreementLevel, results.size),
     };
   }
 
@@ -1105,7 +1133,7 @@ export class IntelligentOrchestrator extends EventEmitter {
     if (expertTool && opinions.has(expertTool)) {
       return {
         method: 'expert',
-        value: opinions.get(expertTool)
+        value: opinions.get(expertTool),
       };
     }
 
@@ -1121,7 +1149,7 @@ export class IntelligentOrchestrator extends EventEmitter {
       if (count > majorityThreshold) {
         return {
           method: 'majority',
-          value: JSON.parse(opinion)
+          value: JSON.parse(opinion),
         };
       }
     }
@@ -1129,7 +1157,7 @@ export class IntelligentOrchestrator extends EventEmitter {
     // Default to weighted if no clear majority
     return {
       method: 'weighted',
-      value: bestOpinion
+      value: bestOpinion,
     };
   }
 
@@ -1138,18 +1166,18 @@ export class IntelligentOrchestrator extends EventEmitter {
    */
   private findExpertForAspect(aspect: string): string | undefined {
     const expertMap: Record<string, string> = {
-      'security': 'security-scanner',
-      'vulnerabilities': 'security-scanner',
-      'tests': 'test-generator',
-      'coverage': 'test-generator',
-      'quality': 'smart-reviewer',
-      'metrics': 'smart-reviewer',
-      'refactoring': 'refactor-assistant',
-      'architecture': 'architecture-analyzer',
-      'dependencies': 'architecture-analyzer',
-      'documentation': 'doc-generator',
-      'api': 'api-designer',
-      'schema': 'db-schema'
+      security: 'security-scanner',
+      vulnerabilities: 'security-scanner',
+      tests: 'test-generator',
+      coverage: 'test-generator',
+      quality: 'smart-reviewer',
+      metrics: 'smart-reviewer',
+      refactoring: 'refactor-assistant',
+      architecture: 'architecture-analyzer',
+      dependencies: 'architecture-analyzer',
+      documentation: 'doc-generator',
+      api: 'api-designer',
+      schema: 'db-schema',
     };
 
     return expertMap[aspect.toLowerCase()];
@@ -1164,7 +1192,7 @@ export class IntelligentOrchestrator extends EventEmitter {
     const agreementFactor = agreementLevel;
     const toolFactor = Math.min(toolCount / 5, 1); // Max benefit at 5 tools
 
-    return (agreementFactor * 0.7 + toolFactor * 0.3);
+    return agreementFactor * 0.7 + toolFactor * 0.3;
   }
 
   /**
@@ -1181,7 +1209,7 @@ export class IntelligentOrchestrator extends EventEmitter {
         pattern: 'slow-execution',
         observation: `Stage ${stage.id} took ${duration}ms (expected ${stage.timeout}ms)`,
         impact: 'negative',
-        recommendation: `Consider using faster tools or parallel execution`
+        recommendation: `Consider using faster tools or parallel execution`,
       };
     }
 
@@ -1192,7 +1220,7 @@ export class IntelligentOrchestrator extends EventEmitter {
         pattern: 'low-agreement',
         observation: `Tools had ${(consensus.agreement * 100).toFixed(0)}% agreement`,
         impact: 'negative',
-        recommendation: 'Consider using more specialized tools or adjusting inputs'
+        recommendation: 'Consider using more specialized tools or adjusting inputs',
       };
     }
 
@@ -1200,9 +1228,9 @@ export class IntelligentOrchestrator extends EventEmitter {
     if (stage.execution === 'parallel' && duration < stage.timeout! * 0.5) {
       return {
         pattern: 'efficient-parallel',
-        observation: `Parallel execution saved ${(stage.timeout! - duration)}ms`,
+        observation: `Parallel execution saved ${stage.timeout! - duration}ms`,
         impact: 'positive',
-        recommendation: 'Continue using parallel execution for these tools'
+        recommendation: 'Continue using parallel execution for these tools',
       };
     }
 
@@ -1241,7 +1269,8 @@ export class IntelligentOrchestrator extends EventEmitter {
         .map(r => r.confidence);
 
       if (confidenceResults.length > 0) {
-        const avgConfidence = confidenceResults.reduce((a, b) => a + b, 0) / confidenceResults.length;
+        const avgConfidence =
+          confidenceResults.reduce((a, b) => a + b, 0) / confidenceResults.length;
         if (avgConfidence < requirements.confidence) {
           return false;
         }
@@ -1265,7 +1294,7 @@ export class IntelligentOrchestrator extends EventEmitter {
     // Explain plan execution
     explanations.push({
       title: 'Orchestration Plan',
-      content: plan.reasoning.join('\n')
+      content: plan.reasoning.join('\n'),
     });
 
     // Explain results from each tool
@@ -1273,7 +1302,7 @@ export class IntelligentOrchestrator extends EventEmitter {
       if (result.explanation) {
         explanations.push({
           title: `${tool} Analysis`,
-          content: result.explanation
+          content: result.explanation,
         });
       }
     }
@@ -1282,18 +1311,20 @@ export class IntelligentOrchestrator extends EventEmitter {
     if (consensus) {
       explanations.push({
         title: 'Consensus Resolution',
-        content: `Agreement Level: ${(consensus.agreement * 100).toFixed(0)}%\n` +
-                 `Conflicts Resolved: ${consensus.conflicts.length}\n` +
-                 `Confidence: ${(consensus.confidence * 100).toFixed(0)}%`
+        content:
+          `Agreement Level: ${(consensus.agreement * 100).toFixed(0)}%\n` +
+          `Conflicts Resolved: ${consensus.conflicts.length}\n` +
+          `Confidence: ${(consensus.confidence * 100).toFixed(0)}%`,
       });
 
       for (const conflict of consensus.conflicts) {
         explanations.push({
           title: `Conflict: ${conflict.aspect}`,
-          content: `Resolution Method: ${conflict.resolution}\n` +
-                   `Opinions: ${Array.from(conflict.toolOpinions.entries())
-                     .map(([t, o]) => `${t}: ${JSON.stringify(o)}`)
-                     .join('\n')}`
+          content:
+            `Resolution Method: ${conflict.resolution}\n` +
+            `Opinions: ${Array.from(conflict.toolOpinions.entries())
+              .map(([t, o]) => `${t}: ${JSON.stringify(o)}`)
+              .join('\n')}`,
         });
       }
     }
@@ -1302,11 +1333,14 @@ export class IntelligentOrchestrator extends EventEmitter {
     if (learnings && learnings.length > 0) {
       explanations.push({
         title: 'Execution Insights',
-        content: learnings.map(l =>
-          `${l.pattern}: ${l.observation}\n` +
-          `Impact: ${l.impact}\n` +
-          `${l.recommendation ? `Recommendation: ${l.recommendation}` : ''}`
-        ).join('\n\n')
+        content: learnings
+          .map(
+            l =>
+              `${l.pattern}: ${l.observation}\n` +
+              `Impact: ${l.impact}\n` +
+              `${l.recommendation ? `Recommendation: ${l.recommendation}` : ''}`
+          )
+          .join('\n\n'),
       });
     }
 
@@ -1328,7 +1362,7 @@ export class IntelligentOrchestrator extends EventEmitter {
 
       this.emit('orchestration:recovery', {
         planId: plan.id,
-        reason: alternative.reason
+        reason: alternative.reason,
       });
 
       // Create new plan with alternative stages
@@ -1338,8 +1372,8 @@ export class IntelligentOrchestrator extends EventEmitter {
         reasoning: [
           ...plan.reasoning,
           `Recovery: ${alternative.reason}`,
-          `Original error: ${error.message}`
-        ]
+          `Original error: ${error.message}`,
+        ],
       };
 
       try {
@@ -1415,10 +1449,7 @@ export class IntelligentOrchestrator extends EventEmitter {
     const cap = this.toolCapabilities.get(message.from);
     if (cap && message.confidence > 0.8) {
       // Positive insight increases quality score
-      cap.performance.qualityScore = Math.min(
-        100,
-        cap.performance.qualityScore * 1.01
-      );
+      cap.performance.qualityScore = Math.min(100, cap.performance.qualityScore * 1.01);
     }
   }
 
@@ -1445,8 +1476,8 @@ export class IntelligentOrchestrator extends EventEmitter {
           confidence: 1,
           data: {
             failed: failedTool,
-            fallback: alternative
-          }
+            fallback: alternative,
+          },
         });
       }
     }
@@ -1467,7 +1498,7 @@ export class IntelligentOrchestrator extends EventEmitter {
       subject: 'consensus-result',
       confidence: consensus.confidence || 0.8,
       data: consensus,
-      inReplyTo: message.id
+      inReplyTo: message.id,
     });
   }
 }

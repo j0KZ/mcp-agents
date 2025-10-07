@@ -103,56 +103,57 @@ export class DomainKnowledgeBase extends EventEmitter {
           when: 'Need clear separation of concerns',
           implementation: 'Container handles state/logic, Presentational handles UI',
           example: 'UserContainer fetches data, UserList displays it',
-          antiPattern: 'Mixing data fetching with rendering in one component'
+          antiPattern: 'Mixing data fetching with rendering in one component',
         },
         {
           name: 'Custom Hooks',
           description: 'Extract component logic into reusable functions',
           when: 'Logic needs to be shared between multiple components',
           implementation: 'Create hook with use prefix, return state and handlers',
-          example: 'useAuth, useDebounce, useFetch'
+          example: 'useAuth, useDebounce, useFetch',
         },
         {
           name: 'Compound Components',
           description: 'Components that work together to form a complete UI',
           when: 'Building flexible, composable interfaces',
           implementation: 'Parent provides context, children consume it',
-          example: '<Select><Select.Option /></Select>'
-        }
+          example: '<Select><Select.Option /></Select>',
+        },
       ],
       conventions: [
         {
           aspect: 'File Naming',
           standard: 'PascalCase for components, camelCase for utils',
           reasoning: 'Distinguishes components from regular functions',
-          example: 'UserProfile.tsx, formatDate.ts'
+          example: 'UserProfile.tsx, formatDate.ts',
         },
         {
           aspect: 'Component Structure',
           standard: 'Props interface, component, export',
           reasoning: 'Consistent structure improves readability',
-          example: 'interface Props {}\nconst Component: FC<Props> = () => {}\nexport default Component'
-        }
+          example:
+            'interface Props {}\nconst Component: FC<Props> = () => {}\nexport default Component',
+        },
       ],
       pitfalls: [
         {
           issue: 'Using array index as key',
           symptoms: ['Incorrect rendering after reorder', 'Lost component state'],
           solution: 'Use stable, unique IDs as keys',
-          severity: 'high'
+          severity: 'high',
         },
         {
           issue: 'Direct state mutation',
           symptoms: ['Component not re-rendering', 'Stale data displayed'],
           solution: 'Always create new objects/arrays when updating state',
-          severity: 'high'
+          severity: 'high',
         },
         {
           issue: 'useEffect without dependencies',
           symptoms: ['Infinite loops', 'Performance issues'],
           solution: 'Always specify dependency array',
-          severity: 'critical'
-        }
+          severity: 'critical',
+        },
       ],
       bestPractices: [
         {
@@ -160,38 +161,38 @@ export class DomainKnowledgeBase extends EventEmitter {
           practice: 'Lift state up to common ancestor',
           reasoning: 'Prevents prop drilling and keeps state centralized',
           implementation: 'Move shared state to parent component',
-          impact: 'maintainability'
+          impact: 'maintainability',
         },
         {
           category: 'Performance',
           practice: 'Memoize expensive computations',
           reasoning: 'Avoid recalculation on every render',
           implementation: 'Use useMemo for values, useCallback for functions',
-          impact: 'performance'
-        }
+          impact: 'performance',
+        },
       ],
       performance: [
         {
           operation: 'List rendering',
           optimization: 'Use React.memo and key prop',
           improvement: '50-70% faster for large lists',
-          tradeoff: 'Slightly more memory usage'
+          tradeoff: 'Slightly more memory usage',
         },
         {
           operation: 'Context updates',
           optimization: 'Split contexts by update frequency',
           improvement: 'Reduces unnecessary re-renders by 80%',
-          tradeoff: 'More complex setup'
-        }
+          tradeoff: 'More complex setup',
+        },
       ],
       security: [
         {
           threat: 'XSS attacks',
           vulnerability: 'dangerouslySetInnerHTML with user input',
           mitigation: 'Sanitize HTML or use text content',
-          owaspCategory: 'A03:2021 - Injection'
-        }
-      ]
+          owaspCategory: 'A03:2021 - Injection',
+        },
+      ],
     });
 
     // Node.js/Express Knowledge
@@ -204,82 +205,82 @@ export class DomainKnowledgeBase extends EventEmitter {
           description: 'Chain of responsibility for request processing',
           when: 'Need modular request handling',
           implementation: 'app.use() with next() calls',
-          example: 'auth -> validation -> controller -> error handler'
+          example: 'auth -> validation -> controller -> error handler',
         },
         {
           name: 'Router Separation',
           description: 'Organize routes in separate modules',
           when: 'Application has multiple route groups',
           implementation: 'Create router instances, mount on app',
-          example: 'userRouter, productRouter, authRouter'
-        }
+          example: 'userRouter, productRouter, authRouter',
+        },
       ],
       conventions: [
         {
           aspect: 'Error Handling',
           standard: 'Centralized error middleware',
           reasoning: 'Consistent error responses',
-          example: 'app.use((err, req, res, next) => {...})'
+          example: 'app.use((err, req, res, next) => {...})',
         },
         {
           aspect: 'Route Naming',
           standard: 'RESTful conventions with plural nouns',
           reasoning: 'Predictable API structure',
-          example: '/api/users, /api/products/:id'
-        }
+          example: '/api/users, /api/products/:id',
+        },
       ],
       pitfalls: [
         {
           issue: 'Synchronous operations blocking event loop',
           symptoms: ['Poor performance', 'Request timeouts'],
           solution: 'Use async/await or promises',
-          severity: 'high'
+          severity: 'high',
         },
         {
           issue: 'Missing error handling in async routes',
           symptoms: ['Unhandled promise rejections', 'Server crashes'],
           solution: 'Wrap async handlers with error catcher',
-          severity: 'critical'
-        }
+          severity: 'critical',
+        },
       ],
       bestPractices: [
         {
           category: 'Security',
           practice: 'Use helmet for security headers',
           reasoning: 'Protects against common vulnerabilities',
-          implementation: "app.use(helmet())",
-          impact: 'security'
+          implementation: 'app.use(helmet())',
+          impact: 'security',
         },
         {
           category: 'Performance',
           practice: 'Enable gzip compression',
           reasoning: 'Reduces response size by 70%',
-          implementation: "app.use(compression())",
-          impact: 'performance'
-        }
+          implementation: 'app.use(compression())',
+          impact: 'performance',
+        },
       ],
       performance: [
         {
           operation: 'Database queries',
           optimization: 'Use connection pooling',
           improvement: '10x throughput increase',
-          tradeoff: 'More memory usage'
-        }
+          tradeoff: 'More memory usage',
+        },
       ],
       security: [
         {
           threat: 'SQL Injection',
           vulnerability: 'String concatenation in queries',
           mitigation: 'Use parameterized queries',
-          owaspCategory: 'A03:2021 - Injection'
+          owaspCategory: 'A03:2021 - Injection',
         },
         {
           threat: 'NoSQL Injection',
           vulnerability: 'Direct object passing to MongoDB',
           mitigation: 'Validate and sanitize inputs',
-          owaspCategory: 'A03:2021 - Injection'
-        }
-      ]
+          owaspCategory: 'A03:2021 - Injection',
+        },
+      ],
     });
 
     // TypeScript Knowledge
@@ -293,43 +294,43 @@ export class DomainKnowledgeBase extends EventEmitter {
           when: 'Handling multiple states or variants',
           implementation: 'Common discriminator property',
           example: 'type State = { type: "loading" } | { type: "success", data: T }',
-          antiPattern: 'Optional properties for different states'
+          antiPattern: 'Optional properties for different states',
         },
         {
           name: 'Builder Pattern',
           description: 'Fluent interface for object construction',
           when: 'Complex object creation with many options',
           implementation: 'Chain methods returning this',
-          example: 'new QueryBuilder().select("*").where("id", 1).build()'
-        }
+          example: 'new QueryBuilder().select("*").where("id", 1).build()',
+        },
       ],
       conventions: [
         {
           aspect: 'Type vs Interface',
           standard: 'Interface for objects, Type for unions/intersections',
           reasoning: 'Interfaces are extendable and provide better error messages',
-          example: 'interface User {} vs type Status = "active" | "inactive"'
+          example: 'interface User {} vs type Status = "active" | "inactive"',
         },
         {
           aspect: 'Naming',
           standard: 'PascalCase for types/interfaces, avoid I/T prefixes',
           reasoning: 'Modern TypeScript convention',
-          example: 'User not IUser, Status not TStatus'
-        }
+          example: 'User not IUser, Status not TStatus',
+        },
       ],
       pitfalls: [
         {
           issue: 'Using any type',
           symptoms: ['Runtime errors', 'Lost type safety'],
           solution: 'Use unknown or specific types',
-          severity: 'medium'
+          severity: 'medium',
         },
         {
           issue: 'Not using strict mode',
           symptoms: ['Implicit any', 'Nullable issues'],
           solution: 'Enable strict in tsconfig.json',
-          severity: 'high'
-        }
+          severity: 'high',
+        },
       ],
       bestPractices: [
         {
@@ -337,25 +338,25 @@ export class DomainKnowledgeBase extends EventEmitter {
           practice: 'Use const assertions',
           reasoning: 'Narrower types, readonly properties',
           implementation: 'const config = {...} as const',
-          impact: 'maintainability'
+          impact: 'maintainability',
         },
         {
           category: 'Performance',
           practice: 'Avoid enum, use const objects',
           reasoning: 'Enums generate extra JavaScript',
           implementation: 'const Status = { Active: "active" } as const',
-          impact: 'performance'
-        }
+          impact: 'performance',
+        },
       ],
       performance: [
         {
           operation: 'Type checking',
           optimization: 'Use project references',
           improvement: '3-5x faster builds',
-          tradeoff: 'More complex setup'
-        }
+          tradeoff: 'More complex setup',
+        },
       ],
-      security: []
+      security: [],
     });
 
     // Testing Knowledge
@@ -368,43 +369,43 @@ export class DomainKnowledgeBase extends EventEmitter {
           description: 'Arrange, Act, Assert',
           when: 'Writing any test',
           implementation: 'Setup data, execute function, check result',
-          example: 'const data = ...; const result = fn(data); expect(result).toBe(...)'
+          example: 'const data = ...; const result = fn(data); expect(result).toBe(...)',
         },
         {
           name: 'Test Data Builders',
           description: 'Flexible test data creation',
           when: 'Complex test objects needed',
           implementation: 'Builder class with default values',
-          example: 'new UserBuilder().withEmail("test@test.com").build()'
-        }
+          example: 'new UserBuilder().withEmail("test@test.com").build()',
+        },
       ],
       conventions: [
         {
           aspect: 'Test Naming',
           standard: 'describe what is being tested',
           reasoning: 'Self-documenting tests',
-          example: 'it("should return user when valid ID provided")'
+          example: 'it("should return user when valid ID provided")',
         },
         {
           aspect: 'File Structure',
           standard: '__tests__ folder or .test.ts suffix',
           reasoning: 'Clear separation of tests and code',
-          example: 'user.test.ts or __tests__/user.ts'
-        }
+          example: 'user.test.ts or __tests__/user.ts',
+        },
       ],
       pitfalls: [
         {
           issue: 'Testing implementation details',
           symptoms: ['Tests break on refactor', 'Brittle tests'],
           solution: 'Test behavior, not implementation',
-          severity: 'medium'
+          severity: 'medium',
         },
         {
           issue: 'Shared mutable test data',
           symptoms: ['Flaky tests', 'Order-dependent tests'],
           solution: 'Create fresh data for each test',
-          severity: 'high'
-        }
+          severity: 'high',
+        },
       ],
       bestPractices: [
         {
@@ -412,25 +413,25 @@ export class DomainKnowledgeBase extends EventEmitter {
           practice: 'One assertion per test',
           reasoning: 'Clear failure messages',
           implementation: 'Split multiple assertions into separate tests',
-          impact: 'maintainability'
+          impact: 'maintainability',
         },
         {
           category: 'Performance',
           practice: 'Use beforeAll for expensive setup',
           reasoning: 'Reduce test execution time',
           implementation: 'beforeAll for DB connection, beforeEach for data',
-          impact: 'performance'
-        }
+          impact: 'performance',
+        },
       ],
       performance: [
         {
           operation: 'Test execution',
           optimization: 'Run tests in parallel',
           improvement: '4x faster test runs',
-          tradeoff: 'May need test isolation'
-        }
+          tradeoff: 'May need test isolation',
+        },
       ],
-      security: []
+      security: [],
     });
 
     // Database Knowledge
@@ -444,43 +445,43 @@ export class DomainKnowledgeBase extends EventEmitter {
           when: 'Need audit trail or recovery capability',
           implementation: 'deleted_at timestamp column',
           example: 'UPDATE users SET deleted_at = NOW() WHERE id = ?',
-          antiPattern: 'Hard delete with no recovery option'
+          antiPattern: 'Hard delete with no recovery option',
         },
         {
           name: 'Materialized Views',
           description: 'Pre-computed query results',
           when: 'Complex queries with infrequent data changes',
           implementation: 'CREATE MATERIALIZED VIEW with REFRESH',
-          example: 'Dashboard aggregations refreshed hourly'
-        }
+          example: 'Dashboard aggregations refreshed hourly',
+        },
       ],
       conventions: [
         {
           aspect: 'Naming',
           standard: 'snake_case for tables and columns',
           reasoning: 'PostgreSQL convention, case-insensitive',
-          example: 'user_accounts, created_at'
+          example: 'user_accounts, created_at',
         },
         {
           aspect: 'Primary Keys',
           standard: 'Use UUID or BIGSERIAL',
           reasoning: 'UUID for distributed, BIGSERIAL for single DB',
-          example: 'id UUID DEFAULT gen_random_uuid()'
-        }
+          example: 'id UUID DEFAULT gen_random_uuid()',
+        },
       ],
       pitfalls: [
         {
           issue: 'N+1 query problem',
           symptoms: ['Slow page loads', 'High DB CPU'],
           solution: 'Use JOIN or batch fetching',
-          severity: 'high'
+          severity: 'high',
         },
         {
           issue: 'Missing indexes on foreign keys',
           symptoms: ['Slow joins', 'Lock contention'],
           solution: 'Create indexes on all FK columns',
-          severity: 'high'
-        }
+          severity: 'high',
+        },
       ],
       bestPractices: [
         {
@@ -488,38 +489,38 @@ export class DomainKnowledgeBase extends EventEmitter {
           practice: 'Use EXPLAIN ANALYZE',
           reasoning: 'Understand query execution plan',
           implementation: 'EXPLAIN ANALYZE SELECT ...',
-          impact: 'performance'
+          impact: 'performance',
         },
         {
           category: 'Data Integrity',
           practice: 'Use transactions for multi-table updates',
           reasoning: 'Maintain consistency',
           implementation: 'BEGIN; UPDATE...; UPDATE...; COMMIT;',
-          impact: 'maintainability'
-        }
+          impact: 'maintainability',
+        },
       ],
       performance: [
         {
           operation: 'Bulk inserts',
           optimization: 'Use COPY instead of INSERT',
           improvement: '10-100x faster',
-          tradeoff: 'Less flexible than INSERT'
+          tradeoff: 'Less flexible than INSERT',
         },
         {
           operation: 'Count queries',
           optimization: 'Use approximate count for large tables',
           improvement: '1000x faster',
-          tradeoff: 'Not exact count'
-        }
+          tradeoff: 'Not exact count',
+        },
       ],
       security: [
         {
           threat: 'SQL Injection',
           vulnerability: 'String concatenation',
           mitigation: 'Use parameterized queries ($1, $2)',
-          owaspCategory: 'A03:2021 - Injection'
-        }
-      ]
+          owaspCategory: 'A03:2021 - Injection',
+        },
+      ],
     });
 
     // Domain Concepts
@@ -538,27 +539,27 @@ export class DomainKnowledgeBase extends EventEmitter {
           name: 'Shopping Cart',
           definition: 'Temporary storage for items before purchase',
           importance: 'critical',
-          relatedConcepts: ['Session Management', 'Inventory', 'Checkout']
+          relatedConcepts: ['Session Management', 'Inventory', 'Checkout'],
         },
         {
           name: 'Inventory Management',
           definition: 'Track product availability and stock levels',
           importance: 'critical',
-          relatedConcepts: ['SKU', 'Warehousing', 'Reorder Points']
+          relatedConcepts: ['SKU', 'Warehousing', 'Reorder Points'],
         },
         {
           name: 'Payment Gateway',
           definition: 'Interface for processing payments',
           importance: 'critical',
-          relatedConcepts: ['PCI Compliance', 'Tokenization', 'Webhooks']
+          relatedConcepts: ['PCI Compliance', 'Tokenization', 'Webhooks'],
         },
         {
           name: 'Order Fulfillment',
           definition: 'Process from order to delivery',
           importance: 'high',
-          relatedConcepts: ['Shipping', 'Tracking', 'Returns']
-        }
-      ]
+          relatedConcepts: ['Shipping', 'Tracking', 'Returns'],
+        },
+      ],
     });
 
     // FinTech Domain
@@ -569,27 +570,27 @@ export class DomainKnowledgeBase extends EventEmitter {
           name: 'KYC (Know Your Customer)',
           definition: 'Identity verification process',
           importance: 'critical',
-          relatedConcepts: ['AML', 'Identity Verification', 'Compliance']
+          relatedConcepts: ['AML', 'Identity Verification', 'Compliance'],
         },
         {
           name: 'PCI DSS Compliance',
           definition: 'Payment Card Industry Data Security Standards',
           importance: 'critical',
-          relatedConcepts: ['Encryption', 'Tokenization', 'Audit Logs']
+          relatedConcepts: ['Encryption', 'Tokenization', 'Audit Logs'],
         },
         {
           name: 'Double-Entry Bookkeeping',
           definition: 'Every transaction affects two accounts',
           importance: 'critical',
-          relatedConcepts: ['Ledger', 'Journal', 'Trial Balance']
+          relatedConcepts: ['Ledger', 'Journal', 'Trial Balance'],
         },
         {
           name: 'Idempotency',
           definition: 'Same operation produces same result',
           importance: 'critical',
-          relatedConcepts: ['Retry Logic', 'Distributed Systems', 'API Design']
-        }
-      ]
+          relatedConcepts: ['Retry Logic', 'Distributed Systems', 'API Design'],
+        },
+      ],
     });
 
     // Healthcare Domain
@@ -600,21 +601,21 @@ export class DomainKnowledgeBase extends EventEmitter {
           name: 'HIPAA Compliance',
           definition: 'Health Insurance Portability and Accountability Act',
           importance: 'critical',
-          relatedConcepts: ['PHI', 'Encryption', 'Access Control']
+          relatedConcepts: ['PHI', 'Encryption', 'Access Control'],
         },
         {
           name: 'HL7/FHIR',
           definition: 'Healthcare data exchange standards',
           importance: 'high',
-          relatedConcepts: ['Interoperability', 'APIs', 'Data Standards']
+          relatedConcepts: ['Interoperability', 'APIs', 'Data Standards'],
         },
         {
           name: 'Electronic Health Records (EHR)',
           definition: 'Digital patient medical records',
           importance: 'critical',
-          relatedConcepts: ['Patient Portal', 'Clinical Data', 'Audit Trail']
-        }
-      ]
+          relatedConcepts: ['Patient Portal', 'Clinical Data', 'Audit Trail'],
+        },
+      ],
     });
   }
 
@@ -654,7 +655,7 @@ export class DomainKnowledgeBase extends EventEmitter {
       warnings: [] as string[],
       suggestions: [] as string[],
       patterns: [] as Pattern[],
-      pitfalls: [] as Pitfall[]
+      pitfalls: [] as Pitfall[],
     };
 
     // Detect framework if not provided
@@ -730,10 +731,10 @@ export class DomainKnowledgeBase extends EventEmitter {
         data: {
           framework: detectedFramework,
           warnings: result.warnings,
-          pitfalls: result.pitfalls
+          pitfalls: result.pitfalls,
         },
         confidence: 0.85,
-        affects: ['smart-reviewer', 'refactor-assistant']
+        affects: ['smart-reviewer', 'refactor-assistant'],
       });
     }
 
@@ -751,7 +752,7 @@ export class DomainKnowledgeBase extends EventEmitter {
       { pattern: /app\.(get|post|put|delete|use)/, framework: 'express' },
       { pattern: /(describe|it|test|expect)\s*\(/, framework: 'jest' },
       { pattern: /interface\s+\w+|type\s+\w+\s*=/, framework: 'typescript' },
-      { pattern: /SELECT.*FROM|INSERT INTO|UPDATE.*SET/, framework: 'postgresql' }
+      { pattern: /SELECT.*FROM|INSERT INTO|UPDATE.*SET/, framework: 'postgresql' },
     ];
 
     for (const detector of detectors) {
@@ -809,7 +810,11 @@ export class DomainKnowledgeBase extends EventEmitter {
    */
   private isPatternApplicable(code: string, pattern: Pattern): boolean {
     // Simple heuristics for pattern applicability
-    if (pattern.name === 'Custom Hooks' && code.includes('useState') && code.includes('useEffect')) {
+    if (
+      pattern.name === 'Custom Hooks' &&
+      code.includes('useState') &&
+      code.includes('useEffect')
+    ) {
       return true;
     }
     if (pattern.name === 'Middleware Pipeline' && code.includes('app.use')) {
@@ -938,7 +943,7 @@ export class DomainKnowledgeBase extends EventEmitter {
           description: metadata.description,
           when: 'Learned from successful implementation',
           implementation: code.substring(0, 500),
-          example: code
+          example: code,
         });
 
         // Share learning with other tools
@@ -946,10 +951,10 @@ export class DomainKnowledgeBase extends EventEmitter {
           type: 'new-pattern-learned',
           data: {
             framework: metadata.framework,
-            pattern: metadata.patternName
+            pattern: metadata.patternName,
           },
           confidence: metadata.userRating / 5,
-          affects: ['test-generator', 'refactor-assistant']
+          affects: ['test-generator', 'refactor-assistant'],
         });
       }
     }

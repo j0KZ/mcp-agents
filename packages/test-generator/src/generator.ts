@@ -113,8 +113,8 @@ export class TestGenerator {
       sourceFile: filePath,
       testFile: this.getTestFilePath(filePath, framework),
       framework,
-      code: fullTestCode,  // Add this for compatibility
-      suite: suites[0],    // Add first suite for compatibility
+      code: fullTestCode, // Add this for compatibility
+      suite: suites[0], // Add first suite for compatibility
       suites,
       fullTestCode,
       estimatedCoverage,
@@ -123,8 +123,8 @@ export class TestGenerator {
         percentage: estimatedCoverage,
         functions: functions.length,
         classes: classes.length,
-        tests: totalTests
-      }
+        tests: totalTests,
+      },
     } as any;
   }
 
@@ -261,7 +261,11 @@ export class TestGenerator {
   /**
    * Estimate test coverage based on generated tests
    */
-  private estimateCoverage(functions: FunctionInfo[], classes: ClassInfo[], suites: TestSuite[]): number {
+  private estimateCoverage(
+    functions: FunctionInfo[],
+    classes: ClassInfo[],
+    suites: TestSuite[]
+  ): number {
     const totalItems = functions.length + classes.reduce((sum, c) => sum + c.methods.length + 1, 0);
     const totalTests = suites.reduce((sum, s) => sum + s.tests.length, 0);
 
@@ -271,7 +275,6 @@ export class TestGenerator {
     const coverage = Math.min(100, (totalTests / totalItems) * 100);
     return Math.round(coverage);
   }
-
 
   // Unused method - commented out to fix TypeScript strict mode
   // private generateMockValue(param: string): string {

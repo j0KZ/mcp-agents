@@ -29,30 +29,30 @@ interface MultiDimensionalPattern {
     statistical?: StatisticalPattern;
     quantum?: QuantumPattern;
   };
-  significance: number;        // 0-1: How important this pattern is
-  humanObvious: number;        // 0-1: How obvious to humans (lower = more superhuman)
+  significance: number; // 0-1: How important this pattern is
+  humanObvious: number; // 0-1: How obvious to humans (lower = more superhuman)
   confidence: number;
   discovered: Date;
   instances: PatternInstance[];
 }
 
 type PatternType =
-  | 'evolution-convergence'      // Multiple files evolving toward same pattern
-  | 'hidden-coupling'            // Non-obvious dependencies
-  | 'emergent-architecture'      // Unplanned architectural patterns
-  | 'statistical-anomaly'        // Probabilistic outliers
-  | 'semantic-drift'             // Meaning changing over time
-  | 'quantum-superposition'      // Multiple valid interpretations
-  | 'cross-domain-similarity'    // Similar patterns across domains
-  | 'predictive-correlation';    // Changes that predict other changes
+  | 'evolution-convergence' // Multiple files evolving toward same pattern
+  | 'hidden-coupling' // Non-obvious dependencies
+  | 'emergent-architecture' // Unplanned architectural patterns
+  | 'statistical-anomaly' // Probabilistic outliers
+  | 'semantic-drift' // Meaning changing over time
+  | 'quantum-superposition' // Multiple valid interpretations
+  | 'cross-domain-similarity' // Similar patterns across domains
+  | 'predictive-correlation'; // Changes that predict other changes
 
 interface TemporalPattern {
   type: 'evolution' | 'oscillation' | 'acceleration' | 'decay';
   timeframe: { start: Date; end: Date };
-  velocity: number;              // Rate of change
+  velocity: number; // Rate of change
   direction: 'converging' | 'diverging' | 'stable' | 'chaotic';
-  cyclePeriod?: number;          // For oscillations (in days)
-  halfLife?: number;             // For decay patterns (in days)
+  cyclePeriod?: number; // For oscillations (in days)
+  halfLife?: number; // For decay patterns (in days)
   predictions: TemporalPrediction[];
 }
 
@@ -65,11 +65,11 @@ interface TemporalPrediction {
 
 interface SpatialPattern {
   type: 'cluster' | 'hub-spoke' | 'chain' | 'mesh' | 'isolated';
-  nodes: string[];               // File paths or module names
+  nodes: string[]; // File paths or module names
   edges: Array<{ from: string; to: string; strength: number }>;
   centrality: Map<string, number>; // Which nodes are most important
-  communities: string[][];       // Detected communities/clusters
-  anomalies: string[];           // Nodes that don't fit
+  communities: string[][]; // Detected communities/clusters
+  anomalies: string[]; // Nodes that don't fit
 }
 
 interface SemanticPattern {
@@ -83,7 +83,7 @@ interface SemanticPattern {
 interface ConceptEvolution {
   name: string;
   meanings: Array<{ meaning: string; confidence: number; firstSeen: Date }>;
-  drift: number;                 // How much meaning has changed
+  drift: number; // How much meaning has changed
 }
 
 interface StatisticalPattern {
@@ -115,8 +115,8 @@ interface QuantumState {
   id: string;
   description: string;
   probability: number;
-  compatible: string[];          // Other states this can coexist with
-  exclusive: string[];           // States this excludes
+  compatible: string[]; // Other states this can coexist with
+  exclusive: string[]; // States this excludes
 }
 
 interface PatternInstance {
@@ -130,7 +130,7 @@ interface SuperhumanInsight {
   id: string;
   pattern: MultiDimensionalPattern;
   description: string;
-  whyNotObvious: string;         // Why humans would miss this
+  whyNotObvious: string; // Why humans would miss this
   businessImpact: BusinessImpact;
   actionable: ActionableRecommendation[];
   visualization: Visualization;
@@ -138,10 +138,10 @@ interface SuperhumanInsight {
 
 interface BusinessImpact {
   category: 'performance' | 'security' | 'maintainability' | 'scalability' | 'cost';
-  magnitude: number;             // 0-10
+  magnitude: number; // 0-10
   timeframe: 'immediate' | 'week' | 'month' | 'quarter';
   description: string;
-  estimatedValue?: number;       // Dollar value if quantifiable
+  estimatedValue?: number; // Dollar value if quantifiable
 }
 
 interface ActionableRecommendation {
@@ -149,14 +149,14 @@ interface ActionableRecommendation {
   action: string;
   rationale: string;
   effort: 'trivial' | 'small' | 'medium' | 'large';
-  roi: number;                   // Return on investment (impact/effort)
+  roi: number; // Return on investment (impact/effort)
 }
 
 interface Visualization {
   type: 'graph' | 'heatmap' | 'timeline' | 'tree' | '3d-space' | 'force-directed';
   data: any;
-  mermaid?: string;              // Mermaid diagram if applicable
-  d3?: any;                      // D3.js data if applicable
+  mermaid?: string; // Mermaid diagram if applicable
+  d3?: any; // D3.js data if applicable
 }
 
 // ============================================================================
@@ -202,13 +202,16 @@ export class SuperPatternRecognizer extends EventEmitter {
       spatial: await this.architecturalRelationships(codebase),
       semantic: await this.meaningfulConnections(codebase),
       statistical: await this.probabilisticCorrelations(codebase),
-      quantum: await this.superpositionStates(codebase)
+      quantum: await this.superpositionStates(codebase),
     });
 
     // Find non-obvious connections (from plan)
     const insights = patterns
-      .filter(p => p.humanObvious < this.HUMAN_OBVIOUS_THRESHOLD &&
-                   p.significance > this.SIGNIFICANCE_THRESHOLD)
+      .filter(
+        p =>
+          p.humanObvious < this.HUMAN_OBVIOUS_THRESHOLD &&
+          p.significance > this.SIGNIFICANCE_THRESHOLD
+      )
       .map(p => this.createInsight(p));
 
     // Generate visualizations
@@ -220,7 +223,7 @@ export class SuperPatternRecognizer extends EventEmitter {
     this.emit('analysis-complete', {
       patternsFound: patterns.length,
       insightsGenerated: insights.length,
-      superhumanInsights: insights.filter(i => i.pattern.humanObvious < 0.2).length
+      superhumanInsights: insights.filter(i => i.pattern.humanObvious < 0.2).length,
     });
 
     return { insights, visualization, impact };
@@ -246,7 +249,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         timeframe: { start: convergence.start, end: new Date() },
         velocity: convergence.rate,
         direction: 'converging',
-        predictions: this.predictConvergenceOutcome(convergence)
+        predictions: this.predictConvergenceOutcome(convergence),
       });
     }
 
@@ -259,12 +262,14 @@ export class SuperPatternRecognizer extends EventEmitter {
         velocity: osc.frequency,
         direction: 'stable',
         cyclePeriod: osc.period,
-        predictions: [{
-          when: new Date(Date.now() + osc.period * 24 * 60 * 60 * 1000),
-          what: `Pattern will likely oscillate back to state: ${osc.state}`,
-          probability: osc.confidence,
-          reasoning: `Detected ${osc.cycles} complete cycles with ${osc.regularity}% regularity`
-        }]
+        predictions: [
+          {
+            when: new Date(Date.now() + osc.period * 24 * 60 * 60 * 1000),
+            what: `Pattern will likely oscillate back to state: ${osc.state}`,
+            probability: osc.confidence,
+            reasoning: `Detected ${osc.cycles} complete cycles with ${osc.regularity}% regularity`,
+          },
+        ],
       });
     }
 
@@ -276,12 +281,14 @@ export class SuperPatternRecognizer extends EventEmitter {
         timeframe: { start: acceleration.start, end: new Date() },
         velocity: acceleration.rate,
         direction: 'chaotic',
-        predictions: [{
-          when: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          what: 'Code churn will reach unsustainable levels',
-          probability: 0.82,
-          reasoning: `Change rate increasing ${acceleration.rate}x over ${acceleration.days} days`
-        }]
+        predictions: [
+          {
+            when: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            what: 'Code churn will reach unsustainable levels',
+            probability: 0.82,
+            reasoning: `Change rate increasing ${acceleration.rate}x over ${acceleration.days} days`,
+          },
+        ],
       });
     }
 
@@ -294,12 +301,14 @@ export class SuperPatternRecognizer extends EventEmitter {
         velocity: -dec.staleness,
         direction: 'stable',
         halfLife: dec.halfLife,
-        predictions: [{
-          when: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-          what: `Module will become legacy code (${dec.daysSinceModified} days without changes)`,
-          probability: Math.min(0.95, dec.daysSinceModified / 365),
-          reasoning: `No changes in ${dec.daysSinceModified} days, dependencies aging`
-        }]
+        predictions: [
+          {
+            when: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            what: `Module will become legacy code (${dec.daysSinceModified} days without changes)`,
+            probability: Math.min(0.95, dec.daysSinceModified / 365),
+            reasoning: `No changes in ${dec.daysSinceModified} days, dependencies aging`,
+          },
+        ],
       });
     }
 
@@ -323,7 +332,7 @@ export class SuperPatternRecognizer extends EventEmitter {
           timestamp: commit.timestamp,
           complexity: file.complexity,
           patterns: file.patterns,
-          dependencies: file.dependencies
+          dependencies: file.dependencies,
         });
       }
     }
@@ -347,7 +356,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         targetPattern: largest.targetPattern,
         rate: largest.convergenceRate,
         start: largest.firstDetected,
-        confidence: largest.confidence
+        confidence: largest.confidence,
       };
     }
 
@@ -407,7 +416,7 @@ export class SuperPatternRecognizer extends EventEmitter {
           targetPattern: 'convergent-evolution',
           convergenceRate: 0.7,
           firstDetected: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
-          confidence: 0.85
+          confidence: 0.85,
         });
       }
     }
@@ -434,7 +443,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         }
         stateHistory.get(file.path)!.push({
           timestamp: commit.timestamp,
-          state: this.hashState(file)
+          state: this.hashState(file),
         });
       }
     }
@@ -451,7 +460,9 @@ export class SuperPatternRecognizer extends EventEmitter {
           confidence: Math.min(0.95, cycles.length / 5),
           firstSeen: states[0].timestamp,
           lastSeen: states[states.length - 1].timestamp,
-          frequency: cycles.length / ((states[states.length - 1].timestamp - states[0].timestamp) / (1000 * 60 * 60 * 24))
+          frequency:
+            cycles.length /
+            ((states[states.length - 1].timestamp - states[0].timestamp) / (1000 * 60 * 60 * 24)),
         });
       }
     }
@@ -488,7 +499,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         cycles.push({
           state,
           period: avgPeriod,
-          occurrences: indices.length
+          occurrences: indices.length,
         });
       }
     }
@@ -534,7 +545,7 @@ export class SuperPatternRecognizer extends EventEmitter {
       return {
         rate,
         start: history.commits[0].timestamp,
-        days: (Date.now() - history.commits[0].timestamp.getTime()) / (1000 * 60 * 60 * 24)
+        days: (Date.now() - history.commits[0].timestamp.getTime()) / (1000 * 60 * 60 * 24),
       };
     }
 
@@ -548,8 +559,10 @@ export class SuperPatternRecognizer extends EventEmitter {
     // Track last modification time for each file
     for (const commit of history.commits) {
       for (const file of commit.files) {
-        if (!fileModifications.has(file.path) ||
-            commit.timestamp > fileModifications.get(file.path)!) {
+        if (
+          !fileModifications.has(file.path) ||
+          commit.timestamp > fileModifications.get(file.path)!
+        ) {
           fileModifications.set(file.path, commit.timestamp);
         }
       }
@@ -559,13 +572,14 @@ export class SuperPatternRecognizer extends EventEmitter {
     for (const [file, lastMod] of fileModifications) {
       const daysSince = (now.getTime() - lastMod.getTime()) / (1000 * 60 * 60 * 24);
 
-      if (daysSince > 180) { // 6 months
+      if (daysSince > 180) {
+        // 6 months
         decaying.push({
           file,
           lastModified: lastMod,
           daysSinceModified: Math.floor(daysSince),
           staleness: daysSince / 365,
-          halfLife: 180 // Days until considered legacy
+          halfLife: 180, // Days until considered legacy
         });
       }
     }
@@ -574,12 +588,14 @@ export class SuperPatternRecognizer extends EventEmitter {
   }
 
   private predictConvergenceOutcome(convergence: any): TemporalPrediction[] {
-    return [{
-      when: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      what: `Files ${convergence.files.join(', ')} will converge to pattern: ${convergence.targetPattern}`,
-      probability: convergence.confidence,
-      reasoning: `Detected convergent evolution at rate ${convergence.rate}/month across ${convergence.files.length} files`
-    }];
+    return [
+      {
+        when: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        what: `Files ${convergence.files.join(', ')} will converge to pattern: ${convergence.targetPattern}`,
+        probability: convergence.confidence,
+        reasoning: `Detected convergent evolution at rate ${convergence.rate}/month across ${convergence.files.length} files`,
+      },
+    ];
   }
 
   // ============================================================================
@@ -604,12 +620,12 @@ export class SuperPatternRecognizer extends EventEmitter {
           c.coupledWith.map((target: string) => ({
             from: c.file,
             to: target,
-            strength: c.strength
+            strength: c.strength,
           }))
         ),
         centrality: new Map(),
         communities: [],
-        anomalies: hiddenCoupling.map(c => c.file)
+        anomalies: hiddenCoupling.map(c => c.file),
       });
     }
 
@@ -622,11 +638,11 @@ export class SuperPatternRecognizer extends EventEmitter {
         edges: hub.dependents.map((dep: string) => ({
           from: dep,
           to: hub.file,
-          strength: 1.0
+          strength: 1.0,
         })),
         centrality: new Map([[hub.file, hub.centrality]]),
         communities: [],
-        anomalies: hub.centrality > 0.8 ? [hub.file] : []
+        anomalies: hub.centrality > 0.8 ? [hub.file] : [],
       });
     }
 
@@ -639,7 +655,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         edges: [],
         centrality: new Map(isolated.map(f => [f, 0])),
         communities: isolated.map(f => [f]),
-        anomalies: isolated
+        anomalies: isolated,
       });
     }
 
@@ -683,7 +699,7 @@ export class SuperPatternRecognizer extends EventEmitter {
             file: files[i],
             coupledWith: [files[j]],
             strength: jaccardIndex,
-            sharedDependencies: Array.from(shared)
+            sharedDependencies: Array.from(shared),
           });
         }
       }
@@ -708,7 +724,8 @@ export class SuperPatternRecognizer extends EventEmitter {
     for (const [file, count] of inDegree) {
       const centrality = count / totalFiles;
 
-      if (centrality > 0.3) { // More than 30% of files depend on this
+      if (centrality > 0.3) {
+        // More than 30% of files depend on this
         const dependents: string[] = [];
         for (const [f, deps] of graph) {
           if (deps.has(file)) {
@@ -720,7 +737,7 @@ export class SuperPatternRecognizer extends EventEmitter {
           file,
           centrality,
           dependentCount: count,
-          dependents
+          dependents,
         });
       }
     }
@@ -768,7 +785,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         concepts: drift,
         similarityGraph: new Map(),
         abstractionLevels: new Map(),
-        intentMismatch: []
+        intentMismatch: [],
       });
     }
 
@@ -780,7 +797,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         concepts: new Map(),
         similarityGraph: inconsistencies,
         abstractionLevels: new Map(),
-        intentMismatch: []
+        intentMismatch: [],
       });
     }
 
@@ -805,7 +822,7 @@ export class SuperPatternRecognizer extends EventEmitter {
           const meaning = this.inferMeaning(func);
           functionMeanings.get(key)!.push({
             meaning,
-            timestamp: commit.timestamp
+            timestamp: commit.timestamp,
           });
         }
       }
@@ -822,9 +839,9 @@ export class SuperPatternRecognizer extends EventEmitter {
           meanings: Array.from(uniqueMeanings).map(m => ({
             meaning: m,
             confidence: meanings.filter(x => x.meaning === m).length / meanings.length,
-            firstSeen: meanings.find(x => x.meaning === m)!.timestamp
+            firstSeen: meanings.find(x => x.meaning === m)!.timestamp,
           })),
-          drift: uniqueMeanings.size / meanings.length
+          drift: uniqueMeanings.size / meanings.length,
         };
 
         concepts.set(key, evolution);
@@ -844,7 +861,9 @@ export class SuperPatternRecognizer extends EventEmitter {
     return 'unknown';
   }
 
-  private async detectNamingInconsistencies(codebase: Codebase): Promise<Map<string, Array<{ to: string; similarity: number }>>> {
+  private async detectNamingInconsistencies(
+    codebase: Codebase
+  ): Promise<Map<string, Array<{ to: string; similarity: number }>>> {
     const graph = new Map<string, Array<{ to: string; similarity: number }>>();
 
     // Find functions with similar purposes but different names
@@ -859,7 +878,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         if (similarity > 0.7 && !this.similarNames(functions[i].name, functions[j].name)) {
           similar.push({
             to: functions[j].fullName,
-            similarity
+            similarity,
           });
         }
       }
@@ -882,7 +901,7 @@ export class SuperPatternRecognizer extends EventEmitter {
           fullName: `${file.path}:${func.name}`,
           params: func.params || [],
           returns: func.returns || 'any',
-          purpose: this.inferMeaning(func)
+          purpose: this.inferMeaning(func),
         });
       }
     }
@@ -944,7 +963,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         metrics,
         outliers,
         correlations: [],
-        distributions: new Map()
+        distributions: new Map(),
       });
     }
 
@@ -956,7 +975,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         metrics,
         outliers: [],
         correlations,
-        distributions: new Map()
+        distributions: new Map(),
       });
     }
 
@@ -984,7 +1003,9 @@ export class SuperPatternRecognizer extends EventEmitter {
     return metrics;
   }
 
-  private detectOutliers(metrics: Map<string, number[]>): Array<{ entity: string; metric: string; value: number; zScore: number }> {
+  private detectOutliers(
+    metrics: Map<string, number[]>
+  ): Array<{ entity: string; metric: string; value: number; zScore: number }> {
     const outliers: Array<{ entity: string; metric: string; value: number; zScore: number }> = [];
 
     for (const [metric, values] of metrics) {
@@ -1000,7 +1021,7 @@ export class SuperPatternRecognizer extends EventEmitter {
             entity: `file_${index}`,
             metric,
             value,
-            zScore
+            zScore,
           });
         }
       });
@@ -1009,7 +1030,9 @@ export class SuperPatternRecognizer extends EventEmitter {
     return outliers;
   }
 
-  private detectCorrelations(metrics: Map<string, number[]>): Array<{ a: string; b: string; coefficient: number; pValue: number }> {
+  private detectCorrelations(
+    metrics: Map<string, number[]>
+  ): Array<{ a: string; b: string; coefficient: number; pValue: number }> {
     const correlations: Array<{ a: string; b: string; coefficient: number; pValue: number }> = [];
     const metricNames = Array.from(metrics.keys());
 
@@ -1026,7 +1049,7 @@ export class SuperPatternRecognizer extends EventEmitter {
             a: metricNames[i],
             b: metricNames[j],
             coefficient,
-            pValue
+            pValue,
           });
         }
       }
@@ -1082,7 +1105,7 @@ export class SuperPatternRecognizer extends EventEmitter {
     x = Math.abs(x);
 
     const t = 1.0 / (1.0 + p * x);
-    const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+    const y = 1.0 - ((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
 
     return sign * y;
   }
@@ -1106,7 +1129,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         states: this.extractStates(superpositions),
         superpositions,
         entanglements: [],
-        uncertainties: []
+        uncertainties: [],
       });
     }
 
@@ -1118,14 +1141,16 @@ export class SuperPatternRecognizer extends EventEmitter {
         states: [],
         superpositions: [],
         entanglements,
-        uncertainties: []
+        uncertainties: [],
       });
     }
 
     return patterns;
   }
 
-  private findSuperpositions(codebase: Codebase): Array<{ entity: string; states: string[]; weights: number[] }> {
+  private findSuperpositions(
+    codebase: Codebase
+  ): Array<{ entity: string; states: string[]; weights: number[] }> {
     const superpositions: Array<{ entity: string; states: string[]; weights: number[] }> = [];
 
     // Find functions that could be multiple things
@@ -1140,7 +1165,7 @@ export class SuperPatternRecognizer extends EventEmitter {
           superpositions.push({
             entity: `${file.path}:${func.name}`,
             states: states.map(s => s.description),
-            weights: normalized
+            weights: normalized,
           });
         }
       }
@@ -1193,7 +1218,7 @@ export class SuperPatternRecognizer extends EventEmitter {
             description: state,
             probability: sup.weights[i],
             compatible: sup.states.filter((_: any, j: number) => j !== i),
-            exclusive: []
+            exclusive: [],
           });
         }
       }
@@ -1202,7 +1227,9 @@ export class SuperPatternRecognizer extends EventEmitter {
     return Array.from(stateMap.values());
   }
 
-  private findEntanglements(codebase: Codebase): Array<{ entities: string[]; correlation: number }> {
+  private findEntanglements(
+    codebase: Codebase
+  ): Array<{ entities: string[]; correlation: number }> {
     const entanglements: Array<{ entities: string[]; correlation: number }> = [];
     const history = this.getCodeHistory(codebase);
 
@@ -1232,7 +1259,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         if (correlation > 0.8) {
           entanglements.push({
             entities: [fileA, fileB],
-            correlation
+            correlation,
           });
         }
       }
@@ -1268,7 +1295,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         humanObvious: this.calculateHumanObviousness({ temporal }),
         confidence: 0.85,
         discovered: new Date(),
-        instances: []
+        instances: [],
       });
     }
 
@@ -1281,7 +1308,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         humanObvious: this.calculateHumanObviousness({ spatial }),
         confidence: 0.82,
         discovered: new Date(),
-        instances: []
+        instances: [],
       });
     }
 
@@ -1294,7 +1321,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         humanObvious: this.calculateHumanObviousness({ semantic }),
         confidence: 0.78,
         discovered: new Date(),
-        instances: []
+        instances: [],
       });
     }
 
@@ -1305,9 +1332,9 @@ export class SuperPatternRecognizer extends EventEmitter {
         dimensions: { statistical },
         significance: this.calculateSignificance({ statistical }),
         humanObvious: this.calculateHumanObviousness({ statistical }),
-        confidence: 0.90,
+        confidence: 0.9,
         discovered: new Date(),
-        instances: []
+        instances: [],
       });
     }
 
@@ -1320,7 +1347,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         humanObvious: this.calculateHumanObviousness({ quantum }),
         confidence: 0.75,
         discovered: new Date(),
-        instances: []
+        instances: [],
       });
     }
 
@@ -1355,15 +1382,15 @@ export class SuperPatternRecognizer extends EventEmitter {
     }
 
     if (dimensions.semantic) {
-      score += (dimensions.semantic.concepts?.size || 0) / 5 * 0.2;
+      score += ((dimensions.semantic.concepts?.size || 0) / 5) * 0.2;
     }
 
     if (dimensions.statistical) {
-      score += (dimensions.statistical.outliers?.length || 0) / 5 * 0.3;
+      score += ((dimensions.statistical.outliers?.length || 0) / 5) * 0.3;
     }
 
     if (dimensions.quantum) {
-      score += (dimensions.quantum.superpositions?.length || 0) / 3 * 0.4;
+      score += ((dimensions.quantum.superpositions?.length || 0) / 3) * 0.4;
     }
 
     return Math.min(1, score);
@@ -1408,7 +1435,7 @@ export class SuperPatternRecognizer extends EventEmitter {
       whyNotObvious: this.explainNonObviousness(pattern),
       businessImpact: this.assessBusinessImpact(pattern),
       actionable: this.generateRecommendations(pattern),
-      visualization: this.visualizePattern(pattern)
+      visualization: this.visualizePattern(pattern),
     };
   }
 
@@ -1417,7 +1444,9 @@ export class SuperPatternRecognizer extends EventEmitter {
 
     if (pattern.dimensions.temporal) {
       const t = pattern.dimensions.temporal;
-      descriptions.push(`Temporal: ${t.type} pattern with ${t.direction} direction at ${t.velocity.toFixed(2)}x velocity`);
+      descriptions.push(
+        `Temporal: ${t.type} pattern with ${t.direction} direction at ${t.velocity.toFixed(2)}x velocity`
+      );
     }
 
     if (pattern.dimensions.spatial) {
@@ -1432,7 +1461,9 @@ export class SuperPatternRecognizer extends EventEmitter {
 
     if (pattern.dimensions.statistical) {
       const stat = pattern.dimensions.statistical;
-      descriptions.push(`Statistical: ${stat.outliers.length} outliers, ${stat.correlations.length} correlations`);
+      descriptions.push(
+        `Statistical: ${stat.outliers.length} outliers, ${stat.correlations.length} correlations`
+      );
     }
 
     if (pattern.dimensions.quantum) {
@@ -1489,7 +1520,7 @@ export class SuperPatternRecognizer extends EventEmitter {
       magnitude,
       timeframe,
       description: `${category} impact of magnitude ${magnitude}/10`,
-      estimatedValue: magnitude * 5000 // $5k per magnitude point
+      estimatedValue: magnitude * 5000, // $5k per magnitude point
     };
   }
 
@@ -1502,7 +1533,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         action: 'Decouple interdependent modules',
         rationale: 'Hidden coupling increases change risk and reduces modularity',
         effort: 'medium',
-        roi: 8.5
+        roi: 8.5,
       });
     }
 
@@ -1512,7 +1543,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         action: 'Extract converging patterns into shared module',
         rationale: 'Files are converging toward same pattern - formalize it',
         effort: 'small',
-        roi: 9.2
+        roi: 9.2,
       });
     }
 
@@ -1522,7 +1553,7 @@ export class SuperPatternRecognizer extends EventEmitter {
         action: 'Investigate and resolve statistical outliers',
         rationale: 'Outliers often indicate bugs or performance issues',
         effort: 'small',
-        roi: 9.8
+        roi: 9.8,
       });
     }
 
@@ -1541,22 +1572,25 @@ export class SuperPatternRecognizer extends EventEmitter {
     return {
       type: 'graph',
       data: {},
-      mermaid: 'graph TD\n  A[Pattern] --> B[Detected]'
+      mermaid: 'graph TD\n  A[Pattern] --> B[Detected]',
     };
   }
 
   private createGraphVisualization(spatial: SpatialPattern): Visualization {
-    const mermaid = `graph LR\n${spatial.edges.map(e =>
-      `  ${e.from.replace(/[^a-zA-Z0-9]/g, '_')} -->|${e.strength.toFixed(2)}| ${e.to.replace(/[^a-zA-Z0-9]/g, '_')}`
-    ).join('\n')}`;
+    const mermaid = `graph LR\n${spatial.edges
+      .map(
+        e =>
+          `  ${e.from.replace(/[^a-zA-Z0-9]/g, '_')} -->|${e.strength.toFixed(2)}| ${e.to.replace(/[^a-zA-Z0-9]/g, '_')}`
+      )
+      .join('\n')}`;
 
     return {
       type: 'force-directed',
       data: {
         nodes: spatial.nodes.map(n => ({ id: n })),
-        edges: spatial.edges
+        edges: spatial.edges,
       },
-      mermaid
+      mermaid,
     };
   }
 
@@ -1568,22 +1602,22 @@ export class SuperPatternRecognizer extends EventEmitter {
         end: temporal.timeframe.end,
         events: temporal.predictions.map(p => ({
           date: p.when,
-          description: p.what
-        }))
-      }
+          description: p.what,
+        })),
+      },
     };
   }
 
   private generateMultiDimensionalView(insights: SuperhumanInsight[]): Visualization {
     // Combine all visualizations
-    const mermaid = `graph TD\n  Root[Superhuman Insights]\n${insights.map((ins, i) =>
-      `  Root --> Insight${i}[${ins.pattern.type}]`
-    ).join('\n')}`;
+    const mermaid = `graph TD\n  Root[Superhuman Insights]\n${insights
+      .map((ins, i) => `  Root --> Insight${i}[${ins.pattern.type}]`)
+      .join('\n')}`;
 
     return {
       type: 'graph',
       data: { insights },
-      mermaid
+      mermaid,
     };
   }
 
@@ -1598,7 +1632,7 @@ export class SuperPatternRecognizer extends EventEmitter {
   private getCodeHistory(codebase: Codebase): any {
     // Simplified: In real implementation, use git history
     return {
-      commits: (codebase as any).history?.commits || []
+      commits: (codebase as any).history?.commits || [],
     };
   }
 }
@@ -1614,5 +1648,5 @@ export type {
   SuperhumanInsight,
   BusinessImpact,
   ActionableRecommendation,
-  Visualization
+  Visualization,
 };

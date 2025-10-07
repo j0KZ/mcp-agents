@@ -58,7 +58,7 @@ export class MessageBus extends EventEmitter {
         received: 0,
         processed: 0,
         failed: 0,
-        averageResponseTime: 0
+        averageResponseTime: 0,
       });
       this.subscriptions.set(toolId, new Set());
     }
@@ -77,7 +77,7 @@ export class MessageBus extends EventEmitter {
     const fullMessage: MCPMessage = {
       ...message,
       id: randomUUID(),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     // Store message
@@ -111,7 +111,7 @@ export class MessageBus extends EventEmitter {
   ): Promise<MCPMessage> {
     const fullMessage = {
       ...message,
-      requiresResponse: true
+      requiresResponse: true,
     };
 
     return new Promise((resolve, reject) => {
@@ -160,7 +160,7 @@ export class MessageBus extends EventEmitter {
       type: 'insight',
       subject: `Insight: ${insight.type}`,
       data: insight.data,
-      confidence: insight.confidence
+      confidence: insight.confidence,
     };
 
     // Send to specific tools if mentioned
@@ -191,7 +191,7 @@ export class MessageBus extends EventEmitter {
       type: 'request',
       subject: `Collaboration request: ${task.type}`,
       data: task,
-      confidence: 0.9
+      confidence: 0.9,
     };
 
     return this.request(message);
@@ -203,9 +203,7 @@ export class MessageBus extends EventEmitter {
   private async broadcast(message: MCPMessage): Promise<void> {
     const tools = Array.from(this.handlers.keys()).filter(t => t !== message.from);
 
-    const deliveries = tools.map(tool =>
-      this.deliver({ ...message, to: tool })
-    );
+    const deliveries = tools.map(tool => this.deliver({ ...message, to: tool }));
 
     await Promise.all(deliveries);
   }
@@ -224,10 +222,8 @@ export class MessageBus extends EventEmitter {
 
     // Find matching handlers
     const matchingHandlers = toolHandlers.filter(h =>
-      h.patterns.some(pattern =>
-        pattern === '*' ||
-        message.type === pattern ||
-        message.subject.includes(pattern)
+      h.patterns.some(
+        pattern => pattern === '*' || message.type === pattern || message.subject.includes(pattern)
       )
     );
 
@@ -240,17 +236,14 @@ export class MessageBus extends EventEmitter {
 
     try {
       // Process with all matching handlers
-      const results = await Promise.all(
-        matchingHandlers.map(h => h.handler(message))
-      );
+      const results = await Promise.all(matchingHandlers.map(h => h.handler(message)));
 
       // Update stats
       if (toStats) {
         toStats.processed++;
         const duration = Date.now() - startTime;
         toStats.averageResponseTime =
-          (toStats.averageResponseTime * (toStats.processed - 1) + duration) /
-          toStats.processed;
+          (toStats.averageResponseTime * (toStats.processed - 1) + duration) / toStats.processed;
       }
 
       // Handle responses
@@ -279,21 +272,23 @@ export class MessageBus extends EventEmitter {
    */
   private setupBuiltInHandlers(): void {
     // Health check handler
-    this.handlers.set('_system', [{
-      toolId: '_system',
-      patterns: ['ping'],
-      handler: async (msg) => ({
-        id: randomUUID(),
-        from: '_system',
-        to: msg.from,
-        type: 'response',
-        subject: 'pong',
-        data: { alive: true, timestamp: new Date() },
-        confidence: 1,
-        timestamp: new Date(),
-        inReplyTo: msg.id
-      })
-    }]);
+    this.handlers.set('_system', [
+      {
+        toolId: '_system',
+        patterns: ['ping'],
+        handler: async msg => ({
+          id: randomUUID(),
+          from: '_system',
+          to: msg.from,
+          type: 'response',
+          subject: 'pong',
+          data: { alive: true, timestamp: new Date() },
+          confidence: 1,
+          timestamp: new Date(),
+          inReplyTo: msg.id,
+        }),
+      },
+    ]);
   }
 
   /**
@@ -351,13 +346,11 @@ export class MessageBus extends EventEmitter {
   /**
    * Example: Smart collaboration between tools
    */
-  async facilitateCollaboration(
-    task: {
-      type: string;
-      input: any;
-      requiredTools: string[];
-    }
-  ): Promise<any> {
+  async facilitateCollaboration(task: {
+    type: string;
+    input: any;
+    requiredTools: string[];
+  }): Promise<any> {
     const results: any[] = [];
     const context: any = { ...task.input };
 
@@ -371,9 +364,9 @@ export class MessageBus extends EventEmitter {
         data: {
           task: task.type,
           input: context,
-          previousResults: results
+          previousResults: results,
         },
-        confidence: 0.9
+        confidence: 0.9,
       };
 
       const response = await this.request(message);
@@ -381,7 +374,7 @@ export class MessageBus extends EventEmitter {
       if (response && response.data) {
         results.push({
           tool,
-          result: response.data
+          result: response.data,
         });
 
         // Update context with new information
@@ -392,7 +385,7 @@ export class MessageBus extends EventEmitter {
     return {
       task: task.type,
       results,
-      finalContext: context
+      finalContext: context,
     };
   }
 }

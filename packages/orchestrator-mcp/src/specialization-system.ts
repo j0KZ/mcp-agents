@@ -150,7 +150,7 @@ export class SpecializationSystem extends EventEmitter {
       category: 'analysis',
       difficulty: 1,
       prerequisites: [],
-      unlocks: ['pattern-detection', 'metrics-calculation']
+      unlocks: ['pattern-detection', 'metrics-calculation'],
     });
 
     this.addSkillNode('pattern-detection', {
@@ -158,7 +158,7 @@ export class SpecializationSystem extends EventEmitter {
       category: 'analysis',
       difficulty: 2,
       prerequisites: ['basic-analysis'],
-      unlocks: ['anti-pattern-detection', 'design-pattern-application']
+      unlocks: ['anti-pattern-detection', 'design-pattern-application'],
     });
 
     this.addSkillNode('anti-pattern-detection', {
@@ -166,7 +166,7 @@ export class SpecializationSystem extends EventEmitter {
       category: 'analysis',
       difficulty: 3,
       prerequisites: ['pattern-detection'],
-      unlocks: ['refactoring-suggestions']
+      unlocks: ['refactoring-suggestions'],
     });
 
     // Security skills
@@ -175,7 +175,7 @@ export class SpecializationSystem extends EventEmitter {
       category: 'security',
       difficulty: 1,
       prerequisites: [],
-      unlocks: ['vulnerability-detection', 'secret-scanning']
+      unlocks: ['vulnerability-detection', 'secret-scanning'],
     });
 
     this.addSkillNode('vulnerability-detection', {
@@ -183,7 +183,7 @@ export class SpecializationSystem extends EventEmitter {
       category: 'security',
       difficulty: 2,
       prerequisites: ['basic-security'],
-      unlocks: ['owasp-compliance', 'threat-modeling']
+      unlocks: ['owasp-compliance', 'threat-modeling'],
     });
 
     this.addSkillNode('threat-modeling', {
@@ -191,7 +191,7 @@ export class SpecializationSystem extends EventEmitter {
       category: 'security',
       difficulty: 4,
       prerequisites: ['vulnerability-detection'],
-      unlocks: ['security-architecture']
+      unlocks: ['security-architecture'],
     });
 
     // Testing skills
@@ -200,7 +200,7 @@ export class SpecializationSystem extends EventEmitter {
       category: 'testing',
       difficulty: 1,
       prerequisites: [],
-      unlocks: ['integration-testing', 'edge-case-generation']
+      unlocks: ['integration-testing', 'edge-case-generation'],
     });
 
     this.addSkillNode('edge-case-generation', {
@@ -208,7 +208,7 @@ export class SpecializationSystem extends EventEmitter {
       category: 'testing',
       difficulty: 3,
       prerequisites: ['unit-testing'],
-      unlocks: ['property-testing', 'fuzzing']
+      unlocks: ['property-testing', 'fuzzing'],
     });
 
     // Architecture skills
@@ -217,7 +217,7 @@ export class SpecializationSystem extends EventEmitter {
       category: 'architecture',
       difficulty: 2,
       prerequisites: [],
-      unlocks: ['circular-detection', 'layer-validation']
+      unlocks: ['circular-detection', 'layer-validation'],
     });
 
     this.addSkillNode('layer-validation', {
@@ -225,7 +225,7 @@ export class SpecializationSystem extends EventEmitter {
       category: 'architecture',
       difficulty: 3,
       prerequisites: ['dependency-analysis'],
-      unlocks: ['architecture-patterns', 'microservice-design']
+      unlocks: ['architecture-patterns', 'microservice-design'],
     });
 
     // Refactoring skills
@@ -234,7 +234,7 @@ export class SpecializationSystem extends EventEmitter {
       category: 'refactoring',
       difficulty: 1,
       prerequisites: [],
-      unlocks: ['complex-refactoring', 'pattern-application']
+      unlocks: ['complex-refactoring', 'pattern-application'],
     });
 
     this.addSkillNode('pattern-application', {
@@ -242,7 +242,7 @@ export class SpecializationSystem extends EventEmitter {
       category: 'refactoring',
       difficulty: 3,
       prerequisites: ['basic-refactoring', 'pattern-detection'],
-      unlocks: ['architecture-refactoring']
+      unlocks: ['architecture-refactoring'],
     });
   }
 
@@ -264,14 +264,24 @@ export class SpecializationSystem extends EventEmitter {
       requirements: [
         { type: 'tasks', target: 100, description: 'Complete 100 security tasks' },
         { type: 'success-rate', target: 0.95, description: '95% success rate' },
-        { type: 'skill-level', target: 90, description: 'Achieve level 90 in vulnerability detection', skill: 'vulnerability-detection' },
-        { type: 'skill-level', target: 85, description: 'Achieve level 85 in threat modeling', skill: 'threat-modeling' }
+        {
+          type: 'skill-level',
+          target: 90,
+          description: 'Achieve level 90 in vulnerability detection',
+          skill: 'vulnerability-detection',
+        },
+        {
+          type: 'skill-level',
+          target: 85,
+          description: 'Achieve level 85 in threat modeling',
+          skill: 'threat-modeling',
+        },
       ],
       benefits: [
         'Priority assignment for security tasks',
         '20% confidence boost in security domain',
-        'Mentor status for other tools'
-      ]
+        'Mentor status for other tools',
+      ],
     });
 
     // Testing Master Certification
@@ -280,15 +290,25 @@ export class SpecializationSystem extends EventEmitter {
       domain: 'testing',
       requirements: [
         { type: 'tasks', target: 150, description: 'Complete 150 testing tasks' },
-        { type: 'success-rate', target: 0.90, description: '90% success rate' },
-        { type: 'skill-level', target: 95, description: 'Achieve level 95 in unit testing', skill: 'unit-testing' },
-        { type: 'skill-level', target: 85, description: 'Achieve level 85 in edge case generation', skill: 'edge-case-generation' }
+        { type: 'success-rate', target: 0.9, description: '90% success rate' },
+        {
+          type: 'skill-level',
+          target: 95,
+          description: 'Achieve level 95 in unit testing',
+          skill: 'unit-testing',
+        },
+        {
+          type: 'skill-level',
+          target: 85,
+          description: 'Achieve level 85 in edge case generation',
+          skill: 'edge-case-generation',
+        },
       ],
       benefits: [
         'Automatic edge case generation capability',
         'Test strategy planning authority',
-        'Coverage guarantee certification'
-      ]
+        'Coverage guarantee certification',
+      ],
     });
 
     // Architecture Guru Certification
@@ -298,14 +318,24 @@ export class SpecializationSystem extends EventEmitter {
       requirements: [
         { type: 'tasks', target: 75, description: 'Complete 75 architecture tasks' },
         { type: 'success-rate', target: 0.92, description: '92% success rate' },
-        { type: 'skill-level', target: 90, description: 'Achieve level 90 in layer validation', skill: 'layer-validation' },
-        { type: 'skill-level', target: 88, description: 'Achieve level 88 in architecture patterns', skill: 'architecture-patterns' }
+        {
+          type: 'skill-level',
+          target: 90,
+          description: 'Achieve level 90 in layer validation',
+          skill: 'layer-validation',
+        },
+        {
+          type: 'skill-level',
+          target: 88,
+          description: 'Achieve level 88 in architecture patterns',
+          skill: 'architecture-patterns',
+        },
       ],
       benefits: [
         'System design decision authority',
         'Cross-tool architecture coordination',
-        'Performance optimization privileges'
-      ]
+        'Performance optimization privileges',
+      ],
     });
 
     // Code Quality Champion
@@ -315,14 +345,24 @@ export class SpecializationSystem extends EventEmitter {
       requirements: [
         { type: 'tasks', target: 200, description: 'Complete 200 quality tasks' },
         { type: 'success-rate', target: 0.93, description: '93% success rate' },
-        { type: 'skill-level', target: 92, description: 'Achieve level 92 in anti-pattern detection', skill: 'anti-pattern-detection' },
-        { type: 'skill-level', target: 90, description: 'Achieve level 90 in refactoring suggestions', skill: 'refactoring-suggestions' }
+        {
+          type: 'skill-level',
+          target: 92,
+          description: 'Achieve level 92 in anti-pattern detection',
+          skill: 'anti-pattern-detection',
+        },
+        {
+          type: 'skill-level',
+          target: 90,
+          description: 'Achieve level 90 in refactoring suggestions',
+          skill: 'refactoring-suggestions',
+        },
       ],
       benefits: [
         'Final say in code quality disputes',
         'Automated fix application authority',
-        'Quality gate configuration'
-      ]
+        'Quality gate configuration',
+      ],
     });
   }
 
@@ -336,10 +376,10 @@ export class SpecializationSystem extends EventEmitter {
       specializations: [
         this.createSpecialization('code-quality', 'quality', 75),
         this.createSpecialization('pattern-detection', 'analysis', 70),
-        this.createSpecialization('metrics', 'analysis', 65)
+        this.createSpecialization('metrics', 'analysis', 65),
       ],
       learningStyle: 'specialist',
-      strengthAreas: ['analysis', 'quality', 'patterns']
+      strengthAreas: ['analysis', 'quality', 'patterns'],
     });
 
     // Security Scanner Profile
@@ -348,10 +388,10 @@ export class SpecializationSystem extends EventEmitter {
       specializations: [
         this.createSpecialization('vulnerability-detection', 'security', 85),
         this.createSpecialization('compliance', 'security', 80),
-        this.createSpecialization('secret-scanning', 'security', 75)
+        this.createSpecialization('secret-scanning', 'security', 75),
       ],
       learningStyle: 'specialist',
-      strengthAreas: ['security', 'compliance', 'risk']
+      strengthAreas: ['security', 'compliance', 'risk'],
     });
 
     // Test Generator Profile
@@ -360,10 +400,10 @@ export class SpecializationSystem extends EventEmitter {
       specializations: [
         this.createSpecialization('unit-testing', 'testing', 70),
         this.createSpecialization('edge-cases', 'testing', 65),
-        this.createSpecialization('mocking', 'testing', 60)
+        this.createSpecialization('mocking', 'testing', 60),
       ],
       learningStyle: 'steady-improver',
-      strengthAreas: ['testing', 'coverage', 'validation']
+      strengthAreas: ['testing', 'coverage', 'validation'],
     });
 
     // Architecture Analyzer Profile
@@ -372,10 +412,10 @@ export class SpecializationSystem extends EventEmitter {
       specializations: [
         this.createSpecialization('dependency-analysis', 'architecture', 80),
         this.createSpecialization('circular-detection', 'architecture', 75),
-        this.createSpecialization('layer-validation', 'architecture', 70)
+        this.createSpecialization('layer-validation', 'architecture', 70),
       ],
       learningStyle: 'specialist',
-      strengthAreas: ['architecture', 'structure', 'design']
+      strengthAreas: ['architecture', 'structure', 'design'],
     });
 
     // Refactor Assistant Profile
@@ -384,10 +424,10 @@ export class SpecializationSystem extends EventEmitter {
       specializations: [
         this.createSpecialization('refactoring', 'refactoring', 75),
         this.createSpecialization('pattern-application', 'refactoring', 70),
-        this.createSpecialization('complexity-reduction', 'refactoring', 68)
+        this.createSpecialization('complexity-reduction', 'refactoring', 68),
       ],
       learningStyle: 'fast-learner',
-      strengthAreas: ['refactoring', 'patterns', 'optimization']
+      strengthAreas: ['refactoring', 'patterns', 'optimization'],
     });
 
     // Doc Generator Profile
@@ -396,10 +436,10 @@ export class SpecializationSystem extends EventEmitter {
       specializations: [
         this.createSpecialization('api-docs', 'documentation', 80),
         this.createSpecialization('readme-generation', 'documentation', 75),
-        this.createSpecialization('changelog', 'documentation', 70)
+        this.createSpecialization('changelog', 'documentation', 70),
       ],
       learningStyle: 'generalist',
-      strengthAreas: ['documentation', 'communication', 'clarity']
+      strengthAreas: ['documentation', 'communication', 'clarity'],
     });
   }
 
@@ -417,10 +457,10 @@ export class SpecializationSystem extends EventEmitter {
         preferredDomains: config.strengthAreas,
         strengthAreas: config.strengthAreas,
         improvementAreas: [],
-        adaptabilityScore: config.learningStyle === 'fast-learner' ? 85 : 70
+        adaptabilityScore: config.learningStyle === 'fast-learner' ? 85 : 70,
       },
       performanceHistory: [],
-      evolutionPath: []
+      evolutionPath: [],
     };
 
     // Add specializations
@@ -450,7 +490,7 @@ export class SpecializationSystem extends EventEmitter {
       recentPerformance: Array(10).fill(level),
       skills: this.getSkillsForSpecialization(name, level),
       certifications: [],
-      trainingPath: this.createTrainingPath(name, level)
+      trainingPath: this.createTrainingPath(name, level),
     };
   }
 
@@ -466,7 +506,7 @@ export class SpecializationSystem extends EventEmitter {
       'vulnerability-detection': ['basic-security', 'vulnerability-detection', 'threat-modeling'],
       'unit-testing': ['unit-testing', 'edge-case-generation'],
       'dependency-analysis': ['dependency-analysis', 'circular-detection'],
-      'refactoring': ['basic-refactoring', 'pattern-application']
+      refactoring: ['basic-refactoring', 'pattern-application'],
     };
 
     const relevantSkills = skillMap[name] || ['basic-analysis'];
@@ -476,10 +516,10 @@ export class SpecializationSystem extends EventEmitter {
       if (node) {
         skills.push({
           name: node.name,
-          proficiency: level - (node.difficulty * 10), // Adjust by difficulty
+          proficiency: level - node.difficulty * 10, // Adjust by difficulty
           lastUsed: new Date(),
           improvementRate: 0.1,
-          dependencies: node.prerequisites
+          dependencies: node.prerequisites,
         });
       }
     }
@@ -503,17 +543,17 @@ export class SpecializationSystem extends EventEmitter {
           target: Math.floor((nextLevel - currentLevel) * 5),
           description: `Complete ${Math.floor((nextLevel - currentLevel) * 5)} tasks`,
           current: 0,
-          met: false
+          met: false,
         },
         {
           type: 'success-rate',
           target: nextLevel / 100,
-          description: `Achieve ${(nextLevel / 100 * 100).toFixed(0)}% success rate`,
+          description: `Achieve ${((nextLevel / 100) * 100).toFixed(0)}% success rate`,
           current: currentLevel / 100,
-          met: currentLevel >= nextLevel
-        }
+          met: currentLevel >= nextLevel,
+        },
       ],
-      estimatedTime: (nextLevel - currentLevel) * 2 // Hours
+      estimatedTime: (nextLevel - currentLevel) * 2, // Hours
     };
   }
 
@@ -566,7 +606,7 @@ export class SpecializationSystem extends EventEmitter {
       requirements,
       candidates,
       selected: selected.toolId,
-      reasoning: this.explainSelection(selected, candidates, requirements)
+      reasoning: this.explainSelection(selected, candidates, requirements),
     };
 
     // Notify selected tool
@@ -574,7 +614,7 @@ export class SpecializationSystem extends EventEmitter {
       type: 'task-assignment',
       data: assignment,
       confidence: selected.estimatedSuccess,
-      affects: [selected.toolId]
+      affects: [selected.toolId],
     });
 
     this.emit('task:assigned', assignment);
@@ -591,14 +631,15 @@ export class SpecializationSystem extends EventEmitter {
     for (const [toolId, profile] of this.toolProfiles.entries()) {
       const matchScore = this.calculateMatchScore(profile, requirements);
 
-      if (matchScore > 30) { // Minimum threshold
+      if (matchScore > 30) {
+        // Minimum threshold
         candidates.push({
           toolId,
           matchScore,
           specializations: Array.from(profile.specializations.keys()),
           availability: this.calculateAvailability(toolId),
           recentPerformance: this.calculateRecentPerformance(profile),
-          estimatedSuccess: this.estimateSuccess(profile, requirements)
+          estimatedSuccess: this.estimateSuccess(profile, requirements),
         });
       }
     }
@@ -625,7 +666,9 @@ export class SpecializationSystem extends EventEmitter {
     // Skill match
     for (const requiredSkill of requirements.skillsRequired || []) {
       for (const [_, spec] of profile.specializations.entries()) {
-        const skill = spec.skills.find(s => s.name.toLowerCase().includes(requiredSkill.toLowerCase()));
+        const skill = spec.skills.find(s =>
+          s.name.toLowerCase().includes(requiredSkill.toLowerCase())
+        );
         if (skill) {
           score += skill.proficiency * 0.3;
         }
@@ -647,7 +690,7 @@ export class SpecializationSystem extends EventEmitter {
 
     // Recent performance bonus
     const recentPerf = this.calculateRecentPerformance(profile);
-    score *= (recentPerf / 100);
+    score *= recentPerf / 100;
 
     return Math.min(score, 100);
   }
@@ -659,11 +702,16 @@ export class SpecializationSystem extends EventEmitter {
     const avgLevel = this.getAverageSpecializationLevel(profile);
 
     switch (complexity) {
-      case 'simple': return 1.0;
-      case 'moderate': return avgLevel > 50 ? 1.0 : 0.8;
-      case 'complex': return avgLevel > 70 ? 1.0 : 0.6;
-      case 'expert': return avgLevel > 85 ? 1.0 : 0.4;
-      default: return 0.8;
+      case 'simple':
+        return 1.0;
+      case 'moderate':
+        return avgLevel > 50 ? 1.0 : 0.8;
+      case 'complex':
+        return avgLevel > 70 ? 1.0 : 0.6;
+      case 'expert':
+        return avgLevel > 85 ? 1.0 : 0.4;
+      default:
+        return 0.8;
     }
   }
 
@@ -734,7 +782,10 @@ export class SpecializationSystem extends EventEmitter {
   /**
    * Select best candidate
    */
-  private selectBestCandidate(candidates: ToolCandidate[], requirements: TaskRequirements): ToolCandidate {
+  private selectBestCandidate(
+    candidates: ToolCandidate[],
+    requirements: TaskRequirements
+  ): ToolCandidate {
     if (candidates.length === 0) {
       throw new Error('No suitable candidates found');
     }
@@ -742,7 +793,7 @@ export class SpecializationSystem extends EventEmitter {
     // Score each candidate
     const scored = candidates.map(candidate => ({
       candidate,
-      score: this.scoreCandidateForSelection(candidate, requirements)
+      score: this.scoreCandidateForSelection(candidate, requirements),
     }));
 
     // Sort by score
@@ -754,11 +805,14 @@ export class SpecializationSystem extends EventEmitter {
   /**
    * Score candidate for final selection
    */
-  private scoreCandidateForSelection(candidate: ToolCandidate, _requirements: TaskRequirements): number {
+  private scoreCandidateForSelection(
+    candidate: ToolCandidate,
+    _requirements: TaskRequirements
+  ): number {
     // Weighted scoring
     const matchWeight = 0.35;
-    const successWeight = 0.30;
-    const performanceWeight = 0.20;
+    const successWeight = 0.3;
+    const performanceWeight = 0.2;
     const availabilityWeight = 0.15;
 
     return (
@@ -787,7 +841,9 @@ export class SpecializationSystem extends EventEmitter {
     // Compare to next best
     if (candidates.length > 1) {
       const nextBest = candidates[1];
-      reasoning.push(`Next best option: ${nextBest.toolId} (${nextBest.matchScore.toFixed(1)} match)`);
+      reasoning.push(
+        `Next best option: ${nextBest.toolId} (${nextBest.matchScore.toFixed(1)} match)`
+      );
     }
 
     // Specialization match
@@ -828,7 +884,7 @@ export class SpecializationSystem extends EventEmitter {
       success: task.success,
       score: task.score,
       feedback: task.feedback,
-      learnings: task.learnings || []
+      learnings: task.learnings || [],
     };
 
     profile.performanceHistory.push(record);
@@ -866,7 +922,7 @@ export class SpecializationSystem extends EventEmitter {
         spec.level = Math.max(0, Math.min(100, spec.level + levelChange));
 
         // Update success rate (moving average)
-        spec.successRate = (spec.successRate * 0.9) + (task.success ? 0.1 : 0);
+        spec.successRate = spec.successRate * 0.9 + (task.success ? 0.1 : 0);
 
         // Update recent performance
         spec.recentPerformance.push(task.score);
@@ -908,7 +964,10 @@ export class SpecializationSystem extends EventEmitter {
 
           // Update proficiency
           if (task.success) {
-            skill.proficiency = Math.min(100, skill.proficiency + skill.improvementRate * task.score);
+            skill.proficiency = Math.min(
+              100,
+              skill.proficiency + skill.improvementRate * task.score
+            );
 
             // Adjust improvement rate based on consistency
             if (task.score > 80) {
@@ -948,20 +1007,21 @@ export class SpecializationSystem extends EventEmitter {
   /**
    * Check certification requirements
    */
-  private checkCertificationRequirements(profile: ToolProfile, program: CertificationProgram): boolean {
+  private checkCertificationRequirements(
+    profile: ToolProfile,
+    program: CertificationProgram
+  ): boolean {
     for (const req of program.requirements) {
       switch (req.type) {
         case 'tasks':
-          const taskCount = profile.performanceHistory.filter(r =>
-            r.domain === program.domain
+          const taskCount = profile.performanceHistory.filter(
+            r => r.domain === program.domain
           ).length;
           if (taskCount < req.target) return false;
           break;
 
         case 'success-rate':
-          const domainRecords = profile.performanceHistory.filter(r =>
-            r.domain === program.domain
-          );
+          const domainRecords = profile.performanceHistory.filter(r => r.domain === program.domain);
           if (domainRecords.length > 0) {
             const successRate = domainRecords.filter(r => r.success).length / domainRecords.length;
             if (successRate < req.target) return false;
@@ -973,7 +1033,9 @@ export class SpecializationSystem extends EventEmitter {
         case 'skill-level':
           let hasSkill = false;
           for (const [_, spec] of profile.specializations.entries()) {
-            const skill = spec.skills.find(s => s.name.toLowerCase().includes(req.skill!.toLowerCase()));
+            const skill = spec.skills.find(s =>
+              s.name.toLowerCase().includes(req.skill!.toLowerCase())
+            );
             if (skill && skill.proficiency >= req.target) {
               hasSkill = true;
               break;
@@ -990,7 +1052,10 @@ export class SpecializationSystem extends EventEmitter {
   /**
    * Award certification to tool
    */
-  private async awardCertification(profile: ToolProfile, program: CertificationProgram): Promise<void> {
+  private async awardCertification(
+    profile: ToolProfile,
+    program: CertificationProgram
+  ): Promise<void> {
     const certification: Certification = {
       name: program.name,
       domain: program.domain,
@@ -1001,8 +1066,8 @@ export class SpecializationSystem extends EventEmitter {
         description: r.description,
         skill: r.skill,
         current: r.target,
-        met: true
-      }))
+        met: true,
+      })),
     };
 
     // Add to relevant specialization
@@ -1018,7 +1083,7 @@ export class SpecializationSystem extends EventEmitter {
       timestamp: new Date(),
       type: 'certification',
       description: `Achieved ${program.name} certification`,
-      impact: 'major'
+      impact: 'major',
     });
 
     // Notify system
@@ -1031,13 +1096,13 @@ export class SpecializationSystem extends EventEmitter {
       data: {
         toolId: profile.toolId,
         certification: program.name,
-        benefits: program.benefits
-      }
+        benefits: program.benefits,
+      },
     });
 
     this.emit('certification:achieved', {
       toolId: profile.toolId,
-      certification: program.name
+      certification: program.name,
     });
   }
 
@@ -1047,7 +1112,9 @@ export class SpecializationSystem extends EventEmitter {
   private async checkEvolution(profile: ToolProfile, task: any): Promise<void> {
     // Check for level-up
     for (const [_, spec] of profile.specializations.entries()) {
-      const oldLevel = this.getLevelName(spec.level - this.calculateLevelChange(task.success, task.score, spec.level));
+      const oldLevel = this.getLevelName(
+        spec.level - this.calculateLevelChange(task.success, task.score, spec.level)
+      );
       const newLevel = this.getLevelName(spec.level);
 
       if (oldLevel !== newLevel) {
@@ -1055,7 +1122,7 @@ export class SpecializationSystem extends EventEmitter {
           timestamp: new Date(),
           type: 'level-up',
           description: `Advanced to ${newLevel} in ${spec.name}`,
-          impact: 'moderate'
+          impact: 'moderate',
         });
       }
     }
@@ -1066,7 +1133,7 @@ export class SpecializationSystem extends EventEmitter {
         timestamp: new Date(),
         type: 'skill-gained',
         description: `Learned: ${task.learnings.join(', ')}`,
-        impact: 'minor'
+        impact: 'minor',
       });
     }
 
@@ -1116,13 +1183,16 @@ export class SpecializationSystem extends EventEmitter {
         timestamp: new Date(),
         type: 'specialization-change',
         description: `Primary focus shifted from ${profile.primaryFocus} to ${bestSpec.name}`,
-        impact: 'major'
+        impact: 'major',
       });
 
       // Update primary focus
       const oldPrimary = profile.primaryFocus;
       profile.primaryFocus = bestSpec.name;
-      profile.secondaryFocus = [oldPrimary, ...profile.secondaryFocus.filter(f => f !== bestSpec.name)];
+      profile.secondaryFocus = [
+        oldPrimary,
+        ...profile.secondaryFocus.filter(f => f !== bestSpec.name),
+      ];
 
       await this.messageBus.shareInsight('specialization-system', {
         type: 'specialization-change',
@@ -1130,10 +1200,10 @@ export class SpecializationSystem extends EventEmitter {
           toolId: profile.toolId,
           oldFocus: oldPrimary,
           newFocus: bestSpec.name,
-          reason: `Superior performance in ${bestSpec.name} (Level ${bestLevel})`
+          reason: `Superior performance in ${bestSpec.name} (Level ${bestLevel})`,
         },
         confidence: bestLevel / 100,
-        affects: ['orchestrator']
+        affects: ['orchestrator'],
       });
     }
   }
@@ -1179,9 +1249,7 @@ export class SpecializationSystem extends EventEmitter {
     for (const [_, spec] of profile.specializations.entries()) {
       allSkills.push(...spec.skills);
     }
-    const topSkills = allSkills
-      .sort((a, b) => b.proficiency - a.proficiency)
-      .slice(0, 5);
+    const topSkills = allSkills.sort((a, b) => b.proficiency - a.proficiency).slice(0, 5);
 
     // Get all certifications
     const certifications: Certification[] = [];
@@ -1194,7 +1262,7 @@ export class SpecializationSystem extends EventEmitter {
       certifications,
       topSkills,
       performance: this.calculateRecentPerformance(profile),
-      evolution: profile.evolutionPath.slice(-10) // Last 10 events
+      evolution: profile.evolutionPath.slice(-10), // Last 10 events
     };
   }
 
@@ -1229,7 +1297,7 @@ export class SpecializationSystem extends EventEmitter {
       // Performance ranking
       performers.push({
         toolId,
-        score: this.calculateRecentPerformance(profile)
+        score: this.calculateRecentPerformance(profile),
       });
     }
 
@@ -1240,7 +1308,7 @@ export class SpecializationSystem extends EventEmitter {
       toolProfiles: this.toolProfiles,
       domainCoverage,
       certificationStats,
-      topPerformers: performers.slice(0, 5)
+      topPerformers: performers.slice(0, 5),
     };
   }
 }

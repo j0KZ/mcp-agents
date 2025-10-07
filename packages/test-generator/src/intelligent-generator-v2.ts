@@ -12,7 +12,7 @@ import {
   DomainKnowledgeBase,
   ExplanationEngine,
   PerformanceTracker,
-  MessageBus
+  MessageBus,
 } from '@j0kz/shared';
 
 export interface IntelligentTestResult {
@@ -73,7 +73,7 @@ export class IntelligentTestGeneratorV2 {
       intent,
       frameworkInsights,
       executionResults,
-      context
+      context,
     });
 
     // Step 5: Calculate quality metrics
@@ -85,7 +85,7 @@ export class IntelligentTestGeneratorV2 {
       frameworkInsights,
       executionResults,
       tests,
-      quality
+      quality,
     });
 
     // Step 7: Track performance and learn
@@ -99,13 +99,13 @@ export class IntelligentTestGeneratorV2 {
       input: {
         type: 'source-file',
         size: code.length,
-        complexity: 0
+        complexity: 0,
       },
       output: {
         type: 'test-suite',
         size: tests.code.length,
-        quality: quality.overall
-      }
+        quality: quality.overall,
+      },
     });
 
     // Step 8: Share insights with other tools
@@ -115,10 +115,10 @@ export class IntelligentTestGeneratorV2 {
         coverage: tests.coverage,
         quality: quality.overall,
         patterns: intent.patterns,
-        issues: intent.antiPatterns
+        issues: intent.antiPatterns,
       },
       confidence: quality.overall / 100,
-      affects: ['smart-reviewer', 'refactor-assistant']
+      affects: ['smart-reviewer', 'refactor-assistant'],
     });
 
     return {
@@ -126,7 +126,7 @@ export class IntelligentTestGeneratorV2 {
       coverage: tests.coverage,
       quality,
       explanation,
-      learnings: executionResults.learnings.map(l => l.insight)
+      learnings: executionResults.learnings.map(l => l.insight),
     };
   }
 
@@ -141,18 +141,14 @@ export class IntelligentTestGeneratorV2 {
       inputs: this.generateHappyPathInputs(intent),
       expectedBehavior: {
         shouldThrow: false,
-        sideEffects: intent.sideEffects.map((s: any) => s.type)
-      }
+        sideEffects: intent.sideEffects.map((s: any) => s.type),
+      },
     });
 
     // Edge cases based on data flow
     for (const input of intent.inputs) {
       if (input.type === 'number') {
-        testCases.push(
-          { inputs: [0] },
-          { inputs: [-1] },
-          { inputs: [Number.MAX_VALUE] }
-        );
+        testCases.push({ inputs: [0] }, { inputs: [-1] }, { inputs: [Number.MAX_VALUE] });
       } else if (input.type === 'string') {
         testCases.push(
           { inputs: [''] },
@@ -183,12 +179,18 @@ export class IntelligentTestGeneratorV2 {
   private generateHappyPathInputs(intent: any): any[] {
     return intent.inputs.map((input: any) => {
       switch (input.type) {
-        case 'number': return 42;
-        case 'string': return 'test-value';
-        case 'boolean': return true;
-        case 'array': return [1, 2, 3];
-        case 'object': return { id: 1, name: 'test' };
-        default: return 'default-value';
+        case 'number':
+          return 42;
+        case 'string':
+          return 'test-value';
+        case 'boolean':
+          return true;
+        case 'array':
+          return [1, 2, 3];
+        case 'object':
+          return { id: 1, name: 'test' };
+        default:
+          return 'default-value';
       }
     });
   }
@@ -299,15 +301,13 @@ export class IntelligentTestGeneratorV2 {
     const assertionQuality = executionResults.success ? 85 : 70;
     const mockingStrategy = intent.sideEffects.length > 0 ? 90 : 75;
 
-    const overall = Math.round(
-      (edgeCaseCoverage + assertionQuality + mockingStrategy) / 3
-    );
+    const overall = Math.round((edgeCaseCoverage + assertionQuality + mockingStrategy) / 3);
 
     return {
       edgeCaseCoverage,
       assertionQuality,
       mockingStrategy,
-      overall
+      overall,
     };
   }
 
@@ -317,27 +317,30 @@ export class IntelligentTestGeneratorV2 {
   private generateExplanation(data: any): any {
     const { intent, frameworkInsights, executionResults, tests, quality } = data;
 
-    return this.explanationEngine.createUnifiedExplanation(new Map([
-      ['Semantic Analysis', this.explanationEngine.explainSemanticAnalysis(intent, tests.code)],
-      ['Framework Insights', this.explanationEngine.explainFrameworkInsights(
-        frameworkInsights.framework || 'general',
-        frameworkInsights
-      )],
-      ['Execution Results', this.explanationEngine.explainExecutionResults(
-        executionResults,
-        tests.code,
-        []
-      )],
-      ['Test Strategy', this.explanationEngine.explainTestGeneration(
-        [],
-        tests.coverage,
-        {
-          edgeCases: quality.edgeCaseCoverage > 70,
-          mocking: quality.mockingStrategy > 70,
-          asyncTesting: intent.sideEffects.some((s: any) => s.type === 'async')
-        }
-      )]
-    ]));
+    return this.explanationEngine.createUnifiedExplanation(
+      new Map([
+        ['Semantic Analysis', this.explanationEngine.explainSemanticAnalysis(intent, tests.code)],
+        [
+          'Framework Insights',
+          this.explanationEngine.explainFrameworkInsights(
+            frameworkInsights.framework || 'general',
+            frameworkInsights
+          ),
+        ],
+        [
+          'Execution Results',
+          this.explanationEngine.explainExecutionResults(executionResults, tests.code, []),
+        ],
+        [
+          'Test Strategy',
+          this.explanationEngine.explainTestGeneration([], tests.coverage, {
+            edgeCases: quality.edgeCaseCoverage > 70,
+            mocking: quality.mockingStrategy > 70,
+            asyncTesting: intent.sideEffects.some((s: any) => s.type === 'async'),
+          }),
+        ],
+      ])
+    );
   }
 
   /**
@@ -361,14 +364,14 @@ export class IntelligentTestGeneratorV2 {
       confidence: (feedback.rating || 0) / 5,
       input: {
         type: 'test-suite',
-        size: tests.length
+        size: tests.length,
       },
       output: {
         type: 'feedback',
         size: 1,
-        quality: feedback.rating
+        quality: feedback.rating,
       },
-      humanFeedback: feedback
+      humanFeedback: feedback,
     });
 
     // Share learning with other tools
@@ -377,7 +380,7 @@ export class IntelligentTestGeneratorV2 {
         type: 'successful-pattern',
         data: { tests, rating: feedback.rating },
         confidence: feedback.rating / 5,
-        affects: ['all']
+        affects: ['all'],
       });
     }
   }

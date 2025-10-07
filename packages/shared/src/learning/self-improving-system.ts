@@ -141,14 +141,13 @@ export class SelfImprovingSystem extends EventEmitter {
             // Learn from failure
             this.emit('hypothesis:failed', {
               hypothesisId: hypothesis.id,
-              reason: 'No improvement observed'
+              reason: 'No improvement observed',
             });
           }
         }
 
         // Wait for next iteration
         await this.sleep(this.LEARNING_INTERVAL);
-
       } catch (error) {
         this.emit('self-improvement:error', error);
         await this.sleep(this.LEARNING_INTERVAL);
@@ -179,11 +178,7 @@ export class SelfImprovingSystem extends EventEmitter {
     const predictionScore = Math.min(predictionStats.avgConfidence * 100, 100);
 
     // Overall score is weighted average
-    const overallScore = (
-      learningScore * 0.35 +
-      acceptanceScore * 0.40 +
-      predictionScore * 0.25
-    );
+    const overallScore = learningScore * 0.35 + acceptanceScore * 0.4 + predictionScore * 0.25;
 
     // Identify weaknesses (score < 70)
     const weaknesses: Weakness[] = [];
@@ -194,7 +189,7 @@ export class SelfImprovingSystem extends EventEmitter {
         score: learningScore,
         impact: learningScore < 50 ? 'critical' : learningScore < 60 ? 'high' : 'medium',
         description: 'Model prediction accuracy below target',
-        examples: [`Current: ${learningScore.toFixed(1)}%, Target: 85%`]
+        examples: [`Current: ${learningScore.toFixed(1)}%, Target: 85%`],
       });
     }
 
@@ -204,7 +199,7 @@ export class SelfImprovingSystem extends EventEmitter {
         score: acceptanceScore,
         impact: acceptanceScore < 50 ? 'critical' : acceptanceScore < 60 ? 'high' : 'medium',
         description: 'User acceptance rate below target',
-        examples: [`Current: ${acceptanceScore.toFixed(1)}%, Target: 80%`]
+        examples: [`Current: ${acceptanceScore.toFixed(1)}%, Target: 80%`],
       });
     }
 
@@ -214,7 +209,7 @@ export class SelfImprovingSystem extends EventEmitter {
         score: predictionScore,
         impact: 'medium',
         description: 'Prediction confidence below target',
-        examples: [`Current: ${predictionScore.toFixed(1)}%, Target: 85%`]
+        examples: [`Current: ${predictionScore.toFixed(1)}%, Target: 85%`],
       });
     }
 
@@ -225,7 +220,7 @@ export class SelfImprovingSystem extends EventEmitter {
         score: Math.min(stats.patternsDiscovered * 10, 100),
         impact: 'medium',
         description: 'Too few patterns discovered',
-        examples: [`Current: ${stats.patternsDiscovered}, Target: 50+`]
+        examples: [`Current: ${stats.patternsDiscovered}, Target: 50+`],
       });
     }
 
@@ -236,7 +231,7 @@ export class SelfImprovingSystem extends EventEmitter {
       strengths.push({
         area: 'learning-accuracy',
         score: learningScore,
-        description: 'Strong model prediction accuracy'
+        description: 'Strong model prediction accuracy',
       });
     }
 
@@ -244,7 +239,7 @@ export class SelfImprovingSystem extends EventEmitter {
       strengths.push({
         area: 'user-acceptance',
         score: acceptanceScore,
-        description: 'High user acceptance of suggestions'
+        description: 'High user acceptance of suggestions',
       });
     }
 
@@ -257,7 +252,7 @@ export class SelfImprovingSystem extends EventEmitter {
         description: 'Retrain model with larger dataset',
         potentialImprovement: 85 - learningScore,
         effort: 'low',
-        priority: 0.9
+        priority: 0.9,
       });
     }
 
@@ -269,7 +264,7 @@ export class SelfImprovingSystem extends EventEmitter {
           description: `Address top rejection reason: ${rejectionCategories[0]}`,
           potentialImprovement: 20,
           effort: 'medium',
-          priority: 0.85
+          priority: 0.85,
         });
       }
     }
@@ -279,7 +274,7 @@ export class SelfImprovingSystem extends EventEmitter {
       overallScore,
       weaknesses,
       strengths,
-      opportunities
+      opportunities,
     };
 
     // Store in history
@@ -293,7 +288,7 @@ export class SelfImprovingSystem extends EventEmitter {
     this.emit('performance:analyzed', {
       overallScore,
       weaknessCount: weaknesses.length,
-      opportunityCount: opportunities.length
+      opportunityCount: opportunities.length,
     });
 
     return analysis;
@@ -309,13 +304,11 @@ export class SelfImprovingSystem extends EventEmitter {
 
     // Sort by impact and score
     const impactScore = (w: Weakness): number => {
-      const impactWeight = { 'critical': 4, 'high': 3, 'medium': 2, 'low': 1 };
+      const impactWeight = { critical: 4, high: 3, medium: 2, low: 1 };
       return impactWeight[w.impact] * (100 - w.score);
     };
 
-    const sorted = [...performance.weaknesses].sort((a, b) =>
-      impactScore(b) - impactScore(a)
-    );
+    const sorted = [...performance.weaknesses].sort((a, b) => impactScore(b) - impactScore(a));
 
     return sorted[0];
   }
@@ -337,7 +330,7 @@ export class SelfImprovingSystem extends EventEmitter {
           type: 'parameter-tuning',
           description: 'Increase learning rate from 0.01 to 0.02',
           implementation: { learningRate: 0.02 },
-          reversible: true
+          reversible: true,
         };
         expectedImprovement = 10;
         break;
@@ -348,7 +341,7 @@ export class SelfImprovingSystem extends EventEmitter {
           type: 'strategy-adjustment',
           description: 'Only show suggestions with >70% confidence',
           implementation: { confidenceThreshold: 0.7 },
-          reversible: true
+          reversible: true,
         };
         expectedImprovement = 15;
         break;
@@ -359,7 +352,7 @@ export class SelfImprovingSystem extends EventEmitter {
           type: 'algorithm-change',
           description: 'Use weighted ensemble of multiple predictors',
           implementation: { useEnsemble: true },
-          reversible: true
+          reversible: true,
         };
         expectedImprovement = 12;
         break;
@@ -370,7 +363,7 @@ export class SelfImprovingSystem extends EventEmitter {
           type: 'parameter-tuning',
           description: 'Lower pattern threshold from 0.8 to 0.6',
           implementation: { patternThreshold: 0.6 },
-          reversible: true
+          reversible: true,
         };
         expectedImprovement = 20;
         break;
@@ -381,7 +374,7 @@ export class SelfImprovingSystem extends EventEmitter {
           type: 'parameter-tuning',
           description: 'Optimize general parameters',
           implementation: {},
-          reversible: true
+          reversible: true,
         };
         expectedImprovement = 5;
     }
@@ -393,7 +386,7 @@ export class SelfImprovingSystem extends EventEmitter {
       proposedChange,
       expectedImprovement,
       risk: proposedChange.reversible ? 'low' : 'medium',
-      confidence: Math.min(weakness.score / 100 + 0.5, 0.9)
+      confidence: Math.min(weakness.score / 100 + 0.5, 0.9),
     };
 
     this.hypothesisQueue.push(hyp);
@@ -401,7 +394,7 @@ export class SelfImprovingSystem extends EventEmitter {
     this.emit('hypothesis:generated', {
       hypothesisId: id,
       targetArea: weakness.area,
-      expectedImprovement
+      expectedImprovement,
     });
 
     return hyp;
@@ -427,7 +420,7 @@ export class SelfImprovingSystem extends EventEmitter {
         improved: false,
         actualImprovement: 0,
         metrics: baselineMetrics,
-        recommendation: 'reject'
+        recommendation: 'reject',
       };
     }
 
@@ -445,23 +438,20 @@ export class SelfImprovingSystem extends EventEmitter {
 
     const improved = actualImprovement >= this.MIN_IMPROVEMENT_THRESHOLD;
 
-    const recommendation =
-      improved ? 'apply' :
-      actualImprovement > 0 ? 'refine' :
-      'reject';
+    const recommendation = improved ? 'apply' : actualImprovement > 0 ? 'refine' : 'reject';
 
     const result: HypothesisTestResult = {
       hypothesisId: hypothesis.id,
       improved,
       actualImprovement,
       metrics: newMetrics,
-      recommendation
+      recommendation,
     };
 
     this.emit('hypothesis:tested', {
       hypothesisId: hypothesis.id,
       improved,
-      actualImprovement: actualImprovement.toFixed(1)
+      actualImprovement: actualImprovement.toFixed(1),
     });
 
     return result;
@@ -478,7 +468,7 @@ export class SelfImprovingSystem extends EventEmitter {
       accuracy: stats.modelAccuracy,
       performance: 1.0, // Would measure actual latency
       reliability: stats.successRate,
-      userSatisfaction: monitorStats.acceptanceRate
+      userSatisfaction: monitorStats.acceptanceRate,
     };
   }
 
@@ -503,16 +493,19 @@ export class SelfImprovingSystem extends EventEmitter {
    */
   private calculateImprovement(baseline: TestMetrics, current: TestMetrics): number {
     const accuracyImprovement = ((current.accuracy - baseline.accuracy) / baseline.accuracy) * 100;
-    const performanceImprovement = ((current.performance - baseline.performance) / baseline.performance) * 100;
-    const reliabilityImprovement = ((current.reliability - baseline.reliability) / baseline.reliability) * 100;
-    const satisfactionImprovement = ((current.userSatisfaction - baseline.userSatisfaction) / baseline.userSatisfaction) * 100;
+    const performanceImprovement =
+      ((current.performance - baseline.performance) / baseline.performance) * 100;
+    const reliabilityImprovement =
+      ((current.reliability - baseline.reliability) / baseline.reliability) * 100;
+    const satisfactionImprovement =
+      ((current.userSatisfaction - baseline.userSatisfaction) / baseline.userSatisfaction) * 100;
 
     // Weighted average
     return (
       accuracyImprovement * 0.35 +
-      performanceImprovement * 0.20 +
+      performanceImprovement * 0.2 +
       reliabilityImprovement * 0.25 +
-      satisfactionImprovement * 0.20
+      satisfactionImprovement * 0.2
     );
   }
 
@@ -528,7 +521,7 @@ export class SelfImprovingSystem extends EventEmitter {
       id: `imp-${Date.now()}`,
       hypothesis,
       appliedAt: new Date(),
-      results: result
+      results: result,
     };
 
     this.appliedImprovements.push(applied);
@@ -544,7 +537,7 @@ export class SelfImprovingSystem extends EventEmitter {
     this.emit('improvement:applied', {
       improvementId: applied.id,
       hypothesisId: hypothesis.id,
-      improvement: result.actualImprovement.toFixed(1)
+      improvement: result.actualImprovement.toFixed(1),
     });
   }
 
@@ -569,7 +562,7 @@ export class SelfImprovingSystem extends EventEmitter {
 
     this.emit('improvement:rolled-back', {
       improvementId: improvement.id,
-      reason: 'Performance degradation detected'
+      reason: 'Performance degradation detected',
     });
   }
 
@@ -586,8 +579,8 @@ export class SelfImprovingSystem extends EventEmitter {
         area: hypothesis.targetWeakness,
         change: hypothesis.proposedChange.description,
         improvement: result.actualImprovement,
-        applicable: hypothesis.proposedChange.type
-      }
+        applicable: hypothesis.proposedChange.type,
+      },
     });
   }
 
@@ -609,13 +602,14 @@ export class SelfImprovingSystem extends EventEmitter {
     performanceTrend: 'improving' | 'stable' | 'degrading';
   } {
     const total = this.appliedImprovements.length;
-    const successful = this.appliedImprovements.filter(i =>
-      i.results.actualImprovement >= this.MIN_IMPROVEMENT_THRESHOLD
+    const successful = this.appliedImprovements.filter(
+      i => i.results.actualImprovement >= this.MIN_IMPROVEMENT_THRESHOLD
     ).length;
 
-    const avgImprovement = total > 0
-      ? this.appliedImprovements.reduce((sum, i) => sum + i.results.actualImprovement, 0) / total
-      : 0;
+    const avgImprovement =
+      total > 0
+        ? this.appliedImprovements.reduce((sum, i) => sum + i.results.actualImprovement, 0) / total
+        : 0;
 
     const rolledBack = this.appliedImprovements.filter(i => i.rollback).length;
 
@@ -636,7 +630,7 @@ export class SelfImprovingSystem extends EventEmitter {
       successRate: total > 0 ? successful / total : 0,
       avgImprovement,
       rollbackRate: total > 0 ? rolledBack / total : 0,
-      performanceTrend: trend
+      performanceTrend: trend,
     };
   }
 
@@ -653,7 +647,7 @@ export class SelfImprovingSystem extends EventEmitter {
       currentPerformance: this.performanceHistory[this.performanceHistory.length - 1] || null,
       improvements: this.appliedImprovements,
       hypotheses: this.hypothesisQueue,
-      statistics: this.getStatistics()
+      statistics: this.getStatistics(),
     };
   }
 }

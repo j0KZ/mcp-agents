@@ -73,7 +73,7 @@ export class ExplanationEngine extends EventEmitter {
       sections: ['what', 'why', 'how', 'impact', 'alternatives'],
       tone: 'technical',
       includeEvidence: true,
-      includeVisualizations: true
+      includeVisualizations: true,
     });
 
     // Test Generation Template
@@ -81,7 +81,7 @@ export class ExplanationEngine extends EventEmitter {
       sections: ['coverage', 'scenarios', 'assertions', 'mocks', 'edge-cases'],
       tone: 'educational',
       includeEvidence: true,
-      includeVisualizations: false
+      includeVisualizations: false,
     });
 
     // Refactoring Template
@@ -89,7 +89,7 @@ export class ExplanationEngine extends EventEmitter {
       sections: ['current-state', 'issues', 'proposed-changes', 'benefits', 'risks'],
       tone: 'balanced',
       includeEvidence: true,
-      includeVisualizations: true
+      includeVisualizations: true,
     });
 
     // Security Template
@@ -97,23 +97,20 @@ export class ExplanationEngine extends EventEmitter {
       sections: ['vulnerabilities', 'severity', 'attack-vectors', 'mitigations', 'verification'],
       tone: 'serious',
       includeEvidence: true,
-      includeVisualizations: false
+      includeVisualizations: false,
     });
   }
 
   /**
    * Generate explanation for a semantic analysis
    */
-  explainSemanticAnalysis(
-    intent: CodeIntent,
-    code: string
-  ): Explanation {
+  explainSemanticAnalysis(intent: CodeIntent, code: string): Explanation {
     const explanation: Explanation = {
       summary: this.generateSemanticSummary(intent),
       reasoning: [],
       evidence: [],
       confidence: intent.confidence,
-      educationalNotes: []
+      educationalNotes: [],
     };
 
     // Explain purpose detection
@@ -130,7 +127,7 @@ export class ExplanationEngine extends EventEmitter {
         type: 'pattern',
         description: `Found ${intent.patterns.length} design patterns`,
         data: intent.patterns,
-        importance: 'high'
+        importance: 'high',
       });
     }
 
@@ -139,7 +136,7 @@ export class ExplanationEngine extends EventEmitter {
         type: 'pattern',
         description: `Detected ${intent.antiPatterns.length} anti-patterns`,
         data: intent.antiPatterns,
-        importance: 'high'
+        importance: 'high',
       });
 
       explanation.reasoning.push(
@@ -171,9 +168,7 @@ export class ExplanationEngine extends EventEmitter {
 
     // Add visualization if complex
     if (intent.complexity.cyclomatic > 10) {
-      explanation.visualizations = [
-        this.generateComplexityDiagram(intent.complexity)
-      ];
+      explanation.visualizations = [this.generateComplexityDiagram(intent.complexity)];
     }
 
     return explanation;
@@ -243,24 +238,20 @@ graph TD
       type: 'diagram',
       title: 'Complexity Breakdown',
       data: complexity,
-      mermaidCode
+      mermaidCode,
     };
   }
 
   /**
    * Explain execution results
    */
-  explainExecutionResults(
-    results: ExecutionResult,
-    code: string,
-    testCases: any[]
-  ): Explanation {
+  explainExecutionResults(results: ExecutionResult, code: string, testCases: any[]): Explanation {
     const explanation: Explanation = {
       summary: this.generateExecutionSummary(results),
       reasoning: [],
       evidence: [],
       confidence: 0.9,
-      educationalNotes: []
+      educationalNotes: [],
     };
 
     // Performance explanation
@@ -277,18 +268,13 @@ graph TD
         `Observed Behaviors:`,
         `- ${results.behavior.sideEffects.length} side effects`,
         `- ${results.behavior.asyncOperations} async operations`,
-        ...results.behavior.sideEffects.map(e =>
-          `  • ${e.type}: ${e.operation} (risk: ${e.risk})`
-        )
+        ...results.behavior.sideEffects.map(e => `  • ${e.type}: ${e.operation} (risk: ${e.risk})`)
       );
     }
 
     // Learning insights
     if (results.learnings.length > 0) {
-      explanation.reasoning.push(
-        `Key Learnings:`,
-        ...results.learnings.map(l => `- ${l.insight}`)
-      );
+      explanation.reasoning.push(`Key Learnings:`, ...results.learnings.map(l => `- ${l.insight}`));
 
       // Add recommendations
       const recommendations = results.learnings
@@ -296,10 +282,7 @@ graph TD
         .map(l => l.recommendation!);
 
       if (recommendations.length > 0) {
-        explanation.reasoning.push(
-          `Recommendations:`,
-          ...recommendations.map(r => `✓ ${r}`)
-        );
+        explanation.reasoning.push(`Recommendations:`, ...recommendations.map(r => `✓ ${r}`));
       }
     }
 
@@ -323,7 +306,7 @@ graph TD
         type: 'metric',
         description: 'Code Coverage',
         data: results.coverage,
-        importance: 'medium'
+        importance: 'medium',
       });
 
       explanation.reasoning.push(
@@ -353,11 +336,11 @@ graph TD
    */
   private explainError(error: { type: string; message: string }): string {
     const explanations: Record<string, string> = {
-      'TypeError': 'incorrect data type or null/undefined access',
-      'ReferenceError': 'variable or function not defined',
-      'SyntaxError': 'invalid JavaScript/TypeScript syntax',
-      'RangeError': 'value outside allowed range or stack overflow',
-      'Error': 'general error condition'
+      TypeError: 'incorrect data type or null/undefined access',
+      ReferenceError: 'variable or function not defined',
+      SyntaxError: 'invalid JavaScript/TypeScript syntax',
+      RangeError: 'value outside allowed range or stack overflow',
+      Error: 'general error condition',
     };
 
     return explanations[error.type] || 'unexpected condition';
@@ -380,7 +363,7 @@ graph TD
       evidence: [],
       confidence: 0.85,
       educationalNotes: [],
-      alternativeApproaches: []
+      alternativeApproaches: [],
     };
 
     // Explain patterns
@@ -393,15 +376,11 @@ graph TD
       // Add pattern examples
       for (const pattern of insights.patterns) {
         if (pattern.example) {
-          explanation.educationalNotes?.push(
-            `📘 ${pattern.name} Example: ${pattern.example}`
-          );
+          explanation.educationalNotes?.push(`📘 ${pattern.name} Example: ${pattern.example}`);
         }
 
         if (pattern.antiPattern) {
-          explanation.educationalNotes?.push(
-            `⚠️ Avoid: ${pattern.antiPattern}`
-          );
+          explanation.educationalNotes?.push(`⚠️ Avoid: ${pattern.antiPattern}`);
         }
       }
     }
@@ -410,9 +389,7 @@ graph TD
     if (insights.pitfalls.length > 0) {
       explanation.reasoning.push(
         `⚠️ Potential Issues Detected:`,
-        ...insights.pitfalls.map(p =>
-          `- ${p.issue} (${p.severity} severity)`
-        )
+        ...insights.pitfalls.map(p => `- ${p.issue} (${p.severity} severity)`)
       );
 
       // Add solutions
@@ -424,9 +401,9 @@ graph TD
           description: pitfall.issue,
           data: {
             symptoms: pitfall.symptoms,
-            solution: pitfall.solution
+            solution: pitfall.solution,
           },
-          importance: pitfall.severity === 'critical' ? 'high' : 'medium'
+          importance: pitfall.severity === 'critical' ? 'high' : 'medium',
         });
       }
     }
@@ -439,14 +416,11 @@ graph TD
           pros: [
             'Well-established pattern',
             'Clear separation of concerns',
-            'Easier testing and maintenance'
+            'Easier testing and maintenance',
           ],
-          cons: [
-            'May add initial complexity',
-            'Requires team familiarity'
-          ]
+          cons: ['May add initial complexity', 'Requires team familiarity'],
         },
-        whenToUse: pattern.when
+        whenToUse: pattern.when,
       });
     }
 
@@ -469,7 +443,7 @@ graph TD
       summary: `Generated ${tests.length} tests achieving ${coverage.toFixed(1)}% coverage.`,
       reasoning: [],
       evidence: [],
-      confidence: 0.8
+      confidence: 0.8,
     };
 
     // Test strategy explanation
@@ -512,7 +486,7 @@ graph TD
     explanation.educationalNotes = [
       '🎯 Good tests are: Fast, Independent, Repeatable, Self-validating, and Timely (FIRST)',
       '📊 Aim for 80%+ code coverage, but remember: coverage ≠ quality',
-      '🔄 Test behavior, not implementation details'
+      '🔄 Test behavior, not implementation details',
     ];
 
     return explanation;
@@ -535,7 +509,7 @@ graph TD
       reasoning: [],
       evidence: [],
       confidence: 0.85,
-      alternativeApproaches: []
+      alternativeApproaches: [],
     };
 
     // Explain each change
@@ -550,14 +524,14 @@ graph TD
         type: 'code',
         description: change.type,
         data: { before: original.substring(0, 100), after: refactored.substring(0, 100) },
-        importance: 'medium'
+        importance: 'medium',
       });
     }
 
     // Metrics comparison
     const originalLines = original.split('\n').length;
     const refactoredLines = refactored.split('\n').length;
-    const reduction = ((originalLines - refactoredLines) / originalLines * 100).toFixed(1);
+    const reduction = (((originalLines - refactoredLines) / originalLines) * 100).toFixed(1);
 
     if (refactoredLines < originalLines) {
       explanation.reasoning.push(
@@ -571,18 +545,18 @@ graph TD
         approach: 'Minimal Refactoring',
         prosAndCons: {
           pros: ['Less risky', 'Faster to implement', 'Easier review'],
-          cons: ['May not address all issues', 'Technical debt remains']
+          cons: ['May not address all issues', 'Technical debt remains'],
         },
-        whenToUse: 'When time is limited or code is in production'
+        whenToUse: 'When time is limited or code is in production',
       },
       {
         approach: 'Complete Rewrite',
         prosAndCons: {
           pros: ['Clean slate', 'Modern patterns', 'Optimal design'],
-          cons: ['High risk', 'Time consuming', 'May introduce new bugs']
+          cons: ['High risk', 'Time consuming', 'May introduce new bugs'],
         },
-        whenToUse: 'When code is unmaintainable and well-tested'
-      }
+        whenToUse: 'When code is unmaintainable and well-tested',
+      },
     ];
 
     return explanation;
@@ -606,15 +580,18 @@ graph TD
       summary: `Found ${vulnerabilities.length} security issues (${criticalCount} critical, ${highCount} high).`,
       reasoning: [],
       evidence: [],
-      confidence: 0.95
+      confidence: 0.95,
     };
 
     // Group by severity
-    const grouped = vulnerabilities.reduce((acc, vuln) => {
-      if (!acc[vuln.severity]) acc[vuln.severity] = [];
-      acc[vuln.severity].push(vuln);
-      return acc;
-    }, {} as Record<string, typeof vulnerabilities>);
+    const grouped = vulnerabilities.reduce(
+      (acc, vuln) => {
+        if (!acc[vuln.severity]) acc[vuln.severity] = [];
+        acc[vuln.severity].push(vuln);
+        return acc;
+      },
+      {} as Record<string, typeof vulnerabilities>
+    );
 
     // Explain each severity level
     for (const [severity, vulns] of Object.entries(grouped)) {
@@ -631,7 +608,7 @@ graph TD
           type: 'pattern',
           description: vuln.type,
           data: vuln,
-          importance: severity === 'critical' ? 'high' : 'medium'
+          importance: severity === 'critical' ? 'high' : 'medium',
         });
       }
     }
@@ -641,7 +618,7 @@ graph TD
       '🔒 Security Principle: Defense in Depth - multiple layers of security',
       '🛡️ Never trust user input - always validate and sanitize',
       '🔑 Principle of Least Privilege - minimize access rights',
-      '📝 Log security events for audit trails'
+      '📝 Log security events for audit trails',
     ];
 
     return explanation;
@@ -658,14 +635,14 @@ graph TD
       cons: string[];
     }[]
   ): Explanation {
-    const best = options.reduce((a, b) => a.score > b.score ? a : b);
+    const best = options.reduce((a, b) => (a.score > b.score ? a : b));
 
     const explanation: Explanation = {
       summary: `Comparing ${options.length} approaches. Recommendation: ${best.name} (score: ${best.score}/100).`,
       reasoning: [],
       evidence: [],
       confidence: 0.8,
-      alternativeApproaches: []
+      alternativeApproaches: [],
     };
 
     // Compare each option
@@ -680,18 +657,17 @@ graph TD
         approach: option.name,
         prosAndCons: {
           pros: option.pros,
-          cons: option.cons
+          cons: option.cons,
         },
-        whenToUse: option.score === best.score
-          ? 'Recommended approach for this scenario'
-          : `Consider when: ${option.pros[0]?.toLowerCase()}`
+        whenToUse:
+          option.score === best.score
+            ? 'Recommended approach for this scenario'
+            : `Consider when: ${option.pros[0]?.toLowerCase()}`,
       });
     }
 
     // Visual comparison
-    explanation.visualizations = [
-      this.generateComparisonChart(options)
-    ];
+    explanation.visualizations = [this.generateComparisonChart(options)];
 
     return explanation;
   }
@@ -702,41 +678,35 @@ graph TD
   private generateComparisonChart(options: any[]): Visualization {
     const mermaidCode = `
 graph LR
-    ${options.map((o, i) =>
-      `O${i}[${o.name}<br/>Score: ${o.score}]`
-    ).join('\n    ')}
+    ${options.map((o, i) => `O${i}[${o.name}<br/>Score: ${o.score}]`).join('\n    ')}
 
-    ${options.map((o, i) =>
-      `O${i} --> S[Selection]`
-    ).join('\n    ')}
+    ${options.map((o, i) => `O${i} --> S[Selection]`).join('\n    ')}
 
     style S fill:#f9f,stroke:#333,stroke-width:2px
-    ${options.map((o, i) =>
-      `style O${i} fill:#${o.score > 80 ? '9f9' : o.score > 60 ? 'ff9' : 'f99'}`
-    ).join('\n    ')}
+    ${options
+      .map((o, i) => `style O${i} fill:#${o.score > 80 ? '9f9' : o.score > 60 ? 'ff9' : 'f99'}`)
+      .join('\n    ')}
 `;
 
     return {
       type: 'graph',
       title: 'Approach Comparison',
       data: options,
-      mermaidCode
+      mermaidCode,
     };
   }
 
   /**
    * Create unified explanation from multiple tools
    */
-  async createUnifiedExplanation(
-    toolExplanations: Map<string, Explanation>
-  ): Promise<Explanation> {
+  async createUnifiedExplanation(toolExplanations: Map<string, Explanation>): Promise<Explanation> {
     const unified: Explanation = {
       summary: 'Combined analysis from multiple MCP tools.',
       reasoning: [],
       evidence: [],
       confidence: 0,
       educationalNotes: [],
-      visualizations: []
+      visualizations: [],
     };
 
     // Combine summaries
@@ -747,10 +717,12 @@ graph LR
     // Merge reasoning with tool attribution
     for (const [tool, exp] of toolExplanations.entries()) {
       unified.reasoning.push(`\n[${tool}]`, ...exp.reasoning);
-      unified.evidence.push(...exp.evidence.map(e => ({
-        ...e,
-        description: `[${tool}] ${e.description}`
-      })));
+      unified.evidence.push(
+        ...exp.evidence.map(e => ({
+          ...e,
+          description: `[${tool}] ${e.description}`,
+        }))
+      );
     }
 
     // Calculate average confidence
@@ -775,7 +747,7 @@ graph LR
       type: 'unified-explanation',
       data: unified,
       confidence: unified.confidence,
-      affects: ['all']
+      affects: ['all'],
     });
 
     return unified;
@@ -905,21 +877,33 @@ graph LR
   <h2>Analysis</h2>
   ${explanation.reasoning.map(r => `<p>${r}</p>`).join('')}
 
-  ${explanation.evidence.length > 0 ? `
+  ${
+    explanation.evidence.length > 0
+      ? `
   <h2>Evidence</h2>
-  ${explanation.evidence.map(e => `
+  ${explanation.evidence
+    .map(
+      e => `
     <div class="evidence ${e.importance}">
       <strong>${e.description}</strong> (${e.importance} importance)
     </div>
-  `).join('')}
-  ` : ''}
+  `
+    )
+    .join('')}
+  `
+      : ''
+  }
 
-  ${explanation.educationalNotes?.length ? `
+  ${
+    explanation.educationalNotes?.length
+      ? `
   <h2>Learning Notes</h2>
   <div class="educational">
     ${explanation.educationalNotes.map(n => `<p>${n}</p>`).join('')}
   </div>
-  ` : ''}
+  `
+      : ''
+  }
 </body>
 </html>`;
   }
