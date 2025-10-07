@@ -138,7 +138,12 @@ AUDIT_REPORT_*.md
 *-refactored.ts
 .mcp.json
 
-# Root-level reports and temporary files (moved to docs/ or should be ignored)
+# Internal documentation (not for public repo)
+internal/
+demo-transcendence.js
+benchmarks/real-world-benchmark.js
+
+# Root-level reports and temporary files (moved to internal/ or should be ignored)
 COMPREHENSIVE_AUDIT_REPORT.md
 IMPLEMENTATION_PLAN.md
 PHASE_*_COMPLETE.md
@@ -153,6 +158,19 @@ HONEST_AUDIT_PASSED.md
 TEST_COUNT_VERIFICATION.md
 BASELINE_*.txt
 test-count-report.txt
+ALL_MCPS_FIXED.md
+MCP_STATUS_REPORT.md
+
+# Temporary planning and work tracking documents
+QUICK_START_MCPS.md
+RELEASE_NOTES_v*.md
+ROADMAP_REVIEW_FINDINGS.md
+ROADMAP_TASKS_COMPLETED.md
+VERSION_*_SUMMARY.md
+WORK_COMPLETED_v*.md
+*_FINDINGS.md
+*_SUMMARY.md
+*_TASKS_*.md
 
 # Sensitive configuration files
 *.local.json

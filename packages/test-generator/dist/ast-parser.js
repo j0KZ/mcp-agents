@@ -3,7 +3,9 @@
  * Replaces regex-based parsing for better accuracy and TypeScript support
  */
 import { parse } from '@babel/parser';
-import traverse from '@babel/traverse';
+import _traverse from '@babel/traverse';
+// Handle ESM/CommonJS compatibility
+const traverse = _traverse.default || _traverse;
 import { generateHash } from '@j0kz/shared';
 export class ASTParser {
     cache;
@@ -32,14 +34,14 @@ export class ASTParser {
             const classes = [];
             traverse(ast, {
                 // Extract function declarations
-                FunctionDeclaration: path => {
+                FunctionDeclaration: (path) => {
                     const node = path.node;
                     if (node.id) {
                         functions.push(this.extractFunctionInfo(node, node.id.name));
                     }
                 },
                 // Extract arrow functions assigned to variables
-                VariableDeclarator: path => {
+                VariableDeclarator: (path) => {
                     const { id, init } = path.node;
                     if (init &&
                         (init.type === 'ArrowFunctionExpression' || init.type === 'FunctionExpression')) {
@@ -49,7 +51,7 @@ export class ASTParser {
                     }
                 },
                 // Extract class declarations
-                ClassDeclaration: path => {
+                ClassDeclaration: (path) => {
                     const node = path.node;
                     if (node.id) {
                         classes.push(this.extractClassInfo(node));

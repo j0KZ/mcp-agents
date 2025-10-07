@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/shared",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "description": "Shared utilities and types for MCP tools - enables modularity and integration",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,7 +12,6 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "test": "vitest",
-    "test:ci": "vitest run --passWithNoTests",
     "test:ci": "vitest run",
     "lint": "eslint src --ext .ts"
   },
@@ -26,6 +25,8 @@
   "author": "MCP Tools",
   "license": "MIT",
   "dependencies": {
+    "@babel/parser": "^7.24.0",
+    "@babel/traverse": "^7.24.0",
     "@modelcontextprotocol/sdk": "^1.19.1",
     "fast-glob": "^3.3.2",
     "lru-cache": "^11.0.2",

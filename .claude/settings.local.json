@@ -58,7 +58,8 @@
       "Bash(npm run prettier:write:*)",
       "Bash(npm run:*)",
       "Bash(npx prettier:*)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []

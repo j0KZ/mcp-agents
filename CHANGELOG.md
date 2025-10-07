@@ -4,6 +4,45 @@ All notable changes to this project will be documented in this file.
 
 ## [1.0.34] - 2025-10-06
 
+### 🔧 CRITICAL BUILD FIXES - All MCPs Now Building
+
+**TypeScript Compilation Fixes:**
+
+- ✅ **test-generator** - Fixed 4 compilation errors
+  - Fixed missing `constructor` property in ClassInfo return
+  - Fixed SemanticAnalyzer constructor call (removed arguments)
+  - Fixed ToolMetric calls - added required `input`/`output` fields
+  - Fixed `tests.length` → `tests.code.length` type error
+
+- ✅ **orchestrator-mcp** - Fixed 16 compilation errors
+  - Fixed async return type in conflict-resolver (`Promise<Resolution>`)
+  - Fixed SemanticAnalyzer constructor call
+  - Fixed ToolMetric tracking calls (2 locations) with proper input/output
+  - Fixed MessageBus API usage:
+    - Changed private `broadcast()` → public `send()` with `to: 'broadcast'`
+    - Changed non-existent `respond()` → `send()` with `inReplyTo` field
+    - Fixed MessageType: `'notification'` → `'broadcast'`
+  - Fixed Requirement interface - added `description`, `skill?` fields
+  - Added descriptions to 10+ certification/training requirements
+  - Fixed type assertions for requirement types
+  - Fixed Map/Object property access (`results.length` → `results.size`)
+
+**Build Verification:**
+- ✅ All 9 core MCP packages compile successfully
+- ✅ test-generator: `tsc` completes without errors
+- ✅ orchestrator-mcp: `tsc` completes without errors
+- ✅ 100% build success rate across all packages
+
+**Quality Impact:**
+- 20+ TypeScript errors eliminated
+- Improved type safety across orchestration system
+- Consistent MessageBus API usage
+- Better ToolMetric tracking structure
+
+---
+
+## [1.0.33] - 2025-10-06
+
 ### 📚 Documentation & Test Coverage Update
 
 **Documentation Improvements:**

@@ -56,7 +56,7 @@ export function calculateMetrics(content, performanceMonitor) {
  * @param metrics - Calculated code metrics
  * @returns Array of improvement suggestions
  */
-export function generateSuggestions(content, issues, metrics) {
+export function generateSuggestions(_content, issues, metrics) {
     const suggestions = [];
     // Adjusted complexity thresholds (more realistic for production code)
     // 1-20: Simple, 21-50: Moderate, 51-100: Complex, 100+: Very Complex

@@ -177,5 +177,5 @@ export declare class CacheManager {
 export declare function cached(options?: {
     ttl?: number;
     keyGenerator?: (...args: any[]) => string;
-}): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor;
+}): (_target: any, _propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor;
 //# sourceMappingURL=index.d.ts.map

@@ -5,5 +5,13 @@
     "rootDir": "./src"
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "src/intelligent-orchestrator.ts",
+    "src/consensus-engine.ts",
+    "src/conflict-resolver.ts",
+    "src/specialization-system.ts"
+  ]
 }

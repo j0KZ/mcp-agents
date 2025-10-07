@@ -350,7 +350,7 @@ export class CacheManager {
 export function cached(options: { ttl?: number; keyGenerator?: (...args: any[]) => string } = {}) {
   const cache = new MemoryCache({ ttl: options.ttl });
 
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function (_target: any, _propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {

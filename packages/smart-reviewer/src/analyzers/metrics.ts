@@ -74,7 +74,7 @@ export function calculateMetrics(
  * @returns Array of improvement suggestions
  */
 export function generateSuggestions(
-  content: string,
+  _content: string,
   issues: CodeIssue[],
   metrics: CodeMetrics
 ): string[] {

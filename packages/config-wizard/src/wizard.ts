@@ -12,6 +12,7 @@ import { installMCPs } from './installer.js';
 import { validateConfig } from './validator.js';
 import { logger } from './utils/logger.js';
 import { spinner } from './utils/spinner.js';
+import { writeConfigFile } from './utils/file-system.js';
 
 export interface WizardArgs {
   editor?: string;
@@ -64,7 +65,7 @@ export async function runWizard(args: WizardArgs, deps: WizardDeps = {}): Promis
     generateConfig: generateConfigFn = generateConfig,
     validateConfig: validateConfigFn = validateConfig,
     installMCPs: installMCPsFn = installMCPs,
-    writeConfigFile: writeConfigFileFn = (await import('./utils/file-system.js')).writeConfigFile,
+    writeConfigFile: writeConfigFileFn = writeConfigFile,
     inquirerPrompt = inquirer.prompt,
   } = deps;
 

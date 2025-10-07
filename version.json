@@ -1,4 +1,4 @@
 {
-  "version": "1.0.33",
+  "version": "1.0.34",
   "description": "Global version for all MCP packages. Update this file to bump all packages simultaneously."
 }

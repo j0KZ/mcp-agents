@@ -35,7 +35,6 @@ export declare class MemoryProfiler extends EventEmitter {
     private snapshots;
     private checkpoints;
     private startTime;
-    private leakThreshold;
     constructor(maxSnapshots?: number);
     /**
      * Start profiling with optional label
