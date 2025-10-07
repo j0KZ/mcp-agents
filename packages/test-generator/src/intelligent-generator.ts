@@ -554,6 +554,7 @@ import * as target from '${importPath}';`
     return {
       name: className,
       methods,
+      constructor: undefined,
       line: node.loc?.start.line || 0
     };
   }

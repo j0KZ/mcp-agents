@@ -84,7 +84,7 @@ describe('Config Generators', () => {
 
     it('should throw for unknown editor', async () => {
       const invalidSelections = { ...mockSelections, editor: 'unknown' as any };
-      await expect(target.generateConfig(invalidSelections)).rejects.toThrow();
+      await expect(generateConfig(invalidSelections)).rejects.toThrow();
     });
   });
 });

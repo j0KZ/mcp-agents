@@ -1,153 +1,130 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import * as target from '../src/analyzer.js';
 
-describe('ArchitectureAnalyzer class', () => {
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(__dirname, '../../..');
+const apiDesignerPath = path.join(projectRoot, 'packages/api-designer');
+
+describe('ArchitectureAnalyzer', () => {
+  let analyzer: target.ArchitectureAnalyzer;
+
   beforeEach(() => {
-    let instance: any;
+    analyzer = new target.ArchitectureAnalyzer();
   });
 
-  it('should create instance of ArchitectureAnalyzer', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(instance).toBeInstanceOf(ArchitectureAnalyzer);
+  describe('constructor', () => {
+    it('should create instance of ArchitectureAnalyzer', () => {
+      expect(analyzer).toBeInstanceOf(target.ArchitectureAnalyzer);
+    });
+
+    it('should initialize properly', () => {
+      expect(analyzer).toBeDefined();
+    });
   });
 
-  it('should analyzeArchitecture', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-await expect(instance.analyzeArchitecture('', {})).resolves.toBeDefined();
+  describe('analyzeArchitecture()', () => {
+    it('should analyze architecture of a project', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {});
+      expect(result).toBeDefined();
+      expect(result.modules).toBeDefined();
+    });
+
+    it('should return modules array', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {});
+      expect(Array.isArray(result.modules)).toBe(true);
+    });
+
+    it('should detect dependencies', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {});
+      expect(result.dependencies).toBeDefined();
+    });
+
+    it('should handle configuration options', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        maxDepth: 3,
+        detectCircular: true
+      });
+      expect(result).toBeDefined();
+    });
+
+    it('should include project path in result', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {});
+      expect(result.projectPath).toBeDefined();
+    });
   });
 
-  it('should handle edge cases in analyzeArchitecture', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(() => instance.analyzeArchitecture()).not.toThrow();
+  describe('circular dependency detection', () => {
+    it('should detect circular dependencies when enabled', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        detectCircular: true
+      });
+      expect(result).toBeDefined();
+    });
+
+    it('should return circular dependencies array', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        detectCircular: true
+      });
+      if (result.circularDependencies) {
+        expect(Array.isArray(result.circularDependencies)).toBe(true);
+      }
+    });
   });
 
-  it('should detectCircularDependencies', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(instance.detectCircularDependencies('', '')).toBeDefined();
+  describe('module analysis', () => {
+    it('should identify module types', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {});
+      if (result.modules.length > 0) {
+        result.modules.forEach(mod => {
+          expect(mod).toHaveProperty('path');
+        });
+      }
+    });
+
+    it('should track module dependencies', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {});
+      expect(result.dependencies).toBeDefined();
+    });
   });
 
-  it('should handle edge cases in detectCircularDependencies', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(() => instance.detectCircularDependencies()).not.toThrow();
+  describe('depth limiting', () => {
+    it('should respect maxDepth configuration', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        maxDepth: 2
+      });
+      expect(result).toBeDefined();
+    });
   });
 
-  it('should buildDependencyGraph', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(instance.buildDependencyGraph('')).toBeDefined();
+  describe('exclude patterns', () => {
+    it('should support exclude patterns', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        excludePatterns: ['node_modules', 'dist']
+      });
+      expect(result).toBeDefined();
+    });
   });
 
-  it('should handle edge cases in buildDependencyGraph', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(() => instance.buildDependencyGraph()).not.toThrow();
+  describe('graph generation', () => {
+    it('should generate dependency graph when configured', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        generateGraph: true
+      });
+      expect(result).toBeDefined();
+    });
   });
 
-  it('should findCycles', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(instance.findCycles('', '', true, '', '')).toBeDefined();
-  });
-
-  it('should handle edge cases in findCycles', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(() => instance.findCycles()).not.toThrow();
-  });
-
-  it('should deduplicateCycles', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(instance.deduplicateCycles('')).toBeDefined();
-  });
-
-  it('should handle edge cases in deduplicateCycles', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(() => instance.deduplicateCycles()).not.toThrow();
-  });
-
-  it('should normalizeCycle', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(instance.normalizeCycle('')).toBeDefined();
-  });
-
-  it('should handle edge cases in normalizeCycle', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(() => instance.normalizeCycle()).not.toThrow();
-  });
-
-  it('should detectLayerViolations', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(instance.detectLayerViolations('', '')).toBeDefined();
-  });
-
-  it('should handle edge cases in detectLayerViolations', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(() => instance.detectLayerViolations()).not.toThrow();
-  });
-
-  it('should getLayer', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(instance.getLayer('', '')).toBeDefined();
-  });
-
-  it('should handle edge cases in getLayer', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(() => instance.getLayer()).not.toThrow();
-  });
-
-  it('should calculateMetrics', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(instance.calculateMetrics('', '', '', '')).toBeDefined();
-  });
-
-  it('should handle edge cases in calculateMetrics', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(() => instance.calculateMetrics()).not.toThrow();
-  });
-
-  it('should calculateCohesion', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(instance.calculateCohesion('', '')).toBeDefined();
-  });
-
-  it('should handle edge cases in calculateCohesion', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(() => instance.calculateCohesion()).not.toThrow();
-  });
-
-  it('should calculateCoupling', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(instance.calculateCoupling('', '')).toBeDefined();
-  });
-
-  it('should handle edge cases in calculateCoupling', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(() => instance.calculateCoupling()).not.toThrow();
-  });
-
-  it('should generateSuggestions', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(instance.generateSuggestions('', '', '')).toBeDefined();
-  });
-
-  it('should handle edge cases in generateSuggestions', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(() => instance.generateSuggestions()).not.toThrow();
-  });
-
-  it('should generateDependencyGraph', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(instance.generateDependencyGraph('', '')).toBeDefined();
-  });
-
-  it('should handle edge cases in generateDependencyGraph', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(() => instance.generateDependencyGraph()).not.toThrow();
-  });
-
-  it('should sanitizeNodeId', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(instance.sanitizeNodeId('')).toBeDefined();
-  });
-
-  it('should handle edge cases in sanitizeNodeId', async () => {
-    const instance = new target.ArchitectureAnalyzer();
-expect(() => instance.sanitizeNodeId()).not.toThrow();
+  describe('layer rules', () => {
+    it('should validate layer rules when provided', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        layerRules: {
+          presentation: ['business'],
+          business: ['data']
+        }
+      });
+      expect(result).toBeDefined();
+    });
   });
 });

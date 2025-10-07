@@ -318,7 +318,7 @@ export class MessageBus extends EventEmitter {
         messages = messages.filter(m => m.type === filter.type);
       }
       if (filter.since) {
-        messages = messages.filter(m => m.timestamp >= filter.since);
+        messages = messages.filter(m => m.timestamp >= filter.since!);
       }
     }
 
