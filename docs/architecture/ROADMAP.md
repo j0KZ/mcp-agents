@@ -44,7 +44,7 @@
 
 ### ✅ v1.0.34 - Critical Build Fixes 🔧
 
-**TypeScript Compilation Fixes (COMPLETE - 20+ errors fixed)**
+#### TypeScript Compilation Fixes (COMPLETE - 20+ errors fixed)
 
 - ✅ **test-generator package** (4 errors fixed)
   - Fixed missing `constructor` property in ClassInfo return
