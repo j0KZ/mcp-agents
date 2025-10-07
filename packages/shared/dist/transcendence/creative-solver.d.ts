@@ -178,5 +178,5 @@ export declare class CreativeSolver extends EventEmitter {
     private initializeKnowledgeBase;
     private initializeCrossDomainMappings;
 }
-export type { Problem, ProblemType, ProblemContext, Solution, ImplementationPlan, KnownSolution, CrossDomainInsight, NovelApproach };
+export type { Problem, ProblemType, ProblemContext, Solution, ImplementationPlan, KnownSolution, CrossDomainInsight, NovelApproach, };
 //# sourceMappingURL=creative-solver.d.ts.map

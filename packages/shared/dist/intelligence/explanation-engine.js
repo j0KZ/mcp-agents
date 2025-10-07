@@ -24,28 +24,28 @@ export class ExplanationEngine extends EventEmitter {
             sections: ['what', 'why', 'how', 'impact', 'alternatives'],
             tone: 'technical',
             includeEvidence: true,
-            includeVisualizations: true
+            includeVisualizations: true,
         });
         // Test Generation Template
         this.templates.set('test-generation', {
             sections: ['coverage', 'scenarios', 'assertions', 'mocks', 'edge-cases'],
             tone: 'educational',
             includeEvidence: true,
-            includeVisualizations: false
+            includeVisualizations: false,
         });
         // Refactoring Template
         this.templates.set('refactoring', {
             sections: ['current-state', 'issues', 'proposed-changes', 'benefits', 'risks'],
             tone: 'balanced',
             includeEvidence: true,
-            includeVisualizations: true
+            includeVisualizations: true,
         });
         // Security Template
         this.templates.set('security', {
             sections: ['vulnerabilities', 'severity', 'attack-vectors', 'mitigations', 'verification'],
             tone: 'serious',
             includeEvidence: true,
-            includeVisualizations: false
+            includeVisualizations: false,
         });
     }
     /**
@@ -57,7 +57,7 @@ export class ExplanationEngine extends EventEmitter {
             reasoning: [],
             evidence: [],
             confidence: intent.confidence,
-            educationalNotes: []
+            educationalNotes: [],
         };
         // Explain purpose detection
         explanation.reasoning.push(`Identified this code's primary purpose as "${intent.purpose}" based on:`, `- Function names and variable patterns`, `- Data flow analysis showing ${intent.inputs.length} inputs and ${intent.outputs.length} outputs`, `- ${intent.sideEffects.length} side effects detected`);
@@ -67,7 +67,7 @@ export class ExplanationEngine extends EventEmitter {
                 type: 'pattern',
                 description: `Found ${intent.patterns.length} design patterns`,
                 data: intent.patterns,
-                importance: 'high'
+                importance: 'high',
             });
         }
         if (intent.antiPatterns.length > 0) {
@@ -75,7 +75,7 @@ export class ExplanationEngine extends EventEmitter {
                 type: 'pattern',
                 description: `Detected ${intent.antiPatterns.length} anti-patterns`,
                 data: intent.antiPatterns,
-                importance: 'high'
+                importance: 'high',
             });
             explanation.reasoning.push(`⚠️ Anti-patterns detected that may impact code quality:`, ...intent.antiPatterns.map(p => `  - ${p}`));
         }
@@ -90,9 +90,7 @@ export class ExplanationEngine extends EventEmitter {
         }
         // Add visualization if complex
         if (intent.complexity.cyclomatic > 10) {
-            explanation.visualizations = [
-                this.generateComplexityDiagram(intent.complexity)
-            ];
+            explanation.visualizations = [this.generateComplexityDiagram(intent.complexity)];
         }
         return explanation;
     }
@@ -158,7 +156,7 @@ graph TD
             type: 'diagram',
             title: 'Complexity Breakdown',
             data: complexity,
-            mermaidCode
+            mermaidCode,
         };
     }
     /**
@@ -170,7 +168,7 @@ graph TD
             reasoning: [],
             evidence: [],
             confidence: 0.9,
-            educationalNotes: []
+            educationalNotes: [],
         };
         // Performance explanation
         explanation.reasoning.push(`Execution Performance:`, `- Completed in ${results.metrics.executionTime.toFixed(2)}ms`, `- Memory usage: ${(results.metrics.memoryUsed / 1024).toFixed(2)}KB`, `- CPU utilization: ${results.metrics.cpuUsage.toFixed(1)}%`);
@@ -200,7 +198,7 @@ graph TD
                 type: 'metric',
                 description: 'Code Coverage',
                 data: results.coverage,
-                importance: 'medium'
+                importance: 'medium',
             });
             explanation.reasoning.push(`Coverage Analysis:`, `- Statements: ${results.coverage.statements.toFixed(1)}%`, `- Branches: ${results.coverage.branches.toFixed(1)}%`, `- Functions: ${results.coverage.functions.toFixed(1)}%`);
         }
@@ -222,11 +220,11 @@ graph TD
      */
     explainError(error) {
         const explanations = {
-            'TypeError': 'incorrect data type or null/undefined access',
-            'ReferenceError': 'variable or function not defined',
-            'SyntaxError': 'invalid JavaScript/TypeScript syntax',
-            'RangeError': 'value outside allowed range or stack overflow',
-            'Error': 'general error condition'
+            TypeError: 'incorrect data type or null/undefined access',
+            ReferenceError: 'variable or function not defined',
+            SyntaxError: 'invalid JavaScript/TypeScript syntax',
+            RangeError: 'value outside allowed range or stack overflow',
+            Error: 'general error condition',
         };
         return explanations[error.type] || 'unexpected condition';
     }
@@ -240,7 +238,7 @@ graph TD
             evidence: [],
             confidence: 0.85,
             educationalNotes: [],
-            alternativeApproaches: []
+            alternativeApproaches: [],
         };
         // Explain patterns
         if (insights.patterns.length > 0) {
@@ -266,9 +264,9 @@ graph TD
                     description: pitfall.issue,
                     data: {
                         symptoms: pitfall.symptoms,
-                        solution: pitfall.solution
+                        solution: pitfall.solution,
                     },
-                    importance: pitfall.severity === 'critical' ? 'high' : 'medium'
+                    importance: pitfall.severity === 'critical' ? 'high' : 'medium',
                 });
             }
         }
@@ -280,14 +278,11 @@ graph TD
                     pros: [
                         'Well-established pattern',
                         'Clear separation of concerns',
-                        'Easier testing and maintenance'
+                        'Easier testing and maintenance',
                     ],
-                    cons: [
-                        'May add initial complexity',
-                        'Requires team familiarity'
-                    ]
+                    cons: ['May add initial complexity', 'Requires team familiarity'],
                 },
-                whenToUse: pattern.when
+                whenToUse: pattern.when,
             });
         }
         return explanation;
@@ -300,7 +295,7 @@ graph TD
             summary: `Generated ${tests.length} tests achieving ${coverage.toFixed(1)}% coverage.`,
             reasoning: [],
             evidence: [],
-            confidence: 0.8
+            confidence: 0.8,
         };
         // Test strategy explanation
         explanation.reasoning.push(`Test Strategy:`, `- Generated ${tests.filter(t => t.type === 'happy-path').length} happy path tests`, `- Generated ${tests.filter(t => t.type === 'edge-case').length} edge case tests`, `- Generated ${tests.filter(t => t.type === 'error').length} error handling tests`);
@@ -317,7 +312,7 @@ graph TD
         explanation.educationalNotes = [
             '🎯 Good tests are: Fast, Independent, Repeatable, Self-validating, and Timely (FIRST)',
             '📊 Aim for 80%+ code coverage, but remember: coverage ≠ quality',
-            '🔄 Test behavior, not implementation details'
+            '🔄 Test behavior, not implementation details',
         ];
         return explanation;
     }
@@ -330,7 +325,7 @@ graph TD
             reasoning: [],
             evidence: [],
             confidence: 0.85,
-            alternativeApproaches: []
+            alternativeApproaches: [],
         };
         // Explain each change
         for (const change of changes) {
@@ -339,13 +334,13 @@ graph TD
                 type: 'code',
                 description: change.type,
                 data: { before: original.substring(0, 100), after: refactored.substring(0, 100) },
-                importance: 'medium'
+                importance: 'medium',
             });
         }
         // Metrics comparison
         const originalLines = original.split('\n').length;
         const refactoredLines = refactored.split('\n').length;
-        const reduction = ((originalLines - refactoredLines) / originalLines * 100).toFixed(1);
+        const reduction = (((originalLines - refactoredLines) / originalLines) * 100).toFixed(1);
         if (refactoredLines < originalLines) {
             explanation.reasoning.push(`📉 Code Reduction: ${reduction}% fewer lines (${originalLines} → ${refactoredLines})`);
         }
@@ -355,18 +350,18 @@ graph TD
                 approach: 'Minimal Refactoring',
                 prosAndCons: {
                     pros: ['Less risky', 'Faster to implement', 'Easier review'],
-                    cons: ['May not address all issues', 'Technical debt remains']
+                    cons: ['May not address all issues', 'Technical debt remains'],
                 },
-                whenToUse: 'When time is limited or code is in production'
+                whenToUse: 'When time is limited or code is in production',
             },
             {
                 approach: 'Complete Rewrite',
                 prosAndCons: {
                     pros: ['Clean slate', 'Modern patterns', 'Optimal design'],
-                    cons: ['High risk', 'Time consuming', 'May introduce new bugs']
+                    cons: ['High risk', 'Time consuming', 'May introduce new bugs'],
                 },
-                whenToUse: 'When code is unmaintainable and well-tested'
-            }
+                whenToUse: 'When code is unmaintainable and well-tested',
+            },
         ];
         return explanation;
     }
@@ -380,7 +375,7 @@ graph TD
             summary: `Found ${vulnerabilities.length} security issues (${criticalCount} critical, ${highCount} high).`,
             reasoning: [],
             evidence: [],
-            confidence: 0.95
+            confidence: 0.95,
         };
         // Group by severity
         const grouped = vulnerabilities.reduce((acc, vuln) => {
@@ -399,7 +394,7 @@ graph TD
                     type: 'pattern',
                     description: vuln.type,
                     data: vuln,
-                    importance: severity === 'critical' ? 'high' : 'medium'
+                    importance: severity === 'critical' ? 'high' : 'medium',
                 });
             }
         }
@@ -408,7 +403,7 @@ graph TD
             '🔒 Security Principle: Defense in Depth - multiple layers of security',
             '🛡️ Never trust user input - always validate and sanitize',
             '🔑 Principle of Least Privilege - minimize access rights',
-            '📝 Log security events for audit trails'
+            '📝 Log security events for audit trails',
         ];
         return explanation;
     }
@@ -416,13 +411,13 @@ graph TD
      * Generate comparative explanation
      */
     explainComparison(options) {
-        const best = options.reduce((a, b) => a.score > b.score ? a : b);
+        const best = options.reduce((a, b) => (a.score > b.score ? a : b));
         const explanation = {
             summary: `Comparing ${options.length} approaches. Recommendation: ${best.name} (score: ${best.score}/100).`,
             reasoning: [],
             evidence: [],
             confidence: 0.8,
-            alternativeApproaches: []
+            alternativeApproaches: [],
         };
         // Compare each option
         for (const option of options) {
@@ -431,17 +426,15 @@ graph TD
                 approach: option.name,
                 prosAndCons: {
                     pros: option.pros,
-                    cons: option.cons
+                    cons: option.cons,
                 },
                 whenToUse: option.score === best.score
                     ? 'Recommended approach for this scenario'
-                    : `Consider when: ${option.pros[0]?.toLowerCase()}`
+                    : `Consider when: ${option.pros[0]?.toLowerCase()}`,
             });
         }
         // Visual comparison
-        explanation.visualizations = [
-            this.generateComparisonChart(options)
-        ];
+        explanation.visualizations = [this.generateComparisonChart(options)];
         return explanation;
     }
     /**
@@ -455,13 +448,15 @@ graph LR
     ${options.map((o, i) => `O${i} --> S[Selection]`).join('\n    ')}
 
     style S fill:#f9f,stroke:#333,stroke-width:2px
-    ${options.map((o, i) => `style O${i} fill:#${o.score > 80 ? '9f9' : o.score > 60 ? 'ff9' : 'f99'}`).join('\n    ')}
+    ${options
+            .map((o, i) => `style O${i} fill:#${o.score > 80 ? '9f9' : o.score > 60 ? 'ff9' : 'f99'}`)
+            .join('\n    ')}
 `;
         return {
             type: 'graph',
             title: 'Approach Comparison',
             data: options,
-            mermaidCode
+            mermaidCode,
         };
     }
     /**
@@ -474,7 +469,7 @@ graph LR
             evidence: [],
             confidence: 0,
             educationalNotes: [],
-            visualizations: []
+            visualizations: [],
         };
         // Combine summaries
         unified.summary = Array.from(toolExplanations.entries())
@@ -485,7 +480,7 @@ graph LR
             unified.reasoning.push(`\n[${tool}]`, ...exp.reasoning);
             unified.evidence.push(...exp.evidence.map(e => ({
                 ...e,
-                description: `[${tool}] ${e.description}`
+                description: `[${tool}] ${e.description}`,
             })));
         }
         // Calculate average confidence
@@ -507,7 +502,7 @@ graph LR
             type: 'unified-explanation',
             data: unified,
             confidence: unified.confidence,
-            affects: ['all']
+            affects: ['all'],
         });
         return unified;
     }
@@ -618,21 +613,27 @@ graph LR
   <h2>Analysis</h2>
   ${explanation.reasoning.map(r => `<p>${r}</p>`).join('')}
 
-  ${explanation.evidence.length > 0 ? `
+  ${explanation.evidence.length > 0
+            ? `
   <h2>Evidence</h2>
-  ${explanation.evidence.map(e => `
+  ${explanation.evidence
+                .map(e => `
     <div class="evidence ${e.importance}">
       <strong>${e.description}</strong> (${e.importance} importance)
     </div>
-  `).join('')}
-  ` : ''}
+  `)
+                .join('')}
+  `
+            : ''}
 
-  ${explanation.educationalNotes?.length ? `
+  ${explanation.educationalNotes?.length
+            ? `
   <h2>Learning Notes</h2>
   <div class="educational">
     ${explanation.educationalNotes.map(n => `<p>${n}</p>`).join('')}
   </div>
-  ` : ''}
+  `
+            : ''}
 </body>
 </html>`;
     }

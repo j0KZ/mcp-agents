@@ -24,7 +24,7 @@ export class IntuitionEngine extends EventEmitter {
     LAYERS = 100;
     NEURONS_PER_LAYER = 10000;
     EPOCHS = 1000;
-    TARGET_ACCURACY = 0.90;
+    TARGET_ACCURACY = 0.9;
     // Simplified for actual implementation (full deep learning would use external library)
     PRACTICAL_LAYERS = 10;
     PRACTICAL_NEURONS = 100;
@@ -49,7 +49,7 @@ export class IntuitionEngine extends EventEmitter {
         await this.trainSubconscious(examples, {
             layers: this.PRACTICAL_LAYERS, // Practical: 10 instead of 100
             neurons: this.PRACTICAL_NEURONS, // Practical: 100 instead of 10000
-            epochs: this.PRACTICAL_EPOCHS // Practical: 100 instead of 1000
+            epochs: this.PRACTICAL_EPOCHS, // Practical: 100 instead of 1000
         });
         // Now can have "hunches" (from plan)
         return {
@@ -61,9 +61,9 @@ export class IntuitionEngine extends EventEmitter {
                     reasoning: 'Subconscious pattern match',
                     similar: feeling.similarExamples,
                     warning: feeling.warning,
-                    suggestion: feeling.suggestion
+                    suggestion: feeling.suggestion,
                 };
-            }
+            },
         };
     }
     /**
@@ -84,7 +84,7 @@ export class IntuitionEngine extends EventEmitter {
             reasoning: this.explainIntuition(feeling, features),
             similar,
             warning: this.generateWarning(feeling, features),
-            suggestion: this.generateSuggestion(feeling, features)
+            suggestion: this.generateSuggestion(feeling, features),
         };
     }
     // ============================================================================
@@ -129,7 +129,7 @@ export class IntuitionEngine extends EventEmitter {
             id: 0,
             neurons: this.createNeurons(this.FEATURE_DIM, 'input'),
             type: 'input',
-            activation: 'relu'
+            activation: 'relu',
         });
         // Hidden layers
         for (let i = 1; i < numLayers - 1; i++) {
@@ -137,7 +137,7 @@ export class IntuitionEngine extends EventEmitter {
                 id: i,
                 neurons: this.createNeurons(neuronsPerLayer, `hidden-${i}`),
                 type: 'hidden',
-                activation: 'leaky-relu'
+                activation: 'leaky-relu',
             });
         }
         // Output layer (10 feelings)
@@ -145,7 +145,7 @@ export class IntuitionEngine extends EventEmitter {
             id: numLayers - 1,
             neurons: this.createNeurons(10, 'output'),
             type: 'output',
-            activation: 'softmax'
+            activation: 'softmax',
         });
         return layers;
     }
@@ -156,7 +156,7 @@ export class IntuitionEngine extends EventEmitter {
                 id: `${prefix}-${i}`,
                 weights: this.initializeWeights(this.FEATURE_DIM),
                 bias: Math.random() * 0.01,
-                activation: 0
+                activation: 0,
             });
         }
         return neurons;
@@ -276,7 +276,7 @@ export class IntuitionEngine extends EventEmitter {
         }
         this.emit('patterns-extracted', {
             layers: this.subconscious.layers.length,
-            specializedNeurons: this.subconscious.layers.flatMap(l => l.neurons.filter(n => n.specialization)).length
+            specializedNeurons: this.subconscious.layers.flatMap(l => l.neurons.filter(n => n.specialization)).length,
         });
     }
     interpretNeuronSpecialization(weights) {
@@ -363,7 +363,7 @@ export class IntuitionEngine extends EventEmitter {
         // Simplified: ratio of private to public methods
         const total = (code.match(/function|const.*=.*=>/g) || []).length;
         const exported = (code.match(/export/g) || []).length;
-        return total > 0 ? 1 - (exported / total) : 0.5;
+        return total > 0 ? 1 - exported / total : 0.5;
     }
     detectPatterns(code) {
         return [
@@ -376,7 +376,7 @@ export class IntuitionEngine extends EventEmitter {
             /async.*await/.test(code),
             /\.map\(/.test(code),
             /\.filter\(/.test(code),
-            /\.reduce\(/.test(code)
+            /\.reduce\(/.test(code),
         ];
     }
     detectAntiPatterns(code) {
@@ -390,14 +390,14 @@ export class IntuitionEngine extends EventEmitter {
             /\/\/\s*TODO/.test(code), // TODOs
             /\/\/\s*HACK/.test(code), // HACKs
             /function\s+\w+\s*\([^)]{50,}/.test(code), // Long param lists
-            code.includes('God') || code.includes('Manager') || code.includes('Helper') // God classes
+            code.includes('God') || code.includes('Manager') || code.includes('Helper'), // God classes
         ];
     }
     measureNamingQuality(code) {
         // Simplified: check for descriptive names
         const names = code.match(/\b[a-z][a-zA-Z0-9]{2,}\b/g) || [];
         const shortNames = names.filter(n => n.length < 3).length;
-        return names.length > 0 ? 1 - (shortNames / names.length) : 0.5;
+        return names.length > 0 ? 1 - shortNames / names.length : 0.5;
     }
     measureCommentDensity(code) {
         const lines = code.split('\n');
@@ -475,24 +475,32 @@ export class IntuitionEngine extends EventEmitter {
     // ============================================================================
     interpretResponse(response) {
         const feelings = [
-            'good', 'bad', 'excellent', 'terrible', 'suspicious',
-            'elegant', 'clumsy', 'dangerous', 'solid', 'fragile'
+            'good',
+            'bad',
+            'excellent',
+            'terrible',
+            'suspicious',
+            'elegant',
+            'clumsy',
+            'dangerous',
+            'solid',
+            'fragile',
         ];
         const maxIndex = response.values.indexOf(Math.max(...response.values));
         return feelings[maxIndex] || 'good';
     }
     explainIntuition(feeling, features) {
         const explanations = {
-            'good': 'Code shows healthy patterns and reasonable complexity',
-            'bad': 'Something about this code triggers concern',
-            'excellent': 'Exceptionally well-structured and elegant',
-            'terrible': 'Multiple red flags detected',
-            'suspicious': 'Unusual patterns that warrant investigation',
-            'elegant': 'Clean, functional approach with good style',
-            'clumsy': 'Gets the job done but feels awkward',
-            'dangerous': 'High risk of bugs or security issues',
-            'solid': 'Reliable and maintainable implementation',
-            'fragile': 'Likely to break under edge cases'
+            good: 'Code shows healthy patterns and reasonable complexity',
+            bad: 'Something about this code triggers concern',
+            excellent: 'Exceptionally well-structured and elegant',
+            terrible: 'Multiple red flags detected',
+            suspicious: 'Unusual patterns that warrant investigation',
+            elegant: 'Clean, functional approach with good style',
+            clumsy: 'Gets the job done but feels awkward',
+            dangerous: 'High risk of bugs or security issues',
+            solid: 'Reliable and maintainable implementation',
+            fragile: 'Likely to break under edge cases',
         };
         return explanations[feeling] || 'Subconscious pattern match';
     }
@@ -537,7 +545,7 @@ export class IntuitionEngine extends EventEmitter {
             code: 'Similar code pattern...',
             outcome: this.mapFeelingToOutcome(s.example.label),
             description: `Pattern led to ${s.example.outcome}`,
-            similarity: 1 - s.distance
+            similarity: 1 - s.distance,
         }));
     }
     euclideanDistance(a, b) {
@@ -567,8 +575,16 @@ export class IntuitionEngine extends EventEmitter {
         // For now, generate synthetic training data
         const examples = [];
         const feelings = [
-            'good', 'bad', 'excellent', 'terrible', 'suspicious',
-            'elegant', 'clumsy', 'dangerous', 'solid', 'fragile'
+            'good',
+            'bad',
+            'excellent',
+            'terrible',
+            'suspicious',
+            'elegant',
+            'clumsy',
+            'dangerous',
+            'solid',
+            'fragile',
         ];
         // Generate 10,000 synthetic examples
         for (let i = 0; i < 10000; i++) {
@@ -586,8 +602,8 @@ export class IntuitionEngine extends EventEmitter {
                 context: {
                     language: 'TypeScript',
                     domain: 'general',
-                    fileType: 'component'
-                }
+                    fileType: 'component',
+                },
             });
         }
         return examples;
@@ -640,7 +656,7 @@ export class IntuitionEngine extends EventEmitter {
             testCoverage: 0.5,
             elegance: features[31],
             clarity: features[32],
-            surprise: features[33]
+            surprise: features[33],
         };
     }
     // ============================================================================
@@ -651,7 +667,7 @@ export class IntuitionEngine extends EventEmitter {
             layers: [],
             trained: false,
             trainingExamples: 0,
-            accuracy: 0
+            accuracy: 0,
         };
     }
     async quickTrain() {
@@ -659,7 +675,7 @@ export class IntuitionEngine extends EventEmitter {
         await this.trainSubconscious(examples.slice(0, 1000), {
             layers: 5,
             neurons: 50,
-            epochs: 50
+            epochs: 50,
         });
     }
     shuffle(array) {
@@ -680,7 +696,7 @@ export class IntuitionEngine extends EventEmitter {
             strength: response.confidence,
             similarExamples: similar,
             warning: this.generateWarning(feeling, features),
-            suggestion: this.generateSuggestion(feeling, features)
+            suggestion: this.generateSuggestion(feeling, features),
         };
     }
 }

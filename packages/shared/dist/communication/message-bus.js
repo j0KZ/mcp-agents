@@ -25,7 +25,7 @@ export class MessageBus extends EventEmitter {
                 received: 0,
                 processed: 0,
                 failed: 0,
-                averageResponseTime: 0
+                averageResponseTime: 0,
             });
             this.subscriptions.set(toolId, new Set());
         }
@@ -41,7 +41,7 @@ export class MessageBus extends EventEmitter {
         const fullMessage = {
             ...message,
             id: randomUUID(),
-            timestamp: new Date()
+            timestamp: new Date(),
         };
         // Store message
         this.messages.push(fullMessage);
@@ -67,7 +67,7 @@ export class MessageBus extends EventEmitter {
     async request(message) {
         const fullMessage = {
             ...message,
-            requiresResponse: true
+            requiresResponse: true,
         };
         return new Promise((resolve, reject) => {
             const msgId = randomUUID();
@@ -103,7 +103,7 @@ export class MessageBus extends EventEmitter {
             type: 'insight',
             subject: `Insight: ${insight.type}`,
             data: insight.data,
-            confidence: insight.confidence
+            confidence: insight.confidence,
         };
         // Send to specific tools if mentioned
         if (insight.affects) {
@@ -125,7 +125,7 @@ export class MessageBus extends EventEmitter {
             type: 'request',
             subject: `Collaboration request: ${task.type}`,
             data: task,
-            confidence: 0.9
+            confidence: 0.9,
         };
         return this.request(message);
     }
@@ -148,9 +148,7 @@ export class MessageBus extends EventEmitter {
         // Find handlers for this tool
         const toolHandlers = this.handlers.get(message.to) || [];
         // Find matching handlers
-        const matchingHandlers = toolHandlers.filter(h => h.patterns.some(pattern => pattern === '*' ||
-            message.type === pattern ||
-            message.subject.includes(pattern)));
+        const matchingHandlers = toolHandlers.filter(h => h.patterns.some(pattern => pattern === '*' || message.type === pattern || message.subject.includes(pattern)));
         if (matchingHandlers.length === 0) {
             this.emit('message:unhandled', message);
             return;
@@ -164,8 +162,7 @@ export class MessageBus extends EventEmitter {
                 toStats.processed++;
                 const duration = Date.now() - startTime;
                 toStats.averageResponseTime =
-                    (toStats.averageResponseTime * (toStats.processed - 1) + duration) /
-                        toStats.processed;
+                    (toStats.averageResponseTime * (toStats.processed - 1) + duration) / toStats.processed;
             }
             // Handle responses
             const response = results.find(r => r !== undefined);
@@ -191,7 +188,8 @@ export class MessageBus extends EventEmitter {
      */
     setupBuiltInHandlers() {
         // Health check handler
-        this.handlers.set('_system', [{
+        this.handlers.set('_system', [
+            {
                 toolId: '_system',
                 patterns: ['ping'],
                 handler: async (msg) => ({
@@ -203,9 +201,10 @@ export class MessageBus extends EventEmitter {
                     data: { alive: true, timestamp: new Date() },
                     confidence: 1,
                     timestamp: new Date(),
-                    inReplyTo: msg.id
-                })
-            }]);
+                    inReplyTo: msg.id,
+                }),
+            },
+        ]);
     }
     /**
      * Get message history
@@ -264,15 +263,15 @@ export class MessageBus extends EventEmitter {
                 data: {
                     task: task.type,
                     input: context,
-                    previousResults: results
+                    previousResults: results,
                 },
-                confidence: 0.9
+                confidence: 0.9,
             };
             const response = await this.request(message);
             if (response && response.data) {
                 results.push({
                     tool,
-                    result: response.data
+                    result: response.data,
                 });
                 // Update context with new information
                 Object.assign(context, response.data);
@@ -281,7 +280,7 @@ export class MessageBus extends EventEmitter {
         return {
             task: task.type,
             results,
-            finalContext: context
+            finalContext: context,
         };
     }
 }
@@ -320,5 +319,5 @@ export function getMessageBus() {
  *   data: { code: sourceCode },
  *   confidence: 0.8
  * });
- */ 
+ */
 //# sourceMappingURL=message-bus.js.map

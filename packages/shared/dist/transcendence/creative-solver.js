@@ -47,18 +47,14 @@ export class CreativeSolver extends EventEmitter {
         // Generate completely new approaches (from plan)
         const novel = await this.generateNovelApproaches(problem);
         // Evaluate all solutions (from plan)
-        const evaluated = await this.evaluateSolutions([
-            ...combinations,
-            ...crossDomain,
-            ...novel
-        ], problem);
+        const evaluated = await this.evaluateSolutions([...combinations, ...crossDomain, ...novel], problem);
         // Return best, including novel ones (from plan)
         const best = evaluated.filter(s => s.score > this.SCORE_THRESHOLD || s.novelty > this.NOVELTY_THRESHOLD);
         this.emit('solving-complete', {
             problem: problem.id,
             solutionsGenerated: evaluated.length,
             highQuality: best.filter(s => s.score > this.SCORE_THRESHOLD).length,
-            highNovelty: best.filter(s => s.novelty > this.NOVELTY_THRESHOLD).length
+            highNovelty: best.filter(s => s.novelty > this.NOVELTY_THRESHOLD).length,
         });
         return best.sort((a, b) => {
             // Prioritize: high score AND high novelty > high score > high novelty
@@ -79,7 +75,7 @@ export class CreativeSolver extends EventEmitter {
                 if (applicability > 0.3) {
                     solutions.push({
                         ...solution,
-                        applicability
+                        applicability,
                     });
                 }
             }
@@ -121,7 +117,7 @@ export class CreativeSolver extends EventEmitter {
                     const combined = this.combineSolutions([
                         knownSolutions[i],
                         knownSolutions[j],
-                        knownSolutions[k]
+                        knownSolutions[k],
                     ]);
                     if (combined) {
                         combinations.push(combined);
@@ -157,20 +153,20 @@ export class CreativeSolver extends EventEmitter {
             benefits: this.identifyBenefits(solutions),
             tradeoffs: this.identifyTradeoffs(solutions),
             alternatives: solutions.map(s => s.name),
-            inspirations: solutions.map(s => `${s.name} from ${s.domain}`)
+            inspirations: solutions.map(s => `${s.name} from ${s.domain}`),
         };
     }
     synthesizeCombination(solutions) {
         const parts = solutions.map(s => s.approach);
         if (solutions.length === 2) {
-            return `Hybrid approach combining ${parts[0]} with ${parts[1]}. ` +
+            return (`Hybrid approach combining ${parts[0]} with ${parts[1]}. ` +
                 `Use ${parts[0]} for ${this.identifyStrength(solutions[0])} while leveraging ` +
-                `${parts[1]} for ${this.identifyStrength(solutions[1])}.`;
+                `${parts[1]} for ${this.identifyStrength(solutions[1])}.`);
         }
         else {
-            return `Multi-faceted solution integrating ${parts.join(', ')}. ` +
+            return (`Multi-faceted solution integrating ${parts.join(', ')}. ` +
                 `This creates a comprehensive approach that addresses the problem from multiple angles, ` +
-                `with each component contributing its unique strengths.`;
+                `with each component contributing its unique strengths.`);
         }
     }
     identifyStrength(solution) {
@@ -228,7 +224,7 @@ export class CreativeSolver extends EventEmitter {
                         description: 'Improved execution speed and response times',
                         magnitude: 8,
                         measurable: true,
-                        metric: 'response-time-ms'
+                        metric: 'response-time-ms',
                     });
                     types.add('performance');
                 }
@@ -240,7 +236,7 @@ export class CreativeSolver extends EventEmitter {
                         description: 'Better code organization and readability',
                         magnitude: 7,
                         measurable: true,
-                        metric: 'complexity-score'
+                        metric: 'complexity-score',
                     });
                     types.add('maintainability');
                 }
@@ -255,7 +251,7 @@ export class CreativeSolver extends EventEmitter {
                 gives: 'Comprehensive solution addressing multiple concerns',
                 takes: 'Increased implementation complexity',
                 worthIt: true,
-                reasoning: 'Multiple approaches provide redundancy and robustness'
+                reasoning: 'Multiple approaches provide redundancy and robustness',
             });
         }
         return tradeoffs;
@@ -304,20 +300,24 @@ export class CreativeSolver extends EventEmitter {
             feasibility: 0.65, // Cross-domain adaptation is challenging
             risk: 0.5, // Moderate risk
             effort: { category: 'medium', personDays: 10, complexity: 6 },
-            benefits: [{
+            benefits: [
+                {
                     type: 'maintainability',
                     description: 'Novel approach from proven concept in different domain',
                     magnitude: 7,
-                    measurable: false
-                }],
-            tradeoffs: [{
+                    measurable: false,
+                },
+            ],
+            tradeoffs: [
+                {
                     gives: 'Innovative solution with fresh perspective',
                     takes: 'Requires learning and adaptation',
                     worthIt: true,
-                    reasoning: 'Cross-pollination often leads to breakthrough insights'
-                }],
+                    reasoning: 'Cross-pollination often leads to breakthrough insights',
+                },
+            ],
             alternatives: [],
-            inspirations: [`${insight.concept} from ${insight.fromDomain}`]
+            inspirations: [`${insight.concept} from ${insight.fromDomain}`],
         };
     }
     // ============================================================================
@@ -347,7 +347,7 @@ export class CreativeSolver extends EventEmitter {
                 description: 'Instead of optimizing for speed, intentionally slow down operations to enable better caching, batching, and resource utilization',
                 reasoning: 'Counter-intuitively, adding small delays can improve overall throughput by reducing contention',
                 precedents: ['TCP slow start', 'Database connection pooling with delays'],
-                newness: 0.85
+                newness: 0.85,
             });
         }
         if (problem.type === 'complexity') {
@@ -356,7 +356,7 @@ export class CreativeSolver extends EventEmitter {
                 description: 'Instead of reducing complexity, organize and visualize it. Make complexity explicit and manageable.',
                 reasoning: 'Some problems are inherently complex. Fighting it creates worse problems than accepting and managing it.',
                 precedents: ['Domain-Driven Design', 'Microservices accepting distributed complexity'],
-                newness: 0.75
+                newness: 0.75,
             });
         }
         return approaches;
@@ -372,7 +372,7 @@ export class CreativeSolver extends EventEmitter {
                 description: 'Like fungal mycelium networks, create a distributed mesh where each node can independently grow and connect',
                 reasoning: 'Mycelium scales without central coordination, is resilient to node failure, and self-organizes',
                 precedents: ['Peer-to-peer networks', 'Blockchain'],
-                newness: 0.92
+                newness: 0.92,
             });
         }
         if (problem.type === 'maintainability') {
@@ -381,7 +381,7 @@ export class CreativeSolver extends EventEmitter {
                 description: 'Store "genetic code" that can regenerate components. Focus on maintaining the template, not instances.',
                 reasoning: 'DNA proves that complex systems can be described compactly and reproduced reliably',
                 precedents: ['Infrastructure as Code', 'Template patterns'],
-                newness: 0.88
+                newness: 0.88,
             });
         }
         if (problem.type === 'security') {
@@ -390,7 +390,7 @@ export class CreativeSolver extends EventEmitter {
                 description: 'Instead of static defenses, create an adaptive system that learns to recognize threats and builds antibodies',
                 reasoning: 'Biological immune systems handle novel threats better than rule-based systems',
                 precedents: ['Anomaly detection', 'Behavioral analysis'],
-                newness: 0.90
+                newness: 0.9,
             });
         }
         return approaches;
@@ -405,7 +405,7 @@ export class CreativeSolver extends EventEmitter {
             description: 'Forget all existing patterns. What would you build if starting from absolute zero with current constraints?',
             reasoning: 'Historical patterns may not apply to current technology. Rebuild from fundamentals.',
             precedents: ['Rust vs C++', 'React vs jQuery'],
-            newness: 0.95
+            newness: 0.95,
         });
         return approaches;
     }
@@ -420,7 +420,7 @@ export class CreativeSolver extends EventEmitter {
                 description: 'Design assuming infinite resources, then find creative ways to approximate it',
                 reasoning: 'Often, creative solutions emerge when you think beyond resource limits first',
                 precedents: ['Serverless architecture', 'Cloud auto-scaling'],
-                newness: 0.82
+                newness: 0.82,
             });
         }
         return approaches;
@@ -430,17 +430,25 @@ export class CreativeSolver extends EventEmitter {
      */
     randomCombination(problem) {
         const concepts = [
-            'quantum superposition', 'blockchain', 'game theory', 'fractals',
-            'evolution', 'markets', 'swarm intelligence', 'chaos theory'
+            'quantum superposition',
+            'blockchain',
+            'game theory',
+            'fractals',
+            'evolution',
+            'markets',
+            'swarm intelligence',
+            'chaos theory',
         ];
         const randomConcept = concepts[Math.floor(Math.random() * concepts.length)];
-        return [{
+        return [
+            {
                 concept: `${randomConcept.charAt(0).toUpperCase() + randomConcept.slice(1)}-Inspired Solution`,
                 description: `Apply principles from ${randomConcept} to solve ${problem.type} problem`,
                 reasoning: 'Random combinations sometimes produce surprising breakthroughs',
                 precedents: ['Genetic algorithms', 'Simulated annealing'],
-                newness: 0.87
-            }];
+                newness: 0.87,
+            },
+        ];
     }
     novelApproachToSolution(approach, problem) {
         return {
@@ -448,25 +456,29 @@ export class CreativeSolver extends EventEmitter {
             approach: approach.concept,
             description: approach.description,
             implementation: this.createImplementationPlan(approach.description, []),
-            score: 0.70, // Lower score due to unproven nature
+            score: 0.7, // Lower score due to unproven nature
             novelty: approach.newness,
-            feasibility: 0.50, // Novel = uncertain feasibility
-            risk: 0.70, // Higher risk for novel approaches
+            feasibility: 0.5, // Novel = uncertain feasibility
+            risk: 0.7, // Higher risk for novel approaches
             effort: { category: 'large', personDays: 20, complexity: 8 },
-            benefits: [{
+            benefits: [
+                {
                     type: 'maintainability',
                     description: 'Breakthrough approach that could redefine the problem space',
                     magnitude: 9,
-                    measurable: false
-                }],
-            tradeoffs: [{
+                    measurable: false,
+                },
+            ],
+            tradeoffs: [
+                {
                     gives: 'Potentially revolutionary solution',
                     takes: 'High uncertainty and implementation risk',
                     worthIt: false, // Most novel approaches aren't worth it, but some are game-changers
-                    reasoning: approach.reasoning
-                }],
+                    reasoning: approach.reasoning,
+                },
+            ],
             alternatives: approach.precedents,
-            inspirations: [approach.concept, ...approach.precedents]
+            inspirations: [approach.concept, ...approach.precedents],
         };
     }
     // ============================================================================
@@ -533,17 +545,17 @@ export class CreativeSolver extends EventEmitter {
                     action: 'Research similar solutions',
                     details: `Study ${sources.map(s => s.name).join(', ') || 'relevant patterns'}`,
                     prerequisites: [],
-                    validation: 'Document findings and create design proposal'
+                    validation: 'Document findings and create design proposal',
                 },
                 {
                     action: 'Create proof of concept',
                     details: 'Build minimal prototype to validate approach',
                     prerequisites: ['Research complete'],
-                    validation: 'PoC demonstrates core concept'
-                }
+                    validation: 'PoC demonstrates core concept',
+                },
             ],
             duration: 3,
-            deliverable: 'Design document and working PoC'
+            deliverable: 'Design document and working PoC',
         });
         // Phase 2: Implementation
         phases.push({
@@ -553,17 +565,17 @@ export class CreativeSolver extends EventEmitter {
                     action: 'Implement core functionality',
                     details: description,
                     prerequisites: ['PoC validated'],
-                    validation: 'Unit tests passing'
+                    validation: 'Unit tests passing',
                 },
                 {
                     action: 'Integration',
                     details: 'Integrate with existing codebase',
                     prerequisites: ['Core implementation complete'],
-                    validation: 'Integration tests passing'
-                }
+                    validation: 'Integration tests passing',
+                },
             ],
             duration: 7,
-            deliverable: 'Working implementation'
+            deliverable: 'Working implementation',
         });
         // Phase 3: Validation
         phases.push({
@@ -573,17 +585,17 @@ export class CreativeSolver extends EventEmitter {
                     action: 'Performance testing',
                     details: 'Validate improvements meet goals',
                     prerequisites: ['Implementation complete'],
-                    validation: 'Metrics show improvement'
+                    validation: 'Metrics show improvement',
                 },
                 {
                     action: 'Deploy to production',
                     details: 'Gradual rollout with monitoring',
                     prerequisites: ['Testing complete'],
-                    validation: 'Production metrics stable'
-                }
+                    validation: 'Production metrics stable',
+                },
             ],
             duration: 3,
-            deliverable: 'Production deployment'
+            deliverable: 'Production deployment',
         });
         const estimatedTime = phases.reduce((sum, p) => sum + p.duration, 0);
         return {
@@ -596,9 +608,9 @@ export class CreativeSolver extends EventEmitter {
                     description: 'Solution may not achieve expected results',
                     probability: 0.3,
                     impact: 0.6,
-                    mitigation: 'Early PoC validation and incremental rollout'
-                }
-            ]
+                    mitigation: 'Early PoC validation and incremental rollout',
+                },
+            ],
         };
     }
     identifyRequiredSkills(description) {
@@ -629,22 +641,22 @@ export class CreativeSolver extends EventEmitter {
                 domain: 'performance',
                 approach: 'Add caching layer to reduce database queries',
                 effectiveness: 0.85,
-                applicability: 0.9
+                applicability: 0.9,
             },
             {
                 name: 'Query Optimization',
                 domain: 'performance',
                 approach: 'Optimize database queries and add indexes',
-                effectiveness: 0.80,
-                applicability: 0.85
+                effectiveness: 0.8,
+                applicability: 0.85,
             },
             {
                 name: 'Async Processing',
                 domain: 'performance',
                 approach: 'Move heavy operations to background workers',
                 effectiveness: 0.75,
-                applicability: 0.80
-            }
+                applicability: 0.8,
+            },
         ]);
         // Architecture domain
         this.knowledgeBase.set('architecture', [
@@ -652,23 +664,23 @@ export class CreativeSolver extends EventEmitter {
                 name: 'Layered Architecture',
                 domain: 'architecture',
                 approach: 'Separate concerns into distinct layers',
-                effectiveness: 0.80,
-                applicability: 0.90
+                effectiveness: 0.8,
+                applicability: 0.9,
             },
             {
                 name: 'Event-Driven',
                 domain: 'architecture',
                 approach: 'Use events for loose coupling',
                 effectiveness: 0.75,
-                applicability: 0.70
+                applicability: 0.7,
             },
             {
                 name: 'Microservices',
                 domain: 'architecture',
                 approach: 'Split into independent services',
-                effectiveness: 0.70,
-                applicability: 0.60
-            }
+                effectiveness: 0.7,
+                applicability: 0.6,
+            },
         ]);
         // More domains...
     }
@@ -681,15 +693,15 @@ export class CreativeSolver extends EventEmitter {
                 toDomain: 'software',
                 concept: 'Evolutionary Algorithms',
                 adaptation: 'Use mutation and selection to optimize parameters',
-                novelty: 0.85
+                novelty: 0.85,
             },
             {
                 fromDomain: 'biology',
                 toDomain: 'software',
                 concept: 'Immune System',
                 adaptation: 'Adaptive threat detection that learns from attacks',
-                novelty: 0.90
-            }
+                novelty: 0.9,
+            },
         ]);
         this.crossDomainMappings.set('biology', bioToSoftware);
         // Economics → Software
@@ -700,8 +712,8 @@ export class CreativeSolver extends EventEmitter {
                 toDomain: 'software',
                 concept: 'Market Mechanisms',
                 adaptation: 'Use pricing and auctions for resource allocation',
-                novelty: 0.87
-            }
+                novelty: 0.87,
+            },
         ]);
         this.crossDomainMappings.set('economics', econToSoftware);
     }

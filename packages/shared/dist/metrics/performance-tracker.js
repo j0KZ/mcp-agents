@@ -75,7 +75,7 @@ export class PerformanceTracker extends EventEmitter {
         const acceptanceRate = metrics.filter(m => m.humanFeedback?.accepted).length /
             metrics.filter(m => m.humanFeedback).length || 0;
         // Weighted score
-        return (successRate * 0.4) + (avgConfidence * 0.3) + (acceptanceRate * 0.3);
+        return successRate * 0.4 + avgConfidence * 0.3 + acceptanceRate * 0.3;
     }
     /**
      * Detect patterns in tool usage
@@ -99,7 +99,7 @@ export class PerformanceTracker extends EventEmitter {
                     pattern: `Common failure: ${pattern}`,
                     frequency: tools.length,
                     tools: [...new Set(tools)],
-                    recommendation: 'Investigate shared failure cause'
+                    recommendation: 'Investigate shared failure cause',
                 });
             }
         });
@@ -113,7 +113,7 @@ export class PerformanceTracker extends EventEmitter {
                     pattern: `Sequential usage: ${current.toolId} → ${next.toolId}`,
                     frequency: 1,
                     tools: [current.toolId, next.toolId],
-                    recommendation: 'Consider creating combined tool'
+                    recommendation: 'Consider creating combined tool',
                 });
             }
         }
@@ -125,7 +125,7 @@ export class PerformanceTracker extends EventEmitter {
                 pattern: 'Low confidence operations',
                 frequency: lowConfidence.length,
                 tools: toolsWithLowConfidence,
-                recommendation: 'Improve training or add validation'
+                recommendation: 'Improve training or add validation',
             });
         }
         return patterns;
@@ -145,7 +145,7 @@ export class PerformanceTracker extends EventEmitter {
                 averageConfidence: 0,
                 acceptanceRate: 0,
                 patterns: new Map(),
-                improvements: 0
+                improvements: 0,
             });
         }
         const agg = this.aggregations.get(key);
@@ -153,10 +153,12 @@ export class PerformanceTracker extends EventEmitter {
         agg.totalOperations = prevMetrics.length;
         agg.successRate = prevMetrics.filter(m => m.success).length / prevMetrics.length;
         agg.averageDuration = prevMetrics.reduce((sum, m) => sum + m.duration, 0) / prevMetrics.length;
-        agg.averageConfidence = prevMetrics.reduce((sum, m) => sum + m.confidence, 0) / prevMetrics.length;
+        agg.averageConfidence =
+            prevMetrics.reduce((sum, m) => sum + m.confidence, 0) / prevMetrics.length;
         const withFeedback = prevMetrics.filter(m => m.humanFeedback);
         if (withFeedback.length > 0) {
-            agg.acceptanceRate = withFeedback.filter(m => m.humanFeedback.accepted).length / withFeedback.length;
+            agg.acceptanceRate =
+                withFeedback.filter(m => m.humanFeedback.accepted).length / withFeedback.length;
         }
         // Track operation patterns
         const operationKey = `${metric.operation}-${metric.input.type}`;
@@ -176,7 +178,7 @@ export class PerformanceTracker extends EventEmitter {
             output: metric.output,
             accepted: metric.humanFeedback.accepted,
             rating: metric.humanFeedback.rating,
-            timestamp: metric.timestamp
+            timestamp: metric.timestamp,
         };
         // Save to training data
         const trainingFile = path.join(this.dataPath, 'training', `${metric.toolId}.jsonl`);
@@ -186,7 +188,7 @@ export class PerformanceTracker extends EventEmitter {
         this.emit('learning', {
             toolId: metric.toolId,
             feedback: metric.humanFeedback,
-            context: feedbackData
+            context: feedbackData,
         });
     }
     /**
@@ -222,7 +224,8 @@ export class PerformanceTracker extends EventEmitter {
                 return Date.now() - timestamp < 86400000; // 24 hours
             })
                 .sort();
-            for (const file of recentFiles.slice(-5)) { // Load last 5 files
+            for (const file of recentFiles.slice(-5)) {
+                // Load last 5 files
                 const content = await fs.readFile(path.join(rawPath, file), 'utf-8');
                 const metrics = JSON.parse(content);
                 this.metrics.push(...metrics);
@@ -247,7 +250,7 @@ export class PerformanceTracker extends EventEmitter {
                 successRate: `${(agg.successRate * 100).toFixed(1)}%`,
                 avgDuration: `${agg.averageDuration.toFixed(0)}ms`,
                 confidence: `${(agg.averageConfidence * 100).toFixed(1)}%`,
-                acceptance: `${(agg.acceptanceRate * 100).toFixed(1)}%`
+                acceptance: `${(agg.acceptanceRate * 100).toFixed(1)}%`,
             };
             // Generate recommendations
             if (agg.successRate < 0.8) {

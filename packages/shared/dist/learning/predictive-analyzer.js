@@ -36,9 +36,9 @@ export class PredictiveAnalyzer extends EventEmitter {
                 immediate: [],
                 thisWeek: [],
                 thisMonth: [],
-                strategic: []
+                strategic: [],
             },
-            confidence: this.calculateOverallConfidence(trends, patterns)
+            confidence: this.calculateOverallConfidence(trends, patterns),
         };
         // Generate recommendations based on predictions
         result.recommendations = this.generateRecommendations(result);
@@ -48,7 +48,7 @@ export class PredictiveAnalyzer extends EventEmitter {
         this.emit('prediction:complete', {
             codebaseId: codebase.id,
             duration,
-            confidence: result.confidence
+            confidence: result.confidence,
         });
         return result;
     }
@@ -73,7 +73,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                     description: `File ${file} has ${count} bugs in history`,
                     occurrences: count,
                     trend: 'increasing',
-                    significance: Math.min(count / 10, 1)
+                    significance: Math.min(count / 10, 1),
                 });
             }
         }
@@ -90,7 +90,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                     description: 'Performance issues increasing over time',
                     occurrences: perfIssues.length,
                     trend: 'increasing',
-                    significance: 0.8
+                    significance: 0.8,
                 });
             }
         }
@@ -102,7 +102,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                 description: `${secIssues.length} security issues in history`,
                 occurrences: secIssues.length,
                 trend: 'stable',
-                significance: 0.9
+                significance: 0.9,
             });
         }
         // Pattern 4: Frequent refactoring (indicates complexity)
@@ -120,13 +120,13 @@ export class PredictiveAnalyzer extends EventEmitter {
                     description: `File ${file} refactored ${count} times (high complexity)`,
                     occurrences: count,
                     trend: 'increasing',
-                    significance: 0.7
+                    significance: 0.7,
                 });
             }
         }
         return {
             patterns,
-            confidence: patterns.length > 0 ? 0.85 : 0.5
+            confidence: patterns.length > 0 ? 0.85 : 0.5,
         };
     }
     /**
@@ -143,7 +143,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                         metric: 'bug-count',
                         direction: pattern.trend === 'increasing' ? 'up' : 'down',
                         rate: pattern.occurrences / 10, // Normalize
-                        confidence: 0.8
+                        confidence: 0.8,
                     });
                     break;
                 case 'performance-degradation':
@@ -151,7 +151,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                         metric: 'performance',
                         direction: 'down',
                         rate: 0.15, // 15% degradation rate
-                        confidence: 0.75
+                        confidence: 0.75,
                     });
                     break;
                 case 'security-vulnerabilities':
@@ -159,7 +159,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                         metric: 'security',
                         direction: 'down',
                         rate: pattern.occurrences / 5,
-                        confidence: 0.85
+                        confidence: 0.85,
                     });
                     break;
                 case 'high-churn':
@@ -167,7 +167,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                         metric: 'technical-debt',
                         direction: 'up',
                         rate: pattern.occurrences / 10,
-                        confidence: 0.7
+                        confidence: 0.7,
                     });
                     break;
             }
@@ -181,7 +181,8 @@ export class PredictiveAnalyzer extends EventEmitter {
         const predictions = [];
         // High complexity files more likely to have bugs
         for (const file of codebase.files) {
-            if (file.changeFrequency > 5) { // Changed >5 times per week
+            if (file.changeFrequency > 5) {
+                // Changed >5 times per week
                 const bugTrend = trends.trends.find(t => t.metric === 'bug-count');
                 const baseProbability = bugTrend ? Math.min(bugTrend.rate, 0.9) : 0.3;
                 // Increase probability with complexity
@@ -195,7 +196,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                         suggestedAction: probability > 0.8
                             ? 'Refactor auth module - 87% bug probability'
                             : 'Add comprehensive tests and code review',
-                        timeframe: probability > 0.8 ? 'days' : 'weeks'
+                        timeframe: probability > 0.8 ? 'days' : 'weeks',
                     });
                 }
             }
@@ -218,7 +219,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                 probability: 0.75,
                 expectedImpact: '2-3x slowdown over next month',
                 trend: 'degrading',
-                suggestedAction: 'Add caching - query time trending up'
+                suggestedAction: 'Add caching - query time trending up',
             });
             // API endpoints
             if (codebase.metrics.complexity > 70) {
@@ -228,7 +229,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                     probability: 0.65,
                     expectedImpact: '50% slower responses',
                     trend: 'degrading',
-                    suggestedAction: 'Optimize database queries and add pagination'
+                    suggestedAction: 'Optimize database queries and add pagination',
                 });
             }
             // Frontend rendering
@@ -238,7 +239,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                 probability: 0.55,
                 expectedImpact: '1-2 second initial load delay',
                 trend: 'stable',
-                suggestedAction: 'Implement code splitting and lazy loading'
+                suggestedAction: 'Implement code splitting and lazy loading',
             });
         }
         return predictions;
@@ -255,7 +256,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                 type: 'Outdated Dependencies',
                 probability: 0.85,
                 severity: 'high',
-                suggestedAction: 'Upgrade framework - security patch coming'
+                suggestedAction: 'Upgrade framework - security patch coming',
             });
         }
         // Authentication issues
@@ -266,7 +267,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                 probability: 0.7,
                 severity: 'critical',
                 location: authFiles[0].path,
-                suggestedAction: 'Security audit of authentication module'
+                suggestedAction: 'Security audit of authentication module',
             });
         }
         // SQL Injection
@@ -275,7 +276,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                 type: 'SQL Injection',
                 probability: 0.6,
                 severity: 'high',
-                suggestedAction: 'Review and parameterize all database queries'
+                suggestedAction: 'Review and parameterize all database queries',
             });
         }
         // XSS vulnerabilities
@@ -284,7 +285,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                 type: 'Cross-Site Scripting (XSS)',
                 probability: 0.55,
                 severity: 'medium',
-                suggestedAction: 'Sanitize all user input before rendering'
+                suggestedAction: 'Sanitize all user input before rendering',
             });
         }
         return predictions.sort((a, b) => b.probability - a.probability);
@@ -300,8 +301,8 @@ export class PredictiveAnalyzer extends EventEmitter {
         // Project future debt
         const projectedDebt = {
             oneWeek: currentDebt + growthRate,
-            oneMonth: currentDebt + (growthRate * 4),
-            threeMonths: currentDebt + (growthRate * 12)
+            oneMonth: currentDebt + growthRate * 4,
+            threeMonths: currentDebt + growthRate * 12,
         };
         // Identify critical areas
         const criticalAreas = [];
@@ -322,7 +323,7 @@ export class PredictiveAnalyzer extends EventEmitter {
             currentDebt,
             growthRate,
             projectedDebt,
-            criticalAreas
+            criticalAreas,
         };
     }
     /**
@@ -333,7 +334,7 @@ export class PredictiveAnalyzer extends EventEmitter {
             immediate: [],
             thisWeek: [],
             thisMonth: [],
-            strategic: []
+            strategic: [],
         };
         // Immediate: Critical bugs and security
         for (const bug of result.likelyBugs) {
@@ -415,7 +416,7 @@ export class PredictiveAnalyzer extends EventEmitter {
                 accuracy: 0,
                 precision: 0,
                 recall: 0,
-                details: 'No predictions to validate'
+                details: 'No predictions to validate',
             };
         }
         const latestPrediction = predictions[predictions.length - 1];
@@ -439,14 +440,14 @@ export class PredictiveAnalyzer extends EventEmitter {
                 falseNegatives++;
             }
         }
-        const accuracy = (truePositives / (truePositives + falsePositives + falseNegatives)) || 0;
-        const precision = (truePositives / (truePositives + falsePositives)) || 0;
-        const recall = (truePositives / (truePositives + falseNegatives)) || 0;
+        const accuracy = truePositives / (truePositives + falsePositives + falseNegatives) || 0;
+        const precision = truePositives / (truePositives + falsePositives) || 0;
+        const recall = truePositives / (truePositives + falseNegatives) || 0;
         return {
             accuracy,
             precision,
             recall,
-            details: `TP: ${truePositives}, FP: ${falsePositives}, FN: ${falseNegatives}`
+            details: `TP: ${truePositives}, FP: ${falsePositives}, FN: ${falseNegatives}`,
         };
     }
     /**
@@ -462,7 +463,7 @@ export class PredictiveAnalyzer extends EventEmitter {
         return {
             totalPredictions,
             avgConfidence: totalPredictions > 0 ? totalConfidence / totalPredictions : 0,
-            predictionsByCodebase: this.predictionHistory.size
+            predictionsByCodebase: this.predictionHistory.size,
         };
     }
 }

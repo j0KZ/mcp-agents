@@ -210,5 +210,5 @@ export declare class TranscendentMCP extends EventEmitter {
     private calculateTranscendenceLevel;
 }
 export { SuperPatternRecognizer, CreativeSolver, IntuitionEngine, SelfDirectedSystem };
-export type { TranscendentAnalysis, HolisticUnderstanding, PredictedFuture, OptimalPath, Innovation, TeachingMaterial };
+export type { TranscendentAnalysis, HolisticUnderstanding, PredictedFuture, OptimalPath, Innovation, TeachingMaterial, };
 //# sourceMappingURL=index.d.ts.map

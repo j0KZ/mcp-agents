@@ -138,5 +138,5 @@ export declare function getMessageBus(): MessageBus;
  *   data: { code: sourceCode },
  *   confidence: 0.8
  * });
- */ 
+ */
 //# sourceMappingURL=message-bus.d.ts.map

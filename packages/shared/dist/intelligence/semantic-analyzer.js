@@ -27,7 +27,7 @@ export class SemanticAnalyzer {
             const ast = parse(code, {
                 sourceType: 'module',
                 plugins: ['typescript', 'jsx', 'decorators-legacy'],
-                errorRecovery: true
+                errorRecovery: true,
             });
             // Extract semantic information
             const purpose = await this.detectPurpose(ast, context);
@@ -44,7 +44,7 @@ export class SemanticAnalyzer {
                 sideEffects,
                 patterns,
                 antiPatterns,
-                complexity
+                complexity,
             });
             // Calculate confidence
             const confidence = this.calculateConfidence({
@@ -52,7 +52,7 @@ export class SemanticAnalyzer {
                 hasComments: code.includes('//') || code.includes('/*'),
                 hasTests: context?.fileName?.includes('test'),
                 patternMatches: patterns.length,
-                knownPurpose: purpose !== 'unknown'
+                knownPurpose: purpose !== 'unknown',
             });
             const intent = {
                 purpose,
@@ -66,7 +66,7 @@ export class SemanticAnalyzer {
                 patterns,
                 antiPatterns,
                 suggestions,
-                confidence
+                confidence,
             };
             // Track performance
             await this.tracker.track({
@@ -77,7 +77,7 @@ export class SemanticAnalyzer {
                 success: true,
                 input: { type: 'code', size: code.length },
                 output: { type: 'intent', size: JSON.stringify(intent).length },
-                confidence
+                confidence,
             });
             // Share insights with other tools
             if (intent.antiPatterns.length > 0 || intent.sideEffects.some(e => e.risk === 'high')) {
@@ -85,10 +85,10 @@ export class SemanticAnalyzer {
                     type: 'code-issues',
                     data: {
                         antiPatterns: intent.antiPatterns,
-                        riskyEffects: intent.sideEffects.filter(e => e.risk === 'high')
+                        riskyEffects: intent.sideEffects.filter(e => e.risk === 'high'),
                     },
                     confidence,
-                    affects: ['security-scanner', 'smart-reviewer']
+                    affects: ['security-scanner', 'smart-reviewer'],
                 });
             }
             return intent;
@@ -103,7 +103,7 @@ export class SemanticAnalyzer {
                 input: { type: 'code', size: code.length },
                 output: { type: 'error', size: 0 },
                 confidence: 0,
-                error: error instanceof Error ? error.message : String(error)
+                error: error instanceof Error ? error.message : String(error),
             });
             throw error;
         }
@@ -162,7 +162,7 @@ export class SemanticAnalyzer {
                     purposes.push('Data access');
                 if (name.includes('Model'))
                     purposes.push('Data model');
-            }
+            },
         });
         // Combine and prioritize purposes
         if (purposes.length === 0) {
@@ -200,7 +200,7 @@ export class SemanticAnalyzer {
                             source: 'parameter',
                             validation: this.findValidations(path.node, param.name),
                             transformations: transformations.get(param.name) || [],
-                            sensitivity: this.detectSensitivity(param.name)
+                            sensitivity: this.detectSensitivity(param.name),
                         });
                     }
                 });
@@ -214,7 +214,7 @@ export class SemanticAnalyzer {
                         source: 'internal',
                         validation: [],
                         transformations: this.getTransformationChain(path),
-                        sensitivity: 'public'
+                        sensitivity: 'public',
                     });
                 }
             },
@@ -227,7 +227,7 @@ export class SemanticAnalyzer {
                     transforms.push(this.describeOperation(right));
                     transformations.set(left.name, transforms);
                 }
-            }
+            },
         });
         return { inputs, outputs };
     }
@@ -246,7 +246,7 @@ export class SemanticAnalyzer {
                         type: 'database',
                         action: 'write',
                         target: this.extractTarget(callee),
-                        risk: 'medium'
+                        risk: 'medium',
                     });
                 }
                 // File system
@@ -255,7 +255,7 @@ export class SemanticAnalyzer {
                         type: 'file',
                         action: this.extractAction(callee),
                         target: this.extractTarget(callee),
-                        risk: 'medium'
+                        risk: 'medium',
                     });
                 }
                 // Network calls
@@ -264,7 +264,7 @@ export class SemanticAnalyzer {
                         type: 'network',
                         action: 'request',
                         target: this.extractUrl(path.node),
-                        risk: 'high'
+                        risk: 'high',
                     });
                 }
                 // Console logging
@@ -272,7 +272,7 @@ export class SemanticAnalyzer {
                     effects.push({
                         type: 'console',
                         action: 'log',
-                        risk: 'low'
+                        risk: 'low',
                     });
                 }
             },
@@ -283,7 +283,7 @@ export class SemanticAnalyzer {
                         type: 'global',
                         action: 'mutation',
                         target: this.extractTarget(path.node.left),
-                        risk: 'high'
+                        risk: 'high',
                     });
                 }
             },
@@ -293,10 +293,10 @@ export class SemanticAnalyzer {
                     effects.push({
                         type: 'async',
                         action: 'await',
-                        risk: 'low'
+                        risk: 'low',
                     });
                 }
-            }
+            },
         });
         return effects;
     }
@@ -315,7 +315,7 @@ export class SemanticAnalyzer {
                         name: source,
                         type: this.classifyDependency(source),
                         purpose: this.inferDependencyPurpose(source, path.node),
-                        critical: this.isCriticalDependency(source)
+                        critical: this.isCriticalDependency(source),
                     });
                 }
             },
@@ -328,11 +328,11 @@ export class SemanticAnalyzer {
                             name: source,
                             type: this.classifyDependency(source),
                             purpose: this.inferDependencyPurpose(source, path.node),
-                            critical: this.isCriticalDependency(source)
+                            critical: this.isCriticalDependency(source),
                         });
                     }
                 }
-            }
+            },
         });
         return deps;
     }
@@ -398,18 +398,19 @@ export class SemanticAnalyzer {
             },
             exit() {
                 currentDepth--;
-            }
+            },
         });
         // Calculate cohesion score (0-100)
-        cohesion = functionCount.total > 0
-            ? Math.round((functionCount.related / functionCount.total) * 100)
-            : 100;
+        cohesion =
+            functionCount.total > 0
+                ? Math.round((functionCount.related / functionCount.total) * 100)
+                : 100;
         return {
             cognitive: Math.min(cognitive, 100),
             cyclomatic,
             depth: maxDepth,
             coupling: Math.min(coupling, 100),
-            cohesion
+            cohesion,
         };
     }
     /**
@@ -511,7 +512,8 @@ export class SemanticAnalyzer {
         }
         // Data flow suggestions
         const sensitiveData = analysis.dataFlows.inputs.filter((d) => d.sensitivity === 'sensitive');
-        if (sensitiveData.length > 0 && !sensitiveData.every((d) => d.validation.length > 0)) {
+        if (sensitiveData.length > 0 &&
+            !sensitiveData.every((d) => d.validation.length > 0)) {
             suggestions.push('Add validation for sensitive data inputs');
         }
         return suggestions;
@@ -599,7 +601,7 @@ export class SemanticAnalyzer {
                 if (callee.name?.includes('validate')) {
                     validations.push(callee.name);
                 }
-            }
+            },
         });
         return validations;
     }
@@ -616,7 +618,7 @@ export class SemanticAnalyzer {
                 else if (t.isIdentifier(callee)) {
                     actions.push(callee.name);
                 }
-            }
+            },
         });
         return [...new Set(actions)].slice(0, 10); // Top 10 actions
     }
@@ -636,7 +638,9 @@ export class SemanticAnalyzer {
     }
     isAuthCall(node) {
         const authMethods = ['authenticate', 'authorize', 'login', 'logout', 'verifyToken'];
-        return t.isCallExpression(node) && t.isIdentifier(node.callee) && authMethods.includes(node.callee.name);
+        return (t.isCallExpression(node) &&
+            t.isIdentifier(node.callee) &&
+            authMethods.includes(node.callee.name));
     }
     isValidationCall(node) {
         const validationMethods = ['validate', 'check', 'verify', 'assert'];
@@ -647,10 +651,14 @@ export class SemanticAnalyzer {
     }
     isDatabaseWrite(node) {
         const writeMethods = ['save', 'update', 'insert', 'delete', 'create'];
-        return t.isMemberExpression(node) && t.isIdentifier(node.property) && writeMethods.includes(node.property.name);
+        return (t.isMemberExpression(node) &&
+            t.isIdentifier(node.property) &&
+            writeMethods.includes(node.property.name));
     }
     isFileOperation(node) {
-        return t.isMemberExpression(node) && t.isIdentifier(node.object) && ['fs', 'path'].includes(node.object.name);
+        return (t.isMemberExpression(node) &&
+            t.isIdentifier(node.object) &&
+            ['fs', 'path'].includes(node.object.name));
     }
     isNetworkCall(node) {
         const networkMethods = ['fetch', 'axios', 'request', 'http'];
@@ -661,13 +669,16 @@ export class SemanticAnalyzer {
         return false;
     }
     isConsoleLog(node) {
-        return t.isMemberExpression(node) &&
-            t.isIdentifier(node.object) && node.object.name === 'console' &&
-            t.isIdentifier(node.property) && ['log', 'error', 'warn'].includes(node.property.name);
+        return (t.isMemberExpression(node) &&
+            t.isIdentifier(node.object) &&
+            node.object.name === 'console' &&
+            t.isIdentifier(node.property) &&
+            ['log', 'error', 'warn'].includes(node.property.name));
     }
     isGlobalAssignment(node) {
-        return t.isMemberExpression(node.left) &&
-            t.isIdentifier(node.left.object) && ['window', 'global', 'process'].includes(node.left.object.name);
+        return (t.isMemberExpression(node.left) &&
+            t.isIdentifier(node.left.object) &&
+            ['window', 'global', 'process'].includes(node.left.object.name));
     }
     extractTarget(node) {
         if (t.isMemberExpression(node)) {
@@ -701,13 +712,13 @@ export class SemanticAnalyzer {
     }
     inferDependencyPurpose(source, node) {
         const purposes = {
-            'express': 'Web framework',
-            'react': 'UI library',
-            'mongoose': 'Database ORM',
-            'axios': 'HTTP client',
-            'lodash': 'Utility functions',
-            'jsonwebtoken': 'Authentication',
-            'bcrypt': 'Password hashing'
+            express: 'Web framework',
+            react: 'UI library',
+            mongoose: 'Database ORM',
+            axios: 'HTTP client',
+            lodash: 'Utility functions',
+            jsonwebtoken: 'Authentication',
+            bcrypt: 'Password hashing',
         };
         for (const [lib, purpose] of Object.entries(purposes)) {
             if (source.includes(lib))
@@ -737,7 +748,7 @@ export class SemanticAnalyzer {
                 if (this.patterns.get('factory').test(path.node.id?.name || '')) {
                     found = true;
                 }
-            }
+            },
         });
         return found;
     }
@@ -751,7 +762,7 @@ export class SemanticAnalyzer {
                 if (path.node.id?.name?.includes('Repository')) {
                     found = true;
                 }
-            }
+            },
         });
         return found;
     }
@@ -763,7 +774,7 @@ export class SemanticAnalyzer {
                 if (constructor?.value?.params?.length > 0) {
                     found = true;
                 }
-            }
+            },
         });
         return found;
     }
@@ -778,7 +789,7 @@ export class SemanticAnalyzer {
         traverse(ast, {
             ClassDeclaration: (path) => {
                 methodCount = path.node.body.body.filter((m) => m.type === 'MethodDefinition').length;
-            }
+            },
         });
         return methodCount > 20;
     }
@@ -787,9 +798,14 @@ export class SemanticAnalyzer {
         let currentDepth = 0;
         traverse(ast, {
             CallExpression: {
-                enter() { currentDepth++; maxDepth = Math.max(maxDepth, currentDepth); },
-                exit() { currentDepth--; }
-            }
+                enter() {
+                    currentDepth++;
+                    maxDepth = Math.max(maxDepth, currentDepth);
+                },
+                exit() {
+                    currentDepth--;
+                },
+            },
         });
         return maxDepth > 5;
     }
@@ -800,7 +816,7 @@ export class SemanticAnalyzer {
                 if (![0, 1, -1, 10, 100].includes(path.node.value)) {
                     magicCount++;
                 }
-            }
+            },
         });
         return magicCount > 5;
     }
@@ -822,7 +838,7 @@ export class SemanticAnalyzer {
                 if (path.node.params.length > 4) {
                     hasLong = true;
                 }
-            }
+            },
         });
         return hasLong;
     }
@@ -831,9 +847,14 @@ export class SemanticAnalyzer {
         let currentDepth = 0;
         traverse(ast, {
             BlockStatement: {
-                enter() { currentDepth++; maxDepth = Math.max(maxDepth, currentDepth); },
-                exit() { currentDepth--; }
-            }
+                enter() {
+                    currentDepth++;
+                    maxDepth = Math.max(maxDepth, currentDepth);
+                },
+                exit() {
+                    currentDepth--;
+                },
+            },
         });
         return maxDepth > 4;
     }
@@ -850,7 +871,7 @@ export class SemanticAnalyzer {
                 if (path.isReferencedIdentifier()) {
                     used.add(path.node.name);
                 }
-            }
+            },
         });
         const unused = [...declared].filter(v => !used.has(v));
         return unused.length > 2;

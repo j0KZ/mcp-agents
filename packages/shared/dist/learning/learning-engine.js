@@ -28,7 +28,7 @@ export class LearningEngine extends EventEmitter {
             hiddenLayers: [50, 30, 10],
             outputSize: 5, // Action classifications
             learningRate: this.LEARNING_RATE,
-            momentum: this.MOMENTUM
+            momentum: this.MOMENTUM,
         });
         this.initializeStrategies();
     }
@@ -42,7 +42,7 @@ export class LearningEngine extends EventEmitter {
             'similarity-search',
             'heuristic-rules',
             'neural-network',
-            'ensemble-voting'
+            'ensemble-voting',
         ];
         for (const strategy of strategies) {
             this.strategyWeights.set(strategy, 1.0);
@@ -75,7 +75,7 @@ export class LearningEngine extends EventEmitter {
         this.emit('learning:completed', {
             decisionId: decision.id,
             success: outcome.success,
-            patternsFound: patterns.length
+            patternsFound: patterns.length,
         });
     }
     /**
@@ -123,7 +123,7 @@ export class LearningEngine extends EventEmitter {
         this.emit('training:complete', {
             samples: trainingData.length,
             epochs,
-            duration
+            duration,
         });
     }
     /**
@@ -135,7 +135,7 @@ export class LearningEngine extends EventEmitter {
             outcome.metrics.accuracy,
             outcome.metrics.quality / 100,
             Math.min(outcome.metrics.performance / 1000, 1), // Normalize to 0-1
-            outcome.feedback?.rating ? outcome.feedback.rating / 5 : 0.5
+            outcome.feedback?.rating ? outcome.feedback.rating / 5 : 0.5,
         ];
     }
     /**
@@ -184,7 +184,7 @@ export class LearningEngine extends EventEmitter {
                     action: 'prefer-this-approach',
                     significance: successRate - failureRate,
                     confidence: Math.min(successful.length, failed.length) / 10, // More examples = more confidence
-                    examples: successful.filter(h => this.matchesCondition(h.decision.features, { feature, operator: 'eq', value })).length
+                    examples: successful.filter(h => this.matchesCondition(h.decision.features, { feature, operator: 'eq', value })).length,
                 };
                 newPatterns.push(pattern);
             }
@@ -252,12 +252,18 @@ export class LearningEngine extends EventEmitter {
         if (value === undefined)
             return false;
         switch (condition.operator) {
-            case 'eq': return value === condition.value;
-            case 'gt': return value > condition.value;
-            case 'lt': return value < condition.value;
-            case 'gte': return value >= condition.value;
-            case 'lte': return value <= condition.value;
-            case 'in': return Array.isArray(condition.value) && Array.from(condition.value).includes(value);
+            case 'eq':
+                return value === condition.value;
+            case 'gt':
+                return value > condition.value;
+            case 'lt':
+                return value < condition.value;
+            case 'gte':
+                return value >= condition.value;
+            case 'lte':
+                return value <= condition.value;
+            case 'in':
+                return Array.isArray(condition.value) && Array.from(condition.value).includes(value);
             case 'contains': {
                 if (typeof value !== 'string' || typeof condition.value !== 'string')
                     return false;
@@ -265,7 +271,8 @@ export class LearningEngine extends EventEmitter {
                 const strCondValue = condition.value;
                 return strValue.includes(strCondValue);
             }
-            default: return false;
+            default:
+                return false;
         }
     }
     /**
@@ -278,7 +285,7 @@ export class LearningEngine extends EventEmitter {
             { name: 'similarity-search', score: this.scoreSimilaritySearch(pattern) },
             { name: 'heuristic-rules', score: this.scoreHeuristicRules(pattern) },
             { name: 'neural-network', score: this.scoreNeuralNetwork(pattern) },
-            { name: 'ensemble-voting', score: 0.5 } // Always moderate
+            { name: 'ensemble-voting', score: 0.5 }, // Always moderate
         ];
         // Increase weight of successful strategies
         for (const strategy of strategies) {
@@ -291,11 +298,11 @@ export class LearningEngine extends EventEmitter {
         // Normalize weights
         const totalWeight = Array.from(this.strategyWeights.values()).reduce((a, b) => a + b, 0);
         for (const [name, weight] of this.strategyWeights.entries()) {
-            this.strategyWeights.set(name, weight / totalWeight * strategies.length);
+            this.strategyWeights.set(name, (weight / totalWeight) * strategies.length);
         }
         this.emit('strategies:updated', {
             pattern: pattern.name,
-            weights: Object.fromEntries(this.strategyWeights)
+            weights: Object.fromEntries(this.strategyWeights),
         });
     }
     /**
@@ -340,9 +347,21 @@ export class LearningEngine extends EventEmitter {
         const similarityPrediction = this.predictBySimilarity(features);
         // Ensemble voting weighted by strategy performance
         const predictions = [
-            { method: 'neural-network', prediction: nnPrediction, weight: this.strategyWeights.get('neural-network') || 1 },
-            { method: 'pattern-matching', prediction: patternPrediction, weight: this.strategyWeights.get('pattern-matching') || 1 },
-            { method: 'similarity-search', prediction: similarityPrediction, weight: this.strategyWeights.get('similarity-search') || 1 }
+            {
+                method: 'neural-network',
+                prediction: nnPrediction,
+                weight: this.strategyWeights.get('neural-network') || 1,
+            },
+            {
+                method: 'pattern-matching',
+                prediction: patternPrediction,
+                weight: this.strategyWeights.get('pattern-matching') || 1,
+            },
+            {
+                method: 'similarity-search',
+                prediction: similarityPrediction,
+                weight: this.strategyWeights.get('similarity-search') || 1,
+            },
         ];
         // Weighted average
         const bestAction = this.ensembleVote(predictions);
@@ -353,7 +372,7 @@ export class LearningEngine extends EventEmitter {
             confidence: bestAction.confidence,
             expectedOutcome: bestAction.expectedOutcome,
             explanation,
-            alternatives: bestAction.alternatives
+            alternatives: bestAction.alternatives,
         };
     }
     /**
@@ -397,8 +416,8 @@ export class LearningEngine extends EventEmitter {
             expectedOutcome: {
                 success: best.confidence,
                 quality: 80,
-                performance: 100
-            }
+                performance: 100,
+            },
         };
     }
     /**
@@ -426,8 +445,8 @@ export class LearningEngine extends EventEmitter {
             expectedOutcome: {
                 success: bestSimilarity,
                 quality: 75,
-                performance: 150
-            }
+                performance: 150,
+            },
         };
     }
     /**
@@ -483,14 +502,18 @@ export class LearningEngine extends EventEmitter {
             .map(([action, vote]) => ({
             action,
             confidence: totalWeight > 0 ? vote.weight / totalWeight : 0,
-            tradeoff: `Alternative approach with ${((vote.weight / totalWeight) * 100).toFixed(0)}% support`
+            tradeoff: `Alternative approach with ${((vote.weight / totalWeight) * 100).toFixed(0)}% support`,
         }))
             .slice(0, 3);
         return {
             action: bestAction,
             confidence,
-            expectedOutcome: bestData?.expectedOutcome || { success: confidence, quality: 70, performance: 200 },
-            alternatives
+            expectedOutcome: bestData?.expectedOutcome || {
+                success: confidence,
+                quality: 70,
+                performance: 200,
+            },
+            alternatives,
         };
     }
     /**
@@ -526,7 +549,7 @@ export class LearningEngine extends EventEmitter {
             successRate: total > 0 ? successful / total : 0,
             patternsDiscovered: this.patterns.length,
             modelAccuracy: this.estimateModelAccuracy(),
-            strategyWeights: Object.fromEntries(this.strategyWeights)
+            strategyWeights: Object.fromEntries(this.strategyWeights),
         };
     }
     /**
@@ -601,7 +624,7 @@ class SimpleNeuralNetwork {
         }
         loss /= prediction.length;
         // Backpropagation
-        let delta = prediction.map((p, i) => 2 * (p - target[i]) / prediction.length);
+        let delta = prediction.map((p, i) => (2 * (p - target[i])) / prediction.length);
         for (let i = this.weights.length - 1; i >= 0; i--) {
             const input = activations[i];
             const output = activations[i + 1];
@@ -610,7 +633,8 @@ class SimpleNeuralNetwork {
                 for (let k = 0; k < this.weights[i][j].length; k++) {
                     const gradient = delta[j] * input[k];
                     // Momentum update
-                    this.momentum[i][j][k] = this.config.momentum * this.momentum[i][j][k] - this.config.learningRate * gradient;
+                    this.momentum[i][j][k] =
+                        this.config.momentum * this.momentum[i][j][k] - this.config.learningRate * gradient;
                     this.weights[i][j][k] += this.momentum[i][j][k];
                 }
                 // Update bias

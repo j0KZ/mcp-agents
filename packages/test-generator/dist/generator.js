@@ -85,8 +85,8 @@ export class TestGenerator {
                 percentage: estimatedCoverage,
                 functions: functions.length,
                 classes: classes.length,
-                tests: totalTests
-            }
+                tests: totalTests,
+            },
         };
     }
     /**

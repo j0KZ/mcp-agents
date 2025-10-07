@@ -132,5 +132,5 @@ export declare class IntuitionEngine extends EventEmitter {
     private shuffle;
     private processSubconscious;
 }
-export type { IntuitionRequest, Intuition, Feeling, SimilarExample, DeepLearningModel, SubconsciousPattern };
+export type { IntuitionRequest, Intuition, Feeling, SimilarExample, DeepLearningModel, SubconsciousPattern, };
 //# sourceMappingURL=intuition-engine.d.ts.map

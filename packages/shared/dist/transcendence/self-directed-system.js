@@ -92,16 +92,14 @@ export class SelfDirectedSystem extends EventEmitter {
         const completedActions = Array.from(this.plans.values())
             .flatMap(p => p.actions)
             .filter(a => a.status === 'completed').length;
-        const significantFindings = Array.from(this.findings.values())
-            .filter(f => f.significance > this.SIGNIFICANCE_THRESHOLD).length;
-        const currentPlan = Array.from(this.plans.values())
-            .find(p => p.progress < 1);
+        const significantFindings = Array.from(this.findings.values()).filter(f => f.significance > this.SIGNIFICANCE_THRESHOLD).length;
+        const currentPlan = Array.from(this.plans.values()).find(p => p.progress < 1);
         return {
             running: this.running,
             objectives: this.objectives.size,
             completedActions,
             significantFindings,
-            currentPlan: currentPlan?.objective
+            currentPlan: currentPlan?.objective,
         };
     }
     // ============================================================================
@@ -122,7 +120,7 @@ export class SelfDirectedSystem extends EventEmitter {
                 metric: 'code-quality-score',
                 target: 85,
                 current: 72,
-                priority: 9
+                priority: 9,
             },
             {
                 id: 'goal-2',
@@ -131,7 +129,7 @@ export class SelfDirectedSystem extends EventEmitter {
                 metric: 'high-severity-vulns',
                 target: 0,
                 current: 3,
-                priority: 10
+                priority: 10,
             },
             {
                 id: 'goal-3',
@@ -140,8 +138,8 @@ export class SelfDirectedSystem extends EventEmitter {
                 metric: 'avg-complexity',
                 target: 15,
                 current: 23,
-                priority: 7
-            }
+                priority: 7,
+            },
         ];
         const secondary = [
             {
@@ -151,7 +149,7 @@ export class SelfDirectedSystem extends EventEmitter {
                 metric: 'p95-response-time',
                 target: 200,
                 current: 450,
-                priority: 6
+                priority: 6,
             },
             {
                 id: 'goal-5',
@@ -160,8 +158,8 @@ export class SelfDirectedSystem extends EventEmitter {
                 metric: 'avg-pr-review-hours',
                 target: 4,
                 current: 12,
-                priority: 5
-            }
+                priority: 5,
+            },
         ];
         return {
             primary,
@@ -170,13 +168,13 @@ export class SelfDirectedSystem extends EventEmitter {
                 {
                     type: 'time',
                     description: 'Must not disrupt development velocity',
-                    limit: 1.0
+                    limit: 1.0,
                 },
                 {
                     type: 'resources',
                     description: 'Limited to autonomous operations',
-                    limit: 1.0
-                }
+                    limit: 1.0,
+                },
             ],
             timeline: {
                 start: new Date(),
@@ -184,16 +182,16 @@ export class SelfDirectedSystem extends EventEmitter {
                     {
                         name: 'Initial improvements visible',
                         date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-                        criteria: 'At least 2 goals showing progress'
+                        criteria: 'At least 2 goals showing progress',
                     },
                     {
                         name: 'Major goals achieved',
                         date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-                        criteria: 'All priority 10 goals met'
-                    }
+                        criteria: 'All priority 10 goals met',
+                    },
                 ],
-                end: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
-            }
+                end: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+            },
         };
     }
     // ============================================================================
@@ -221,12 +219,12 @@ export class SelfDirectedSystem extends EventEmitter {
                         category: 'quality',
                         magnitude: 7,
                         confidence: 0.85,
-                        timeToValue: 1
+                        timeToValue: 1,
                     },
                     effort: 2,
                     roi: 7 / 2,
                     relatedGoals: [goal.id],
-                    discovered: new Date()
+                    discovered: new Date(),
                 });
                 break;
             case 'security':
@@ -237,13 +235,13 @@ export class SelfDirectedSystem extends EventEmitter {
                     impact: {
                         category: 'security',
                         magnitude: 10,
-                        confidence: 0.90,
-                        timeToValue: 2
+                        confidence: 0.9,
+                        timeToValue: 2,
                     },
                     effort: 3,
                     roi: 10 / 3,
                     relatedGoals: [goal.id],
-                    discovered: new Date()
+                    discovered: new Date(),
                 });
                 break;
             case 'maintainability':
@@ -254,13 +252,13 @@ export class SelfDirectedSystem extends EventEmitter {
                     impact: {
                         category: 'maintainability',
                         magnitude: 8,
-                        confidence: 0.80,
-                        timeToValue: 7
+                        confidence: 0.8,
+                        timeToValue: 7,
                     },
                     effort: 10,
                     roi: 8 / 10,
                     relatedGoals: [goal.id],
-                    discovered: new Date()
+                    discovered: new Date(),
                 });
                 break;
             case 'performance':
@@ -271,13 +269,13 @@ export class SelfDirectedSystem extends EventEmitter {
                     impact: {
                         category: 'performance',
                         magnitude: 6,
-                        confidence: 0.70,
-                        timeToValue: 5
+                        confidence: 0.7,
+                        timeToValue: 5,
                     },
                     effort: 8,
                     roi: 6 / 8,
                     relatedGoals: [goal.id],
-                    discovered: new Date()
+                    discovered: new Date(),
                 });
                 break;
             case 'velocity':
@@ -289,12 +287,12 @@ export class SelfDirectedSystem extends EventEmitter {
                         category: 'velocity',
                         magnitude: 5,
                         confidence: 0.75,
-                        timeToValue: 3
+                        timeToValue: 3,
                     },
                     effort: 4,
                     roi: 5 / 4,
                     relatedGoals: [goal.id],
-                    discovered: new Date()
+                    discovered: new Date(),
                 });
                 break;
         }
@@ -317,11 +315,11 @@ export class SelfDirectedSystem extends EventEmitter {
                 successCriteria: topOpportunities.map(o => ({
                     metric: o.impact.category,
                     target: o.impact.magnitude,
-                    measurable: true
+                    measurable: true,
                 })),
                 deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
                 priority: this.calculateObjectivePriority(topOpportunities),
-                status: 'planned'
+                status: 'planned',
             });
         }
         return objectives.sort((a, b) => b.priority - a.priority);
@@ -345,7 +343,7 @@ export class SelfDirectedSystem extends EventEmitter {
         const avgImpact = opportunities.reduce((sum, o) => sum + o.impact.magnitude, 0) / opportunities.length;
         const avgConfidence = opportunities.reduce((sum, o) => sum + o.impact.confidence, 0) / opportunities.length;
         const avgROI = opportunities.reduce((sum, o) => sum + o.roi, 0) / opportunities.length;
-        return (avgImpact * 0.4 + avgConfidence * 10 * 0.3 + avgROI * 0.3);
+        return avgImpact * 0.4 + avgConfidence * 10 * 0.3 + avgROI * 0.3;
     }
     // ============================================================================
     // ACTION PLANNING
@@ -362,9 +360,9 @@ export class SelfDirectedSystem extends EventEmitter {
                 prerequisites: [],
                 validation: {
                     type: 'metrics',
-                    description: 'Metrics collected successfully'
+                    description: 'Metrics collected successfully',
                 },
-                status: 'pending'
+                status: 'pending',
             },
             {
                 id: 'action-2',
@@ -375,9 +373,9 @@ export class SelfDirectedSystem extends EventEmitter {
                 validation: {
                     type: 'review',
                     threshold: 0.8,
-                    description: 'Suggestions have confidence > 0.8'
+                    description: 'Suggestions have confidence > 0.8',
                 },
-                status: 'pending'
+                status: 'pending',
             },
             {
                 id: 'action-3',
@@ -387,9 +385,9 @@ export class SelfDirectedSystem extends EventEmitter {
                 prerequisites: ['action-2'],
                 validation: {
                     type: 'tests',
-                    description: 'All tests pass after changes'
+                    description: 'All tests pass after changes',
                 },
-                status: 'pending'
+                status: 'pending',
             },
             {
                 id: 'action-4',
@@ -400,9 +398,9 @@ export class SelfDirectedSystem extends EventEmitter {
                 validation: {
                     type: 'metrics',
                     threshold: 1.0,
-                    description: 'Metrics show improvement'
+                    description: 'Metrics show improvement',
                 },
-                status: 'pending'
+                status: 'pending',
             },
             {
                 id: 'action-5',
@@ -412,10 +410,10 @@ export class SelfDirectedSystem extends EventEmitter {
                 prerequisites: ['action-4'],
                 validation: {
                     type: 'manual',
-                    description: 'Notification sent'
+                    description: 'Notification sent',
                 },
-                status: 'pending'
-            }
+                status: 'pending',
+            },
         ];
         return {
             id: `plan-${Date.now()}`,
@@ -423,7 +421,7 @@ export class SelfDirectedSystem extends EventEmitter {
             actions,
             currentAction: 0,
             estimatedCompletion: objective.deadline,
-            progress: 0
+            progress: 0,
         };
     }
     async createNewPlan() {
@@ -462,9 +460,9 @@ export class SelfDirectedSystem extends EventEmitter {
                 prerequisites: [],
                 validation: {
                     type: 'manual',
-                    description: 'Alternative approach identified'
+                    description: 'Alternative approach identified',
                 },
-                status: 'pending'
+                status: 'pending',
             });
         }
         return plan;
@@ -509,7 +507,7 @@ export class SelfDirectedSystem extends EventEmitter {
                 metrics,
                 findings,
                 duration: Date.now() - startTime,
-                timestamp: new Date()
+                timestamp: new Date(),
             };
             this.emit('action-complete', { action: action.id, result });
             return result;
@@ -518,17 +516,19 @@ export class SelfDirectedSystem extends EventEmitter {
             const result = {
                 success: false,
                 metrics,
-                findings: [{
+                findings: [
+                    {
                         id: `finding-error-${Date.now()}`,
                         significance: 0.8,
                         category: 'error',
                         description: `Action failed: ${action.id}`,
                         impact: 'Autonomous operation interrupted',
                         recommendation: 'Investigate and retry with different approach',
-                        evidence: [error instanceof Error ? error.message : String(error)]
-                    }],
+                        evidence: [error instanceof Error ? error.message : String(error)],
+                    },
+                ],
                 duration: Date.now() - startTime,
-                timestamp: new Date()
+                timestamp: new Date(),
             };
             this.emit('action-failed', { action: action.id, error, result });
             return result;
@@ -546,7 +546,7 @@ export class SelfDirectedSystem extends EventEmitter {
             description: 'Current codebase metrics established',
             impact: 'Baseline for measuring improvements',
             recommendation: 'Proceed with improvement actions',
-            evidence: ['127 files analyzed', 'Average complexity: 23.4']
+            evidence: ['127 files analyzed', 'Average complexity: 23.4'],
         });
     }
     async executeSuggest(findings, metrics) {
@@ -560,7 +560,7 @@ export class SelfDirectedSystem extends EventEmitter {
             description: 'Generated 23 high-confidence improvement suggestions',
             impact: 'Potential complexity reduction of 30%',
             recommendation: 'Apply top 10 suggestions automatically',
-            evidence: ['23 high-confidence suggestions', 'Estimated 30% complexity reduction']
+            evidence: ['23 high-confidence suggestions', 'Estimated 30% complexity reduction'],
         });
     }
     async executeRefactor(findings, metrics) {
@@ -574,7 +574,7 @@ export class SelfDirectedSystem extends EventEmitter {
             description: 'Successfully applied 10 refactorings',
             impact: 'Reduced average complexity by 7.2 points',
             recommendation: 'Monitor for any regressions',
-            evidence: ['10 refactorings applied', 'Complexity: 23.4 → 16.2', 'All tests passing']
+            evidence: ['10 refactorings applied', 'Complexity: 23.4 → 16.2', 'All tests passing'],
         });
     }
     async executeTest(findings, metrics) {
@@ -617,7 +617,7 @@ export class SelfDirectedSystem extends EventEmitter {
             description: finding.description,
             impact: finding.impact,
             recommendation: finding.recommendation,
-            evidence: finding.evidence
+            evidence: finding.evidence,
         });
         // In real implementation: create GitHub issue, send notification, etc.
     }

@@ -32,7 +32,7 @@ export class ExecutionSandbox extends EventEmitter {
             memoryLimit: options.memoryLimit || 128 * 1024 * 1024, // 128MB
             instrumentCode: options.instrumentCode ?? true,
             captureConsole: options.captureConsole ?? true,
-            mockModules: options.mockModules || {}
+            mockModules: options.mockModules || {},
         };
         // Instrument code if requested
         let instrumentedCode = code;
@@ -58,7 +58,7 @@ export class ExecutionSandbox extends EventEmitter {
                         type: 'execution-learnings',
                         data: { learnings, code: code.substring(0, 200) },
                         confidence: Math.max(...learnings.map(l => l.confidence)),
-                        affects: ['test-generator', 'smart-reviewer', 'refactor-assistant']
+                        affects: ['test-generator', 'smart-reviewer', 'refactor-assistant'],
                     });
                 }
             }
@@ -68,21 +68,21 @@ export class ExecutionSandbox extends EventEmitter {
                     error: {
                         type: error.constructor.name,
                         message: error.message,
-                        stack: error.stack
+                        stack: error.stack,
                     },
                     metrics: {
                         executionTime: performance.now() - startTime,
                         memoryUsed: 0,
-                        cpuUsage: 0
+                        cpuUsage: 0,
                     },
                     behavior: {
                         functionsCalld: [],
                         variablesMutated: [],
                         asyncOperations: 0,
                         exceptions: [error],
-                        sideEffects: []
+                        sideEffects: [],
                     },
-                    learnings: []
+                    learnings: [],
                 });
             }
         }
@@ -101,13 +101,13 @@ export class ExecutionSandbox extends EventEmitter {
             input: {
                 type: 'code',
                 size: code.length,
-                complexity: 0
+                complexity: 0,
             },
             output: {
                 type: 'execution-result',
                 size: aggregated.learnings.length,
-                quality: aggregated.success ? 100 : 0
-            }
+                quality: aggregated.success ? 100 : 0,
+            },
         });
         return aggregated;
     }
@@ -122,7 +122,7 @@ export class ExecutionSandbox extends EventEmitter {
             variablesMutated: [],
             asyncOperations: 0,
             exceptions: [],
-            sideEffects: []
+            sideEffects: [],
         };
         // Create VM with restrictions
         const vm = new VM({
@@ -143,8 +143,8 @@ export class ExecutionSandbox extends EventEmitter {
                 // Test case inputs
                 ...this.prepareInputs(testCase.inputs),
                 // Coverage tracking
-                __coverage__: coverage
-            }
+                __coverage__: coverage,
+            },
         });
         try {
             // Execute code
@@ -155,7 +155,7 @@ export class ExecutionSandbox extends EventEmitter {
                 behavior.asyncOperations++;
                 finalResult = await Promise.race([
                     result,
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Async timeout')), options.timeout))
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('Async timeout')), options.timeout)),
                 ]);
             }
             const endTime = performance.now();
@@ -166,33 +166,33 @@ export class ExecutionSandbox extends EventEmitter {
                 metrics: {
                     executionTime: endTime - startTime,
                     memoryUsed: endMemory - startMemory,
-                    cpuUsage: this.calculateCPUUsage(startTime, endTime)
+                    cpuUsage: this.calculateCPUUsage(startTime, endTime),
                 },
                 behavior,
                 coverage: coverage ? this.extractCoverage(coverage) : undefined,
-                learnings: []
+                learnings: [],
             };
         }
         catch (error) {
             behavior.exceptions.push({
                 type: error.constructor.name,
                 message: error.message,
-                stack: error.stack
+                stack: error.stack,
             });
             return {
                 success: false,
                 error: {
                     type: error.constructor.name,
                     message: error.message,
-                    stack: error.stack
+                    stack: error.stack,
                 },
                 metrics: {
                     executionTime: performance.now() - startTime,
                     memoryUsed: process.memoryUsage().heapUsed - startMemory,
-                    cpuUsage: 0
+                    cpuUsage: 0,
                 },
                 behavior,
-                learnings: []
+                learnings: [],
             };
         }
     }
@@ -205,7 +205,7 @@ export class ExecutionSandbox extends EventEmitter {
         const coverage = {
             statements: {},
             branches: {},
-            functions: {}
+            functions: {},
         };
         // Add basic instrumentation
         const instrumented = code.replace(/function\s+(\w+)/g, (match, name) => {
@@ -224,7 +224,7 @@ export class ExecutionSandbox extends EventEmitter {
                 operation: level,
                 data: args,
                 timestamp: Date.now(),
-                risk: 'low'
+                risk: 'low',
             });
         };
         return {
@@ -232,7 +232,7 @@ export class ExecutionSandbox extends EventEmitter {
             error: handler('error'),
             warn: handler('warn'),
             info: handler('info'),
-            debug: handler('debug')
+            debug: handler('debug'),
         };
     }
     /**
@@ -246,7 +246,7 @@ export class ExecutionSandbox extends EventEmitter {
                 operation: name,
                 data: { delay },
                 timestamp: Date.now(),
-                risk: 'low'
+                risk: 'low',
             });
             // Don't actually set timers in sandbox
             return null;
@@ -262,13 +262,13 @@ export class ExecutionSandbox extends EventEmitter {
                 operation: name,
                 data: { url, options },
                 timestamp: Date.now(),
-                risk: 'high'
+                risk: 'high',
             });
             // Return mock response
             return Promise.resolve({
                 ok: true,
                 json: () => Promise.resolve({}),
-                text: () => Promise.resolve('')
+                text: () => Promise.resolve(''),
             });
         };
     }
@@ -302,7 +302,7 @@ export class ExecutionSandbox extends EventEmitter {
         return {
             statements: total > 0 ? (statements / Object.keys(coverage.statements).length) * 100 : 0,
             branches: total > 0 ? (branches / Object.keys(coverage.branches).length) * 100 : 0,
-            functions: total > 0 ? (functions / Object.keys(coverage.functions).length) * 100 : 0
+            functions: total > 0 ? (functions / Object.keys(coverage.functions).length) * 100 : 0,
         };
     }
     /**
@@ -327,16 +327,17 @@ export class ExecutionSandbox extends EventEmitter {
                 confidence: 0.95,
                 recommendation: result.metrics.executionTime > 1000
                     ? 'Consider optimizing for better performance'
-                    : undefined
+                    : undefined,
             });
         }
         // Memory analysis
-        if (result.metrics.memoryUsed > 10 * 1024 * 1024) { // 10MB
+        if (result.metrics.memoryUsed > 10 * 1024 * 1024) {
+            // 10MB
             learnings.push({
                 type: 'performance',
                 insight: `High memory usage: ${(result.metrics.memoryUsed / 1024 / 1024).toFixed(2)}MB`,
                 confidence: 0.9,
-                recommendation: 'Consider memory optimization'
+                recommendation: 'Consider memory optimization',
             });
         }
         // Behavior patterns
@@ -344,7 +345,7 @@ export class ExecutionSandbox extends EventEmitter {
             learnings.push({
                 type: 'behavior',
                 insight: `Code performs ${result.behavior.asyncOperations} async operations`,
-                confidence: 1.0
+                confidence: 1.0,
             });
         }
         // Error patterns
@@ -355,7 +356,7 @@ export class ExecutionSandbox extends EventEmitter {
                     type: 'error',
                     insight: errorPattern.insight,
                     confidence: errorPattern.confidence,
-                    recommendation: errorPattern.fix
+                    recommendation: errorPattern.fix,
                 });
             }
         }
@@ -366,7 +367,7 @@ export class ExecutionSandbox extends EventEmitter {
                 type: 'behavior',
                 insight: `Code has ${highRiskEffects.length} high-risk side effects`,
                 confidence: 0.95,
-                recommendation: 'Review side effects for security implications'
+                recommendation: 'Review side effects for security implications',
             });
         }
         // Pattern detection
@@ -377,7 +378,7 @@ export class ExecutionSandbox extends EventEmitter {
                     type: 'pattern',
                     insight: pattern.insight,
                     confidence: pattern.confidence,
-                    recommendation: pattern.recommendation
+                    recommendation: pattern.recommendation,
                 });
             }
         }
@@ -392,33 +393,33 @@ export class ExecutionSandbox extends EventEmitter {
                 match: /TypeError.*undefined/i,
                 insight: 'Null/undefined reference error',
                 confidence: 0.95,
-                fix: 'Add null checks before accessing properties'
+                fix: 'Add null checks before accessing properties',
             },
             {
                 match: /RangeError.*Maximum call stack/i,
                 insight: 'Stack overflow from infinite recursion',
                 confidence: 1.0,
-                fix: 'Add base case to recursive function'
+                fix: 'Add base case to recursive function',
             },
             {
                 match: /SyntaxError/i,
                 insight: 'Code has syntax errors',
                 confidence: 1.0,
-                fix: 'Fix syntax before execution'
+                fix: 'Fix syntax before execution',
             },
             {
                 match: /ReferenceError.*not defined/i,
                 insight: 'Variable or function not defined',
                 confidence: 0.95,
-                fix: 'Ensure all variables are declared'
-            }
+                fix: 'Ensure all variables are declared',
+            },
         ];
         for (const pattern of patterns) {
             if (pattern.match.test(`${error.type} ${error.message}`)) {
                 return {
                     insight: pattern.insight,
                     confidence: pattern.confidence,
-                    fix: pattern.fix
+                    fix: pattern.fix,
                 };
             }
         }
@@ -433,7 +434,7 @@ export class ExecutionSandbox extends EventEmitter {
             return {
                 insight: 'Function appears to be pure (no side effects)',
                 confidence: 0.85,
-                recommendation: 'Good practice! Pure functions are easier to test'
+                recommendation: 'Good practice! Pure functions are easier to test',
             };
         }
         // Validation function detection
@@ -441,14 +442,14 @@ export class ExecutionSandbox extends EventEmitter {
             return {
                 insight: 'Function performs validation',
                 confidence: 0.9,
-                recommendation: 'Ensure all edge cases are handled'
+                recommendation: 'Ensure all edge cases are handled',
             };
         }
         // Transformation function detection
         if (typeof result === 'object' && testCase.inputs.length > 0) {
             return {
                 insight: 'Function transforms data',
-                confidence: 0.75
+                confidence: 0.75,
             };
         }
         return null;
@@ -467,7 +468,7 @@ export class ExecutionSandbox extends EventEmitter {
         const avgMetrics = {
             executionTime: results.reduce((sum, r) => sum + r.metrics.executionTime, 0) / results.length,
             memoryUsed: results.reduce((sum, r) => sum + r.metrics.memoryUsed, 0) / results.length,
-            cpuUsage: results.reduce((sum, r) => sum + r.metrics.cpuUsage, 0) / results.length
+            cpuUsage: results.reduce((sum, r) => sum + r.metrics.cpuUsage, 0) / results.length,
         };
         // Aggregate behavior
         const allSideEffects = [];
@@ -494,9 +495,9 @@ export class ExecutionSandbox extends EventEmitter {
                 variablesMutated: [...new Set(results.flatMap(r => r.behavior.variablesMutated))],
                 asyncOperations: totalAsync,
                 exceptions: allExceptions,
-                sideEffects: allSideEffects
+                sideEffects: allSideEffects,
             },
-            learnings: this.consolidateLearnings(allLearnings)
+            learnings: this.consolidateLearnings(allLearnings),
         };
     }
     /**
@@ -531,7 +532,7 @@ export class ExecutionSandbox extends EventEmitter {
         let hash = 0;
         for (let i = 0; i < code.length; i++) {
             const char = code.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
+            hash = (hash << 5) - hash + char;
             hash = hash & hash; // Convert to 32-bit integer
         }
         return hash.toString(16);
@@ -566,10 +567,13 @@ export class ExecutionSandbox extends EventEmitter {
         // Execute with optimized settings
         const result = await this.execute(code, testCases, options);
         // Add past learnings to result
-        result.learnings = [...result.learnings, ...pastLearnings.map(l => ({
+        result.learnings = [
+            ...result.learnings,
+            ...pastLearnings.map(l => ({
                 ...l,
-                confidence: l.confidence * 0.8 // Reduce confidence for past learnings
-            }))];
+                confidence: l.confidence * 0.8, // Reduce confidence for past learnings
+            })),
+        ];
         return result;
     }
 }

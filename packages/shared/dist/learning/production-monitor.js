@@ -47,7 +47,7 @@ export class ProductionMonitor extends EventEmitter {
             }
         }
         this.emit('monitoring:completed', {
-            outcomesProcessed: outcomes.length
+            outcomesProcessed: outcomes.length,
         });
     }
     /**
@@ -86,7 +86,7 @@ export class ProductionMonitor extends EventEmitter {
         await this.persistSuggestion(suggestion);
         this.emit('suggestion:recorded', {
             suggestionId: suggestion.id,
-            toolId: suggestion.toolId
+            toolId: suggestion.toolId,
         });
     }
     /**
@@ -107,7 +107,7 @@ export class ProductionMonitor extends EventEmitter {
         }
         this.emit('outcome:recorded', {
             suggestionId: outcome.suggestionId,
-            accepted: outcome.accepted
+            accepted: outcome.accepted,
         });
     }
     /**
@@ -162,7 +162,7 @@ export class ProductionMonitor extends EventEmitter {
             before,
             after: Math.min(100, before + actualImprovement),
             improvement: (actualImprovement / before) * 100,
-            measuredAt: new Date()
+            measuredAt: new Date(),
         };
     }
     /**
@@ -177,7 +177,7 @@ export class ProductionMonitor extends EventEmitter {
             before,
             after,
             improvement: ((before - after) / before) * 100,
-            measuredAt: new Date()
+            measuredAt: new Date(),
         };
     }
     /**
@@ -191,7 +191,7 @@ export class ProductionMonitor extends EventEmitter {
             before,
             after: before - actualFixed,
             improvement: (actualFixed / before) * 100,
-            measuredAt: new Date()
+            measuredAt: new Date(),
         };
     }
     /**
@@ -205,7 +205,7 @@ export class ProductionMonitor extends EventEmitter {
             before,
             after: Math.max(10, before - actualReduction),
             improvement: (actualReduction / before) * 100,
-            measuredAt: new Date()
+            measuredAt: new Date(),
         };
     }
     /**
@@ -220,7 +220,7 @@ export class ProductionMonitor extends EventEmitter {
             after: Math.max(0, before - actualFixed),
             improvement: (actualFixed / before) * 100,
             measuredAt: new Date(),
-            timeWindow: 7
+            timeWindow: 7,
         };
     }
     /**
@@ -242,10 +242,10 @@ export class ProductionMonitor extends EventEmitter {
             context: {
                 codeType: suggestion.context.file?.split('.').pop(),
                 complexity: 0.5, // Would be measured from actual code
-                domain: this.inferDomain(suggestion.context)
+                domain: this.inferDomain(suggestion.context),
             },
             timestamp: suggestion.timestamp,
-            features: this.extractFeaturesFromSuggestion(suggestion)
+            features: this.extractFeaturesFromSuggestion(suggestion),
         };
         const learningOutcome = {
             decisionId: suggestion.id,
@@ -254,21 +254,23 @@ export class ProductionMonitor extends EventEmitter {
                 accuracy: successScore,
                 performance: metrics.performance?.improvement || 0,
                 quality: metrics.codeQuality?.after || 70,
-                userSatisfaction: outcome.userFeedback?.rating || 4
+                userSatisfaction: outcome.userFeedback?.rating || 4,
             },
-            feedback: outcome.userFeedback ? {
-                accepted: true,
-                rating: outcome.userFeedback.rating,
-                comment: outcome.userFeedback.comment
-            } : undefined,
-            timestamp: new Date()
+            feedback: outcome.userFeedback
+                ? {
+                    accepted: true,
+                    rating: outcome.userFeedback.rating,
+                    comment: outcome.userFeedback.comment,
+                }
+                : undefined,
+            timestamp: new Date(),
         };
         // Learn from this experience
         await this.learningEngine.learn(decision, learningOutcome);
         this.emit('learning:success', {
             suggestionId: suggestion.id,
             successScore,
-            improvements: metrics
+            improvements: metrics,
         });
     }
     /**
@@ -294,9 +296,7 @@ export class ProductionMonitor extends EventEmitter {
         if (feedback) {
             scores.push(feedback.rating / 5);
         }
-        return scores.length > 0
-            ? scores.reduce((sum, score) => sum + score, 0) / scores.length
-            : 0.5;
+        return scores.length > 0 ? scores.reduce((sum, score) => sum + score, 0) / scores.length : 0.5;
     }
     /**
      * Analyze why suggestion was rejected
@@ -308,7 +308,7 @@ export class ProductionMonitor extends EventEmitter {
                 reason: 'Unknown suggestion',
                 category: 'other',
                 confidence: 0,
-                learnings: []
+                learnings: [],
             };
         }
         // Analyze rejection reason
@@ -345,7 +345,7 @@ export class ProductionMonitor extends EventEmitter {
             reason,
             category,
             confidence: 0.8,
-            learnings
+            learnings,
         };
     }
     /**
@@ -387,10 +387,10 @@ export class ProductionMonitor extends EventEmitter {
             context: {
                 codeType: suggestion.context.file?.split('.').pop(),
                 complexity: 0.5,
-                domain: this.inferDomain(suggestion.context)
+                domain: this.inferDomain(suggestion.context),
             },
             timestamp: suggestion.timestamp,
-            features: this.extractFeaturesFromSuggestion(suggestion)
+            features: this.extractFeaturesFromSuggestion(suggestion),
         };
         const learningOutcome = {
             decisionId: suggestion.id,
@@ -399,20 +399,20 @@ export class ProductionMonitor extends EventEmitter {
                 accuracy: 0,
                 performance: 0,
                 quality: 0,
-                userSatisfaction: outcome.userFeedback?.rating || 1
+                userSatisfaction: outcome.userFeedback?.rating || 1,
             },
             feedback: {
                 accepted: false,
-                comment: analysis.reason
+                comment: analysis.reason,
             },
-            timestamp: new Date()
+            timestamp: new Date(),
         };
         // Learn from this failure
         await this.learningEngine.learn(decision, learningOutcome);
         this.emit('learning:rejection', {
             suggestionId: suggestion.id,
             category: analysis.category,
-            learnings: analysis.learnings
+            learnings: analysis.learnings,
         });
     }
     /**
@@ -442,7 +442,7 @@ export class ProductionMonitor extends EventEmitter {
             hasFile: suggestion.context?.file ? 1 : 0,
             hasFunction: suggestion.context?.function ? 1 : 0,
             timeOfDay: suggestion.timestamp.getHours() / 24,
-            dayOfWeek: suggestion.timestamp.getDay() / 7
+            dayOfWeek: suggestion.timestamp.getDay() / 7,
         };
     }
     /**
@@ -455,7 +455,7 @@ export class ProductionMonitor extends EventEmitter {
         const metrics = await this.measureImpact(outcome);
         this.emit('impact:measured', {
             suggestionId,
-            metrics
+            metrics,
         });
     }
     /**
@@ -469,7 +469,7 @@ export class ProductionMonitor extends EventEmitter {
         const longTermMetrics = await this.measureImpact(outcome);
         this.emit('impact:long-term', {
             suggestionId,
-            metrics: longTermMetrics
+            metrics: longTermMetrics,
         });
     }
     /**
@@ -528,7 +528,8 @@ export class ProductionMonitor extends EventEmitter {
         }
         const avgImprovementByType = {};
         for (const [type, improvements] of Object.entries(improvementByType)) {
-            avgImprovementByType[type] = improvements.reduce((sum, imp) => sum + imp, 0) / improvements.length;
+            avgImprovementByType[type] =
+                improvements.reduce((sum, imp) => sum + imp, 0) / improvements.length;
         }
         // Count rejection categories
         const rejectionCategories = {};
@@ -544,7 +545,7 @@ export class ProductionMonitor extends EventEmitter {
             acceptanceRate: total > 0 ? accepted / total : 0,
             avgImprovementByType,
             rejectionCategories,
-            topLearnings: [] // Would extract from analysis
+            topLearnings: [], // Would extract from analysis
         };
     }
 }

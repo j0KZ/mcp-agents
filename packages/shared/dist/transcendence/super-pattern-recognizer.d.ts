@@ -271,5 +271,5 @@ export declare class SuperPatternRecognizer extends EventEmitter {
     private calculateBusinessImpact;
     private getCodeHistory;
 }
-export type { MultiDimensionalPattern, PatternType, TemporalPattern, SpatialPattern, SemanticPattern, StatisticalPattern, QuantumPattern, SuperhumanInsight, BusinessImpact, ActionableRecommendation, Visualization };
+export type { MultiDimensionalPattern, PatternType, TemporalPattern, SpatialPattern, SemanticPattern, StatisticalPattern, QuantumPattern, SuperhumanInsight, BusinessImpact, ActionableRecommendation, Visualization, };
 //# sourceMappingURL=super-pattern-recognizer.d.ts.map
