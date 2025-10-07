@@ -11,7 +11,7 @@
 [![codecov](https://codecov.io/gh/j0KZ/mcp-agents/branch/main/graph/badge.svg)](https://codecov.io/gh/j0KZ/mcp-agents)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 
-[![Tests](https://img.shields.io/badge/tests-1094_passing-success.svg)](https://github.com/j0KZ/mcp-agents/actions)
+[![Tests](https://img.shields.io/badge/tests-366_passing-success.svg)](https://github.com/j0KZ/mcp-agents/actions)
 [![Performance](https://img.shields.io/badge/performance-2.18x_faster-brightgreen.svg)](docs/PHASE3_SUMMARY.md)
 [![Code Quality](https://img.shields.io/badge/code_quality-A+-brightgreen.svg)](https://github.com/j0KZ/mcp-agents/actions/workflows/codeql.yml)
 [![Security](https://img.shields.io/badge/security-100%25_secure-shield.svg)](https://github.com/j0KZ/mcp-agents/security)
@@ -152,7 +152,7 @@ Just chat naturally with your AI assistant after installation:
 | **Test Coverage** | 75% | ✅ Enforced |
 | **Code Quality** | Score 88/100 | ⭐ Excellent |
 | **Security** | 0 vulnerabilities | 🛡️ Hardened |
-| **Tests** | 1,094 passing | ✅ Complete |
+| **Tests** | 366 passing | ✅ Complete |
 | **Complexity** | -36% reduction | 📈 Improved |
 
 </div>
