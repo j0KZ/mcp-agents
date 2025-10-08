@@ -169,53 +169,101 @@ npm run dev -w packages/smart-reviewer
 npm run publish-all
 ```
 
-### Version Management
+### Standardization & Automation
 
-**CRITICAL: All packages use a single source of truth for versions**
+**CRITICAL: We use standardized patterns to eliminate manual updates**
 
-This monorepo uses **`version.json`** as the single source of truth for all package versions:
+See **[docs/STANDARDIZATION.md](docs/STANDARDIZATION.md)** for complete details.
 
-- ✅ **Global version file:** `version.json` at root
-- ✅ **Current version:** `1.0.25` (check version.json)
-- ✅ **Auto-sync script:** Syncs all packages from version.json
-- ✅ **Why:** Single place to update, impossible to have version mismatches
+#### ✅ Already Standardized (Use These!)
 
-**To release a new version:**
-
+**1. Version Management** (via `version.json`)
 ```bash
-# 1. Update version.json
-echo '{"version":"1.0.26","description":"Global version for all MCP packages"}' > version.json
+# Single source of truth for ALL package versions
+# Location: version.json at root
+# Current: 1.0.35 (always check version.json)
 
-# 2. Sync all packages automatically
-npm run version:sync
-
-# 3. Update CHANGELOG and README
-# - Update version badge in README.md
-# - Add new section to CHANGELOG.md
-
-# 4. Build and publish
-npm run build
-npm run publish-all
-cd installer && npm publish
-
-# 5. Commit and tag
-git add .
-git commit -m "release: v1.0.26"
-git tag v1.0.26
-git push && git push --tags
+# To release a new version:
+1. Edit version.json ONLY
+2. npm run version:sync        # Auto-updates all packages
+3. Update CHANGELOG.md manually
+4. npm run build && npm run publish-all
+5. git commit -m "release: v1.0.X" && git tag v1.0.X && git push --tags
 ```
 
-**Adding new MCP packages:**
+**2. Installation Commands** (always use `@latest`)
+```bash
+# ✅ CORRECT - Always use @latest in documentation
+npx @j0kz/mcp-agents@latest
+npx @j0kz/smart-reviewer-mcp@latest
 
-1. Create in `packages/your-package/`
-2. Run `npm run version:sync` - it will automatically get the global version
-3. No manual version management needed!
+# ❌ WRONG - Never hardcode versions
+npx @j0kz/mcp-agents@1.0.35
+```
 
-**Never:**
+**3. Test Count Updates** (automated script)
+```bash
+# After adding/removing tests, run:
+npm run update:test-count
 
-- ❌ Manually edit version in package.json files
-- ❌ Use different versions across packages
-- ❌ Forget to run `npm run version:sync` after updating version.json
+# This auto-updates:
+# - README.md badge
+# - wiki/Home.md badge
+# - CHANGELOG.md metrics
+```
+
+**4. Tool Metadata** (centralized in `tools.json`)
+```javascript
+// Single source of truth for all 9 MCP tools
+// Location: tools.json at root
+// Contains: name, package, description, features, wiki links
+// Use this for generating documentation
+```
+
+#### 📋 Standardization Rules
+
+**URL Casing (IMPORTANT!):**
+- GitHub URLs: `https://github.com/j0KZ/mcp-agents` (capital K, Z)
+- npm packages: `@j0kz/package-name` (lowercase)
+- Never mix these up!
+
+**Version References:**
+- ✅ Read from `version.json`
+- ✅ Use `@latest` in docs
+- ❌ Never hardcode version numbers
+
+**Test Counts:**
+- ✅ Run `npm run update:test-count`
+- ❌ Never manually edit test counts
+
+**Coverage Badges:**
+- ✅ Use dynamic Codecov badge (auto-updates)
+- ❌ Don't hardcode percentages
+
+#### 🚀 Release Checklist
+
+```bash
+# Complete release process (standardized):
+
+1. npm run update:test-count    # Update test counts
+2. Edit version.json             # Bump version
+3. npm run version:sync          # Sync to all packages
+4. Update CHANGELOG.md           # Add release notes
+5. npm run build                 # Build all packages
+6. npm run publish-all           # Publish to npm
+7. cd installer && npm publish   # Publish installer
+8. git add . && git commit -m "release: vX.Y.Z"
+9. git tag vX.Y.Z && git push --tags
+10. Update wiki if needed: powershell -File publish-wiki.ps1
+```
+
+#### ❌ Never Do These:
+
+- ❌ Manually edit version in package.json files (use `version.json`)
+- ❌ Hardcode version numbers in docs (use `@latest`)
+- ❌ Manually update test counts (run `npm run update:test-count`)
+- ❌ Use different versions across packages (all synced from `version.json`)
+- ❌ Forget to run `npm run version:sync` after editing `version.json`
 
 ## Important Patterns & Conventions
 
@@ -264,13 +312,27 @@ return {
 
 ### Adding a New MCP Tool
 
-1. Create directory in `packages/`
+1. Create directory in `packages/your-tool/`
 2. Add `package.json` with proper bin/main/types fields
 3. Create `src/mcp-server.ts` implementing MCP protocol
 4. Add core logic in separate files
 5. Import shared utilities from `@j0kz/shared`
 6. Add tests using Vitest
 7. Add to root workspace in root `package.json`
+8. **Add to `tools.json`** - Register the new tool:
+   ```json
+   {
+     "id": "your-tool",
+     "name": "Your Tool Name",
+     "package": "@j0kz/your-tool-mcp",
+     "description": "What it does",
+     "category": "analysis|generation|refactoring|design|orchestration",
+     "features": ["Feature 1", "Feature 2"],
+     "wikiPage": "Your-Tool"
+   }
+   ```
+9. Run `npm run version:sync` to auto-set version
+10. Update wiki page count (9 → 10 tools) using search & replace
 
 ### Modifying Existing Tools
 
