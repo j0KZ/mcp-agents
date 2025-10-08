@@ -1,0 +1,162 @@
+{
+  "version": "1.0.35",
+  "tools": [
+    {
+      "id": "smart-reviewer",
+      "name": "Smart Reviewer",
+      "package": "@j0kz/smart-reviewer-mcp",
+      "description": "Code review with auto-fixes following 80/20 principle",
+      "category": "analysis",
+      "features": [
+        "Deep code analysis",
+        "Quality metrics (complexity, maintainability)",
+        "Auto-fix engine (Pareto 80/20)",
+        "Code smell detection",
+        "Safe AST-based refactoring"
+      ],
+      "wikiPage": "Smart-Reviewer"
+    },
+    {
+      "id": "test-generator",
+      "name": "Test Generator",
+      "package": "@j0kz/test-generator-mcp",
+      "description": "Generate comprehensive test suites with edge cases",
+      "category": "generation",
+      "features": [
+        "Smart test generation",
+        "Edge case coverage",
+        "Multiple frameworks (Jest, Vitest, Mocha, AVA)",
+        "Mock generation",
+        "Coverage estimation"
+      ],
+      "wikiPage": "Test-Generator"
+    },
+    {
+      "id": "architecture-analyzer",
+      "name": "Architecture Analyzer",
+      "package": "@j0kz/architecture-analyzer-mcp",
+      "description": "Dependency analysis, circular detection, layer violations",
+      "category": "analysis",
+      "features": [
+        "Circular dependency detection",
+        "Layer violation checking",
+        "Mermaid diagram generation",
+        "Module cohesion/coupling metrics",
+        "Architecture suggestions"
+      ],
+      "wikiPage": "Architecture-Analyzer"
+    },
+    {
+      "id": "security-scanner",
+      "name": "Security Scanner",
+      "package": "@j0kz/security-scanner-mcp",
+      "description": "OWASP Top 10, secret detection, vulnerability scanning",
+      "category": "analysis",
+      "features": [
+        "OWASP Top 10 scanning",
+        "Secret pattern detection",
+        "SQL injection detection",
+        "XSS vulnerability scanning",
+        "Dependency vulnerability check"
+      ],
+      "wikiPage": "Security-Scanner"
+    },
+    {
+      "id": "refactor-assistant",
+      "name": "Refactor Assistant",
+      "package": "@j0kz/refactor-assistant-mcp",
+      "description": "Extract functions, simplify conditionals, apply design patterns",
+      "category": "refactoring",
+      "features": [
+        "Extract function",
+        "Simplify conditionals",
+        "Apply design patterns (10 patterns)",
+        "Convert to async/await",
+        "Remove dead code"
+      ],
+      "wikiPage": "Refactor-Assistant"
+    },
+    {
+      "id": "api-designer",
+      "name": "API Designer",
+      "package": "@j0kz/api-designer-mcp",
+      "description": "REST/GraphQL API design with OpenAPI generation",
+      "category": "design",
+      "features": [
+        "REST API design",
+        "GraphQL schema generation",
+        "OpenAPI 3.0 spec generation",
+        "Client code generation",
+        "Mock server generation"
+      ],
+      "wikiPage": "API-Designer"
+    },
+    {
+      "id": "db-schema",
+      "name": "DB Schema Designer",
+      "package": "@j0kz/db-schema-mcp",
+      "description": "Database schema design for PostgreSQL, MySQL, MongoDB",
+      "category": "design",
+      "features": [
+        "Schema design from requirements",
+        "Migration generation",
+        "ER diagram creation (Mermaid)",
+        "Normalization analysis (1NF-BCNF)",
+        "Index optimization"
+      ],
+      "wikiPage": "DB-Schema-Designer"
+    },
+    {
+      "id": "doc-generator",
+      "name": "Doc Generator",
+      "package": "@j0kz/doc-generator-mcp",
+      "description": "JSDoc, README, API docs, and changelog generation",
+      "category": "generation",
+      "features": [
+        "JSDoc generation",
+        "README generation",
+        "API documentation",
+        "Changelog from git commits",
+        "Conventional commit parsing"
+      ],
+      "wikiPage": "Doc-Generator"
+    },
+    {
+      "id": "orchestrator",
+      "name": "Orchestrator",
+      "package": "@j0kz/orchestrator-mcp",
+      "description": "Chain multiple MCP tools into workflows",
+      "category": "orchestration",
+      "features": [
+        "Pre-built workflows (pre-commit, pre-merge, quality-audit)",
+        "Custom workflow sequences",
+        "Step dependency management",
+        "Error handling and rollback",
+        "Git hook integration"
+      ],
+      "wikiPage": "Orchestrator"
+    }
+  ],
+  "categories": {
+    "analysis": {
+      "name": "Code Analysis",
+      "description": "Analyze code quality, architecture, and security"
+    },
+    "generation": {
+      "name": "Code Generation",
+      "description": "Generate tests, documentation, and boilerplate code"
+    },
+    "refactoring": {
+      "name": "Code Refactoring",
+      "description": "Transform and improve existing code structure"
+    },
+    "design": {
+      "name": "Design Tools",
+      "description": "Design APIs, databases, and system architecture"
+    },
+    "orchestration": {
+      "name": "Workflow Orchestration",
+      "description": "Chain tools together into automated workflows"
+    }
+  }
+}

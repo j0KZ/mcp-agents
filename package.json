@@ -22,6 +22,7 @@
     "install-all": "node scripts/install-all.js",
     "version:sync": "node scripts/sync-versions.js",
     "version:check-shared": "node scripts/enforce-shared-version.js",
+    "update:test-count": "node scripts/update-test-count.js",
     "publish-all": "npm run build && npm publish --workspaces --access public",
     "clean": "npm run clean --workspaces --if-present && rm -rf node_modules",
     "format": "prettier --write \"**/*.{js,ts,json,md}\"",
