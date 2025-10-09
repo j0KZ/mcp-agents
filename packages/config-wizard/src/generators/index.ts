@@ -2,8 +2,6 @@
  * Config generators index with universal config support
  */
 
-import { generateClaudeCodeConfig } from './claude-code.js';
-import { generateCursorConfig } from './cursor.js';
 import { generateUniversalConfig, generateIDESpecificConfig } from './universal.js';
 import type { WizardSelections } from '../wizard.js';
 import type { SupportedEditor } from '../detectors/editor.js';
