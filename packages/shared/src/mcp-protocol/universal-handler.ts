@@ -5,7 +5,6 @@
  */
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { EnvironmentDetector, RuntimeEnvironment } from '../runtime/environment-detector.js';
 import { HealthChecker } from '../health/health-checker.js';
 import { EnhancedError } from '../errors/enhanced-error.js';
