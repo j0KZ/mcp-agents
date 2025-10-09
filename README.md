@@ -8,17 +8,12 @@
 
 [![CI](https://github.com/j0KZ/mcp-agents/workflows/CI/badge.svg)](https://github.com/j0KZ/mcp-agents/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@j0kz/mcp-agents.svg)](https://www.npmjs.com/package/@j0kz/mcp-agents)
-[![Version](https://img.shields.io/badge/version-1.0.35-blue.svg)](https://github.com/j0KZ/mcp-agents/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![codecov](https://codecov.io/gh/j0KZ/mcp-agents/branch/main/graph/badge.svg)](https://codecov.io/gh/j0KZ/mcp-agents)
-[![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
-
 [![Tests](https://img.shields.io/badge/tests-366_passing-success.svg)](https://github.com/j0KZ/mcp-agents/actions)
-[![Performance](https://img.shields.io/badge/performance-2.18x_faster-brightgreen.svg)](docs/PHASE3_SUMMARY.md)
-[![Code Quality](https://img.shields.io/badge/code_quality-A+-brightgreen.svg)](https://github.com/j0KZ/mcp-agents/actions/workflows/codeql.yml)
-[![Security](https://img.shields.io/badge/security-100%25_secure-shield.svg)](https://github.com/j0KZ/mcp-agents/security)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](CONTRIBUTING.md)
-[![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/j0KZ/mcp-agents/wiki)
+[![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+📖 [Read in English](#) | [Leer en Español](README.es.md)
 
 </div>
 
@@ -38,7 +33,7 @@ That's it! The installer automatically:
 - ✅ Fixes malformed config files
 - ✅ Works in English and Spanish
 
-**Restart your editor and start using AI-powered development tools immediately!**
+**Restart your editor and you're ready to go!**
 
 <details>
 <summary>📱 Supported Editors</summary>
@@ -57,118 +52,54 @@ npx @j0kz/mcp-agents@latest roo       # Roo Code
 
 ---
 
-## 🎯 What You Get
+## ✅ Test It's Working
 
-<table>
-<tr>
-<td width="33%">
+After restarting your editor, try one of these commands:
 
-### 🔍 Code Quality
-- **Smart Reviewer** - AI code review
-- **Test Generator** - Comprehensive tests
-- **Refactor Assistant** - Clean code
-
-</td>
-<td width="33%">
-
-### 🏗️ Architecture
-- **Architecture Analyzer** - Dependencies
-- **API Designer** - REST/GraphQL
-- **DB Schema** - Database design
-
-</td>
-<td width="33%">
-
-### 🛡️ Security & Docs
-- **Security Scanner** - Vulnerability scan
-- **Doc Generator** - Auto documentation
-- **Orchestrator** - Workflow automation
-
-</td>
-</tr>
-</table>
-
----
-
-## 💡 Real-World Usage
-
-Just chat naturally with your AI assistant after installation:
-
-<table>
-<tr>
-<td width="50%">
-
-### Code Review (English / Español)
+### Quick Health Check
 ```
-"Review my auth.js file"
-"Revisar mi archivo auth.js"
-"What code smells are in this?"
-"Check for performance issues"
+"Check MCP server status"
 ```
 
-### Testing
+### Your First Command
 ```
-"Generate tests for calculatePrice"
-"Generar pruebas para calculatePrice"
-"Add edge cases to my tests"
-"Create integration tests"
+"Review my package.json"
+"Revisar mi package.json"
 ```
 
-### Security
-```
-"Scan for vulnerabilities"
-"Escanear vulnerabilidades"
-"Check for SQL injection"
-"Find hardcoded secrets"
-```
+**Expected**: Claude will analyze the file and show code quality insights. If you see a detailed report, everything is working! 🎉
 
-</td>
-<td width="50%">
+<details>
+<summary>🆘 Not working? Click here for troubleshooting</summary>
 
-### Architecture
-```
-"Analyze project structure"
-"Analizar estructura del proyecto"
-"Find circular dependencies"
-"Generate dependency graph"
-```
+### Common Issues & Solutions
 
-### API Design
-```
-"Design REST API for users"
-"Diseñar API REST para usuarios"
-"Generate OpenAPI spec"
-"Create GraphQL schema"
-```
+**❌ Tools not appearing in chat?**
+- Solution: Restart your editor completely (close all windows)
+- If still not working: Clear npm cache and reinstall
+  ```bash
+  npm cache clean --force
+  npx @j0kz/mcp-agents@latest
+  ```
 
-### Documentation
-```
-"Generate README"
-"Generar README"
-"Add JSDoc comments"
-"Create API documentation"
-```
+**❌ Commands not recognized?**
+- Try both English and Spanish variants
+- Use natural language: "Review this file" instead of technical syntax
+- Ask: "What MCP tools are available?" to see loaded tools
 
-</td>
-</tr>
-</table>
+**❌ Installation failed?**
+- Check you're on Node.js 18+ (`node --version`)
+- Try with sudo/admin if permission issues
+- Check your editor's config file was updated correctly
 
----
+**❌ "Module not found" errors?**
+- Run: `npm cache clean --force`
+- Reinstall: `npx @j0kz/mcp-agents@latest`
+- Restart editor
 
-## 📊 Performance & Quality Metrics
+**Still stuck?** [Open an issue](https://github.com/j0KZ/mcp-agents/issues) or check the [Wiki](https://github.com/j0KZ/mcp-agents/wiki/Troubleshooting)
 
-<div align="center">
-
-| Metric | Value | Status |
-|--------|-------|--------|
-| **Performance** | 2.18x faster | 🚀 Optimized |
-| **Test Coverage** | 75% | ✅ Enforced |
-| **Code Quality** | Score 88/100 | ⭐ Excellent |
-| **Security** | 0 vulnerabilities | 🛡️ Hardened |
-| **Tests** | 366 passing | ✅ Complete |
-| **Complexity** | -36% reduction | 📈 Improved |
-
-</div>
+</details>
 
 ---
 
@@ -800,108 +731,7 @@ After (7 lines, async/await):
 
 ---
 
-## 🚀 CI/CD Integration
-
-Add automated quality checks to your pipeline:
-
-### GitHub Actions
-```bash
-# Quick setup
-curl -o .github/workflows/mcp-quality.yml \
-  https://raw.githubusercontent.com/j0KZ/mcp-agents/main/templates/github-actions/mcp-basic.yml
-```
-
-### Pre-commit Hooks
-```bash
-npx @j0kz/mcp-hooks-generator basic
-```
-
-### GitLab CI
-```yaml
-include:
-  - remote: 'https://raw.githubusercontent.com/j0KZ/mcp-agents/main/templates/gitlab-ci/mcp-quality-gate.gitlab-ci.yml'
-```
-
-[📚 Full CI/CD Guide](docs/development/CI_CD_TEMPLATES.md)
-
----
-
-## 📦 Features Comparison
-
-<table>
-<thead>
-<tr>
-<th>Feature</th>
-<th>MCP Agent Toolkit</th>
-<th>Traditional Tools</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><b>Installation</b></td>
-<td>✅ One command</td>
-<td>❌ Multiple tools & configs</td>
-</tr>
-<tr>
-<td><b>AI Integration</b></td>
-<td>✅ Native MCP support</td>
-<td>❌ Manual integration</td>
-</tr>
-<tr>
-<td><b>Performance</b></td>
-<td>✅ 2.18x faster with caching</td>
-<td>❌ No intelligent caching</td>
-</tr>
-<tr>
-<td><b>Coverage</b></td>
-<td>✅ 9 tools in one package</td>
-<td>❌ Separate installations</td>
-</tr>
-<tr>
-<td><b>Updates</b></td>
-<td>✅ Synchronized versions</td>
-<td>❌ Version conflicts</td>
-</tr>
-<tr>
-<td><b>Editor Support</b></td>
-<td>✅ All MCP editors</td>
-<td>❌ Limited support</td>
-</tr>
-</tbody>
-</table>
-
----
-
-## 🎯 Quick Start Examples
-
-### 1. Code Quality Check
-```bash
-"Review all files in src/ and generate tests for uncovered functions"
-```
-
-### 2. Security Audit
-```bash
-"Scan the entire project for security vulnerabilities and generate a report"
-```
-
-### 3. API Documentation
-```bash
-"Generate OpenAPI documentation for all endpoints in server.js"
-```
-
-### 4. Architecture Review
-```bash
-"Analyze dependencies and find circular references"
-```
-
-### 5. Database Design
-```bash
-"Design a schema for a blog with users, posts, and comments"
-```
-
----
-
-## 📚 Documentation
+## 📚 Documentation & Resources
 
 <div align="center">
 
@@ -912,8 +742,54 @@ include:
 | [**🔧 Configuration**](https://github.com/j0KZ/mcp-agents/wiki/Configuration) | Editor setup guides |
 | [**💡 Examples**](examples/) | Real-world usage patterns |
 | [**🐛 Troubleshooting**](https://github.com/j0KZ/mcp-agents/wiki/Troubleshooting) | Common issues & solutions |
+| [**📋 Changelog**](CHANGELOG.md) | What's new in each version |
 
 </div>
+
+---
+
+## 🚀 Advanced: CI/CD Integration
+
+Automate code quality checks in your development workflow:
+
+<details>
+<summary><b>GitHub Actions</b> - Click to expand</summary>
+
+```bash
+# Quick setup - adds MCP quality checks to your CI pipeline
+curl -o .github/workflows/mcp-quality.yml \
+  https://raw.githubusercontent.com/j0KZ/mcp-agents/main/templates/github-actions/mcp-basic.yml
+```
+
+This will run Smart Reviewer, Test Generator, and Security Scanner on every PR.
+
+</details>
+
+<details>
+<summary><b>Pre-commit Hooks</b> - Click to expand</summary>
+
+```bash
+# Automatically review code before committing
+npx @j0kz/mcp-hooks-generator basic
+```
+
+Runs checks locally before pushing, catching issues early.
+
+</details>
+
+<details>
+<summary><b>GitLab CI</b> - Click to expand</summary>
+
+```yaml
+include:
+  - remote: 'https://raw.githubusercontent.com/j0KZ/mcp-agents/main/templates/gitlab-ci/mcp-quality-gate.gitlab-ci.yml'
+```
+
+Integrates MCP tools into GitLab's CI/CD pipeline.
+
+</details>
+
+📚 [Full CI/CD Integration Guide](docs/development/CI_CD_TEMPLATES.md)
 
 ---
 
@@ -934,19 +810,6 @@ npm test
 # Build all packages
 npm run build
 ```
-
----
-
-## 📈 Project Stats
-
-<div align="center">
-
-[![GitHub stars](https://img.shields.io/github/stars/j0KZ/mcp-agents?style=social)](https://github.com/j0KZ/mcp-agents)
-[![GitHub forks](https://img.shields.io/github/forks/j0KZ/mcp-agents?style=social)](https://github.com/j0KZ/mcp-agents/fork)
-[![GitHub issues](https://img.shields.io/github/issues/j0KZ/mcp-agents)](https://github.com/j0KZ/mcp-agents/issues)
-[![GitHub PRs](https://img.shields.io/github/issues-pr/j0KZ/mcp-agents)](https://github.com/j0KZ/mcp-agents/pulls)
-
-</div>
 
 ---
 
