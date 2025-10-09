@@ -7,7 +7,7 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { EnvironmentDetector, RuntimeEnvironment } from '../runtime/environment-detector.js';
-import { HealthChecker, HealthCheckResult } from '../health/health-checker.js';
+import { HealthChecker } from '../health/health-checker.js';
 import { EnhancedError } from '../errors/enhanced-error.js';
 import { MCPError } from '../errors/error-codes.js';
 import { matchToolName } from '../i18n/tool-matcher.js';
