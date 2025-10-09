@@ -16,34 +16,11 @@ import { Module, Dependency } from '../types.js';
 export function calculateCohesion(modules: Module[], dependencies: Dependency[]): number {
   if (modules.length === 0) return 0;
 
-  // Identify modules that are part of the same package/directory
-  const packageGroups = groupModulesByPackage(modules);
-
   // Calculate cohesion: dependencies within same package vs cross-package
   const intraPackageDeps = countIntraPackageDependencies(dependencies);
   const totalDeps = dependencies.length || 1;
 
   return Math.round((intraPackageDeps / totalDeps) * 100);
-}
-
-/**
- * Group modules by their package/directory path
- *
- * @param modules - Modules to group
- * @returns Map of package paths to modules
- */
-function groupModulesByPackage(modules: Module[]): Map<string, Module[]> {
-  const packageGroups = new Map<string, Module[]>();
-
-  modules.forEach(m => {
-    const packagePath = getPackagePath(m.path);
-    if (!packageGroups.has(packagePath)) {
-      packageGroups.set(packagePath, []);
-    }
-    packageGroups.get(packagePath)!.push(m);
-  });
-
-  return packageGroups;
 }
 
 /**
