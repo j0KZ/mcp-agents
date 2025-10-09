@@ -231,9 +231,11 @@ class MutationTester {
     const pkgPath = path.join(__dirname, '..', 'packages', packageName);
 
     // Backup current tests
+    const testsPath = path.join(pkgPath, 'tests');
     const testsBackupPath = path.join(pkgPath, 'tests.backup');
-    if (fs.existsSync(path.join(pkgPath, 'tests'))) {
-      execSync(`cp -r tests ${testsBackupPath}`, { cwd: pkgPath });
+    if (fs.existsSync(testsPath)) {
+      // Use Node.js fs methods instead of shell commands for security
+      fs.cpSync(testsPath, testsBackupPath, { recursive: true });
     }
 
     // Test with generated tests
@@ -245,7 +247,13 @@ class MutationTester {
 
     // Restore backup
     if (fs.existsSync(testsBackupPath)) {
-      execSync(`rm -rf tests && mv ${testsBackupPath} tests`, { cwd: pkgPath });
+      const testsPath = path.join(pkgPath, 'tests');
+      // Remove current tests directory safely
+      if (fs.existsSync(testsPath)) {
+        fs.rmSync(testsPath, { recursive: true, force: true });
+      }
+      // Restore from backup
+      fs.renameSync(testsBackupPath, testsPath);
     }
 
     return generatedResults;
