@@ -10,6 +10,6 @@ export declare function editorPrompt(detectedEditor: SupportedEditor): {
         name: string;
         value: string;
     }[];
-    default: "claude-code" | "cursor" | "windsurf" | "vscode" | "roo";
+    default: "claude-code" | "cursor" | "windsurf" | "vscode" | "roo" | "qoder";
 };
 //# sourceMappingURL=editor-select.d.ts.map

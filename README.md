@@ -2,7 +2,9 @@
 
 <div align="center">
 
-**Enterprise-grade AI development tools for Claude, Cursor, Windsurf & MCP-compatible editors**
+**Enterprise-grade AI development tools for Claude, Cursor, Windsurf, Qoder & all MCP-compatible editors**
+
+🌍 **Multi-language Support**: Works in English and Spanish | Funciona en inglés y español
 
 [![CI](https://github.com/j0KZ/mcp-agents/workflows/CI/badge.svg)](https://github.com/j0KZ/mcp-agents/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@j0kz/mcp-agents.svg)](https://www.npmjs.com/package/@j0kz/mcp-agents)
@@ -29,21 +31,26 @@ npx @j0kz/mcp-agents@latest
 ```
 
 That's it! The installer automatically:
-- ✅ Detects your editor (Claude, Cursor, Windsurf, VS Code, etc.)
-- ✅ Configures all 9 MCP tools
+- ✅ Detects your editor (Claude, Cursor, Windsurf, Qoder, VS Code, Roo, etc.)
+- ✅ Configures all 9 MCP tools with universal compatibility
+- ✅ Adds proper `type: stdio` for maximum compatibility
 - ✅ Clears npm cache to prevent issues
 - ✅ Fixes malformed config files
+- ✅ Works in English and Spanish
 
 **Restart your editor and start using AI-powered development tools immediately!**
 
 <details>
-<summary>📱 Other Editors</summary>
+<summary>📱 Supported Editors</summary>
 
 ```bash
-npx @j0kz/mcp-agents@latest cursor     # Cursor
-npx @j0kz/mcp-agents@latest windsurf   # Windsurf
-npx @j0kz/mcp-agents@latest vscode     # VS Code
-npx @j0kz/mcp-agents@latest roo        # Roo Code
+npx @j0kz/mcp-agents@latest           # Auto-detect
+npx @j0kz/mcp-agents@latest claude    # Claude Code
+npx @j0kz/mcp-agents@latest cursor    # Cursor
+npx @j0kz/mcp-agents@latest windsurf  # Windsurf
+npx @j0kz/mcp-agents@latest qoder     # Qoder
+npx @j0kz/mcp-agents@latest vscode    # VS Code
+npx @j0kz/mcp-agents@latest roo       # Roo Code
 ```
 
 </details>
@@ -91,9 +98,10 @@ Just chat naturally with your AI assistant after installation:
 <tr>
 <td width="50%">
 
-### Code Review
+### Code Review (English / Español)
 ```
 "Review my auth.js file"
+"Revisar mi archivo auth.js"
 "What code smells are in this?"
 "Check for performance issues"
 ```
@@ -101,6 +109,7 @@ Just chat naturally with your AI assistant after installation:
 ### Testing
 ```
 "Generate tests for calculatePrice"
+"Generar pruebas para calculatePrice"
 "Add edge cases to my tests"
 "Create integration tests"
 ```
@@ -108,6 +117,7 @@ Just chat naturally with your AI assistant after installation:
 ### Security
 ```
 "Scan for vulnerabilities"
+"Escanear vulnerabilidades"
 "Check for SQL injection"
 "Find hardcoded secrets"
 ```
@@ -118,6 +128,7 @@ Just chat naturally with your AI assistant after installation:
 ### Architecture
 ```
 "Analyze project structure"
+"Analizar estructura del proyecto"
 "Find circular dependencies"
 "Generate dependency graph"
 ```
@@ -125,6 +136,7 @@ Just chat naturally with your AI assistant after installation:
 ### API Design
 ```
 "Design REST API for users"
+"Diseñar API REST para usuarios"
 "Generate OpenAPI spec"
 "Create GraphQL schema"
 ```
@@ -132,6 +144,7 @@ Just chat naturally with your AI assistant after installation:
 ### Documentation
 ```
 "Generate README"
+"Generar README"
 "Add JSDoc comments"
 "Create API documentation"
 ```

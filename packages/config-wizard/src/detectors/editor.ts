@@ -7,10 +7,10 @@ import path from 'path';
 import os from 'os';
 import { execa } from 'execa';
 
-export type SupportedEditor = 'claude-code' | 'cursor' | 'windsurf' | 'vscode' | 'roo' | null;
+export type SupportedEditor = 'claude-code' | 'cursor' | 'windsurf' | 'vscode' | 'roo' | 'qoder' | null;
 
 export async function detectEditor(): Promise<SupportedEditor> {
-  const detectors = [detectClaudeCode, detectCursor, detectWindsurf, detectVSCode, detectRooCode];
+  const detectors = [detectClaudeCode, detectCursor, detectWindsurf, detectVSCode, detectRooCode, detectQoder];
 
   for (const detect of detectors) {
     const editor = await detect();
@@ -28,6 +28,7 @@ export async function detectInstalledEditors(): Promise<SupportedEditor[]> {
   if (await detectWindsurf()) editors.push('windsurf');
   if (await detectVSCode()) editors.push('vscode');
   if (await detectRooCode()) editors.push('roo');
+  if (await detectQoder()) editors.push('qoder');
 
   return editors;
 }
@@ -162,6 +163,40 @@ async function detectRooCode(): Promise<SupportedEditor> {
   return null;
 }
 
+async function detectQoder(): Promise<SupportedEditor> {
+  const configPaths =
+    process.platform === 'win32'
+      ? [
+          path.join(process.env.APPDATA || '', 'Qoder', 'mcp-config.json'),
+          path.join(process.env.LOCALAPPDATA || '', 'Qoder', 'mcp-config.json'),
+        ]
+      : process.platform === 'darwin'
+      ? [
+          path.join(os.homedir(), 'Library', 'Application Support', 'Qoder', 'mcp-config.json'),
+          path.join(os.homedir(), '.qoder', 'mcp-config.json'),
+        ]
+      : [
+          path.join(os.homedir(), '.qoder', 'mcp-config.json'),
+          path.join(os.homedir(), '.config', 'qoder', 'mcp-config.json'),
+        ];
+
+  for (const configPath of configPaths) {
+    if (await fs.pathExists(path.dirname(configPath))) {
+      return 'qoder';
+    }
+  }
+
+  // Check if qoder command exists
+  try {
+    await execa('qoder', ['--version']);
+    return 'qoder';
+  } catch {
+    // Not found
+  }
+
+  return null;
+}
+
 export function getEditorConfigPath(editor: SupportedEditor): string | null {
   if (!editor) return null;
 
@@ -180,6 +215,12 @@ export function getEditorConfigPath(editor: SupportedEditor): string | null {
         : path.join(home, '.windsurf', 'mcp_config.json'),
     vscode: path.join(home, '.continue', 'config.json'),
     roo: path.join(home, '.roo', 'mcp_config.json'),
+    qoder:
+      process.platform === 'win32'
+        ? path.join(appData, 'Qoder', 'mcp-config.json')
+        : process.platform === 'darwin'
+        ? path.join(home, 'Library', 'Application Support', 'Qoder', 'mcp-config.json')
+        : path.join(home, '.qoder', 'mcp-config.json'),
   };
 
   return paths[editor] || null;

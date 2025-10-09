@@ -3,18 +3,33 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { CodeAnalyzer } from './analyzer.js';
-import { validateFilePath, MCPError, getErrorMessage } from '@j0kz/shared';
+import { validateFilePath, MCPError, getErrorMessage, EnvironmentDetector, SmartPathResolver, EnhancedError, HealthChecker, VERSION as SHARED_VERSION } from '@j0kz/shared';
 import { AutoFixer } from './auto-fixer.js';
+const VERSION = '1.0.35';
 class SmartReviewerServer {
     server;
     analyzer;
     autoFixer;
+    healthChecker;
+    environment;
     constructor() {
         this.analyzer = new CodeAnalyzer();
         this.autoFixer = new AutoFixer();
+        this.healthChecker = new HealthChecker('smart-reviewer', VERSION);
+        // Detect runtime environment
+        this.environment = EnvironmentDetector.detect();
+        // Log startup info to stderr (won't interfere with MCP protocol)
+        console.error('='.repeat(60));
+        console.error(`Smart Reviewer MCP Server v${VERSION}`);
+        console.error(`Shared Library: v${SHARED_VERSION}`);
+        console.error(`IDE: ${this.environment.ide}${this.environment.ideVersion ? ' v' + this.environment.ideVersion : ''}`);
+        console.error(`Locale: ${this.environment.locale}`);
+        console.error(`Transport: ${this.environment.transport}`);
+        console.error(`Project Root: ${this.environment.projectRoot || 'Not detected'}`);
+        console.error('='.repeat(60));
         this.server = new Server({
             name: 'smart-reviewer',
-            version: '1.0.0',
+            version: VERSION,
         }, {
             capabilities: {
                 tools: {},
@@ -26,6 +41,19 @@ class SmartReviewerServer {
         // List available tools
         this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
             tools: [
+                {
+                    name: '__health',
+                    description: 'Check MCP server health and diagnostics (internal tool)',
+                    inputSchema: {
+                        type: 'object',
+                        properties: {
+                            verbose: {
+                                type: 'boolean',
+                                description: 'Include detailed diagnostic information',
+                            },
+                        },
+                    },
+                },
                 {
                     name: 'review_file',
                     description: 'Review a code file and provide detailed analysis with issues, metrics, and suggestions',
@@ -133,13 +161,49 @@ class SmartReviewerServer {
         // Handle tool calls
         this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
             const { name, arguments: args } = request.params;
+            // Log incoming request
+            console.error(JSON.stringify({
+                timestamp: new Date().toISOString(),
+                event: 'tool_call',
+                tool: name,
+                ide: this.environment.ide,
+            }));
             try {
                 switch (name) {
+                    case '__health': {
+                        const { verbose = false } = args;
+                        const health = await this.healthChecker.check(verbose);
+                        return {
+                            content: [
+                                {
+                                    type: 'text',
+                                    text: HealthChecker.format(health),
+                                },
+                            ],
+                        };
+                    }
                     case 'review_file': {
                         const { filePath, config: _config } = args;
-                        // Validate file path to prevent path traversal
-                        const validatedPath = validateFilePath(filePath);
-                        const result = await this.analyzer.analyzeFile(validatedPath);
+                        // Use smart path resolution
+                        let resolvedPath;
+                        try {
+                            const resolution = await SmartPathResolver.resolvePath(filePath, {
+                                projectRoot: this.environment.projectRoot || undefined,
+                                workingDir: this.environment.workingDir,
+                            });
+                            resolvedPath = resolution.resolved;
+                            console.error(JSON.stringify({
+                                event: 'path_resolved',
+                                requested: filePath,
+                                resolved: resolvedPath,
+                                strategy: resolution.strategy,
+                            }));
+                        }
+                        catch (error) {
+                            // Fallback to old validation
+                            resolvedPath = validateFilePath(filePath);
+                        }
+                        const result = await this.analyzer.analyzeFile(resolvedPath);
                         return {
                             content: [
                                 {
@@ -291,8 +355,35 @@ class SmartReviewerServer {
                 }
             }
             catch (error) {
+                // Log error
+                console.error(JSON.stringify({
+                    timestamp: new Date().toISOString(),
+                    event: 'error',
+                    tool: name,
+                    error: error instanceof Error ? error.message : String(error),
+                }));
+                // Enhanced error handling
+                if (error instanceof MCPError) {
+                    const enhanced = EnhancedError.fromMCPError(error, {
+                        tool: name,
+                        args: args,
+                        environment: {
+                            ide: this.environment.ide,
+                            locale: this.environment.locale,
+                        },
+                    });
+                    return {
+                        content: [
+                            {
+                                type: 'text',
+                                text: JSON.stringify(enhanced, null, 2),
+                            },
+                        ],
+                        isError: true,
+                    };
+                }
+                // Fallback for non-MCP errors
                 const errorMessage = getErrorMessage(error);
-                const errorCode = error instanceof MCPError ? error.code : 'UNKNOWN';
                 return {
                     content: [
                         {
@@ -300,8 +391,8 @@ class SmartReviewerServer {
                             text: JSON.stringify({
                                 success: false,
                                 error: errorMessage,
-                                code: errorCode,
-                                ...(error instanceof MCPError && error.details ? { details: error.details } : {}),
+                                code: 'UNKNOWN',
+                                timestamp: new Date().toISOString(),
                             }, null, 2),
                         },
                     ],

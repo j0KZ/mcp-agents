@@ -2,6 +2,7 @@
  * Optimized file system operations for MCP tools
  * Provides caching, batching, and parallel operations
  */
+export * from './smart-resolver.js';
 import { FileInfo } from '../types/index.js';
 import type { Stats } from 'node:fs';
 /**

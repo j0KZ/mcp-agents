@@ -43,5 +43,17 @@ export * from './errors/index.js';
 // Common patterns for reducing duplication
 export * from './patterns/index.js';
 
+// Runtime environment detection
+export * from './runtime/index.js';
+
+// Configuration management
+export * from './config/index.js';
+
+// Health check and diagnostics
+export * from './health/index.js';
+
+// Internationalization
+export * from './i18n/index.js';
+
 export const VERSION = '1.0.33';
 export const PACKAGE_NAME = '@j0kz/shared';

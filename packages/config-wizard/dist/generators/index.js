@@ -1,26 +1,29 @@
 /**
- * Config generators index
+ * Config generators index with universal config support
  */
-import { generateClaudeCodeConfig } from './claude-code.js';
-import { generateCursorConfig } from './cursor.js';
+import { generateUniversalConfig, generateIDESpecificConfig } from './universal.js';
 export async function generateConfig(selections) {
     const editor = selections.editor;
+    // Use universal config generator for maximum compatibility
     switch (editor) {
         case 'claude-code':
-            return generateClaudeCodeConfig(selections);
+            return generateIDESpecificConfig(selections, 'claude');
         case 'cursor':
-            return generateCursorConfig(selections);
+            return generateIDESpecificConfig(selections, 'cursor');
         case 'windsurf':
-            // Windsurf uses same format as Cursor/Claude Code
-            return generateCursorConfig(selections);
+            return generateIDESpecificConfig(selections, 'windsurf');
         case 'vscode':
-            // VS Code with Continue uses similar format
-            return { mcp: generateClaudeCodeConfig(selections).mcpServers };
+            // VS Code with Continue uses MCP wrapper
+            return { mcp: generateIDESpecificConfig(selections, 'vscode').mcpServers };
         case 'roo':
-            // Roo Code uses same format
-            return generateClaudeCodeConfig(selections);
+            return generateIDESpecificConfig(selections, 'roo');
+        case 'qoder':
+            // Qoder REQUIRES explicit type field
+            return generateIDESpecificConfig(selections, 'qoder');
         default:
-            throw new Error(`Unsupported editor: ${editor}`);
+            // Fallback to universal config for unknown IDEs
+            console.warn(`Unknown editor: ${editor}, using universal config`);
+            return generateUniversalConfig(selections);
     }
 }
 //# sourceMappingURL=index.js.map

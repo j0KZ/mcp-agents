@@ -3,6 +3,8 @@
  * Provides caching, batching, and parallel operations
  */
 
+export * from './smart-resolver.js';
+
 import fs from 'fs/promises';
 import path from 'path';
 import fastGlob from 'fast-glob';

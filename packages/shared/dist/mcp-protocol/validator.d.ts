@@ -89,12 +89,12 @@ export declare const MCPResponseSchema: z.ZodObject<{
         message: z.ZodString;
         data: z.ZodOptional<z.ZodAny>;
     }, "strip", z.ZodTypeAny, {
-        message: string;
         code: number;
+        message: string;
         data?: any;
     }, {
-        message: string;
         code: number;
+        message: string;
         data?: any;
     }>>;
     id: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
@@ -102,8 +102,8 @@ export declare const MCPResponseSchema: z.ZodObject<{
     jsonrpc: "2.0";
     id: string | number;
     error?: {
-        message: string;
         code: number;
+        message: string;
         data?: any;
     } | undefined;
     result?: any;
@@ -111,8 +111,8 @@ export declare const MCPResponseSchema: z.ZodObject<{
     jsonrpc: "2.0";
     id: string | number;
     error?: {
-        message: string;
         code: number;
+        message: string;
         data?: any;
     } | undefined;
     result?: any;
