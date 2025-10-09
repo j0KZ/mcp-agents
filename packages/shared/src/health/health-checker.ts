@@ -4,7 +4,6 @@
  */
 
 import * as fs from 'fs/promises';
-import * as path from 'path';
 import { EnvironmentDetector } from '../runtime/environment-detector.js';
 
 export interface HealthCheckResult {
