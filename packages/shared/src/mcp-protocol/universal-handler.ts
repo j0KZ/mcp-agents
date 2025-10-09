@@ -4,7 +4,6 @@
  * to any MCP server with minimal code
  */
 
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { EnvironmentDetector, RuntimeEnvironment } from '../runtime/environment-detector.js';
 import { HealthChecker } from '../health/health-checker.js';
 import { EnhancedError } from '../errors/enhanced-error.js';
