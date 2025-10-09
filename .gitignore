@@ -172,6 +172,17 @@ WORK_COMPLETED_v*.md
 *_SUMMARY.md
 *_TASKS_*.md
 
+# Root-level documentation files (should be in docs/ subdirectories)
+/DOCUMENTATION-OVERHAUL.md
+/DOCUMENTATION_OVERHAUL.md
+/PHASE*.md
+/PHASE*-*.md
+/EXPERIMENTAL_FEATURES.md
+/USAGE_GUIDE.md
+/PUBLISH_CHECKLIST.md
+/RELEASE_CHECKLIST.md
+/RELEASE-NOTES.md
+
 # Sensitive configuration files
 *.local.json
 .claude/settings.local.json

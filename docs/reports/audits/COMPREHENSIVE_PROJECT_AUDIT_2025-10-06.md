@@ -265,7 +265,7 @@ docs/
 - ✅ `CONTRIBUTING.md`: Development guidelines
 - ✅ `SECURITY.md`: Security policy
 - ✅ `TODO.md`: Project roadmap and tracking
-- ✅ `RELEASE_CHECKLIST.md`: Publishing workflow
+- ✅ `docs/development/RELEASE_CHECKLIST.md`: Publishing workflow
 
 ### ⚠️ Documentation Gaps
 
