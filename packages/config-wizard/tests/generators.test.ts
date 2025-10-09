@@ -82,9 +82,12 @@ describe('Config Generators', () => {
       expect(config).toHaveProperty('mcp');
     });
 
-    it('should throw for unknown editor', async () => {
+    it('should use universal config for unknown editor', async () => {
       const invalidSelections = { ...mockSelections, editor: 'unknown' as any };
-      await expect(generateConfig(invalidSelections)).rejects.toThrow();
+      const config = await generateConfig(invalidSelections);
+      // Should fall back to universal config
+      expect(config).toHaveProperty('mcpServers');
+      expect(config.mcpServers).toHaveProperty('smart-reviewer');
     });
   });
 });
