@@ -9,9 +9,17 @@ export declare class TestCaseGenerator {
      */
     generateHappyPathTest(func: FunctionInfo): string;
     /**
+     * Generate smart assertion based on function name and characteristics
+     */
+    private generateSmartAssertion;
+    /**
      * Generate edge case tests for a function
      */
     generateEdgeCaseTests(func: FunctionInfo): TestCase[];
+    /**
+     * Infer parameter type from parameter name
+     */
+    private inferParameterType;
     /**
      * Generate error case tests for a function
      */
