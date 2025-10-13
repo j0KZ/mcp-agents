@@ -91,107 +91,9 @@ For ANY substantial work (research, prototypes, experiments, new features), you 
    - **STEP 6**: Add verification steps as you test
    - **STEP 7**: Finalize with lessons learned before ending session
 
-**Example log structure:**
-```markdown
-# Work Log: Test MCP Ambiguity Pattern
-**Date:** 2025-10-10
-**Status:** In Progress
+**Example:** See [`logs/work-2025-10-12-bilingual-i18n.md`](logs/work-2025-10-12-bilingual-i18n.md) - comprehensive 503-line example
 
----
-
-## Context
-User requested testing of two-iteration ambiguity pattern after reviewing Parlant's approach.
-Previous work on contextual guidelines provided foundation for this research.
-
-## Purpose
-Testing whether LLMs can handle two-iteration ambiguity detection:
-1. Iteration 1: Detect ambiguity, ask for clarification
-2. Iteration 2: Execute with specific parameters
-
-## Files Created/Modified
-- test-mcp-ambiguity/src/server.ts (400 lines) - Main MCP server
-- test-mcp-ambiguity/README.md - Documentation
-- test-mcp-ambiguity/SETUP.md - Setup guide
-- test-mcp-ambiguity/package.json - Dependencies
-
-## Key Implementation Details
-
-### Ambiguity Detection Logic
-```typescript
-if (!args.focus) {
-  return {
-    status: "needs_clarification",
-    question: "What should I focus on?",
-    options: [...]
-  };
-}
-```
-
-### Tool Schemas
-```json
-{
-  "focus": {
-    "type": "string",
-    "enum": ["security", "quality", "performance"],
-    "description": "Focus area - omit to get clarification"
-  }
-}
-```
-
-## Architecture Decisions
-- Used optional parameters instead of required to enable ambiguity detection
-- Separate response types: needs_clarification vs success
-- Logging to stderr to avoid interfering with MCP protocol
-
-## Verification
-- Built server: `npm run build` ✓
-- Added to MCP config ✓
-- Server starts successfully ✓
-- Tools visible in Claude Code ✓
-
-## Next Steps
-- [ ] Test with ambiguous request: "Review my code"
-- [ ] Test with specific request: "Check security"
-- [ ] Document results in TESTING_CHECKLIST.md
-
----
-
-**Status:** Ready for testing
-```
-
-### Log Directory Setup
-
-**RULE 7: Initialize logs directory with .gitignore**
-
-1. **Create `logs/` directory** if it doesn't exist
-2. **Create `logs/.gitignore`** with:
-   ```
-   # Exclude all log files from git
-   *.md
-   *.log
-   *.txt
-
-   # But include the .gitignore itself
-   !.gitignore
-   !README.md
-   ```
-3. **Create `logs/README.md`**:
-   ```markdown
-   # Work Logs
-
-   This directory contains session logs that document significant work.
-   These files are NOT committed to git but are preserved locally for recovery.
-
-   ## Purpose
-   - Document research and experimental work
-   - Provide recovery mechanism if files are accidentally deleted
-   - Track development decisions and progress
-
-   ## Log Format
-   - Filename: `work-{YYYY-MM-DD}-{description}.md`
-   - Include: purpose, files, code snippets, decisions
-   - Update as work progresses
-   ```
+**Full template:** [`.claude/references/work-log-template.md`](.claude/references/work-log-template.md)
 
 ### When to Create Logs
 
@@ -208,29 +110,7 @@ if (!args.focus) {
 - ❌ Documentation-only updates
 - ❌ Running existing scripts
 
-### Log Update Triggers
-
-**Update the log whenever:**
-1. You create a new file (add filename and purpose)
-2. You implement a key algorithm (add code snippet)
-3. You complete a milestone (update status)
-4. You make an architectural decision (document why)
-5. Session is ending (final status update)
-
-### Recovery Process
-
-**If files are accidentally deleted:**
-1. Check `logs/` directory for recent work logs
-2. Read the log to understand what was built
-3. Use code snippets and descriptions to recreate
-4. Logs provide: file list, purpose, key implementations, decisions
-
-### Log Retention
-
-- **Keep logs indefinitely** (they're small, text-based)
-- **Never delete logs** without explicit user confirmation
-- **Logs are local-only** (excluded from git via .gitignore)
-- **User owns the logs** (can delete/archive at will)
+**Log benefits:** Recovery mechanism if files accidentally deleted, knowledge preservation, decision tracking
 
 ---
 
@@ -257,92 +137,13 @@ This is a **TypeScript monorepo** containing **11 packages** for AI-powered code
 
 ## Architecture & Code Organization
 
-### Monorepo Structure
+**Full details:** [`.claude/references/architecture-patterns.md`](.claude/references/architecture-patterns.md)
 
-- **Root** manages workspace dependencies and shared build/test scripts
-- **packages/** contains 9 published tools + 1 private shared package
-- Each package has: `src/` (TypeScript), `dist/` (compiled), tests, and `mcp-server.ts` entrypoint
-
-### Modular Architecture Pattern
-
-**Standard Refactoring Pattern (Established 2025):**
-
-All MCP packages follow a consistent modularization approach:
-
-1. **Extract Constants** → `constants/` directory
-   - Magic numbers, thresholds, patterns
-   - Single source of truth for configuration values
-   - Makes tuning behavior trivial
-
-2. **Extract Helpers** → `helpers/` directory
-   - Complex calculations (30+ lines)
-   - Reusable business logic
-   - Independently testable functions
-
-3. **Extract Utilities** → `utils/` directory
-   - Cross-cutting concerns (error handling, validation)
-   - Eliminate code duplication
-   - Shared across multiple modules
-
-**Example: Well-Modularized Package Structure**
-```
-packages/security-scanner/src/
-├── mcp-server.ts          # MCP protocol (orchestration only)
-├── scanner.ts             # Main class (delegates to modules)
-├── constants/
-│   ├── security-thresholds.ts
-│   └── secret-patterns.ts
-├── scanners/              # Specialized scanners
-│   ├── owasp-scanner.ts
-│   └── dependency-scanner.ts
-└── utils.ts               # Shared utilities
-```
-
-**Refactoring Results (2025 Systematic Cleanup):**
-
-4 packages refactored following the pattern above:
-- **security-scanner**: 395 → 209 LOC (-47%), Score 57 → 100
-- **db-schema**: 411 → 262 LOC (-36%), Score 75 → 97
-- **refactor-assistant**: 456 → 407 LOC (-11%), Score 67 → 67 (already clean)
-- **architecture-analyzer**: 382 → 287 LOC (-25%), estimated Score 65 → 85
-
-**Cumulative Impact:**
-- -36% average complexity reduction
-- +122% maintainability improvement
-- -52% duplicate code blocks eliminated
-- 0 test failures, 0 breaking changes
-
-**When to Apply This Pattern:**
-- File exceeds 300 LOC
-- More than 5 magic numbers
-- Functions exceed 30 lines
-- Duplicate code blocks detected
-- Complexity score >70
-
-### Shared Package Integration
-
-Each tool imports from `@j0kz/shared` for common functionality:
-
-- **FileSystemManager** - File operations with caching
-- **AnalysisCache** - LRU cache for analysis results (30min TTL)
-- **PerformanceMonitor** - Performance tracking and metrics
-- **MCPPipeline/MCPIntegration** - Inter-MCP communication
-- **Path validation** - Security utilities for preventing traversal attacks
-
-Example usage:
-
-```typescript
-import { FileSystemManager, AnalysisCache, PerformanceMonitor } from '@j0kz/shared';
-```
-
-### MCP Server Pattern
-
-Every tool follows the same MCP server structure:
-
-- `src/mcp-server.ts` - Entrypoint that implements MCP protocol
-- Exposes tools via `@modelcontextprotocol/sdk`
-- Main logic in separate files (e.g., `analyzer.ts`, `generator.ts`, `scanner.ts`)
-- Uses `ListToolsRequestSchema` and `CallToolRequestSchema` from MCP SDK
+**Key Points:**
+- **Monorepo:** 9 published MCP tools + shared package + config wizard
+- **Modular pattern:** Extract constants/helpers/utilities when files exceed 300 LOC
+- **Shared package:** `@j0kz/shared` provides FileSystemManager, AnalysisCache, PerformanceMonitor, MCPPipeline
+- **MCP servers:** Thin orchestration layer delegating to core logic files
 
 ## Development Commands
 
@@ -474,20 +275,9 @@ npm run update:test-count
 
 #### 🚀 Release Checklist
 
-```bash
-# Complete release process (standardized):
+**Full process:** [`.claude/references/release-process.md`](.claude/references/release-process.md)
 
-1. npm run update:test-count    # Update test counts
-2. Edit version.json             # Bump version
-3. npm run version:sync          # Sync to all packages
-4. Update CHANGELOG.md           # Add release notes
-5. npm run build                 # Build all packages
-6. npm run publish-all           # Publish to npm
-7. cd installer && npm publish   # Publish installer
-8. git add . && git commit -m "release: vX.Y.Z"
-9. git tag vX.Y.Z && git push --tags
-10. Update wiki if needed: powershell -File publish-wiki.ps1
-```
+**Quick summary:** Update test counts → Edit version.json → Sync versions → Update CHANGELOG → Build → Publish → Tag → Push
 
 #### ❌ Never Do These:
 
@@ -532,13 +322,11 @@ return {
 };
 ```
 
-### Dependency Versions (as of v1.0.16)
+### Dependency Versions
 
-- `@anthropic-ai/sdk`: ^0.64.0
-- `@modelcontextprotocol/sdk`: ^1.18.2
-- `lru-cache`: ^11.0.2 (in shared package)
-- `typescript`: ^5.3.3
-- `vitest`: ^3.2.4
+**Current versions:** Check root `package.json` and `packages/shared/package.json`
+
+**Key dependencies:** `@modelcontextprotocol/sdk`, `typescript`, `vitest`, `lru-cache` (in shared)
 
 ## Development Process & Best Practices
 
@@ -567,13 +355,15 @@ You:
 1. [runs audit, finds test count is wrong]
 2. [fixes test counter script]
 3. [updates README, CHANGELOG, package docs]
-4. [updates wiki]
+4. [updates wiki and publishes]
 5. [commits everything]
 "Audit complete! Found test count was wrong (366→388). Fixed:
 - Test counter script (ANSI handling)
 - All documentation (README, CHANGELOG, tools.json)
 - Wiki (published to GitHub)
 All changes committed."
+
+Note: Only ask before destructive actions (delete, force push, npm publish)
 ```
 
 #### Anticipate Logical Next Steps
