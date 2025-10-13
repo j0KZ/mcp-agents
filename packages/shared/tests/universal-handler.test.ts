@@ -4,7 +4,11 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { UniversalMCPHandler, ToolHandler, RequestContext } from '../src/mcp-protocol/universal-handler.js';
+import {
+  UniversalMCPHandler,
+  ToolHandler,
+  RequestContext,
+} from '../src/mcp-protocol/universal-handler.js';
 import { MCPError } from '../src/errors/error-codes.js';
 
 describe('UniversalMCPHandler', () => {
@@ -65,31 +69,50 @@ describe('UniversalMCPHandler', () => {
   });
 
   describe('registerTool', () => {
-    it('should register tool handler', () => {
+    it('should register tool handler', async () => {
       handler.registerTool('test_tool', mockToolHandler);
 
       // Tool is registered - verify by calling it
-      expect(async () => {
-        await handler.handleRequest({
-          params: {
-            name: 'test_tool',
-            arguments: { foo: 'bar' },
-          },
-        });
-      }).not.toThrow();
+      const result = await handler.handleRequest({
+        params: {
+          name: 'test_tool',
+          arguments: { foo: 'bar' },
+        },
+      });
+
+      expect(result).toBeDefined();
+      expect(result.content).toBeDefined();
+      expect(mockToolHandler).toHaveBeenCalledWith(
+        { foo: 'bar' },
+        expect.objectContaining({ toolName: 'test_tool' })
+      );
     });
 
-    it('should allow registering multiple tools', () => {
+    it('should allow registering multiple tools', async () => {
       const tool1 = vi.fn(async () => ({ content: [{ type: 'text', text: 'tool1' }] }));
       const tool2 = vi.fn(async () => ({ content: [{ type: 'text', text: 'tool2' }] }));
 
       handler.registerTool('tool1', tool1);
       handler.registerTool('tool2', tool2);
 
-      expect(async () => {
-        await handler.handleRequest({ params: { name: 'tool1', arguments: {} } });
-        await handler.handleRequest({ params: { name: 'tool2', arguments: {} } });
-      }).not.toThrow();
+      await handler.handleRequest({ params: { name: 'tool1', arguments: {} } });
+      await handler.handleRequest({ params: { name: 'tool2', arguments: {} } });
+
+      expect(tool1).toHaveBeenCalledTimes(1);
+      expect(tool2).toHaveBeenCalledTimes(1);
+    });
+
+    it('should overwrite tool if registered multiple times', async () => {
+      const firstHandler = vi.fn(async () => ({ content: [{ type: 'text', text: 'first' }] }));
+      const secondHandler = vi.fn(async () => ({ content: [{ type: 'text', text: 'second' }] }));
+
+      handler.registerTool('my_tool', firstHandler);
+      handler.registerTool('my_tool', secondHandler);
+
+      await handler.handleRequest({ params: { name: 'my_tool', arguments: {} } });
+
+      expect(firstHandler).not.toHaveBeenCalled();
+      expect(secondHandler).toHaveBeenCalledTimes(1);
     });
   });
 
