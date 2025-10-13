@@ -125,6 +125,42 @@ class ArchitectureAnalyzerServer {
             const validatedPath = validateDirectoryPath(projectPath);
             const result = await this.analyzer.analyzeArchitecture(validatedPath, config);
 
+            // Check response size and provide summary if too large
+            const fullResponse = JSON.stringify(result, null, 2);
+            const estimatedTokens = fullResponse.length / 4; // Rough estimate: 4 chars = 1 token
+
+            // If response is too large (>20k tokens), provide summary instead
+            if (estimatedTokens > 20000) {
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify(
+                      {
+                        note: '⚠️ Full analysis exceeds size limits. Showing summary. Use get_module_info or find_circular_deps for detailed information.',
+                        summary: {
+                          projectPath: result.projectPath,
+                          totalModules: result.metrics.totalModules,
+                          totalDependencies: result.metrics.totalDependencies,
+                          circularDependencies: result.metrics.circularDependencies,
+                          layerViolations: result.metrics.layerViolations,
+                          cohesion: `${result.metrics.cohesion}%`,
+                          coupling: `${result.metrics.coupling}%`,
+                        },
+                        circularDependencies: result.circularDependencies,
+                        layerViolations: result.layerViolations,
+                        topSuggestions: result.suggestions.slice(0, 10),
+                        moduleNames: result.modules.map(m => m.name),
+                      },
+                      null,
+                      2
+                    ),
+                  },
+                ],
+              };
+            }
+
+            // Return full analysis for smaller projects
             return {
               content: [
                 {
