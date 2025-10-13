@@ -88,6 +88,11 @@ IMPORTANT: Always call this tool when user asks to "review my code", "check my c
                 type: 'string',
                 description: 'Project root (optional, defaults to cwd)',
               },
+              language: {
+                type: 'string',
+                enum: ['en', 'es'],
+                description: 'Response language (optional, auto-detects from user input)',
+              },
             },
             required: [],
           },
@@ -159,7 +164,8 @@ IMPORTANT: Always call this tool when user asks to "review my code", "check my c
             args.workflow as WorkflowName | undefined,
             args.focus as FocusArea | undefined,
             args.files as string[],
-            (args.projectPath as string) || '.'
+            (args.projectPath as string) || '.',
+            args.language as 'en' | 'es' | undefined
           );
         }
 
@@ -200,21 +206,27 @@ IMPORTANT: Always call this tool when user asks to "review my code", "check my c
 
   /**
    * Run workflow with smart focus detection
+   * BILINGUAL: Supports English and Spanish responses
    */
   private async runWorkflow(
     workflowName?: WorkflowName,
     focus?: FocusArea,
     files?: string[],
-    projectPath?: string
+    projectPath?: string,
+    language?: 'en' | 'es'
   ) {
+    // Language context: explicit parameter or 'en' default
+    // Note: LLM should set this based on user's language
+    const userLanguage = language || 'en';
+
     // STEP 1: Ambiguity detection - return clarification if BOTH missing
     if (!workflowName && !focus) {
-      return buildClarificationResponse();
+      return buildClarificationResponse(userLanguage);
     }
 
     // STEP 2: Validate focus if provided
     if (focus && !isValidFocus(focus)) {
-      return buildInvalidFocusResponse(focus);
+      return buildInvalidFocusResponse(focus, userLanguage);
     }
 
     // STEP 3: Select workflow (explicit workflow OR smart selection)

@@ -1,14 +1,23 @@
 /**
  * Response builders for MCP protocol
  * Extracted to keep mcp-server.ts under 300 LOC
+ * BILINGUAL: Supports English and Spanish responses
  */
 
 import { getClarificationOptions } from './workflow-selector.js';
+import {
+  getClarificationMessage,
+  getInvalidFocusMessage,
+  Language,
+} from '@j0kz/shared';
 
 /**
  * Build clarification response when workflow/focus is missing
+ * Returns response in specified language
  */
-export function buildClarificationResponse() {
+export function buildClarificationResponse(language: Language = 'en') {
+  const messages = getClarificationMessage(language);
+
   return {
     content: [
       {
@@ -16,9 +25,9 @@ export function buildClarificationResponse() {
         text: JSON.stringify(
           {
             status: 'needs_clarification',
-            message: 'To provide focused analysis, I need to know what aspect to check.',
-            question: 'What would you like me to focus on?',
-            options: getClarificationOptions(),
+            message: messages.message,
+            question: messages.question,
+            options: getClarificationOptions(language),
           },
           null,
           2
@@ -30,8 +39,11 @@ export function buildClarificationResponse() {
 
 /**
  * Build clarification response for invalid focus
+ * Returns response in specified language
  */
-export function buildInvalidFocusResponse(invalidFocus: string) {
+export function buildInvalidFocusResponse(invalidFocus: string, language: Language = 'en') {
+  const messages = getInvalidFocusMessage(invalidFocus, language);
+
   return {
     content: [
       {
@@ -39,9 +51,9 @@ export function buildInvalidFocusResponse(invalidFocus: string) {
         text: JSON.stringify(
           {
             status: 'needs_clarification',
-            message: `Invalid focus "${invalidFocus}". Please choose from valid options.`,
-            question: 'What would you like me to focus on?',
-            options: getClarificationOptions(),
+            message: messages.message,
+            question: messages.question,
+            options: getClarificationOptions(language),
           },
           null,
           2

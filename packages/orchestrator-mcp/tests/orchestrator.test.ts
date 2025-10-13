@@ -254,7 +254,7 @@ describe('Orchestrator Workflows', () => {
     });
 
     describe('getClarificationOptions', () => {
-      it('should return 4 labeled options', async () => {
+      it('should return 4 labeled options in English by default', async () => {
         const { getClarificationOptions } = await import('../src/helpers/workflow-selector.js');
         const options = getClarificationOptions();
 
@@ -265,6 +265,156 @@ describe('Orchestrator Workflows', () => {
         expect(options[1].label).toContain('b)');
         expect(options[2].label).toContain('c)');
         expect(options[3].label).toContain('d)');
+      });
+
+      it('should return options in Spanish when language is "es"', async () => {
+        const { getClarificationOptions } = await import('../src/helpers/workflow-selector.js');
+        const options = getClarificationOptions('es');
+
+        expect(options).toHaveLength(4);
+        expect(options[0].label).toBe('a) Análisis de Seguridad');
+        expect(options[1].label).toBe('b) Calidad de Código');
+        expect(options[2].label).toBe('c) Rendimiento');
+        expect(options[3].label).toBe('d) Todo');
+      });
+    });
+  });
+
+  describe('Bilingual Support (English/Spanish)', () => {
+    describe('Language Detection', () => {
+      it('should detect Spanish from keywords', async () => {
+        const { detectLanguage } = await import('@j0kz/shared');
+
+        expect(detectLanguage('revisar mi código')).toBe('es');
+        expect(detectLanguage('analizar seguridad')).toBe('es');
+        expect(detectLanguage('verificar calidad')).toBe('es');
+        expect(detectLanguage('escanear proyecto')).toBe('es');
+      });
+
+      it('should detect English from keywords', async () => {
+        const { detectLanguage } = await import('@j0kz/shared');
+
+        expect(detectLanguage('review my code')).toBe('en');
+        expect(detectLanguage('analyze security')).toBe('en');
+        expect(detectLanguage('check quality')).toBe('en');
+        expect(detectLanguage('scan project')).toBe('en');
+      });
+
+      it('should detect Spanish from special characters', async () => {
+        const { detectLanguage } = await import('@j0kz/shared');
+
+        expect(detectLanguage('revisión de código')).toBe('es');
+        expect(detectLanguage('está funcionando')).toBe('es');
+        expect(detectLanguage('mañana')).toBe('es');
+      });
+
+      it('should default to English for ambiguous input', async () => {
+        const { detectLanguage } = await import('@j0kz/shared');
+
+        expect(detectLanguage('xyz')).toBe('en');
+        expect(detectLanguage('')).toBe('en');
+        expect(detectLanguage('123')).toBe('en');
+      });
+    });
+
+    describe('Clarification Messages', () => {
+      it('should return English clarification by default', async () => {
+        const { getClarificationMessage } = await import('@j0kz/shared');
+        const msg = getClarificationMessage('en');
+
+        expect(msg.message).toBe('To provide focused analysis, I need to know what aspect to check.');
+        expect(msg.question).toBe('What would you like me to focus on?');
+      });
+
+      it('should return Spanish clarification when language is "es"', async () => {
+        const { getClarificationMessage } = await import('@j0kz/shared');
+        const msg = getClarificationMessage('es');
+
+        expect(msg.message).toBe('Para proporcionar un análisis enfocado, necesito saber qué aspecto verificar.');
+        expect(msg.question).toBe('¿En qué te gustaría que me enfocara?');
+      });
+    });
+
+    describe('Invalid Focus Messages', () => {
+      it('should return English error message by default', async () => {
+        const { getInvalidFocusMessage } = await import('@j0kz/shared');
+        const msg = getInvalidFocusMessage('xyz', 'en');
+
+        expect(msg.message).toBe('Invalid focus "xyz". Please choose from valid options.');
+        expect(msg.question).toBe('What would you like me to focus on?');
+      });
+
+      it('should return Spanish error message when language is "es"', async () => {
+        const { getInvalidFocusMessage } = await import('@j0kz/shared');
+        const msg = getInvalidFocusMessage('xyz', 'es');
+
+        expect(msg.message).toBe('Enfoque inválido "xyz". Por favor elige entre las opciones válidas.');
+        expect(msg.question).toBe('¿En qué te gustaría que me enfocara?');
+      });
+    });
+
+    describe('Response Builders', () => {
+      it('should build English clarification response', async () => {
+        const { buildClarificationResponse } = await import('../src/helpers/response-builder.js');
+        const response = buildClarificationResponse('en');
+
+        const parsed = JSON.parse(response.content[0].text);
+        expect(parsed.status).toBe('needs_clarification');
+        expect(parsed.message).toContain('To provide focused analysis');
+        expect(parsed.options[0].label).toBe('a) Security Analysis');
+      });
+
+      it('should build Spanish clarification response', async () => {
+        const { buildClarificationResponse } = await import('../src/helpers/response-builder.js');
+        const response = buildClarificationResponse('es');
+
+        const parsed = JSON.parse(response.content[0].text);
+        expect(parsed.status).toBe('needs_clarification');
+        expect(parsed.message).toContain('Para proporcionar un análisis enfocado');
+        expect(parsed.options[0].label).toBe('a) Análisis de Seguridad');
+      });
+
+      it('should build English invalid focus response', async () => {
+        const { buildInvalidFocusResponse } = await import('../src/helpers/response-builder.js');
+        const response = buildInvalidFocusResponse('bad', 'en');
+
+        const parsed = JSON.parse(response.content[0].text);
+        expect(parsed.message).toBe('Invalid focus "bad". Please choose from valid options.');
+      });
+
+      it('should build Spanish invalid focus response', async () => {
+        const { buildInvalidFocusResponse } = await import('../src/helpers/response-builder.js');
+        const response = buildInvalidFocusResponse('malo', 'es');
+
+        const parsed = JSON.parse(response.content[0].text);
+        expect(parsed.message).toBe('Enfoque inválido "malo". Por favor elige entre las opciones válidas.');
+      });
+    });
+
+    describe('End-to-End Bilingual Flow', () => {
+      it('should handle English user flow', async () => {
+        const { getClarificationOptions } = await import('../src/helpers/workflow-selector.js');
+        const { buildClarificationResponse } = await import('../src/helpers/response-builder.js');
+
+        // User: "review my code" (ambiguous, English)
+        const clarification = buildClarificationResponse('en');
+        const parsed = JSON.parse(clarification.content[0].text);
+
+        expect(parsed.question).toBe('What would you like me to focus on?');
+        expect(parsed.options[0].label).toContain('Security Analysis');
+        expect(parsed.options[0].value).toBe('security');
+      });
+
+      it('should handle Spanish user flow', async () => {
+        const { buildClarificationResponse } = await import('../src/helpers/response-builder.js');
+
+        // User: "revisar mi código" (ambiguous, Spanish)
+        const clarification = buildClarificationResponse('es');
+        const parsed = JSON.parse(clarification.content[0].text);
+
+        expect(parsed.question).toBe('¿En qué te gustaría que me enfocara?');
+        expect(parsed.options[0].label).toContain('Análisis de Seguridad');
+        expect(parsed.options[1].label).toContain('Calidad de Código');
       });
     });
   });

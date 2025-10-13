@@ -6,7 +6,14 @@ import path from 'path';
 import os from 'os';
 import { execa } from 'execa';
 export async function detectEditor() {
-    const detectors = [detectClaudeCode, detectCursor, detectWindsurf, detectVSCode, detectRooCode, detectQoder];
+    const detectors = [
+        detectClaudeCode,
+        detectCursor,
+        detectWindsurf,
+        detectVSCode,
+        detectRooCode,
+        detectQoder,
+    ];
     for (const detect of detectors) {
         const editor = await detect();
         if (editor)

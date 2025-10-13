@@ -42,7 +42,7 @@ export class UniversalMCPHandler {
     this.config = {
       logRequests: true,
       supportLanguages: true,
-      ...config
+      ...config,
     };
 
     this.environment = EnvironmentDetector.detect();
@@ -58,7 +58,9 @@ export class UniversalMCPHandler {
   private logStartup(): void {
     console.error('='.repeat(60));
     console.error(`${this.config.serverName} v${this.config.version}`);
-    console.error(`IDE: ${this.environment.ide}${this.environment.ideVersion ? ' v' + this.environment.ideVersion : ''}`);
+    console.error(
+      `IDE: ${this.environment.ide}${this.environment.ideVersion ? ' v' + this.environment.ideVersion : ''}`
+    );
     console.error(`Locale: ${this.environment.locale}`);
     console.error(`Transport: ${this.environment.transport}`);
     console.error(`Project Root: ${this.environment.projectRoot || 'Not detected'}`);
@@ -80,12 +82,14 @@ export class UniversalMCPHandler {
 
     // Log incoming request
     if (this.config.logRequests) {
-      console.error(JSON.stringify({
-        timestamp: new Date().toISOString(),
-        event: 'tool_call',
-        tool: requestedName,
-        ide: this.environment.ide,
-      }));
+      console.error(
+        JSON.stringify({
+          timestamp: new Date().toISOString(),
+          event: 'tool_call',
+          tool: requestedName,
+          ide: this.environment.ide,
+        })
+      );
     }
 
     try {
@@ -93,10 +97,12 @@ export class UniversalMCPHandler {
       if (requestedName === '__health') {
         const health = await this.healthChecker.check(args?.verbose || false);
         return {
-          content: [{
-            type: 'text',
-            text: HealthChecker.format(health),
-          }],
+          content: [
+            {
+              type: 'text',
+              text: HealthChecker.format(health),
+            },
+          ],
         };
       }
 
@@ -107,11 +113,13 @@ export class UniversalMCPHandler {
         if (matched) {
           canonicalName = matched;
           if (canonicalName !== requestedName) {
-            console.error(JSON.stringify({
-              event: 'tool_name_translated',
-              from: requestedName,
-              to: canonicalName,
-            }));
+            console.error(
+              JSON.stringify({
+                event: 'tool_name_translated',
+                from: requestedName,
+                to: canonicalName,
+              })
+            );
           }
         }
       }
@@ -132,15 +140,16 @@ export class UniversalMCPHandler {
 
       const result = await handler(args, context);
       return result;
-
     } catch (error) {
       // Log error
-      console.error(JSON.stringify({
-        timestamp: new Date().toISOString(),
-        event: 'error',
-        tool: requestedName,
-        error: error instanceof Error ? error.message : String(error),
-      }));
+      console.error(
+        JSON.stringify({
+          timestamp: new Date().toISOString(),
+          event: 'error',
+          tool: requestedName,
+          error: error instanceof Error ? error.message : String(error),
+        })
+      );
 
       // Enhanced error handling
       if (error instanceof MCPError) {
@@ -154,25 +163,33 @@ export class UniversalMCPHandler {
         });
 
         return {
-          content: [{
-            type: 'text',
-            text: JSON.stringify(enhanced, null, 2),
-          }],
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(enhanced, null, 2),
+            },
+          ],
           isError: true,
         };
       }
 
       // Fallback error handling
       return {
-        content: [{
-          type: 'text',
-          text: JSON.stringify({
-            success: false,
-            error: error instanceof Error ? error.message : String(error),
-            code: 'UNKNOWN',
-            timestamp: new Date().toISOString(),
-          }, null, 2),
-        }],
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              {
+                success: false,
+                error: error instanceof Error ? error.message : String(error),
+                code: 'UNKNOWN',
+                timestamp: new Date().toISOString(),
+              },
+              null,
+              2
+            ),
+          },
+        ],
         isError: true,
       };
     }

@@ -1,9 +1,14 @@
 /**
  * Smart workflow selection based on focus area
  * Maps focus to appropriate existing workflows
+ * BILINGUAL: Supports English and Spanish for frictionless usage
  */
 
 import { FocusArea, WorkflowName } from '../types.js';
+import {
+  getClarificationOptions as getBilingualOptions,
+  Language
+} from '@j0kz/shared';
 
 /**
  * Select workflow based on focus area
@@ -40,32 +45,11 @@ export function selectWorkflowByFocus(
 }
 
 /**
- * Get clarification options with labeled choices
- * Matches test pattern from test-mcp-ambiguity (Oct 11, 2025)
+ * Get clarification options in specified language
+ * Supports English and Spanish
  */
-export function getClarificationOptions() {
-  return [
-    {
-      value: 'security',
-      label: 'a) Security Analysis',
-      description: 'Fast security scan for vulnerabilities (uses pre-commit workflow)'
-    },
-    {
-      value: 'quality',
-      label: 'b) Code Quality',
-      description: 'Review with complexity and test coverage (uses pre-merge workflow)'
-    },
-    {
-      value: 'performance',
-      label: 'c) Performance',
-      description: 'Architecture analysis and bottleneck detection (uses quality-audit workflow)'
-    },
-    {
-      value: 'comprehensive',
-      label: 'd) Everything',
-      description: 'Complete analysis across all areas (uses pre-merge workflow)'
-    }
-  ];
+export function getClarificationOptions(language: Language = 'en') {
+  return getBilingualOptions(language);
 }
 
 /**

@@ -10,7 +10,7 @@ import { COUPLING_THRESHOLDS, COHESION_THRESHOLDS, DEPENDENCY_THRESHOLDS, MODULE
  * @param layerViolations - Detected layer violations
  * @returns Array of suggestion strings
  */
-export function generateSuggestions(metrics, circularDependencies, layerViolations) {
+export function generateSuggestions(metrics, _circularDependencies, _layerViolations) {
     const suggestions = [];
     // Circular dependencies
     if (metrics.circularDependencies > 0) {

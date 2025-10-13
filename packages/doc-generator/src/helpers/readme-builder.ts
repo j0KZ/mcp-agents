@@ -7,7 +7,11 @@ import { ReadmeConfig } from '../types.js';
 /**
  * Build README title section
  */
-export function buildTitleSection(projectName: string, packageJson: any, config: ReadmeConfig): string[] {
+export function buildTitleSection(
+  projectName: string,
+  packageJson: any,
+  config: ReadmeConfig
+): string[] {
   const sections: string[] = [];
   sections.push(`# ${config.projectName || packageJson.name || projectName || 'Project'}`);
   sections.push('');

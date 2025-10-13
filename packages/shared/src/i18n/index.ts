@@ -3,3 +3,4 @@
  */
 
 export * from './tool-matcher.js';
+export * from './messages.js';

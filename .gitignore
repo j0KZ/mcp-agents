@@ -93,6 +93,8 @@ archived/
 test-all.sh
 generate-simple-readmes.cjs
 update-readmes.js
+scripts/fix-*.sh
+scripts/fix-*.js
 
 # Wiki (published separately)
 wiki/
@@ -189,6 +191,7 @@ WORK_COMPLETED_v*.md
 *.local.json
 .claude/settings.local.json
 mcp_config_*.json
+mcp-servers-config.json
 
 # npm publishing artifacts
 npm-audit.json

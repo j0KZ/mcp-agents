@@ -49,7 +49,7 @@ export class HealthChecker {
   /**
    * Run complete health check
    */
-  async check(verbose = false): Promise<HealthCheckResult> {
+  async check(_verbose = false): Promise<HealthCheckResult> {
     const checks = {
       stdio: await this.checkStdio(),
       filesystem: await this.checkFilesystem(),
@@ -170,10 +170,7 @@ export class HealthChecker {
       const deps: Record<string, boolean> = {};
 
       // Check critical dependencies
-      const criticalDeps = [
-        '@modelcontextprotocol/sdk',
-        '@j0kz/shared',
-      ];
+      const criticalDeps = ['@modelcontextprotocol/sdk', '@j0kz/shared'];
 
       for (const dep of criticalDeps) {
         deps[dep] = await this.checkModule(dep);
@@ -327,7 +324,8 @@ export class HealthChecker {
     const lines: string[] = [];
 
     // Status header
-    const statusEmoji = result.status === 'healthy' ? '✅' : result.status === 'degraded' ? '⚠️' : '❌';
+    const statusEmoji =
+      result.status === 'healthy' ? '✅' : result.status === 'degraded' ? '⚠️' : '❌';
     lines.push(`\n${statusEmoji} Health Status: ${result.status.toUpperCase()}`);
     lines.push(`   Server: ${result.version}`);
     lines.push(`   IDE: ${result.environment.ide}`);

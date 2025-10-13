@@ -13,7 +13,7 @@ import {
   SmartPathResolver,
   EnhancedError,
   HealthChecker,
-  VERSION as SHARED_VERSION
+  VERSION as SHARED_VERSION,
 } from '@j0kz/shared';
 import { AutoFixer } from './auto-fixer.js';
 
@@ -38,7 +38,9 @@ class SmartReviewerServer {
     console.error('='.repeat(60));
     console.error(`Smart Reviewer MCP Server v${VERSION}`);
     console.error(`Shared Library: v${SHARED_VERSION}`);
-    console.error(`IDE: ${this.environment.ide}${this.environment.ideVersion ? ' v' + this.environment.ideVersion : ''}`);
+    console.error(
+      `IDE: ${this.environment.ide}${this.environment.ideVersion ? ' v' + this.environment.ideVersion : ''}`
+    );
     console.error(`Locale: ${this.environment.locale}`);
     console.error(`Transport: ${this.environment.transport}`);
     console.error(`Project Root: ${this.environment.projectRoot || 'Not detected'}`);
@@ -189,12 +191,14 @@ class SmartReviewerServer {
       const { name, arguments: args } = request.params;
 
       // Log incoming request
-      console.error(JSON.stringify({
-        timestamp: new Date().toISOString(),
-        event: 'tool_call',
-        tool: name,
-        ide: this.environment.ide,
-      }));
+      console.error(
+        JSON.stringify({
+          timestamp: new Date().toISOString(),
+          event: 'tool_call',
+          tool: name,
+          ide: this.environment.ide,
+        })
+      );
 
       try {
         switch (name) {
@@ -227,13 +231,15 @@ class SmartReviewerServer {
               });
               resolvedPath = resolution.resolved;
 
-              console.error(JSON.stringify({
-                event: 'path_resolved',
-                requested: filePath,
-                resolved: resolvedPath,
-                strategy: resolution.strategy,
-              }));
-            } catch (error) {
+              console.error(
+                JSON.stringify({
+                  event: 'path_resolved',
+                  requested: filePath,
+                  resolved: resolvedPath,
+                  strategy: resolution.strategy,
+                })
+              );
+            } catch {
               // Fallback to old validation
               resolvedPath = validateFilePath(filePath);
             }
@@ -441,12 +447,14 @@ class SmartReviewerServer {
         }
       } catch (error) {
         // Log error
-        console.error(JSON.stringify({
-          timestamp: new Date().toISOString(),
-          event: 'error',
-          tool: name,
-          error: error instanceof Error ? error.message : String(error),
-        }));
+        console.error(
+          JSON.stringify({
+            timestamp: new Date().toISOString(),
+            event: 'error',
+            tool: name,
+            error: error instanceof Error ? error.message : String(error),
+          })
+        );
 
         // Enhanced error handling
         if (error instanceof MCPError) {

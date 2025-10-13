@@ -38,7 +38,8 @@ export class UserService {
 }
 
 export function validateEmail(email: string): boolean {
-  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+  // eslint-disable-next-line no-useless-escape
+  const emailRegex = /^[^ \\t@]+@[^ \\t@]+\\.[^ \\t@]+$/;
   return emailRegex.test(email);
 }
 

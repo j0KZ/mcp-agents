@@ -38,7 +38,7 @@ export declare class HealthChecker {
     /**
      * Run complete health check
      */
-    check(verbose?: boolean): Promise<HealthCheckResult>;
+    check(_verbose?: boolean): Promise<HealthCheckResult>;
     /**
      * Check stdio communication
      */

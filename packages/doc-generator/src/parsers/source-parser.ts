@@ -149,7 +149,7 @@ export function parseSourceFile(filePath: string): {
 
         const isOptional = nameWithoutDefault.includes('?') || paramName.includes('=');
         const isRest = nameWithoutDefault.startsWith('...');
-        const cleanName = nameWithoutDefault.replace(/[?\.]/g, '');
+        const cleanName = nameWithoutDefault.replace(/[?.]/g, '');
 
         return {
           name: cleanName,

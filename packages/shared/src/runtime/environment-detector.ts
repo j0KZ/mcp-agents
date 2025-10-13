@@ -90,7 +90,11 @@ export class EnvironmentDetector {
   private static detectTransport(): 'stdio' | 'sse' | 'websocket' | 'unknown' {
     // Check explicit environment variable
     const explicitTransport = process.env.MCP_TRANSPORT;
-    if (explicitTransport === 'stdio' || explicitTransport === 'sse' || explicitTransport === 'websocket') {
+    if (
+      explicitTransport === 'stdio' ||
+      explicitTransport === 'sse' ||
+      explicitTransport === 'websocket'
+    ) {
       return explicitTransport;
     }
 
@@ -160,6 +164,7 @@ export class EnvironmentDetector {
     // Walk up directory tree looking for project markers
     while (currentDir !== root) {
       try {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         const { existsSync } = require('fs');
 
         // Check for common project markers

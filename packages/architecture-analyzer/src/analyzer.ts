@@ -246,7 +246,6 @@ export class ArchitectureAnalyzer {
     };
   }
 
-
   /**
    * Generate dependency graph in Mermaid format
    */

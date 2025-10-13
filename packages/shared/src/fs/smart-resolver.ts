@@ -43,7 +43,7 @@ export class SmartPathResolver {
     };
 
     // Strategy 1: Handle home directory expansion
-    let normalizedPath = inputPath.replace(/^~/, os.homedir());
+    const normalizedPath = inputPath.replace(/^~/, os.homedir());
 
     // Strategy 2: Absolute path (use as-is)
     if (path.isAbsolute(normalizedPath)) {

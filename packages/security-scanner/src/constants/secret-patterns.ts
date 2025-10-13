@@ -30,7 +30,7 @@ export const DEFAULT_SECRET_PATTERNS: SecretPattern[] = [
   },
   {
     name: 'Generic API Key',
-    pattern: /api[_-]?key\s*[:=]\s*['"]([a-zA-Z0-9_\-]{20,})['"]$/gi,
+    pattern: /api[_-]?key\s*[:=]\s*['"]([a-zA-Z0-9_-]{20,})['"]$/gi,
     severity: SeverityLevel.HIGH,
     description: 'Generic API key detected',
   },

@@ -58,7 +58,7 @@ export function findUnreachableCode(code) {
  * Escape special regex characters in a string
  */
 function escapeRegExp(str) {
-    return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
 /**
  * Remove unused variable declarations

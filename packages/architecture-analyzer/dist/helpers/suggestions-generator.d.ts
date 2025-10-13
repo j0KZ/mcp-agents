@@ -10,5 +10,5 @@ import { ArchitectureMetrics, CircularDependency, LayerViolation } from '../type
  * @param layerViolations - Detected layer violations
  * @returns Array of suggestion strings
  */
-export declare function generateSuggestions(metrics: ArchitectureMetrics, circularDependencies: CircularDependency[], layerViolations: LayerViolation[]): string[];
+export declare function generateSuggestions(metrics: ArchitectureMetrics, _circularDependencies: CircularDependency[], _layerViolations: LayerViolation[]): string[];
 //# sourceMappingURL=suggestions-generator.d.ts.map

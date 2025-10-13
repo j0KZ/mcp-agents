@@ -21,7 +21,7 @@ export class UniversalMCPHandler {
         this.config = {
             logRequests: true,
             supportLanguages: true,
-            ...config
+            ...config,
         };
         this.environment = EnvironmentDetector.detect();
         this.healthChecker = new HealthChecker(config.serverName, config.version);
@@ -65,10 +65,12 @@ export class UniversalMCPHandler {
             if (requestedName === '__health') {
                 const health = await this.healthChecker.check(args?.verbose || false);
                 return {
-                    content: [{
+                    content: [
+                        {
                             type: 'text',
                             text: HealthChecker.format(health),
-                        }],
+                        },
+                    ],
                 };
             }
             // Match tool name (supports Spanish/English)
@@ -120,16 +122,19 @@ export class UniversalMCPHandler {
                     },
                 });
                 return {
-                    content: [{
+                    content: [
+                        {
                             type: 'text',
                             text: JSON.stringify(enhanced, null, 2),
-                        }],
+                        },
+                    ],
                     isError: true,
                 };
             }
             // Fallback error handling
             return {
-                content: [{
+                content: [
+                    {
                         type: 'text',
                         text: JSON.stringify({
                             success: false,
@@ -137,7 +142,8 @@ export class UniversalMCPHandler {
                             code: 'UNKNOWN',
                             timestamp: new Date().toISOString(),
                         }, null, 2),
-                    }],
+                    },
+                ],
                 isError: true,
             };
         }

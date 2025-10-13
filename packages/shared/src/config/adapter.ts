@@ -168,6 +168,7 @@ export class ConfigAdapter {
     if (normalized.command && !path.isAbsolute(normalized.command)) {
       try {
         // Try to find command in PATH
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         const which = require('which');
         const resolved = which.sync(normalized.command, { nothrow: true });
         if (resolved) {
@@ -205,7 +206,9 @@ export class ConfigAdapter {
   /**
    * Get default environment variables based on runtime
    */
-  private static getDefaultEnv(env: ReturnType<typeof EnvironmentDetector.detect>): Record<string, string> {
+  private static getDefaultEnv(
+    env: ReturnType<typeof EnvironmentDetector.detect>
+  ): Record<string, string> {
     return {
       NODE_ENV: 'production',
       MCP_IDE: env.ide,
@@ -233,11 +236,12 @@ export class ConfigAdapter {
 
       case 'claude':
       case 'cursor':
-      case 'windsurf':
+      case 'windsurf': {
         // These IDEs infer stdio if type is missing
         // Can omit type field for cleaner config
-        const { type, ...rest } = normalizedConfig;
+        const { type: _type, ...rest } = normalizedConfig;
         return rest;
+      }
 
       default:
         return { ...normalizedConfig };

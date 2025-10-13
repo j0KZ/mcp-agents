@@ -8,7 +8,8 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { MCPPipeline, MCPError, getErrorMessage } from '@j0kz/shared';
 import { WORKFLOWS, createWorkflow } from './workflows.js';
-import { selectWorkflowByFocus, getClarificationOptions, isValidFocus, } from './helpers/workflow-selector.js';
+import { selectWorkflowByFocus, isValidFocus } from './helpers/workflow-selector.js';
+import { buildClarificationResponse, buildInvalidFocusResponse, buildSuccessResponse, } from './helpers/response-builder.js';
 class OrchestratorServer {
     server;
     constructor() {
@@ -73,6 +74,11 @@ IMPORTANT: Always call this tool when user asks to "review my code", "check my c
                                 type: 'string',
                                 description: 'Project root (optional, defaults to cwd)',
                             },
+                            language: {
+                                type: 'string',
+                                enum: ['en', 'es'],
+                                description: 'Response language (optional, auto-detects from user input)',
+                            },
                         },
                         required: [],
                     },
@@ -136,7 +142,7 @@ IMPORTANT: Always call this tool when user asks to "review my code", "check my c
                     throw new MCPError('ORCH_001', { tool: name });
                 }
                 if (name === 'run_workflow') {
-                    return await this.runWorkflow(args.workflow, args.focus, args.files, args.projectPath || '.');
+                    return await this.runWorkflow(args.workflow, args.focus, args.files, args.projectPath || '.', args.language);
                 }
                 if (name === 'run_sequence') {
                     return await this.runSequence(args.steps);
@@ -168,67 +174,26 @@ IMPORTANT: Always call this tool when user asks to "review my code", "check my c
     }
     /**
      * Run workflow with smart focus detection
+     * BILINGUAL: Supports English and Spanish responses
      */
-    async runWorkflow(workflowName, focus, files, projectPath) {
+    async runWorkflow(workflowName, focus, files, projectPath, language) {
+        // Language context: explicit parameter or 'en' default
+        // Note: LLM should set this based on user's language
+        const userLanguage = language || 'en';
         // STEP 1: Ambiguity detection - return clarification if BOTH missing
         if (!workflowName && !focus) {
-            return {
-                content: [
-                    {
-                        type: 'text',
-                        text: JSON.stringify({
-                            status: 'needs_clarification',
-                            message: 'To provide focused analysis, I need to know what aspect to check.',
-                            question: 'What would you like me to focus on?',
-                            options: getClarificationOptions(),
-                        }, null, 2),
-                    },
-                ],
-            };
+            return buildClarificationResponse(userLanguage);
         }
         // STEP 2: Validate focus if provided
         if (focus && !isValidFocus(focus)) {
-            return {
-                content: [
-                    {
-                        type: 'text',
-                        text: JSON.stringify({
-                            status: 'needs_clarification',
-                            message: `Invalid focus "${focus}". Please choose from valid options.`,
-                            question: 'What would you like me to focus on?',
-                            options: getClarificationOptions(),
-                        }, null, 2),
-                    },
-                ],
-            };
+            return buildInvalidFocusResponse(focus, userLanguage);
         }
         // STEP 3: Select workflow (explicit workflow OR smart selection)
         const selectedWorkflow = workflowName || selectWorkflowByFocus(focus, files || []);
         // STEP 4: Execute pipeline (existing logic)
         const pipeline = createWorkflow(selectedWorkflow, files || [], projectPath || '.');
         const result = await pipeline.execute();
-        return {
-            content: [
-                {
-                    type: 'text',
-                    text: JSON.stringify({
-                        status: 'success',
-                        workflow: selectedWorkflow,
-                        focus: focus || 'N/A',
-                        success: result.success,
-                        duration: result.totalDuration,
-                        steps: result.steps.map(s => ({
-                            name: s.name,
-                            success: s.result.success,
-                            duration: s.duration,
-                            data: s.result.data,
-                            error: s.result.error,
-                        })),
-                        errors: result.errors,
-                    }, null, 2),
-                },
-            ],
-        };
+        return buildSuccessResponse(selectedWorkflow, focus, result);
     }
     /**
      * Run a custom sequence of MCP tools

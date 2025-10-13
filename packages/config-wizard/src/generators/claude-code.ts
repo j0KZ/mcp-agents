@@ -13,7 +13,7 @@ const MCP_PACKAGES: Record<string, string> = {
   'refactor-assistant': '@j0kz/refactor-assistant-mcp',
   'api-designer': '@j0kz/api-designer-mcp',
   'db-schema': '@j0kz/db-schema-mcp',
-  'orchestrator': '@j0kz/orchestrator-mcp',
+  orchestrator: '@j0kz/orchestrator-mcp',
 };
 
 export function generateClaudeCodeConfig(selections: WizardSelections): any {

@@ -1,8 +1,10 @@
 /**
  * Smart workflow selection based on focus area
  * Maps focus to appropriate existing workflows
+ * BILINGUAL: Supports English and Spanish for frictionless usage
  */
 import { FocusArea, WorkflowName } from '../types.js';
+import { Language } from '@j0kz/shared';
 /**
  * Select workflow based on focus area
  * Reuses EXISTING workflows - no new pipeline creation needed
@@ -15,10 +17,10 @@ import { FocusArea, WorkflowName } from '../types.js';
  */
 export declare function selectWorkflowByFocus(focus: FocusArea, files: string[]): WorkflowName;
 /**
- * Get clarification options with labeled choices
- * Matches test pattern from test-mcp-ambiguity (Oct 11, 2025)
+ * Get clarification options in specified language
+ * Supports English and Spanish
  */
-export declare function getClarificationOptions(): {
+export declare function getClarificationOptions(language?: Language): {
     value: string;
     label: string;
     description: string;
