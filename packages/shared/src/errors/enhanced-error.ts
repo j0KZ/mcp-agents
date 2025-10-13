@@ -134,7 +134,10 @@ export class EnhancedError {
   /**
    * Get actionable solutions for error code
    */
-  private static getSolutions(code: ErrorCode, context?: Record<string, unknown>): ErrorSolution[] {
+  private static getSolutions(
+    code: ErrorCode,
+    _context?: Record<string, unknown>
+  ): ErrorSolution[] {
     const env = EnvironmentDetector.detect();
     const solutions: Partial<Record<ErrorCode, ErrorSolution[]>> = {
       TEST_003: [
@@ -150,7 +153,9 @@ export class EnhancedError {
           description: 'Check file permissions',
           steps: [
             'Ensure you have read permissions for the file',
-            env.platform !== 'win32' ? 'Try: chmod +r <file-path>' : 'Check file properties in Windows Explorer',
+            env.platform !== 'win32'
+              ? 'Try: chmod +r <file-path>'
+              : 'Check file properties in Windows Explorer',
           ],
         },
       ],

@@ -229,4 +229,3 @@ export async function generateChangelog(
     throw new DocError('Failed to generate changelog', 'CHANGELOG_GENERATION_FAILED', error);
   }
 }
-

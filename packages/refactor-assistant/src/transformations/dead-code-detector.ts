@@ -71,7 +71,7 @@ export function findUnreachableCode(code: string): Array<{ line: number; code: s
  * Escape special regex characters in a string
  */
 function escapeRegExp(str: string): string {
-  return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
 
 /**

@@ -14,7 +14,7 @@ const MCP_PACKAGES: Record<string, string> = {
   'refactor-assistant': '@j0kz/refactor-assistant-mcp',
   'api-designer': '@j0kz/api-designer-mcp',
   'db-schema': '@j0kz/db-schema-mcp',
-  'orchestrator': '@j0kz/orchestrator-mcp',
+  orchestrator: '@j0kz/orchestrator-mcp',
 };
 
 /**
@@ -33,7 +33,7 @@ export function generateUniversalConfig(selections: WizardSelections): any {
     // Universal format with EXPLICIT type field
     // This ensures compatibility with IDEs like Qoder that require it
     config.mcpServers[mcp] = {
-      type: 'stdio',  // EXPLICIT for maximum compatibility
+      type: 'stdio', // EXPLICIT for maximum compatibility
       command: 'npx',
       args: [`${packageName}@^1.0.0`],
       env: {

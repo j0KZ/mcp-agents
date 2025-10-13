@@ -125,10 +125,12 @@
       "id": "orchestrator",
       "name": "Orchestrator",
       "package": "@j0kz/orchestrator-mcp",
-      "description": "Chain multiple MCP tools into workflows",
+      "description": "Chain multiple MCP tools into workflows with bilingual support",
       "category": "orchestration",
       "features": [
         "Pre-built workflows (pre-commit, pre-merge, quality-audit)",
+        "Smart ambiguity detection (focus areas)",
+        "Bilingual support (English/Spanish)",
         "Custom workflow sequences",
         "Step dependency management",
         "Error handling and rollback",

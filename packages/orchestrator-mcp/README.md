@@ -45,10 +45,47 @@ The Orchestrator MCP enables you to:
 - **Chain multiple MCPs** - smart-reviewer → security-scanner → test-generator
 - **Automate code quality** - Trigger from git hooks or AI editor
 - **Custom sequences** - Build your own multi-tool workflows
+- **🌍 Bilingual support** - Works in English and Spanish
+- **🎯 Smart clarification** - Asks for focus when ambiguous
+
+### NEW: Ambiguity Detection & Focus Areas
+
+The orchestrator now features intelligent ambiguity detection. When you make vague requests, it clarifies what you want:
+
+```text
+User: "review my code"
+
+Orchestrator responds:
+  "What would you like me to focus on?"
+
+  Options:
+  a) Security Analysis - Fast security scan (pre-commit workflow)
+  b) Code Quality - Review with complexity & tests (pre-merge workflow)
+  c) Performance - Architecture analysis (quality-audit workflow)
+  d) Everything - Complete analysis
+
+User: "b"
+
+Orchestrator executes pre-merge workflow with quality focus
+```
+
+**Bilingual Support:**
+```text
+Usuario: "revisar mi código"
+
+Orchestrador responde:
+  "¿En qué te gustaría que me enfocara?"
+
+  Opciones:
+  a) Análisis de Seguridad - Escaneo rápido (flujo pre-commit)
+  b) Calidad de Código - Revisión con complejidad (flujo pre-merge)
+  c) Rendimiento - Análisis de arquitectura (flujo quality-audit)
+  d) Todo - Análisis completo
+```
 
 ### Example: Pre-commit Workflow
 
-```
+```text
 User in Claude Code: "Run pre-commit checks on my staged files"
 
 Orchestrator executes:
@@ -231,7 +268,7 @@ Build your own workflows with `run_sequence`:
 
 Follow your editor's MCP configuration guide. The command is always:
 
-```
+```bash
 orchestrator-mcp
 ```
 
@@ -268,7 +305,7 @@ npx @j0kz/mcp-agents@latest
 
 ### In Claude Code (Natural Language)
 
-```
+```text
 You: "Review my changes and check for security issues"
 Claude: [Calls orchestrator with pre-commit workflow]
 Claude: "✅ Code review passed (Score: 87/100). ✅ No security vulnerabilities found."
@@ -347,9 +384,19 @@ Execute a pre-built workflow.
 
 **Parameters:**
 
-- `workflow` (required): `'pre-commit' | 'pre-merge' | 'quality-audit'`
+- `workflow` (optional): `'pre-commit' | 'pre-merge' | 'quality-audit'`
+- `focus` (optional): `'security' | 'quality' | 'performance' | 'comprehensive'`
 - `files` (required): Array of file paths
 - `projectPath` (optional): Project root path (defaults to `'.'`)
+- `language` (optional): `'en' | 'es'` - Response language (auto-detected if not specified)
+
+**Note:** Either `workflow` or `focus` must be provided. If neither is provided, the orchestrator will ask for clarification.
+
+**Focus Areas Map to Workflows:**
+- `security` → pre-commit workflow
+- `quality` → pre-merge workflow
+- `performance` → quality-audit workflow
+- `comprehensive` → pre-merge workflow
 
 **Returns:**
 

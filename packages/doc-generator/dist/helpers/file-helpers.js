@@ -46,6 +46,6 @@ function shouldExcludeDirectory(dirname) {
  * @returns True if source file
  */
 function isSourceFile(filename) {
-    return (FILE_PATTERNS.SOURCE_FILES.test(filename) && !EXCLUSION_PATTERNS.TEST_FILES.test(filename));
+    return FILE_PATTERNS.SOURCE_FILES.test(filename) && !EXCLUSION_PATTERNS.TEST_FILES.test(filename);
 }
 //# sourceMappingURL=file-helpers.js.map

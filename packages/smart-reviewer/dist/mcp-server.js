@@ -3,7 +3,7 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { CodeAnalyzer } from './analyzer.js';
-import { validateFilePath, MCPError, getErrorMessage, EnvironmentDetector, SmartPathResolver, EnhancedError, HealthChecker, VERSION as SHARED_VERSION } from '@j0kz/shared';
+import { validateFilePath, MCPError, getErrorMessage, EnvironmentDetector, SmartPathResolver, EnhancedError, HealthChecker, VERSION as SHARED_VERSION, } from '@j0kz/shared';
 import { AutoFixer } from './auto-fixer.js';
 const VERSION = '1.0.35';
 class SmartReviewerServer {
@@ -199,7 +199,7 @@ class SmartReviewerServer {
                                 strategy: resolution.strategy,
                             }));
                         }
-                        catch (error) {
+                        catch {
                             // Fallback to old validation
                             resolvedPath = validateFilePath(filePath);
                         }

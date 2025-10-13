@@ -54,7 +54,5 @@ function shouldExcludeDirectory(dirname: string): boolean {
  * @returns True if source file
  */
 function isSourceFile(filename: string): boolean {
-  return (
-    FILE_PATTERNS.SOURCE_FILES.test(filename) && !EXCLUSION_PATTERNS.TEST_FILES.test(filename)
-  );
+  return FILE_PATTERNS.SOURCE_FILES.test(filename) && !EXCLUSION_PATTERNS.TEST_FILES.test(filename);
 }

@@ -34,19 +34,19 @@ export async function runWizard(args, deps = {}) {
     try {
         detected.editor = await detectEditorFn();
     }
-    catch (e) {
+    catch {
         logger.warn('Editor detection failed, will prompt for selection');
     }
     try {
         detected.project = await detectProjectFn();
     }
-    catch (e) {
+    catch {
         logger.warn('Project detection failed, will use defaults');
     }
     try {
         detected.testFramework = await detectTestFrameworkFn();
     }
-    catch (e) {
+    catch {
         logger.warn('Test framework detection failed, will prompt for selection');
     }
     spin.succeed('Environment analyzed');

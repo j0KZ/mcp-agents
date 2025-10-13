@@ -11,7 +11,9 @@ bower_components/
 build/
 
 # Logs
-logs/
+logs/                          # Exclude all logs directory
+!logs/.gitignore              # But keep the gitignore config
+!logs/README.md               # And keep the documentation
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -91,6 +93,8 @@ archived/
 test-all.sh
 generate-simple-readmes.cjs
 update-readmes.js
+scripts/fix-*.sh
+scripts/fix-*.js
 
 # Wiki (published separately)
 wiki/
@@ -187,6 +191,7 @@ WORK_COMPLETED_v*.md
 *.local.json
 .claude/settings.local.json
 mcp_config_*.json
+mcp-servers-config.json
 
 # npm publishing artifacts
 npm-audit.json
@@ -230,3 +235,6 @@ credentials.json
 # See packages/*/experimental/README.md for details
 **/experimental/
 !**/experimental/README.md
+
+# Test MCP servers (research/development only)
+test-mcp-*/

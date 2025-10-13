@@ -102,7 +102,7 @@ export class EnhancedError {
     /**
      * Get actionable solutions for error code
      */
-    static getSolutions(code, context) {
+    static getSolutions(code, _context) {
         const env = EnvironmentDetector.detect();
         const solutions = {
             TEST_003: [
@@ -118,7 +118,9 @@ export class EnhancedError {
                     description: 'Check file permissions',
                     steps: [
                         'Ensure you have read permissions for the file',
-                        env.platform !== 'win32' ? 'Try: chmod +r <file-path>' : 'Check file properties in Windows Explorer',
+                        env.platform !== 'win32'
+                            ? 'Try: chmod +r <file-path>'
+                            : 'Check file properties in Windows Explorer',
                     ],
                 },
             ],

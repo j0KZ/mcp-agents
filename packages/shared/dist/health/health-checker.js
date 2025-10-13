@@ -14,7 +14,7 @@ export class HealthChecker {
     /**
      * Run complete health check
      */
-    async check(verbose = false) {
+    async check(_verbose = false) {
         const checks = {
             stdio: await this.checkStdio(),
             filesystem: await this.checkFilesystem(),
@@ -122,10 +122,7 @@ export class HealthChecker {
         try {
             const deps = {};
             // Check critical dependencies
-            const criticalDeps = [
-                '@modelcontextprotocol/sdk',
-                '@j0kz/shared',
-            ];
+            const criticalDeps = ['@modelcontextprotocol/sdk', '@j0kz/shared'];
             for (const dep of criticalDeps) {
                 deps[dep] = await this.checkModule(dep);
             }

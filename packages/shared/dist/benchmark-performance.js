@@ -23,7 +23,7 @@ export class UserController {
       }
 
       return res.status(200).json(user);
-    } catch (error) {
+    } catch {
       console.error('Error fetching user:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
@@ -40,7 +40,7 @@ export class UserController {
 
       const newUser = await this.userService.create(userData);
       return res.status(201).json(newUser);
-    } catch (error) {
+    } catch {
       console.error('Error creating user:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
@@ -48,7 +48,8 @@ export class UserController {
 }
 
 export function validateEmail(email: string): boolean {
-  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+  // eslint-disable-next-line no-useless-escape
+  const emailRegex = /^[^ \\t@]+@[^ \\t@]+\\.[^ \\t@]+$/;
   return emailRegex.test(email);
 }
 `;

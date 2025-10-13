@@ -94,19 +94,19 @@ export async function runWizard(args: WizardArgs, deps: WizardDeps = {}): Promis
   // Try to detect, but continue if detection fails
   try {
     detected.editor = await detectEditorFn();
-  } catch (e) {
+  } catch {
     logger.warn('Editor detection failed, will prompt for selection');
   }
 
   try {
     detected.project = await detectProjectFn();
-  } catch (e) {
+  } catch {
     logger.warn('Project detection failed, will use defaults');
   }
 
   try {
     detected.testFramework = await detectTestFrameworkFn();
-  } catch (e) {
+  } catch {
     logger.warn('Test framework detection failed, will prompt for selection');
   }
 
