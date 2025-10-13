@@ -5,6 +5,15 @@
  */
 import { getClarificationOptions as getBilingualOptions } from '@j0kz/shared';
 /**
+ * Valid focus areas for workflow selection
+ */
+export const VALID_FOCUS_AREAS = [
+    'security',
+    'quality',
+    'performance',
+    'comprehensive',
+];
+/**
  * Select workflow based on focus area
  * Reuses EXISTING workflows - no new pipeline creation needed
  *
@@ -45,6 +54,6 @@ export function getClarificationOptions(language = 'en') {
  * Type guard for FocusArea
  */
 export function isValidFocus(value) {
-    return ['security', 'quality', 'performance', 'comprehensive'].includes(value);
+    return VALID_FOCUS_AREAS.includes(value);
 }
 //# sourceMappingURL=workflow-selector.js.map

@@ -5,10 +5,17 @@
  */
 
 import { FocusArea, WorkflowName } from '../types.js';
-import {
-  getClarificationOptions as getBilingualOptions,
-  Language
-} from '@j0kz/shared';
+import { getClarificationOptions as getBilingualOptions, Language } from '@j0kz/shared';
+
+/**
+ * Valid focus areas for workflow selection
+ */
+export const VALID_FOCUS_AREAS: readonly FocusArea[] = [
+  'security',
+  'quality',
+  'performance',
+  'comprehensive',
+] as const;
 
 /**
  * Select workflow based on focus area
@@ -56,5 +63,5 @@ export function getClarificationOptions(language: Language = 'en') {
  * Type guard for FocusArea
  */
 export function isValidFocus(value: string): value is FocusArea {
-  return ['security', 'quality', 'performance', 'comprehensive'].includes(value);
+  return VALID_FOCUS_AREAS.includes(value as FocusArea);
 }

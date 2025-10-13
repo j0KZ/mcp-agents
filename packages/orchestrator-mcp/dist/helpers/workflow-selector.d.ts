@@ -6,6 +6,10 @@
 import { FocusArea, WorkflowName } from '../types.js';
 import { Language } from '@j0kz/shared';
 /**
+ * Valid focus areas for workflow selection
+ */
+export declare const VALID_FOCUS_AREAS: readonly FocusArea[];
+/**
  * Select workflow based on focus area
  * Reuses EXISTING workflows - no new pipeline creation needed
  *
