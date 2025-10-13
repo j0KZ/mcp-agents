@@ -207,6 +207,13 @@ IMPORTANT: Always call this tool when user asks to "review my code", "check my c
   /**
    * Run workflow with smart focus detection
    * BILINGUAL: Supports English and Spanish responses
+   *
+   * @param workflowName - Explicit workflow to run (optional)
+   * @param focus - Focus area for smart workflow selection (optional)
+   * @param files - Files to process (optional)
+   * @param projectPath - Project root directory (optional)
+   * @param language - Response language: 'en' or 'es' (optional, defaults to 'en')
+   * @returns MCP response with workflow results or clarification request
    */
   private async runWorkflow(
     workflowName?: WorkflowName,
@@ -215,9 +222,9 @@ IMPORTANT: Always call this tool when user asks to "review my code", "check my c
     projectPath?: string,
     language?: 'en' | 'es'
   ) {
-    // Language context: explicit parameter or 'en' default
-    // Note: LLM should set this based on user's language
-    const userLanguage = language || 'en';
+    // Language validation and default
+    const validLanguages: Array<'en' | 'es'> = ['en', 'es'];
+    const userLanguage = language && validLanguages.includes(language) ? language : 'en';
 
     // STEP 1: Ambiguity detection - return clarification if BOTH missing
     if (!workflowName && !focus) {
