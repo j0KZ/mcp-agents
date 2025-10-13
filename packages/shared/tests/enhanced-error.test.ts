@@ -133,9 +133,15 @@ describe('enhanced-error', () => {
       const mcpError = new MCPError('VAL_001', 'Invalid input');
       const enhanced = EnhancedError.fromMCPError(mcpError);
 
-      const hasDocLink = enhanced.solutions.some(s =>
-        s.documentation?.includes('github.com')
-      );
+      const hasDocLink = enhanced.solutions.some(s => {
+        if (!s.documentation) return false;
+        try {
+          const url = new URL(s.documentation);
+          return url.hostname === 'github.com';
+        } catch {
+          return false;
+        }
+      });
       expect(hasDocLink).toBe(true);
     });
 
