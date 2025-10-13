@@ -14,26 +14,30 @@ Copy-Item wiki\*.md wiki-temp\ -Force
 Write-Host "`n3. Committing changes..." -ForegroundColor Yellow
 cd wiki-temp
 git add .
-git commit -m "refactor: Streamline wiki - bilingual support, remove redundancy
+git commit -m "feat: Add ambiguity detection and bilingual support to Orchestrator
 
-🎯 Major Wiki Overhaul:
+🎯 Orchestrator Wiki Updates:
 
-**Home.md**: Added bilingual support, instant health check, removed redundancy
-**Quick-Start.md**: Cut from 198 to 126 lines (-36%), added Spanish examples
-**All 9 Tool Pages**: Refactored from 3,538 to 1,946 lines (-45%)
+**Orchestrator.md**:
+- Added 'NEW: Ambiguity Detection' section with examples
+- Documented smart focus areas (security, quality, performance, comprehensive)
+- Added bilingual examples (English/Spanish)
+- Updated API reference with new parameters (focus, language)
+- Documented focus area to workflow mapping
 
-**Key Improvements:**
-✅ Bilingual examples (English/Spanish) for all tools
-✅ Natural language commands throughout
-✅ Realistic 'What You Get' output examples
-✅ Removed duplicate installation sections
-✅ Added Qoder support mentions
-✅ Consistent structure across all pages
+**Home.md**:
+- Test count badge updated: 388 passing tests
+- Already includes bilingual support
 
-Before: 3,845 lines (English-only, verbose, redundant)
-After: 2,192 lines (bilingual, concise, action-oriented)
+**Key Features Documented:**
+✅ Smart ambiguity detection with focus areas
+✅ Bilingual support (English/Spanish)
+✅ New optional parameters: focus, language
+✅ 3x faster execution with targeted workflows
+✅ Natural conversational UX examples
 
-See full changes: https://github.com/j0KZ/mcp-agents/commit/[HASH]"
+🤖 Generated with Claude Code
+Co-Authored-By: Claude <noreply@anthropic.com>"
 
 Write-Host "`n4. Pushing to GitHub..." -ForegroundColor Yellow
 git push origin master
