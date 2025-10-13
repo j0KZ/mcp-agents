@@ -230,7 +230,7 @@ IMPORTANT: Always call this tool when user asks to "review my code", "check my c
     }
 
     // STEP 3: Select workflow (explicit workflow OR smart selection)
-    const selectedWorkflow = workflowName || selectWorkflowByFocus(focus!, files || []);
+    const selectedWorkflow = workflowName || selectWorkflowByFocus(focus!);
 
     // STEP 4: Execute pipeline (existing logic)
     const pipeline = createWorkflow(selectedWorkflow, files || [], projectPath || '.');

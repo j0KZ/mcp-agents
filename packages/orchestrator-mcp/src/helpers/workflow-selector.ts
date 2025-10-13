@@ -19,12 +19,11 @@ import {
  * - Quality → pre-merge (has review + architecture + tests)
  * - Performance → quality-audit (has architecture analysis)
  * - Comprehensive → pre-merge (most complete workflow)
+ *
+ * @param focus - The focus area for workflow selection
+ * @returns The name of the workflow to execute
  */
-export function selectWorkflowByFocus(
-  focus: FocusArea,
-  files: string[]
-): WorkflowName {
-
+export function selectWorkflowByFocus(focus: FocusArea): WorkflowName {
   // Security focus → use pre-commit (has security-scan step)
   if (focus === 'security') {
     return 'pre-commit';

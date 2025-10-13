@@ -213,25 +213,25 @@ describe('Orchestrator Workflows', () => {
     describe('selectWorkflowByFocus', () => {
       it('should select pre-commit for security focus', async () => {
         const { selectWorkflowByFocus } = await import('../src/helpers/workflow-selector.js');
-        const workflow = selectWorkflowByFocus('security', ['file.ts']);
+        const workflow = selectWorkflowByFocus('security');
         expect(workflow).toBe('pre-commit');
       });
 
       it('should select pre-merge for quality focus', async () => {
         const { selectWorkflowByFocus } = await import('../src/helpers/workflow-selector.js');
-        const workflow = selectWorkflowByFocus('quality', ['file.ts']);
+        const workflow = selectWorkflowByFocus('quality');
         expect(workflow).toBe('pre-merge');
       });
 
       it('should select quality-audit for performance focus', async () => {
         const { selectWorkflowByFocus } = await import('../src/helpers/workflow-selector.js');
-        const workflow = selectWorkflowByFocus('performance', ['file.ts']);
+        const workflow = selectWorkflowByFocus('performance');
         expect(workflow).toBe('quality-audit');
       });
 
       it('should select pre-merge for comprehensive focus', async () => {
         const { selectWorkflowByFocus } = await import('../src/helpers/workflow-selector.js');
-        const workflow = selectWorkflowByFocus('comprehensive', ['file.ts']);
+        const workflow = selectWorkflowByFocus('comprehensive');
         expect(workflow).toBe('pre-merge');
       });
     });

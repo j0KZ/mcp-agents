@@ -14,8 +14,11 @@ import { Language } from '@j0kz/shared';
  * - Quality → pre-merge (has review + architecture + tests)
  * - Performance → quality-audit (has architecture analysis)
  * - Comprehensive → pre-merge (most complete workflow)
+ *
+ * @param focus - The focus area for workflow selection
+ * @returns The name of the workflow to execute
  */
-export declare function selectWorkflowByFocus(focus: FocusArea, files: string[]): WorkflowName;
+export declare function selectWorkflowByFocus(focus: FocusArea): WorkflowName;
 /**
  * Get clarification options in specified language
  * Supports English and Spanish
