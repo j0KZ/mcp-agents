@@ -52,7 +52,7 @@ The Orchestrator MCP enables you to:
 
 The orchestrator now features intelligent ambiguity detection. When you make vague requests, it clarifies what you want:
 
-```
+```text
 User: "review my code"
 
 Orchestrator responds:
@@ -70,7 +70,7 @@ Orchestrator executes pre-merge workflow with quality focus
 ```
 
 **Bilingual Support:**
-```
+```text
 Usuario: "revisar mi código"
 
 Orchestrador responde:
@@ -85,7 +85,7 @@ Orchestrador responde:
 
 ### Example: Pre-commit Workflow
 
-```
+```text
 User in Claude Code: "Run pre-commit checks on my staged files"
 
 Orchestrator executes:
@@ -268,7 +268,7 @@ Build your own workflows with `run_sequence`:
 
 Follow your editor's MCP configuration guide. The command is always:
 
-```
+```bash
 orchestrator-mcp
 ```
 
@@ -305,7 +305,7 @@ npx @j0kz/mcp-agents@latest
 
 ### In Claude Code (Natural Language)
 
-```
+```text
 You: "Review my changes and check for security issues"
 Claude: [Calls orchestrator with pre-commit workflow]
 Claude: "✅ Code review passed (Score: 87/100). ✅ No security vulnerabilities found."

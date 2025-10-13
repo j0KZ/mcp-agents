@@ -23,9 +23,8 @@ try {
     maxBuffer: 10 * 1024 * 1024 // 10MB buffer
   });
 
-  // Strip ANSI color codes
-  // eslint-disable-next-line no-control-regex
-  const cleanOutput = output.replace(/\x1b\[[0-9;]*m/g, '');
+  // Strip ANSI color codes (ESC [ ... m)
+  const cleanOutput = output.replace(/\u001b\[[0-9;]*m/g, '');
 
   // Extract test counts from vitest output
   // Format: "Tests  31 passed (31)"
