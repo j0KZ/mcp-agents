@@ -2,13 +2,12 @@
  * Core refactoring logic and transformations
  */
 import { REFACTORING_LIMITS, REFACTORING_MESSAGES, PATTERN_CONSTANTS, INDEX_CONSTANTS, } from './constants/refactoring-limits.js';
-import { REGEX_LIMITS } from './constants/transformation-limits.js';
 // Re-export from modular components
 export { extractFunction } from './core/extract-function.js';
 export { calculateMetrics, findDuplicateBlocks } from './analysis/metrics-calculator.js';
 // Import for internal use
 import { findDuplicateBlocks, getNestingDepth } from './analysis/metrics-calculator.js';
-import { applyGuardClauses, combineNestedConditions, } from './transformations/conditional-helpers.js';
+import { applyGuardClauses, combineNestedConditions, convertIfElseToTernary, } from './transformations/conditional-helpers.js';
 import { removeUnusedImportsFromCode, escapeRegExp } from './transformations/import-helpers.js';
 import { analyzeFunctionLengths } from './transformations/analysis-helpers.js';
 import { createSuccessResult, createErrorResult, createValidationError, createSingleChangeResult, validateCodeSize, } from './utils/result-helpers.js';
@@ -78,15 +77,9 @@ export function simplifyConditionals(options) {
             }
         }
         if (useTernary) {
-            // Build ternary pattern with line breaks for readability
-            const conditionLimit = REGEX_LIMITS.MAX_CONDITION_LENGTH;
-            const returnLimit = REGEX_LIMITS.MAX_RETURN_VALUE_LENGTH;
-            const ternaryPattern = new RegExp(`if\\s?\\(([^)]{1,${conditionLimit}})\\)\\s?\\{\\s?` +
-                `return\\s+([^;]{1,${returnLimit}});\\s?\\}\\s?` +
-                `else\\s?\\{\\s?return\\s+([^;]{1,${returnLimit}});\\s?\\}`, 'g');
-            const originalCode = refactoredCode;
-            refactoredCode = refactoredCode.replace(ternaryPattern, 'return $1 ? $2 : $3;');
-            if (refactoredCode !== originalCode) {
+            const ternaryResult = convertIfElseToTernary(refactoredCode);
+            if (ternaryResult.changed) {
+                refactoredCode = ternaryResult.code;
                 changes.push({
                     type: 'simplify-conditionals',
                     description: 'Converted if/else to ternary operator',

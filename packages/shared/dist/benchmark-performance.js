@@ -23,7 +23,7 @@ export class UserController {
       }
 
       return res.status(200).json(user);
-    } catch {
+    } catch (error) {
       console.error('Error fetching user:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
@@ -40,7 +40,7 @@ export class UserController {
 
       const newUser = await this.userService.create(userData);
       return res.status(201).json(newUser);
-    } catch {
+    } catch (error) {
       console.error('Error creating user:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }

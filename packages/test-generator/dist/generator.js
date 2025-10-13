@@ -1,8 +1,10 @@
 import { readFile } from 'fs/promises';
+import { dirname, basename, extname, relative, join } from 'path';
 import { ASTParser } from './ast-parser.js';
 import { TestCaseGenerator } from './test-case-generator.js';
 import { AnalysisCache } from '@j0kz/shared';
 import { FILE_LIMITS } from './constants/limits.js';
+import { DEFAULT_FRAMEWORK, VALID_FRAMEWORKS, COVERAGE, FILE_EXTENSIONS, } from './constants/test-config.js';
 export class TestGenerator {
     parser;
     testCaseGenerator;
@@ -21,10 +23,9 @@ export class TestGenerator {
             throw new Error('TEST_GEN_001: Invalid file path. Please provide a valid string path to the source file.');
         }
         // Validate framework
-        const framework = config.framework || 'jest';
-        const validFrameworks = ['jest', 'vitest', 'mocha', 'ava'];
-        if (!validFrameworks.includes(framework)) {
-            throw new Error(`TEST_GEN_002: Unsupported framework '${framework}'. Supported frameworks: ${validFrameworks.join(', ')}`);
+        const framework = config.framework || DEFAULT_FRAMEWORK;
+        if (!VALID_FRAMEWORKS.includes(framework)) {
+            throw new Error(`TEST_GEN_002: Unsupported framework '${framework}'. Supported frameworks: ${VALID_FRAMEWORKS.join(', ')}`);
         }
         // Read file with better error handling
         let content;
@@ -102,11 +103,13 @@ export class TestGenerator {
             description: `Test ${func.name} with typical valid inputs`,
         });
         // Edge cases
-        if (config.includeEdgeCases !== false) {
+        const includeEdgeCases = config.includeEdgeCases !== false;
+        if (includeEdgeCases) {
             tests.push(...this.testCaseGenerator.generateEdgeCaseTests(func));
         }
         // Error cases
-        if (config.includeErrorCases !== false) {
+        const includeErrorCases = config.includeErrorCases !== false;
+        if (includeErrorCases) {
             tests.push(...this.testCaseGenerator.generateErrorCaseTests(func));
         }
         return {
@@ -137,7 +140,8 @@ export class TestGenerator {
                 description: `Test ${cls.name}.${method.name}()`,
             });
             // Edge cases for methods
-            if (config.includeEdgeCases !== false) {
+            const includeEdgeCases = config.includeEdgeCases !== false;
+            if (includeEdgeCases) {
                 tests.push(...this.testCaseGenerator.generateMethodEdgeCases(cls, method));
             }
         }
@@ -151,20 +155,40 @@ export class TestGenerator {
      * Generate complete test file
      */
     generateTestFile(sourceFile, suites, framework) {
-        const importPath = sourceFile.replace(/\.(ts|js)$/, '');
-        const imports = this.generateImports(framework, importPath);
+        const testFile = this.getTestFilePath(sourceFile, framework);
+        const imports = this.generateImports(framework, sourceFile, testFile);
         const suitesCode = suites.map(s => this.generateSuiteCode(s, framework)).join('\n\n');
         return `${imports}\n\n${suitesCode}`;
     }
     /**
-     * Generate import statements
+     * Generate import statements with correct relative paths
      */
-    generateImports(framework, importPath) {
+    generateImports(framework, sourceFile, testFile) {
+        // Calculate relative path from test file to source file
+        const sourceDir = dirname(sourceFile);
+        const testDir = dirname(testFile);
+        const sourceName = basename(sourceFile, extname(sourceFile));
+        let relativePath;
+        if (sourceDir === testDir) {
+            // Same directory - simple case
+            relativePath = `./${sourceName}`;
+        }
+        else {
+            // Different directories - calculate relative path
+            const relativeDir = relative(testDir, sourceDir);
+            relativePath = join(relativeDir, sourceName);
+            // Ensure Unix-style separators for imports
+            relativePath = relativePath.replace(/\\/g, '/');
+            // Ensure ./ or ../ prefix
+            if (!relativePath.startsWith('.')) {
+                relativePath = `./${relativePath}`;
+            }
+        }
         const imports = {
-            jest: `import { describe, it, expect, beforeEach } from '@jest/globals';\nimport * as target from './${importPath}';`,
-            vitest: `import { describe, it, expect, beforeEach } from 'vitest';\nimport * as target from './${importPath}';`,
-            mocha: `import { describe, it, before } from 'mocha';\nimport { expect } from 'chai';\nimport * as target from './${importPath}';`,
-            ava: `import test from 'ava';\nimport * as target from './${importPath}';`,
+            jest: `import { describe, it, expect, beforeEach } from '@jest/globals';\nimport * as target from '${relativePath}';`,
+            vitest: `import { describe, it, expect, beforeEach } from 'vitest';\nimport * as target from '${relativePath}';`,
+            mocha: `import { describe, it, before } from 'mocha';\nimport { expect } from 'chai';\nimport * as target from '${relativePath}';`,
+            ava: `import test from 'ava';\nimport * as target from '${relativePath}';`,
         };
         return imports[framework];
     }
@@ -193,7 +217,7 @@ export class TestGenerator {
      * Get test file path
      */
     getTestFilePath(sourceFile, _framework) {
-        return sourceFile.replace(/\.(ts|js)$/, '.test.$1');
+        return sourceFile.replace(FILE_EXTENSIONS.SOURCE_FILE_PATTERN, `${FILE_EXTENSIONS.TEST_SUFFIX}$1`);
     }
     /**
      * Estimate test coverage based on generated tests
@@ -201,10 +225,11 @@ export class TestGenerator {
     estimateCoverage(functions, classes, suites) {
         const totalItems = functions.length + classes.reduce((sum, c) => sum + c.methods.length + 1, 0);
         const totalTests = suites.reduce((sum, s) => sum + s.tests.length, 0);
-        if (totalItems === 0)
-            return 100;
+        if (totalItems === COVERAGE.ZERO_COVERAGE) {
+            return COVERAGE.MAX_PERCENTAGE;
+        }
         // Basic estimation: assume each test covers one item
-        const coverage = Math.min(100, (totalTests / totalItems) * 100);
+        const coverage = Math.min(COVERAGE.MAX_PERCENTAGE, (totalTests / totalItems) * COVERAGE.MAX_PERCENTAGE);
         return Math.round(coverage);
     }
 }

@@ -21,7 +21,7 @@ export declare class TestGenerator {
      */
     private generateTestFile;
     /**
-     * Generate import statements
+     * Generate import statements with correct relative paths
      */
     private generateImports;
     /**

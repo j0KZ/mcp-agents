@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/mcp-agents",
-  "version": "1.0.35",
+  "version": "1.0.36",
   "description": "11-package monorepo with 9 professional MCP agents plus shared utilities - Smart Reviewer, Test Generator, Architecture Analyzer, Orchestrator, and more. Works with Claude Code, Cursor, Windsurf, and any MCP-compatible editor.",
   "type": "module",
   "private": true,

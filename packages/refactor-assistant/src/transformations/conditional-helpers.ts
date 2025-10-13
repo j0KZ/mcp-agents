@@ -2,6 +2,28 @@
  * Conditional transformation helpers
  */
 
+import { REGEX_LIMITS } from '../constants/transformation-limits.js';
+
+/**
+ * Convert simple if-else return statements to ternary operators
+ */
+export function convertIfElseToTernary(code: string): { code: string; changed: boolean } {
+  const conditionLimit = REGEX_LIMITS.MAX_CONDITION_LENGTH;
+  const returnLimit = REGEX_LIMITS.MAX_RETURN_VALUE_LENGTH;
+
+  // Build regex pattern parts for better readability
+  const ifPart = `if\\s{0,3}\\(([^)]{1,${conditionLimit}})\\)\\s{0,3}\\{\\s{0,3}`;
+  const returnPart = `return\\s+([^;]{1,${returnLimit}});\\s{0,3}\\}\\s{0,3}`;
+  const elsePart = `else\\s{0,3}\\{\\s{0,3}return\\s+([^;]{1,${returnLimit}});\\s{0,3}\\}`;
+
+  const ternaryPattern = new RegExp(`${ifPart}${returnPart}${elsePart}`, 'g');
+
+  const result = code.replace(ternaryPattern, 'return $1 ? $2 : $3;');
+  const changed = result !== code;
+
+  return { code: result, changed };
+}
+
 export function applyGuardClauses(code: string): { code: string; changed: boolean } {
   let changed = false;
 
