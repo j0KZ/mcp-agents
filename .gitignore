@@ -11,7 +11,9 @@ bower_components/
 build/
 
 # Logs
-logs/
+logs/                          # Exclude all logs directory
+!logs/.gitignore              # But keep the gitignore config
+!logs/README.md               # And keep the documentation
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -230,3 +232,6 @@ credentials.json
 # See packages/*/experimental/README.md for details
 **/experimental/
 !**/experimental/README.md
+
+# Test MCP servers (research/development only)
+test-mcp-*/

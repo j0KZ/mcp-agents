@@ -10,7 +10,13 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { MCPPipeline, MCPError, getErrorMessage } from '@j0kz/shared';
 import { WORKFLOWS, createWorkflow } from './workflows.js';
-import { WorkflowName, WorkflowStep } from './types.js';
+import { WorkflowName, WorkflowStep, FocusArea } from './types.js';
+import { selectWorkflowByFocus, isValidFocus } from './helpers/workflow-selector.js';
+import {
+  buildClarificationResponse,
+  buildInvalidFocusResponse,
+  buildSuccessResponse,
+} from './helpers/response-builder.js';
 
 class OrchestratorServer {
   private server: Server;
@@ -37,27 +43,53 @@ class OrchestratorServer {
       tools: [
         {
           name: 'run_workflow',
-          description:
-            'Execute a pre-built multi-tool workflow (pre-commit, pre-merge, or quality-audit)',
+          description: `Execute intelligent workflow with optional focus detection.
+
+IMPORTANT: Always call this tool when user asks to "review my code", "check my code", or "analyze this".
+
+**Smart Focus Detection:**
+- Ambiguous request → Call WITHOUT workflow parameter to get clarification
+- Specific request → Call WITH workflow or focus parameter
+
+**Focus Areas (Auto-selects appropriate workflow):**
+- security: Fast security scan
+- quality: Code quality review with tests
+- performance: Architecture and performance analysis
+- comprehensive: Complete multi-dimensional analysis
+
+**Direct Workflows (Bypass focus selection):**
+- pre-commit: Git pre-commit checks
+- pre-merge: PR validation
+- quality-audit: Deep audit with reports
+
+**Examples:**
+- "review my code" → omit workflow (get clarification)
+- "check security" → workflow='security' OR focus='security'
+- "run pre-commit" → workflow='pre-commit'`,
           inputSchema: {
             type: 'object',
             properties: {
               workflow: {
                 type: 'string',
                 enum: ['pre-commit', 'pre-merge', 'quality-audit'],
-                description: 'Pre-built workflow to execute',
+                description: 'Explicit workflow name (optional)',
+              },
+              focus: {
+                type: 'string',
+                enum: ['security', 'quality', 'performance', 'comprehensive'],
+                description: 'Focus area for smart workflow selection (optional)',
               },
               files: {
                 type: 'array',
                 items: { type: 'string' },
-                description: 'Files to process',
+                description: 'Files to process (optional for project-level)',
               },
               projectPath: {
                 type: 'string',
-                description: 'Project root path (optional, defaults to current directory)',
+                description: 'Project root (optional, defaults to cwd)',
               },
             },
-            required: ['workflow', 'files'],
+            required: [],
           },
         },
         {
@@ -124,7 +156,8 @@ class OrchestratorServer {
 
         if (name === 'run_workflow') {
           return await this.runWorkflow(
-            args.workflow as WorkflowName,
+            args.workflow as WorkflowName | undefined,
+            args.focus as FocusArea | undefined,
             args.files as string[],
             (args.projectPath as string) || '.'
           );
@@ -166,36 +199,32 @@ class OrchestratorServer {
   }
 
   /**
-   * Run a pre-built workflow
+   * Run workflow with smart focus detection
    */
-  private async runWorkflow(workflowName: WorkflowName, files: string[], projectPath: string) {
-    const pipeline = createWorkflow(workflowName, files, projectPath);
+  private async runWorkflow(
+    workflowName?: WorkflowName,
+    focus?: FocusArea,
+    files?: string[],
+    projectPath?: string
+  ) {
+    // STEP 1: Ambiguity detection - return clarification if BOTH missing
+    if (!workflowName && !focus) {
+      return buildClarificationResponse();
+    }
+
+    // STEP 2: Validate focus if provided
+    if (focus && !isValidFocus(focus)) {
+      return buildInvalidFocusResponse(focus);
+    }
+
+    // STEP 3: Select workflow (explicit workflow OR smart selection)
+    const selectedWorkflow = workflowName || selectWorkflowByFocus(focus!, files || []);
+
+    // STEP 4: Execute pipeline (existing logic)
+    const pipeline = createWorkflow(selectedWorkflow, files || [], projectPath || '.');
     const result = await pipeline.execute();
 
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify(
-            {
-              workflow: workflowName,
-              success: result.success,
-              duration: result.totalDuration,
-              steps: result.steps.map(s => ({
-                name: s.name,
-                success: s.result.success,
-                duration: s.duration,
-                data: s.result.data,
-                error: s.result.error,
-              })),
-              errors: result.errors,
-            },
-            null,
-            2
-          ),
-        },
-      ],
-    };
+    return buildSuccessResponse(selectedWorkflow, focus, result);
   }
 
   /**

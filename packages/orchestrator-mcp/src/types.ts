@@ -48,3 +48,22 @@ export interface WorkflowStepResult {
   data?: any;
   error?: string;
 }
+
+/**
+ * Focus areas for smart workflow selection
+ */
+export type FocusArea = 'security' | 'quality' | 'performance' | 'comprehensive';
+
+/**
+ * Clarification response for ambiguous requests
+ */
+export interface ClarificationResponse {
+  status: 'needs_clarification';
+  message: string;
+  question: string;
+  options: Array<{
+    value: string;
+    label: string;
+    description: string;
+  }>;
+}

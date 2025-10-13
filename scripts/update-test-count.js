@@ -23,9 +23,13 @@ try {
     maxBuffer: 10 * 1024 * 1024 // 10MB buffer
   });
 
+  // Strip ANSI color codes
+  // eslint-disable-next-line no-control-regex
+  const cleanOutput = output.replace(/\x1b\[[0-9;]*m/g, '');
+
   // Extract test counts from vitest output
   // Format: "Tests  31 passed (31)"
-  const matches = output.match(/Tests\s+(\d+)\s+passed/g);
+  const matches = cleanOutput.match(/Tests\s+(\d+)\s+passed/g);
 
   if (!matches || matches.length === 0) {
     console.error('❌ Could not extract test count from output');

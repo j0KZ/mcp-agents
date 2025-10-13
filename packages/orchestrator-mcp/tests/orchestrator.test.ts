@@ -208,4 +208,64 @@ describe('Orchestrator Workflows', () => {
       });
     });
   });
+
+  describe('Ambiguity Detection & Smart Workflow Selection', () => {
+    describe('selectWorkflowByFocus', () => {
+      it('should select pre-commit for security focus', async () => {
+        const { selectWorkflowByFocus } = await import('../src/helpers/workflow-selector.js');
+        const workflow = selectWorkflowByFocus('security', ['file.ts']);
+        expect(workflow).toBe('pre-commit');
+      });
+
+      it('should select pre-merge for quality focus', async () => {
+        const { selectWorkflowByFocus } = await import('../src/helpers/workflow-selector.js');
+        const workflow = selectWorkflowByFocus('quality', ['file.ts']);
+        expect(workflow).toBe('pre-merge');
+      });
+
+      it('should select quality-audit for performance focus', async () => {
+        const { selectWorkflowByFocus } = await import('../src/helpers/workflow-selector.js');
+        const workflow = selectWorkflowByFocus('performance', ['file.ts']);
+        expect(workflow).toBe('quality-audit');
+      });
+
+      it('should select pre-merge for comprehensive focus', async () => {
+        const { selectWorkflowByFocus } = await import('../src/helpers/workflow-selector.js');
+        const workflow = selectWorkflowByFocus('comprehensive', ['file.ts']);
+        expect(workflow).toBe('pre-merge');
+      });
+    });
+
+    describe('isValidFocus', () => {
+      it('should validate correct focus values', async () => {
+        const { isValidFocus } = await import('../src/helpers/workflow-selector.js');
+        expect(isValidFocus('security')).toBe(true);
+        expect(isValidFocus('quality')).toBe(true);
+        expect(isValidFocus('performance')).toBe(true);
+        expect(isValidFocus('comprehensive')).toBe(true);
+      });
+
+      it('should reject invalid focus values', async () => {
+        const { isValidFocus } = await import('../src/helpers/workflow-selector.js');
+        expect(isValidFocus('invalid')).toBe(false);
+        expect(isValidFocus('sec')).toBe(false);
+        expect(isValidFocus('')).toBe(false);
+      });
+    });
+
+    describe('getClarificationOptions', () => {
+      it('should return 4 labeled options', async () => {
+        const { getClarificationOptions } = await import('../src/helpers/workflow-selector.js');
+        const options = getClarificationOptions();
+
+        expect(options).toHaveLength(4);
+        expect(options[0]).toHaveProperty('value', 'security');
+        expect(options[0]).toHaveProperty('label', 'a) Security Analysis');
+        expect(options[0]).toHaveProperty('description');
+        expect(options[1].label).toContain('b)');
+        expect(options[2].label).toContain('c)');
+        expect(options[3].label).toContain('d)');
+      });
+    });
+  });
 });
