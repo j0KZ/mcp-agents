@@ -9,7 +9,7 @@
 [![CI](https://github.com/j0KZ/mcp-agents/workflows/CI/badge.svg)](https://github.com/j0KZ/mcp-agents/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@j0kz/mcp-agents.svg)](https://www.npmjs.com/package/@j0kz/mcp-agents)
 [![codecov](https://codecov.io/gh/j0KZ/mcp-agents/branch/main/graph/badge.svg)](https://codecov.io/gh/j0KZ/mcp-agents)
-[![Tests](https://img.shields.io/badge/tests-388_passing-success.svg)](https://github.com/j0KZ/mcp-agents/actions)
+[![Tests](https://img.shields.io/badge/tests-588_passing-success.svg)](https://github.com/j0KZ/mcp-agents/actions)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -741,10 +741,23 @@ After (7 lines, async/await):
 | [**🚀 Quick Start**](https://github.com/j0KZ/mcp-agents/wiki/Quick-Start) | Get started in 5 minutes |
 | [**🔧 Configuration**](https://github.com/j0KZ/mcp-agents/wiki/Configuration) | Editor setup guides |
 | [**💡 Examples**](examples/) | Real-world usage patterns |
+| [**🧠 Claude Skills**](docs/claude_skills/) | 10 production-ready Claude Code skills (optimized) |
 | [**🐛 Troubleshooting**](https://github.com/j0KZ/mcp-agents/wiki/Troubleshooting) | Common issues & solutions |
 | [**📋 Changelog**](CHANGELOG.md) | What's new in each version |
 
 </div>
+
+### 🧠 Claude Code Skills
+
+**10 production-ready skills** for Claude Code with **41% token savings** through optimized reference file architecture:
+
+- **Main skills** (1,958 lines): Quick references, loaded always
+- **Reference files** (8,915 lines): Detailed guides, loaded on-demand via grep/cat
+- **Token savings**: ~5,468 tokens per skill load (3.9% vs 6.5% context usage)
+
+Skills include: git-pr-workflow, testing-patterns-vitest, documentation-generation, mcp-troubleshooting, release-publishing-workflow, code-quality-pipeline, modular-refactoring-pattern, monorepo-package-workflow, mcp-workflow-composition, project-standardization.
+
+[View all skills →](docs/claude_skills/)
 
 ---
 

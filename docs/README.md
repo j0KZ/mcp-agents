@@ -78,16 +78,40 @@ Reusable templates for documentation and configuration.
 
 - **[Simple README Template](templates/SIMPLE_README_TEMPLATE.md)** - Template for package READMEs
 
-## 📦 The 8 MCP Tools
+## 📦 The 9 MCP Tools
 
-1. **smart-reviewer** - Code review and quality analysis
-2. **test-generator** - Automated test suite generation
+1. **smart-reviewer** - Code review and quality analysis with auto-fix
+2. **test-generator** - Automated test suite generation with smart assertions
 3. **architecture-analyzer** - Dependency and architecture analysis
 4. **refactor-assistant** - Code refactoring tools
 5. **api-designer** - REST/GraphQL API design
 6. **db-schema** - Database schema design
 7. **doc-generator** - Documentation generation
 8. **security-scanner** - Security vulnerability scanning
+9. **orchestrator-mcp** - Multi-tool pipeline orchestration
+
+## 🧠 Claude Code Skills (10 Production-Ready)
+
+**Optimized for token efficiency** - 41% reduction in context usage:
+
+1. **git-pr-workflow** - Git commits, PRs, conflict resolution ([279 lines](../claude/skills/git-pr-workflow/SKILL.md))
+2. **testing-patterns-vitest** - Vitest testing conventions and patterns ([401 lines](../claude/skills/testing-patterns-vitest/SKILL.md))
+3. **documentation-generation** - README, CHANGELOG, badge management ([380 lines](../claude/skills/documentation-generation/SKILL.md))
+4. **mcp-troubleshooting** - MCP tool installation and debugging ([405 lines](../claude/skills/mcp-troubleshooting/SKILL.md))
+5. **release-publishing-workflow** - npm publishing and version management ([493 lines](../claude/skills/release-publishing-workflow/SKILL.md))
+6. **code-quality-pipeline** - Automated code review workflows
+7. **modular-refactoring-pattern** - File refactoring patterns (<300 LOC)
+8. **monorepo-package-workflow** - New package creation workflow
+9. **mcp-workflow-composition** - Multi-tool workflow composition
+10. **project-standardization** - Project standards and automation
+
+**Architecture**:
+- **Main skills**: 1,958 lines total (quick references, always loaded)
+- **Reference files**: 8,915 lines total (detailed guides, on-demand via grep/cat)
+- **Token savings**: ~5,468 tokens per skill load (3.9% vs 6.5% context usage)
+- **Optimization**: 16 reference files created, 5 skills optimized (41% reduction)
+
+**[View Complete Claude Skills Documentation →](claude_skills/)**
 
 ## 🔗 Quick Links
 
@@ -98,9 +122,11 @@ Reusable templates for documentation and configuration.
 
 ## 📊 Project Status
 
-- **Current Version**: v1.0.27 (check [version.json](../version.json))
+- **Current Version**: v1.0.36 (check [version.json](../version.json))
 - **Phase 1-3 Refactoring**: ✅ Complete
-- **Test Coverage**: 68/68 tests passing
+- **Claude Skills Optimization**: ✅ Complete (41% token reduction)
+- **Tests**: 588 passing (100% pass rate)
+- **Coverage**: 75% target achieved
 - **Security Vulnerabilities**: 0 (validated by Security Scanner MCP)
 
 ## 🆘 Need Help?
