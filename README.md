@@ -761,6 +761,46 @@ Skills include: git-pr-workflow, testing-patterns-vitest, documentation-generati
 
 ---
 
+## 🎯 Developer Experience Enhancements
+
+### Natural Language MCP Shortcuts
+
+**Skip the syntax** - use natural language to trigger MCP tools:
+
+```
+"review this"           → Smart code review with auto-detection
+"add tests"             → Generate test suite for current file
+"check before commit"   → Pre-commit validation pipeline
+"ready for PR"          → Full quality checks before merge
+"security scan"         → Find vulnerabilities
+```
+
+**Smart Auto-Detection:**
+- ✅ File: IDE selection → git staged → current file → ask
+- ✅ Severity: Strict for main/release, moderate for features, lenient for experimental
+- ✅ Framework: Auto-detect from package.json
+
+📖 [Full MCP Enhancers Guide](.claude/mcp-enhancers.md)
+
+### Git Hooks (Automatic Quality Enforcement)
+
+**Zero-effort quality gates** at commit and push:
+
+```bash
+npm run hooks:install
+```
+
+**Three hooks, three layers of defense:**
+- ⚡ **pre-commit** (~30s): ESLint, Prettier, TypeScript, code review
+- 🔍 **commit-msg** (~1s): Conventional commits validation
+- 🛡️ **pre-push** (~2-5min): Full test suite, coverage, build, security
+
+**Smart branch detection:** Enhanced checks for main/release/pr, lighter for feature branches.
+
+📖 [Git Hooks Documentation](.git-hooks/README.md)
+
+---
+
 ## 🚀 Advanced: CI/CD Integration
 
 Automate code quality checks in your development workflow:
