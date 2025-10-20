@@ -767,7 +767,7 @@ Skills include: git-pr-workflow, testing-patterns-vitest, documentation-generati
 
 **Skip the syntax** - use natural language to trigger MCP tools:
 
-```
+```text
 "review this"           → Smart code review with auto-detection
 "add tests"             → Generate test suite for current file
 "check before commit"   → Pre-commit validation pipeline

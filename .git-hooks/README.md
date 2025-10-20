@@ -62,7 +62,7 @@ git commit -m "fix: parser bug" --no-verify
 - Required components
 
 **Format:**
-```
+```text
 type(scope): description
 
 [optional body]
@@ -73,14 +73,14 @@ type(scope): description
 **Valid types:** feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
 
 **Example valid:**
-```
+```text
 feat(smart-reviewer): add auto-fix suggestions
 fix: handle null pointer in parser
 docs: update README with examples
 ```
 
 **Example invalid:**
-```
+```text
 Updated stuff          ❌ (no type)
 feature: added thing   ❌ (wrong type, use 'feat')
 fix short msg          ❌ (description too short)
@@ -210,19 +210,24 @@ echo $?
 
 ---
 
-## MCP Integration
+## Quality Checks
 
-**Hooks use your MCP tools automatically!**
+**Hooks use standard development tools:**
 
-**pre-commit:**
-- Uses: `smart-reviewer` (batch_review)
-- Config: moderate severity, staged files only
+**pre-commit checks:**
+- ESLint: JavaScript/TypeScript linting
+- Prettier: Code formatting
+- TypeScript: Type checking and compilation
+- Basic code patterns: console.log (warning), debugger (error), TODO/FIXME (warning)
 
-**pre-push:**
-- Uses: `smart-reviewer` (strict), `security-scanner`, `architecture-analyzer`
-- Config: comprehensive checks
+**pre-push checks:**
+- Test suite: All tests via `npm test`
+- Coverage: Warns if below 75%
+- Build: Verify `npm run build` succeeds
+- Version sync: Check version.json consistency
+- Basic security patterns: Hardcoded secrets, SQL injection patterns (on main/release/pr branches)
 
-**Leverages:** `.claude/mcp-enhancers.md` shortcuts when possible
+**Note:** These hooks use standard CI/CD tools, not MCP tools. For MCP-powered code review, use `.claude/mcp-enhancers.md` shortcuts like "review this" in your editor
 
 ---
 
