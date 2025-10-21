@@ -30,7 +30,11 @@
     "lint:fix": "eslint \"packages/*/src/**/*.{ts,js}\" --fix",
     "validate:baseline": "node scripts/validate-improvements.js --baseline",
     "validate:check": "node scripts/validate-improvements.js --validate",
-    "mutation:test": "node scripts/mutation-test.js"
+    "mutation:test": "node scripts/mutation-test.js",
+    "skills:index": "node scripts/generate-skill-index.js",
+    "skills:validate": "node scripts/validate-skills.js",
+    "skills:validate:fix": "node scripts/validate-skills.js --fix",
+    "skills:validate:strict": "node scripts/validate-skills.js --strict"
   },
   "devDependencies": {
     "@types/node": "^24.6.2",
