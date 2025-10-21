@@ -51,27 +51,32 @@ my-claude-agents/
 ## Development Setup
 
 1. **Fork the repository**
+
    ```bash
    # Click "Fork" button on GitHub
    ```
 
 2. **Clone your fork**
+
    ```bash
    git clone https://github.com/YOUR-USERNAME/my-claude-agents.git
    cd my-claude-agents
    ```
 
 3. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 4. **Build all packages**
+
    ```bash
    npm run build
    ```
 
 5. **Run tests**
+
    ```bash
    npm test
    ```
@@ -154,7 +159,31 @@ npm run build
 7. Add comprehensive tests
 8. Update root workspace
 
-### 3. Version Management
+### 3. Claude Code Skills Management
+
+If you work with Claude Code skills in `.claude/skills/`:
+
+```bash
+# Validate all skills (checks YAML frontmatter, required fields, formats)
+npm run skills:validate
+
+# Generate catalog (creates INDEX.md and skills.json)
+npm run skills:index
+
+# Strict validation (warnings = errors)
+npm run skills:validate:strict
+```
+
+**When to use:**
+
+- After creating/editing skills
+- Before committing skill changes
+- To browse available skills: `cat .claude/skills/INDEX.md`
+- To query skills: `cat .claude/skills/skills.json | jq '.skills[] | select(.category == "quality")'`
+
+See `.claude/skills/README.md` for complete documentation.
+
+### 4. Version Management
 
 **IMPORTANT**: We use centralized versioning!
 
@@ -212,8 +241,8 @@ return {
   errors: ['Detailed error message'],
   metadata: {
     errorCode: 'FILE_NOT_FOUND',
-    suggestion: 'Check file path'
-  }
+    suggestion: 'Check file path',
+  },
 };
 ```
 
@@ -275,6 +304,7 @@ npm run dev
 - [ ] Build succeeds (`npm run build`)
 - [ ] Coverage maintained (`npm run test:coverage`)
 - [ ] Code formatted (`npm run format`)
+- [ ] Skills validated (if modified: `npm run skills:validate`)
 - [ ] Commit messages follow conventional commits
 
 ### 2. PR Guidelines
@@ -301,6 +331,7 @@ type(scope): description
 ```
 
 Types:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation
@@ -310,6 +341,7 @@ Types:
 - `chore`: Maintenance
 
 Examples:
+
 ```bash
 feat(security-scanner): add support for Python files
 fix(db-schema): handle null requirements gracefully
@@ -329,6 +361,7 @@ test(api-designer): add GraphQL schema tests
 Releases are managed by maintainers:
 
 1. **Update version**
+
    ```bash
    echo '{"version":"1.0.34"}' > version.json
    npm run version:sync
@@ -340,6 +373,7 @@ Releases are managed by maintainers:
    - Update migration guides if needed
 
 3. **Build and test**
+
    ```bash
    npm run build
    npm test
@@ -347,6 +381,7 @@ Releases are managed by maintainers:
    ```
 
 4. **Publish**
+
    ```bash
    npm run publish-all
    ```
@@ -367,6 +402,7 @@ Releases are managed by maintainers:
 ## Recognition
 
 Contributors are recognized in:
+
 - CHANGELOG.md (for significant contributions)
 - GitHub contributors page
 - Special thanks in release notes
