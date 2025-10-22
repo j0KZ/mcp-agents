@@ -9,7 +9,7 @@ export interface MCPResult<T = any> {
     data?: T;
     error?: string;
     warnings?: string[];
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
     timestamp?: string;
 }
 /**
@@ -125,9 +125,9 @@ export interface PipelineStep {
     tool: string;
     config: MCPConfig & {
         action?: string;
-        params?: any;
+        params?: Record<string, unknown>;
     };
-    input?: any;
+    input?: unknown;
     dependsOn?: string[];
 }
 /**

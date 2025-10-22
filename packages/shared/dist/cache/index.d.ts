@@ -117,15 +117,15 @@ export declare class AnalysisCache {
     /**
      * Get cached analysis result
      */
-    get(filePath: string, analysisType: string, fileHash: string, config?: any): any | undefined;
+    get(filePath: string, analysisType: string, fileHash: string, config?: Record<string, unknown>): unknown | undefined;
     /**
      * Cache analysis result
      */
-    set(filePath: string, analysisType: string, fileHash: string, result: any, config?: any): void;
+    set(filePath: string, analysisType: string, fileHash: string, result: unknown, config?: Record<string, unknown>): void;
     /**
      * Check if analysis is cached
      */
-    has(filePath: string, analysisType: string, fileHash: string, config?: any): boolean;
+    has(filePath: string, analysisType: string, fileHash: string, config?: Record<string, unknown>): boolean;
     /**
      * Invalidate cache for file
      */

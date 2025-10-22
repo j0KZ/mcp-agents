@@ -76,7 +76,7 @@ export class CodeAnalyzer {
     // Check cache
     const cached = this.analysisCache.get(filePath, 'code-review', fileHash);
     if (cached) {
-      return cached;
+      return cached as ReviewResult;
     }
 
     const issues = await detectIssues(content, filePath);

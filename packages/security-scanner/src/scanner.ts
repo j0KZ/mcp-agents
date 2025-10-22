@@ -76,8 +76,12 @@ export async function scanFile(
   const contentHash = generateHash(content);
 
   // Check cache
-  const configKey = JSON.stringify(config);
-  const cached = scanCache.get(filePath, 'security-scan', contentHash, configKey);
+  const cached = scanCache.get(
+    filePath,
+    'security-scan',
+    contentHash,
+    config as Record<string, unknown>
+  );
   if (cached) {
     return cached as SecurityFinding[];
   }
@@ -135,7 +139,7 @@ export async function scanFile(
   }
 
   // Cache the result
-  scanCache.set(filePath, 'security-scan', contentHash, result, configKey);
+  scanCache.set(filePath, 'security-scan', contentHash, result, config as Record<string, unknown>);
 
   return result;
 }

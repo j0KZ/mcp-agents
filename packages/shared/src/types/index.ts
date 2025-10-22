@@ -10,7 +10,7 @@ export interface MCPResult<T = any> {
   data?: T;
   error?: string;
   warnings?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   timestamp?: string;
 }
 
@@ -136,9 +136,9 @@ export interface PipelineStep {
   tool: string; // MCP name (e.g., 'smart-reviewer')
   config: MCPConfig & {
     action?: string; // Tool name to call (e.g., 'review_file')
-    params?: any; // Tool parameters
+    params?: Record<string, unknown>; // Tool parameters
   };
-  input?: any;
+  input?: unknown;
   dependsOn?: string[];
 }
 

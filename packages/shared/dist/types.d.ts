@@ -5,16 +5,22 @@ export interface Codebase {
     path: string;
     domain?: string;
     files?: CodeFile[];
-    history?: any;
+    history?: Record<string, unknown>;
+}
+export interface FunctionInfo {
+    name: string;
+    parameters?: string[];
+    returnType?: string;
+    complexity?: number;
 }
 export interface CodeFile {
     path: string;
     content?: string;
     complexity?: number;
     lines?: number;
-    functions?: any[];
+    functions?: FunctionInfo[];
     dependencies?: string[];
-    patterns?: any[];
+    patterns?: Pattern[];
 }
 export interface Pattern {
     id: string;
@@ -28,6 +34,6 @@ export interface Insight {
 }
 export interface Visualization {
     type: string;
-    data: any;
+    data: Record<string, unknown>;
 }
 //# sourceMappingURL=types.d.ts.map

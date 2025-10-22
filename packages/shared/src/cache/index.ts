@@ -229,7 +229,7 @@ export class AnalysisCache {
     filePath: string,
     analysisType: string,
     fileHash: string,
-    config?: any
+    config?: Record<string, unknown>
   ): string {
     const configHash = config ? generateHash(JSON.stringify(config)) : '';
     return `${analysisType}:${filePath}:${fileHash}:${configHash}`;
@@ -238,7 +238,12 @@ export class AnalysisCache {
   /**
    * Get cached analysis result
    */
-  get(filePath: string, analysisType: string, fileHash: string, config?: any): any | undefined {
+  get(
+    filePath: string,
+    analysisType: string,
+    fileHash: string,
+    config?: Record<string, unknown>
+  ): unknown | undefined {
     const key = this.generateKey(filePath, analysisType, fileHash, config);
     return this.cache.get(key);
   }
@@ -246,7 +251,13 @@ export class AnalysisCache {
   /**
    * Cache analysis result
    */
-  set(filePath: string, analysisType: string, fileHash: string, result: any, config?: any): void {
+  set(
+    filePath: string,
+    analysisType: string,
+    fileHash: string,
+    result: unknown,
+    config?: Record<string, unknown>
+  ): void {
     const key = this.generateKey(filePath, analysisType, fileHash, config);
     this.cache.set(key, result);
   }
@@ -254,7 +265,12 @@ export class AnalysisCache {
   /**
    * Check if analysis is cached
    */
-  has(filePath: string, analysisType: string, fileHash: string, config?: any): boolean {
+  has(
+    filePath: string,
+    analysisType: string,
+    fileHash: string,
+    config?: Record<string, unknown>
+  ): boolean {
     const key = this.generateKey(filePath, analysisType, fileHash, config);
     return this.cache.has(key);
   }
