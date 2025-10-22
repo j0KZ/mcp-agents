@@ -18,6 +18,7 @@
 - Run system commands
 
 **Example Tools:**
+
 - `bash` - Execute shell commands
 - `python` - Run Python code
 - `web_fetch` - Retrieve web pages
@@ -38,6 +39,7 @@
 - Output formatting preferences
 
 **Example Skills:**
+
 - `pdf-processing` - How to extract, merge, fill PDFs using file and code tools
 - `api-integration` - How to design robust API workflows using HTTP tools
 - `brand-guidelines` - How to apply visual identity using design tools
@@ -52,18 +54,21 @@
 Think of Claude as a skilled carpenter:
 
 ### Tools = Physical Tools
+
 - **Hammer** (bash command execution)
 - **Saw** (file reading/writing)
 - **Drill** (code execution)
 - **Measuring tape** (data validation)
 
-The carpenter *has* these tools but needs to know:
+The carpenter _has_ these tools but needs to know:
+
 - Which tool for which job?
 - In what order?
 - With what technique?
 - How to handle errors?
 
 ### Skills = Craft Knowledge
+
 - **"Building a Deck" Skill:**
   ```
   1. Measure and mark posts (use measuring tape)
@@ -117,6 +122,7 @@ Claude (with pdf-processing skill):
 ```
 
 **The Skill Provides:**
+
 - Tested code (scripts/fill_form.py)
 - Error handling patterns
 - Field mapping guidance (references/FORMS.md)
@@ -172,6 +178,7 @@ return format_user_summary(response.data)
 ```
 
 **The Skill Provides:**
+
 - Validated helper functions (scripts/api_helpers.py)
 - Error categorization logic
 - Idempotency patterns
@@ -207,6 +214,7 @@ return format_user_summary(response.data)
 ```
 
 **Example Workflow:**
+
 ```
 User: "Build a financial dashboard from this CSV"
 
@@ -239,6 +247,7 @@ skill-name/
 ```
 
 When Claude uses the skill:
+
 1. Loads SKILL.md (instructions)
 2. Executes scripts/helper.py via **python tool**
 3. Reads API_REFERENCE.md via **file_read tool**
@@ -253,18 +262,21 @@ When Claude uses the skill:
 ### Use Tools Directly When:
 
 ✅ **One-off, simple tasks**
+
 ```
 User: "Show me the files in the current directory"
 Claude: [Uses bash tool directly: `ls -la`]
 ```
 
 ✅ **Exploratory analysis**
+
 ```
 User: "What's in this JSON file?"
 Claude: [Uses file_read tool: reads and parses]
 ```
 
 ✅ **No established workflow exists**
+
 ```
 User: "Try parsing this unusual data format"
 Claude: [Experiments with tools to find approach]
@@ -273,24 +285,28 @@ Claude: [Experiments with tools to find approach]
 ### Use Skills When:
 
 ✅ **Repeatable workflows**
+
 ```
 User: "Generate weekly sales report" [5th time]
 Claude: [Loads sales-reporting skill → consistent process]
 ```
 
 ✅ **Complex, multi-step processes**
+
 ```
 User: "Build React component with accessibility"
 Claude: [Loads component-builder skill → validated patterns]
 ```
 
 ✅ **Domain-specific expertise required**
+
 ```
 User: "Create HIPAA-compliant data export"
 Claude: [Loads healthcare-compliance skill → regulations]
 ```
 
 ✅ **Quality/consistency critical**
+
 ```
 User: "Apply brand guidelines to presentation"
 Claude: [Loads brand-guidelines skill → standards enforcement]
@@ -304,25 +320,27 @@ Claude: [Loads brand-guidelines skill → standards enforcement]
 
 **Tools provide capabilities** → Skills provide wisdom
 
-| Aspect | Tools | Skills |
-|--------|-------|--------|
-| **What** | Specific actions | Workflows and processes |
-| **How** | Direct execution | Orchestration and guidance |
-| **When** | Any time | Context-dependent activation |
-| **Why** | Perform tasks | Ensure quality, consistency, best practices |
-| **Scope** | Single operation | Multi-step procedures |
-| **Knowledge** | None (stateless) | Domain expertise, patterns, conventions |
-| **Reusability** | Always available | Load when relevant |
+| Aspect          | Tools            | Skills                                      |
+| --------------- | ---------------- | ------------------------------------------- |
+| **What**        | Specific actions | Workflows and processes                     |
+| **How**         | Direct execution | Orchestration and guidance                  |
+| **When**        | Any time         | Context-dependent activation                |
+| **Why**         | Perform tasks    | Ensure quality, consistency, best practices |
+| **Scope**       | Single operation | Multi-step procedures                       |
+| **Knowledge**   | None (stateless) | Domain expertise, patterns, conventions     |
+| **Reusability** | Always available | Load when relevant                          |
 
 ### Example: Building a REST API Client
 
 **Tools Needed:**
+
 - `http_request` - Make API calls
 - `python` - Process responses
 - `file_write` - Save outputs
 - `json_parse` - Handle data
 
 **Skill Needed:**
+
 - `api-client-builder` skill:
   ```markdown
   1. Design client architecture (validate inputs)
@@ -335,6 +353,7 @@ Claude: [Loads brand-guidelines skill → standards enforcement]
   ```
 
 **Outcome:**
+
 - **Tools** execute the HTTP requests and file operations
 - **Skill** ensures the client is robust, maintainable, and follows best practices
 
@@ -360,6 +379,7 @@ Claude: [Loads brand-guidelines skill → standards enforcement]
 ```
 
 **MCP tools** are like adding new tools to Claude's toolbox:
+
 - New **actions** Claude can perform
 - Custom **capabilities** specific to your domain
 - **Extend** the base tool set
@@ -386,10 +406,11 @@ When reviewing code:
 ```
 
 **The skill teaches:**
-- *When* to use the analyze_code_quality MCP tool
-- *How* to interpret results
-- *What* to do with findings
-- *How* to validate fixes
+
+- _When_ to use the analyze_code_quality MCP tool
+- _How_ to interpret results
+- _What_ to do with findings
+- _How_ to validate fixes
 
 ---
 
@@ -406,16 +427,16 @@ When reviewing code:
 
 ## Practical Decision Matrix
 
-| Question | Answer | Use |
-|----------|--------|-----|
-| Is this a one-time exploratory task? | Yes | Tools directly |
-| Will this workflow be repeated? | Yes | Create a skill |
-| Do quality/consistency matter critically? | Yes | Create a skill |
-| Is domain expertise required? | Yes | Create a skill |
-| Is this a simple, well-known operation? | Yes | Tools directly |
-| Do you need to enforce standards? | Yes | Create a skill |
-| Are there multiple ways to accomplish it? | Yes | Create a skill (encode best way) |
-| Do you want to share this approach? | Yes | Create a skill |
+| Question                                  | Answer | Use                              |
+| ----------------------------------------- | ------ | -------------------------------- |
+| Is this a one-time exploratory task?      | Yes    | Tools directly                   |
+| Will this workflow be repeated?           | Yes    | Create a skill                   |
+| Do quality/consistency matter critically? | Yes    | Create a skill                   |
+| Is domain expertise required?             | Yes    | Create a skill                   |
+| Is this a simple, well-known operation?   | Yes    | Tools directly                   |
+| Do you need to enforce standards?         | Yes    | Create a skill                   |
+| Are there multiple ways to accomplish it? | Yes    | Create a skill (encode best way) |
+| Do you want to share this approach?       | Yes    | Create a skill                   |
 
 ---
 
@@ -429,6 +450,7 @@ When reviewing code:
 ---
 
 **Related Documentation:**
+
 - [What Are Skills?](what-are-skills.md)
 - [Progressive Disclosure](../04-best-practices/progressive-disclosure.md)
 - [Development Workflow](../06-development-workflow/creation-process.md)

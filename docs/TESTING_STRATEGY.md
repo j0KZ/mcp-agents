@@ -3,12 +3,14 @@
 ## Current State (v1.0.34)
 
 **Test Coverage:**
+
 - 244 passing tests across all test files
 - Statement coverage: 14.09% (target: 55%)
 - Branch coverage: 66.25% (target: 65%) ✅
 - Function coverage: 65.56% (target: 72%)
 
 **Quality Assessment:**
+
 - Most tests are **smoke tests** (6/10 quality)
 - Tests verify structure but not business logic
 - Missing edge cases and error scenarios
@@ -19,6 +21,7 @@
 ## The Problem: Current Tests Are Too Shallow
 
 ### Example of WEAK Test (Don't Do This)
+
 ```typescript
 // ❌ BAD - Only checks if something is returned
 it('should generate README', async () => {
@@ -29,18 +32,20 @@ it('should generate README', async () => {
 ```
 
 **Why it's weak:**
+
 - Doesn't verify the README content is correct
 - Doesn't check if required sections exist
 - Won't catch logic errors
 - Just checks "did it crash?"
 
 ### Example of STRONG Test (Do This)
+
 ```typescript
 // ✅ GOOD - Verifies actual behavior
 it('should generate README with installation section when configured', async () => {
   const result = await generateReadme('.', {
     includeInstallation: true,
-    projectName: 'my-project'
+    projectName: 'my-project',
   });
 
   expect(result.success).toBe(true);
@@ -52,6 +57,7 @@ it('should generate README with installation section when configured', async () 
 ```
 
 **Why it's strong:**
+
 - Tests specific configuration option
 - Verifies expected content exists
 - Checks actual output format
@@ -74,7 +80,7 @@ describe('generateOpenAPI()', () => {
       version: '1.0.0',
       style: 'REST' as const,
       resources: ['users'],
-      auth: { type: 'bearer' as const }
+      auth: { type: 'bearer' as const },
     };
 
     const result = target.generateOpenAPI(config);
@@ -110,8 +116,12 @@ export function divide(a: number, b: number): number {
 }
 
 export class Calculator {
-  add(x: number, y: number): number { return x + y; }
-  subtract(x: number, y: number): number { return x - y; }
+  add(x: number, y: number): number {
+    return x + y;
+  }
+  subtract(x: number, y: number): number {
+    return x - y;
+  }
 }
 
 // tests/generator.test.ts
@@ -120,7 +130,7 @@ it('should generate edge case tests for error-throwing functions', async () => {
 
   const result = await generator.generateTests(fixturePath, {
     includeEdgeCases: true,
-    includeErrorCases: true
+    includeErrorCases: true,
   });
 
   expect(result.success).toBe(true);
@@ -130,7 +140,7 @@ it('should generate edge case tests for error-throwing functions', async () => {
   expect(result.code).toContain('Division by zero');
 
   // Verify tests for Calculator class
-  expect(result.code).toContain('describe(\'Calculator\'');
+  expect(result.code).toContain("describe('Calculator'");
   expect(result.suite?.tests.length).toBeGreaterThanOrEqual(6); // 2 functions + 2 class methods + edge cases
 });
 ```
@@ -154,14 +164,14 @@ const vulnerableCode = {
   secrets: `
     const AWS_KEY = "AKIA" + "IOSFODNN7EXAMPLE";
     const STRIPE_KEY = "sk_test_" + "XXXXXXXXXXXXXXXXXXXX";
-  `
+  `,
 };
 
 describe('Security Scanner - Real Vulnerability Detection', () => {
   it('should detect SQL injection with line numbers', async () => {
     const result = await scanForSQLInjection({
       content: vulnerableCode.sqlInjection,
-      filePath: 'test.js'
+      filePath: 'test.js',
     });
 
     expect(result.length).toBeGreaterThan(0);
@@ -169,14 +179,14 @@ describe('Security Scanner - Real Vulnerability Detection', () => {
       type: 'sql_injection',
       severity: 'high',
       message: expect.stringContaining('String concatenation in SQL query'),
-      line: expect.any(Number)
+      line: expect.any(Number),
     });
   });
 
   it('should detect multiple XSS vulnerabilities', async () => {
     const result = await scanForXSS({
       content: vulnerableCode.xss,
-      filePath: 'test.js'
+      filePath: 'test.js',
     });
 
     expect(result.length).toBe(2); // innerHTML + eval
@@ -192,7 +202,7 @@ describe('Security Scanner - Real Vulnerability Detection', () => {
   it('should detect and categorize different secret types', async () => {
     const result = await scanForSecrets({
       content: vulnerableCode.secrets,
-      filePath: 'config.js'
+      filePath: 'config.js',
     });
 
     expect(result.length).toBe(2);
@@ -258,7 +268,7 @@ describe('Code Metrics Calculation', () => {
 **Problem:** Tests don't check if generated docs are actually useful
 **Solution:** Verify required sections and markdown structure
 
-```typescript
+````typescript
 describe('README Generation - Content Verification', () => {
   it('should generate complete README with all sections', async () => {
     const result = await generateReadme('.', {
@@ -266,7 +276,7 @@ describe('README Generation - Content Verification', () => {
       includeUsage: true,
       includeTOC: true,
       includeBadges: true,
-      includeAPI: true
+      includeAPI: true,
     });
 
     expect(result.success).toBe(true);
@@ -301,7 +311,7 @@ describe('README Generation - Content Verification', () => {
     expect(codeBlockCount % 2).toBe(0); // Must be even
   });
 });
-```
+````
 
 ### 6. **Architecture Analyzer** - Test with Real Projects
 
@@ -314,10 +324,9 @@ describe('Architecture Analysis - Real Package', () => {
     const analyzer = new ArchitectureAnalyzer();
 
     // Use api-designer package which has generators/ subfolder
-    const result = await analyzer.analyzeArchitecture(
-      path.join(__dirname, '../../api-designer'),
-      { detectCircular: true }
-    );
+    const result = await analyzer.analyzeArchitecture(path.join(__dirname, '../../api-designer'), {
+      detectCircular: true,
+    });
 
     expect(result.modules.length).toBeGreaterThan(5);
     expect(result.dependencies).toBeDefined();
@@ -336,10 +345,9 @@ describe('Architecture Analysis - Real Package', () => {
   it('should generate dependency graph in mermaid format', async () => {
     const analyzer = new ArchitectureAnalyzer();
 
-    const result = await analyzer.analyzeArchitecture(
-      path.join(__dirname, '../../api-designer'),
-      { generateGraph: true }
-    );
+    const result = await analyzer.analyzeArchitecture(path.join(__dirname, '../../api-designer'), {
+      generateGraph: true,
+    });
 
     expect(result.graph).toBeDefined();
     expect(result.graph).toContain('graph TD');
@@ -353,6 +361,7 @@ describe('Architecture Analysis - Real Package', () => {
 ## Testing Anti-Patterns to Avoid
 
 ### ❌ Don't Just Check "toBeDefined"
+
 ```typescript
 // BAD
 it('should work', async () => {
@@ -362,6 +371,7 @@ it('should work', async () => {
 ```
 
 ### ❌ Don't Test Implementation Details
+
 ```typescript
 // BAD - Tests internal variable names
 it('should create cache', () => {
@@ -371,6 +381,7 @@ it('should create cache', () => {
 ```
 
 ### ❌ Don't Have Tests That Can't Fail
+
 ```typescript
 // BAD - This will never fail
 it('should return array', async () => {
@@ -380,6 +391,7 @@ it('should return array', async () => {
 ```
 
 ### ❌ Don't Skip Negative Test Cases
+
 ```typescript
 // BAD - Only tests happy path
 it('should parse code', () => {
@@ -459,22 +471,26 @@ describe('FeatureName', () => {
 ## Action Plan: Reaching 55% Coverage
 
 ### Phase 1: Fix Existing Tests (Week 1)
+
 - [ ] Rewrite security-scanner tests with real vulnerability fixtures
 - [ ] Add snapshot testing to api-designer
 - [ ] Add fixture files to test-generator tests
 - [ ] Verify smart-reviewer metrics calculations
 
 ### Phase 2: Add Integration Tests (Week 2)
+
 - [ ] Create end-to-end workflow tests for orchestrator
 - [ ] Test MCP server responses
 - [ ] Test cross-package integration
 
 ### Phase 3: Add Property-Based Tests (Week 3)
+
 - [ ] Use fast-check for generators (OpenAPI, GraphQL)
 - [ ] Test refactoring operations preserve behavior
 - [ ] Test security scanner with random inputs
 
 ### Phase 4: Performance Tests (Week 4)
+
 - [ ] Benchmark large file analysis
 - [ ] Test caching effectiveness
 - [ ] Memory leak detection
@@ -484,15 +500,18 @@ describe('FeatureName', () => {
 ## Tools & Resources
 
 **Testing Frameworks:**
+
 - Vitest (current) - Fast, ESM-first
 - fast-check - Property-based testing
 - msw - API mocking
 
 **Coverage Tools:**
+
 - c8/v8 (current) - Native coverage
 - istanbul - Alternative coverage
 
 **Best Practices:**
+
 - [Kent C. Dodds - Testing Trophy](https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications)
 - [Martin Fowler - Test Pyramid](https://martinfowler.com/articles/practical-test-pyramid.html)
 
@@ -501,6 +520,7 @@ describe('FeatureName', () => {
 ## Quick Reference: Test Recipes
 
 ### Recipe 1: Testing File Operations
+
 ```typescript
 import { writeFileSync, mkdirSync } from 'fs';
 import { tmpdir } from 'os';
@@ -516,20 +536,20 @@ function createTempFile(content: string): string {
 ```
 
 ### Recipe 2: Testing Async Operations
+
 ```typescript
 it('should complete within timeout', async () => {
   const promise = longRunningOperation();
   const result = await Promise.race([
     promise,
-    new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('timeout')), 5000)
-    )
+    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000)),
   ]);
   expect(result).toBeDefined();
 });
 ```
 
 ### Recipe 3: Testing Error Messages
+
 ```typescript
 it('should provide helpful error message', async () => {
   try {

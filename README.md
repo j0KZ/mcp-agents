@@ -26,6 +26,7 @@ npx @j0kz/mcp-agents@latest
 ```
 
 That's it! The installer automatically:
+
 - ✅ Detects your editor (Claude, Cursor, Windsurf, Qoder, VS Code, Roo, etc.)
 - ✅ Configures all 9 MCP tools with universal compatibility
 - ✅ Adds proper `type: stdio` for maximum compatibility
@@ -57,11 +58,13 @@ npx @j0kz/mcp-agents@latest roo       # Roo Code
 After restarting your editor, try one of these commands:
 
 ### Quick Health Check
+
 ```
 "Check MCP server status"
 ```
 
 ### Your First Command
+
 ```
 "Review my package.json"
 "Revisar mi package.json"
@@ -75,6 +78,7 @@ After restarting your editor, try one of these commands:
 ### Common Issues & Solutions
 
 **❌ Tools not appearing in chat?**
+
 - Solution: Restart your editor completely (close all windows)
 - If still not working: Clear npm cache and reinstall
   ```bash
@@ -83,16 +87,19 @@ After restarting your editor, try one of these commands:
   ```
 
 **❌ Commands not recognized?**
+
 - Try both English and Spanish variants
 - Use natural language: "Review this file" instead of technical syntax
 - Ask: "What MCP tools are available?" to see loaded tools
 
 **❌ Installation failed?**
+
 - Check you're on Node.js 18+ (`node --version`)
 - Try with sudo/admin if permission issues
 - Check your editor's config file was updated correctly
 
 **❌ "Module not found" errors?**
+
 - Run: `npm cache clean --force`
 - Reinstall: `npx @j0kz/mcp-agents@latest`
 - Restart editor
@@ -115,6 +122,7 @@ Each tool below includes **clear examples in English and Spanish** with expected
 Just ask Claude naturally - the tool understands both languages:
 
 #### English Examples
+
 ```
 "Review my auth.js file"
 "Check this file for code smells"
@@ -124,6 +132,7 @@ Just ask Claude naturally - the tool understands both languages:
 ```
 
 #### Spanish Examples (Ejemplos en Español)
+
 ```
 "Revisar mi archivo auth.js"
 "Revisar este archivo"
@@ -155,6 +164,7 @@ Just ask Claude naturally - the tool understands both languages:
 ```
 
 ### Features
+
 - Quality metrics (complexity, maintainability, LOC)
 - Auto-fix generation using Pareto principle (80/20 rule)
 - Pattern detection and best practices
@@ -169,6 +179,7 @@ Just ask Claude naturally - the tool understands both languages:
 ### How to Use
 
 #### English Examples
+
 ```
 "Generate tests for calculatePrice function"
 "Create tests for UserService class"
@@ -178,6 +189,7 @@ Just ask Claude naturally - the tool understands both languages:
 ```
 
 #### Spanish Examples (Ejemplos en Español)
+
 ```
 "Generar pruebas para la función calculatePrice"
 "Generar tests para calculatePrice"
@@ -220,6 +232,7 @@ Boundary Conditions (5 tests):
 ```
 
 ### Features
+
 - Multiple framework support (Jest, Mocha, Vitest, AVA)
 - Edge case detection
 - Mock generation
@@ -234,6 +247,7 @@ Boundary Conditions (5 tests):
 ### How to Use
 
 #### English Examples
+
 ```
 "Analyze project architecture"
 "Find circular dependencies"
@@ -243,6 +257,7 @@ Boundary Conditions (5 tests):
 ```
 
 #### Spanish Examples (Ejemplos en Español)
+
 ```
 "Analizar arquitectura del proyecto"
 "Analizar estructura del proyecto"
@@ -254,7 +269,7 @@ Boundary Conditions (5 tests):
 
 ### What You Get
 
-```javascript
+````javascript
 ✓ Architecture Analysis Complete
 
 🔍 Project Structure:
@@ -282,12 +297,14 @@ graph TD
     B --> C[permissions.js]
     C --> A
     ...
-```
+````
 
 💡 Suggestions:
-  - Break circular dependency in auth module
-  - Add abstraction layer for data access
-  - Consider splitting large modules
+
+- Break circular dependency in auth module
+- Add abstraction layer for data access
+- Consider splitting large modules
+
 ```
 
 ### Features
@@ -306,22 +323,26 @@ graph TD
 
 #### English Examples
 ```
+
 "Scan for security vulnerabilities"
 "Check for SQL injection"
 "Find hardcoded secrets"
 "Scan the entire project for security issues"
 "Check auth.js for XSS vulnerabilities"
+
 ```
 
 #### Spanish Examples (Ejemplos en Español)
 ```
+
 "Escanear vulnerabilidades"
 "Escanear seguridad"
 "Buscar secretos hardcodeados"
 "Revisar inyección SQL"
 "Escanear todo el proyecto por problemas de seguridad"
 "Revisar auth.js por vulnerabilidades XSS"
-```
+
+````
 
 ### What You Get
 
@@ -367,9 +388,10 @@ MEDIUM (1):
   - High: 3
   - Medium: 1
   - Low: 0
-```
+````
 
 ### Features
+
 - OWASP Top 10 detection
 - Secret scanning (20+ patterns: API keys, passwords, tokens)
 - SQL injection & XSS detection
@@ -385,6 +407,7 @@ MEDIUM (1):
 ### How to Use
 
 #### English Examples
+
 ```
 "Design REST API for users and posts"
 "Create GraphQL schema for a blog"
@@ -394,6 +417,7 @@ MEDIUM (1):
 ```
 
 #### Spanish Examples (Ejemplos en Español)
+
 ```
 "Diseñar API REST para usuarios y posts"
 "Diseñar API para usuarios"
@@ -432,6 +456,7 @@ Posts Resource:
 ```
 
 ### Features
+
 - REST & GraphQL API design
 - OpenAPI 3.0 specification generation
 - Client SDK generation (TypeScript, Python, Java, etc.)
@@ -447,6 +472,7 @@ Posts Resource:
 ### How to Use
 
 #### English Examples
+
 ```
 "Design database schema for a blog"
 "Create schema for users, posts, and comments"
@@ -456,6 +482,7 @@ Posts Resource:
 ```
 
 #### Spanish Examples (Ejemplos en Español)
+
 ```
 "Diseñar esquema de base de datos para un blog"
 "Diseñar schema para blog"
@@ -509,6 +536,7 @@ CREATE INDEX idx_posts_published ON posts(published);
 ```
 
 ### Features
+
 - SQL (PostgreSQL, MySQL) & NoSQL (MongoDB) support
 - Automatic normalization (1NF, 2NF, 3NF, BCNF)
 - Migration generation (up/down)
@@ -524,6 +552,7 @@ CREATE INDEX idx_posts_published ON posts(published);
 ### How to Use
 
 #### English Examples
+
 ```
 "Generate README for this project"
 "Add JSDoc comments to auth.js"
@@ -533,6 +562,7 @@ CREATE INDEX idx_posts_published ON posts(published);
 ```
 
 #### Spanish Examples (Ejemplos en Español)
+
 ```
 "Generar README para este proyecto"
 "Generar README"
@@ -547,41 +577,50 @@ CREATE INDEX idx_posts_published ON posts(published);
 ✓ Documentation Generated
 
 📄 README.md created with:
-  - Project description
-  - Installation instructions
-  - Usage examples
-  - API reference
-  - Badges (build, coverage, version)
-  - Table of contents
-  - Contributing guidelines
-  - License info
+
+- Project description
+- Installation instructions
+- Usage examples
+- API reference
+- Badges (build, coverage, version)
+- Table of contents
+- Contributing guidelines
+- License info
 
 📝 JSDoc comments added (24 functions):
-  /**
-   * Authenticates a user with email and password
-   * @param {string} email - User's email address
-   * @param {string} password - User's password (plain text)
-   * @returns {Promise<User>} Authenticated user object
-   * @throws {AuthError} If credentials are invalid
-   */
+/\*\*
+
+- Authenticates a user with email and password
+- @param {string} email - User's email address
+- @param {string} password - User's password (plain text)
+- @returns {Promise<User>} Authenticated user object
+- @throws {AuthError} If credentials are invalid
+  \*/
   async function authenticateUser(email, password) { ... }
 
 📊 API Documentation generated:
-  - All endpoints documented
-  - Request/response examples
-  - Authentication requirements
-  - Error codes and messages
+
+- All endpoints documented
+- Request/response examples
+- Authentication requirements
+- Error codes and messages
 
 📜 CHANGELOG.md updated:
-  ## [1.2.0] - 2025-01-15
-  ### Added
-  - User authentication system
-  - Password reset functionality
-  ### Fixed
-  - Memory leak in event handlers
+
+## [1.2.0] - 2025-01-15
+
+### Added
+
+- User authentication system
+- Password reset functionality
+
+### Fixed
+
+- Memory leak in event handlers
 ```
 
 ### Features
+
 - README generation (with badges, TOC, examples)
 - JSDoc/TSDoc comment generation
 - API documentation (from code)
@@ -597,6 +636,7 @@ CREATE INDEX idx_posts_published ON posts(published);
 ### How to Use
 
 #### English Examples
+
 ```
 "Extract this code block into a function"
 "Convert callbacks to async/await in api.js"
@@ -606,6 +646,7 @@ CREATE INDEX idx_posts_published ON posts(published);
 ```
 
 #### Spanish Examples (Ejemplos en Español)
+
 ```
 "Extraer este bloque de código en una función"
 "Refactorizar este código"
@@ -651,6 +692,7 @@ After (7 lines, async/await):
 ```
 
 ### Features
+
 - Extract function/method/class
 - Convert callbacks to async/await
 - Simplify conditionals (guard clauses, ternary)
@@ -667,6 +709,7 @@ After (7 lines, async/await):
 ### How to Use
 
 #### English Examples
+
 ```
 "Review, test, and document auth.js"
 "Full security audit of the project"
@@ -676,6 +719,7 @@ After (7 lines, async/await):
 ```
 
 #### Spanish Examples (Ejemplos en Español)
+
 ```
 "Revisar, probar y documentar auth.js"
 "Auditoría de seguridad completa del proyecto"
@@ -720,6 +764,7 @@ After (7 lines, async/await):
 ```
 
 ### Features
+
 - Chain multiple MCP tools
 - Pre-built workflows (quality check, security audit, full docs)
 - Conditional execution (skip steps on errors)
@@ -735,15 +780,15 @@ After (7 lines, async/await):
 
 <div align="center">
 
-| Resource | Description |
-|----------|-------------|
-| [**📖 Wiki**](https://github.com/j0KZ/mcp-agents/wiki) | Complete documentation |
-| [**🚀 Quick Start**](https://github.com/j0KZ/mcp-agents/wiki/Quick-Start) | Get started in 5 minutes |
-| [**🔧 Configuration**](https://github.com/j0KZ/mcp-agents/wiki/Configuration) | Editor setup guides |
-| [**💡 Examples**](examples/) | Real-world usage patterns |
-| [**🧠 Claude Skills**](docs/claude_skills/) | 10 production-ready Claude Code skills (optimized) |
-| [**🐛 Troubleshooting**](https://github.com/j0KZ/mcp-agents/wiki/Troubleshooting) | Common issues & solutions |
-| [**📋 Changelog**](CHANGELOG.md) | What's new in each version |
+| Resource                                                                          | Description                                        |
+| --------------------------------------------------------------------------------- | -------------------------------------------------- |
+| [**📖 Wiki**](https://github.com/j0KZ/mcp-agents/wiki)                            | Complete documentation                             |
+| [**🚀 Quick Start**](https://github.com/j0KZ/mcp-agents/wiki/Quick-Start)         | Get started in 5 minutes                           |
+| [**🔧 Configuration**](https://github.com/j0KZ/mcp-agents/wiki/Configuration)     | Editor setup guides                                |
+| [**💡 Examples**](examples/)                                                      | Real-world usage patterns                          |
+| [**🧠 Claude Skills**](docs/claude_skills/)                                       | 10 production-ready Claude Code skills (optimized) |
+| [**🐛 Troubleshooting**](https://github.com/j0KZ/mcp-agents/wiki/Troubleshooting) | Common issues & solutions                          |
+| [**📋 Changelog**](CHANGELOG.md)                                                  | What's new in each version                         |
 
 </div>
 
@@ -776,6 +821,7 @@ Skills include: git-pr-workflow, testing-patterns-vitest, documentation-generati
 ```
 
 **Smart Auto-Detection:**
+
 - ✅ File: IDE selection → git staged → current file → ask
 - ✅ Severity: Strict for main/release, moderate for features, lenient for experimental
 - ✅ Framework: Auto-detect from package.json
@@ -791,6 +837,7 @@ npm run hooks:install
 ```
 
 **Three hooks, three layers of defense:**
+
 - ⚡ **pre-commit** (~30s): ESLint, Prettier, TypeScript, code review
 - 🔍 **commit-msg** (~1s): Conventional commits validation
 - 🛡️ **pre-push** (~2-5min): Full test suite, coverage, build, security

@@ -3,11 +3,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import os from 'os';
 import { execa } from 'execa';
-import {
-  detectProject,
-  getRecommendedMCPs,
-  type ProjectInfo,
-} from '../src/detectors/project.js';
+import { detectProject, getRecommendedMCPs, type ProjectInfo } from '../src/detectors/project.js';
 import {
   detectEditor,
   detectInstalledEditors,
@@ -28,9 +24,7 @@ describe('Project Detection (Real Scenarios)', () => {
     it('should detect TypeScript project with package.json', async () => {
       vi.mocked(fs.pathExists).mockImplementation(async (p: any) => {
         const pathStr = p.toString();
-        return (
-          pathStr.endsWith('package.json') || pathStr.endsWith('tsconfig.json')
-        );
+        return pathStr.endsWith('package.json') || pathStr.endsWith('tsconfig.json');
       });
 
       vi.mocked(fs.readJSON).mockResolvedValue({
@@ -150,10 +144,7 @@ describe('Project Detection (Real Scenarios)', () => {
     it('should detect Python project with requirements.txt', async () => {
       vi.mocked(fs.pathExists).mockImplementation(async (p: any) => {
         const pathStr = p.toString();
-        return (
-          pathStr.endsWith('requirements.txt') &&
-          !pathStr.endsWith('package.json')
-        );
+        return pathStr.endsWith('requirements.txt') && !pathStr.endsWith('package.json');
       });
 
       const info = await detectProject();

@@ -159,7 +159,9 @@ describe('ConfigAdapter', () => {
 
       const result = ConfigAdapter.validate(config);
 
-      expect(result.warnings).toContain('Using @latest may cause version inconsistencies. Consider pinning versions.');
+      expect(result.warnings).toContain(
+        'Using @latest may cause version inconsistencies. Consider pinning versions.'
+      );
     });
 
     it('should warn about missing NODE_ENV', () => {

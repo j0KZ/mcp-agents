@@ -12,13 +12,13 @@ Claude Skills are **organized folders of instructions, scripts, and resources** 
 
 Unlike one-off prompts sent in individual conversations, skills are:
 
-| Traditional Prompts | Skills |
-|-------------------|--------|
-| Written per conversation | Reusable across all conversations |
-| Lost after session ends | Persistent and versioned |
-| Static and unchanging | Can bundle executable code |
-| Consume full context | Progressive disclosure (only load what's needed) |
-| Limited to text | Can include scripts, templates, data |
+| Traditional Prompts      | Skills                                           |
+| ------------------------ | ------------------------------------------------ |
+| Written per conversation | Reusable across all conversations                |
+| Lost after session ends  | Persistent and versioned                         |
+| Static and unchanging    | Can bundle executable code                       |
+| Consume full context     | Progressive disclosure (only load what's needed) |
+| Limited to text          | Can include scripts, templates, data             |
 
 ---
 
@@ -143,27 +143,35 @@ Claude:
 ## Key Benefits
 
 ### 1. Specialization
+
 Transform general-purpose Claude into domain-specific experts:
+
 - Financial modeling specialist
 - Brand guideline enforcer
 - API integration expert
 - Testing automation wizard
 
 ### 2. Reusability
+
 Create once, use everywhere:
+
 - Same skill works across all conversations
 - Share with team members or community
 - Version and update centrally
 - No copy-pasting instructions
 
 ### 3. Composition
+
 Combine multiple skills for complex workflows:
+
 - `brand-guidelines` + `pptx` = On-brand presentations
 - `api-integration` + `data-validation` = Robust API clients
 - `testing-framework` + `ci-cd-workflow` = Complete QA automation
 
 ### 4. Efficiency
+
 Optimize context window usage:
+
 - Metadata always loaded: ~100 tokens/skill
 - Instructions load only when needed: <5k tokens
 - Resources accessed via filesystem: 0 tokens
@@ -176,12 +184,14 @@ Optimize context window usage:
 ### Enterprise & Organizations
 
 **Brand Consistency:**
+
 ```yaml
 name: acme-brand-guidelines
 description: Enforces Acme Corp visual identity standards including colors (#FF6B35 primary), typography (Poppins headings), and design patterns. Use when creating marketing materials, presentations, or public-facing content.
 ```
 
 **Internal Communications:**
+
 ```yaml
 name: internal-comms-templates
 description: Professional email and announcement templates following company tone (friendly, concise, action-oriented). Use when drafting internal communications, team updates, or policy announcements.
@@ -190,12 +200,14 @@ description: Professional email and announcement templates following company ton
 ### Development & Technical
 
 **API Integration:**
+
 ```yaml
 name: stripe-api-workflows
 description: Implements Stripe payment workflows including customer creation, subscription management, and webhook handling. Use when integrating payment processing or managing billing operations.
 ```
 
 **Testing Automation:**
+
 ```yaml
 name: playwright-ui-testing
 description: Creates Playwright test scripts for web applications with selector strategies and assertion patterns. Use when writing UI tests or debugging test failures.
@@ -204,12 +216,14 @@ description: Creates Playwright test scripts for web applications with selector 
 ### Creative & Design
 
 **Generative Art:**
+
 ```yaml
 name: algorithmic-art-p5js
 description: Generates interactive p5.js art using particle systems, seeded randomness, and parameter-driven aesthetics. Use when creating generative visualizations or interactive experiences.
 ```
 
 **Design Systems:**
+
 ```yaml
 name: tailwind-component-builder
 description: Constructs React components using Tailwind CSS with shadcn/ui patterns and accessibility best practices. Use when building UI components or design systems.
@@ -218,6 +232,7 @@ description: Constructs React components using Tailwind CSS with shadcn/ui patte
 ### Meta & Automation
 
 **Skill Creation:**
+
 ```yaml
 name: skill-creator
 description: Guides the creation of new Claude Skills following best practices including progressive disclosure, context efficiency, and proper metadata formatting. Use when building custom skills or teaching others to create skills.
@@ -229,36 +244,36 @@ description: Guides the creation of new Claude Skills following best practices i
 
 ### Compared to Custom Agents
 
-| Custom Agents | Skills |
-|--------------|--------|
-| Purpose-built, single-use | Modular, composable |
+| Custom Agents               | Skills                    |
+| --------------------------- | ------------------------- |
+| Purpose-built, single-use   | Modular, composable       |
 | Require separate deployment | Work with existing Claude |
-| Fixed behavior | Adaptable to context |
-| Siloed knowledge | Shared across workflows |
+| Fixed behavior              | Adaptable to context      |
+| Siloed knowledge            | Shared across workflows   |
 
 **When to use skills:** Most domain-specific tasks
 **When to use custom agents:** Highly specialized, standalone applications
 
 ### Compared to Fine-Tuning
 
-| Fine-Tuning | Skills |
-|-------------|--------|
-| Requires training data | Just write instructions |
-| Time-consuming to update | Edit markdown file |
-| Opaque behavior changes | Transparent instruction sets |
-| Model-specific | Works across Claude versions |
+| Fine-Tuning              | Skills                       |
+| ------------------------ | ---------------------------- |
+| Requires training data   | Just write instructions      |
+| Time-consuming to update | Edit markdown file           |
+| Opaque behavior changes  | Transparent instruction sets |
+| Model-specific           | Works across Claude versions |
 
 **When to use skills:** Dynamic knowledge, frequently changing workflows
 **When to use fine-tuning:** Fundamental behavior shifts, tone/style adaptation
 
 ### Compared to RAG (Retrieval-Augmented Generation)
 
-| RAG | Skills |
-|-----|--------|
-| Best for large knowledge bases | Best for procedural workflows |
-| Retrieves relevant passages | Loads complete instruction sets |
-| Good for facts and reference | Good for processes and actions |
-| Requires vector database | Uses filesystem |
+| RAG                            | Skills                          |
+| ------------------------------ | ------------------------------- |
+| Best for large knowledge bases | Best for procedural workflows   |
+| Retrieves relevant passages    | Loads complete instruction sets |
+| Good for facts and reference   | Good for processes and actions  |
+| Requires vector database       | Uses filesystem                 |
 
 **When to use skills:** Workflow automation, procedural guidance
 **When to use RAG:** Large document corpuses, fact retrieval
@@ -268,13 +283,16 @@ description: Guides the creation of new Claude Skills following best practices i
 ## Real-World Example: PDF Processing Skill
 
 ### The Problem
+
 Users repeatedly ask Claude to:
+
 - Extract text from PDFs
 - Fill PDF forms with data
 - Merge multiple PDFs
 - Extract tables to CSV
 
 Each time requires explaining:
+
 - Which libraries to use
 - How to handle errors
 - Output format preferences
@@ -283,6 +301,7 @@ Each time requires explaining:
 ### The Solution: A Skill
 
 **File Structure:**
+
 ```
 pdf-processing/
 ├── SKILL.md              # Core workflow instructions
@@ -296,6 +315,7 @@ pdf-processing/
 ```
 
 **SKILL.md (Abbreviated):**
+
 ```markdown
 ---
 name: pdf-processing
@@ -307,23 +327,27 @@ description: Extracts text and tables from PDFs, fills forms, merges documents. 
 ## Core Workflows
 
 ### Text Extraction
+
 1. Validate PDF is readable (not encrypted)
 2. Run `scripts/extract_text.py <input.pdf>`
 3. Parse output for structured data if needed
 4. Handle errors gracefully (corrupted PDFs)
 
 ### Form Filling
+
 See references/FORMS.md for detailed field mapping.
 Run `scripts/fill_form.py <template.pdf> <data.json>`
 
 ### Merging Documents
+
 Validate all PDFs have compatible versions.
 Run `scripts/merge_pdfs.py <pdf1> <pdf2> ... <output>`
 ```
 
 **Result:**
+
 - User: "Extract tables from this PDF"
-- Claude: *Loads skill → Runs extract_text.py → Returns structured data*
+- Claude: _Loads skill → Runs extract_text.py → Returns structured data_
 - No need to re-explain the process each time
 - Consistent, validated approach
 - Reusable across all PDF tasks
@@ -333,17 +357,22 @@ Run `scripts/merge_pdfs.py <pdf1> <pdf2> ... <output>`
 ## Platform Availability
 
 ### Claude Code (VSCode Extension)
+
 ```bash
 /plugin marketplace add anthropics/skills
 ```
+
 Access to all public skills in the marketplace.
 
 ### Claude.ai (Web Interface)
+
 Available to **paid subscribers** (Pro, Team, Enterprise).
 Skills automatically available in conversations.
 
 ### Claude API (Programmatic)
+
 Requires beta headers:
+
 ```python
 import anthropic
 
@@ -382,6 +411,7 @@ response = client.messages.create(
 ---
 
 **Related Documentation:**
+
 - [Skill Structure](../03-skill-structure/anatomy.md)
 - [Best Practices](../04-best-practices/progressive-disclosure.md)
 - [Development Workflow](../06-development-workflow/creation-process.md)

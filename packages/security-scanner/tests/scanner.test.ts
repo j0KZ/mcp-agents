@@ -14,7 +14,7 @@ describe('Security Scanner Functions', () => {
       eval(userInput);
       document.innerHTML = userContent;
     `,
-    filePath: 'test.js'
+    filePath: 'test.js',
   };
 
   describe('scanForSQLInjection()', () => {
@@ -27,7 +27,7 @@ describe('Security Scanner Functions', () => {
     it('should detect string concatenation in SQL', async () => {
       const code = {
         content: 'const query = "SELECT * FROM users WHERE id = " + userId;',
-        filePath: 'test.js'
+        filePath: 'test.js',
       };
       const result = await target.scanForSQLInjection(code);
       expect(Array.isArray(result)).toBe(true);
@@ -36,7 +36,7 @@ describe('Security Scanner Functions', () => {
     it('should handle clean code without SQL injection', async () => {
       const code = {
         content: 'const greeting = "Hello, " + name;',
-        filePath: 'test.js'
+        filePath: 'test.js',
       };
       const result = await target.scanForSQLInjection(code);
       expect(Array.isArray(result)).toBe(true);
@@ -53,7 +53,7 @@ describe('Security Scanner Functions', () => {
     it('should detect innerHTML usage', async () => {
       const code = {
         content: 'document.getElementById("test").innerHTML = userInput;',
-        filePath: 'test.js'
+        filePath: 'test.js',
       };
       const result = await target.scanForXSS(code);
       expect(Array.isArray(result)).toBe(true);
@@ -62,7 +62,7 @@ describe('Security Scanner Functions', () => {
     it('should detect eval usage', async () => {
       const code = {
         content: 'eval(userCode);',
-        filePath: 'test.js'
+        filePath: 'test.js',
       };
       const result = await target.scanForXSS(code);
       expect(Array.isArray(result)).toBe(true);
@@ -71,7 +71,7 @@ describe('Security Scanner Functions', () => {
     it('should detect dangerouslySetInnerHTML', async () => {
       const code = {
         content: '<div dangerouslySetInnerHTML={{ __html: userContent }} />',
-        filePath: 'test.jsx'
+        filePath: 'test.jsx',
       };
       const result = await target.scanForXSS(code);
       expect(Array.isArray(result)).toBe(true);
@@ -82,7 +82,7 @@ describe('Security Scanner Functions', () => {
     it('should scan for secrets', async () => {
       const codeWithSecret = {
         content: 'const apiKey = "sk_test_12345abcdef";',
-        filePath: 'test.js'
+        filePath: 'test.js',
       };
       const result = await target.scanForSecrets(codeWithSecret);
       expect(result).toBeDefined();
@@ -92,7 +92,7 @@ describe('Security Scanner Functions', () => {
     it('should detect API keys', async () => {
       const code = {
         content: 'const key = "AIzaSyD-9tN_ABCDEFGHIJKLMNOPQRSTUVWXYZ";',
-        filePath: 'test.js'
+        filePath: 'test.js',
       };
       const result = await target.scanForSecrets(code);
       expect(Array.isArray(result)).toBe(true);
@@ -101,7 +101,7 @@ describe('Security Scanner Functions', () => {
     it('should detect AWS keys', async () => {
       const code = {
         content: 'const aws = "AKIAIOSFODNN7EXAMPLE";',
-        filePath: 'test.js'
+        filePath: 'test.js',
       };
       const result = await target.scanForSecrets(code);
       expect(Array.isArray(result)).toBe(true);
@@ -110,7 +110,7 @@ describe('Security Scanner Functions', () => {
     it('should detect private keys', async () => {
       const code = {
         content: '-----BEGIN RSA PRIVATE KEY-----',
-        filePath: 'test.js'
+        filePath: 'test.js',
       };
       const result = await target.scanForSecrets(code);
       expect(Array.isArray(result)).toBe(true);
@@ -119,7 +119,7 @@ describe('Security Scanner Functions', () => {
     it('should handle code without secrets', async () => {
       const code = {
         content: 'const name = "John Doe";',
-        filePath: 'test.js'
+        filePath: 'test.js',
       };
       const result = await target.scanForSecrets(code);
       expect(Array.isArray(result)).toBe(true);
@@ -175,7 +175,7 @@ describe('Security Scanner Functions', () => {
     it('should detect path traversal attempts', async () => {
       const code = {
         content: 'const filePath = "../../../etc/passwd";',
-        filePath: 'test.js'
+        filePath: 'test.js',
       };
       // This would be part of scanFile functionality
       expect(code.content).toContain('..');
@@ -186,7 +186,7 @@ describe('Security Scanner Functions', () => {
     it('should detect command injection patterns', async () => {
       const code = {
         content: 'exec("ls -la " + userInput);',
-        filePath: 'test.js'
+        filePath: 'test.js',
       };
       expect(code.content).toContain('exec');
     });

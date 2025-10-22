@@ -15,6 +15,7 @@ These files are **NOT committed to git** but are preserved locally for recovery.
 **Filename:** `work-{YYYY-MM-DD}-{description}.md`
 
 **Required sections:**
+
 - **Timestamp**: When work started
 - **Purpose**: What we're building and why
 - **Files created/modified**: Full list with paths
@@ -25,6 +26,7 @@ These files are **NOT committed to git** but are preserved locally for recovery.
 ## When Logs Are Created
 
 Logs are created for:
+
 - ✅ Research and experimental code
 - ✅ Proof-of-concept implementations
 - ✅ Features spanning multiple files
@@ -32,6 +34,7 @@ Logs are created for:
 - ✅ User-requested documentation
 
 Logs are NOT created for:
+
 - ❌ Simple bug fixes (1-2 line changes)
 - ❌ Routine maintenance
 - ❌ Documentation-only updates
@@ -40,6 +43,7 @@ Logs are NOT created for:
 ## Recovery Process
 
 If files are accidentally deleted:
+
 1. Check this `logs/` directory for recent work logs
 2. Read the log to understand what was built
 3. Use code snippets and descriptions to recreate

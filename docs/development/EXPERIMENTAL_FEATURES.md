@@ -23,6 +23,7 @@ Experimental features are **fully implemented, advanced functionality** that is 
 **What it adds:** Instead of manually choosing workflows, describe what you want and let AI figure out the best tool combination.
 
 **Files:**
+
 - `intelligent-orchestrator.ts` (1,507 LOC) - AI-powered task analysis and tool selection
 - `specialization-system.ts` (1,338 LOC) - Tool expertise and routing
 - `conflict-resolver.ts` (1,050 LOC) - Resolves conflicts between tool outputs
@@ -43,10 +44,12 @@ Experimental features are **fully implemented, advanced functionality** that is 
 **What it adds:** Instead of generic tests, generates tests that understand what your code does.
 
 **Files:**
+
 - `intelligent-generator.ts` (674 LOC) - Pattern recognition and smart test generation
 - `intelligent-generator-v2.ts` - Enhanced version (TBD)
 
 **Key Features:**
+
 - Recognizes function purposes (validation, CRUD, async, etc.)
 - Generates realistic test data (emails, URLs, dates)
 - Provides confidence scores
@@ -67,6 +70,7 @@ Experimental features are **fully implemented, advanced functionality** that is 
 **What it adds:** AI-powered code understanding, learning, and intelligence systems.
 
 **Directories:**
+
 - `communication/` - MessageBus for inter-MCP communication
 - `metrics/` - PerformanceTracker for tool monitoring
 - `intelligence/` (5 files, ~4,700 LOC) - Code understanding & reasoning
@@ -74,6 +78,7 @@ Experimental features are **fully implemented, advanced functionality** that is 
 - `transcendence/` (5 files, ~6,000 LOC) - Advanced AI capabilities
 
 **Key Systems:**
+
 - **SemanticAnalyzer**: Understands what code means, not just what it says
 - **DomainKnowledgeBase**: Domain-specific rules (fintech, healthcare, etc.)
 - **ExplanationEngine**: Explains AI decisions in human terms
@@ -91,18 +96,21 @@ Experimental features are **fully implemented, advanced functionality** that is 
 ## Roadmap
 
 ### Short Term (Next 3 months)
+
 - [ ] Refactor high-complexity files (reduce from 278 to <50)
 - [ ] Extract constants and remove magic numbers
 - [ ] Add comprehensive tests
 - [ ] Performance profiling and optimization
 
 ### Medium Term (3-6 months)
+
 - [ ] Integrate MessageBus and PerformanceTracker (low risk)
 - [ ] Beta test IntelligentTestGenerator
 - [ ] Export core intelligence utilities
 - [ ] Create MVP of intelligent orchestration
 
 ### Long Term (6-12 months)
+
 - [ ] Full intelligence system integration
 - [ ] Learning and self-improvement features
 - [ ] Natural language orchestration
@@ -113,6 +121,7 @@ Experimental features are **fully implemented, advanced functionality** that is 
 ## How to Explore
 
 Each experimental directory has a detailed README with:
+
 - Feature descriptions
 - Architecture diagrams
 - Code examples
@@ -121,6 +130,7 @@ Each experimental directory has a detailed README with:
 - Security concerns
 
 **Start here:**
+
 1. [Orchestrator Experimental Features](packages/orchestrator-mcp/experimental/README.md)
 2. [Test Generator Experimental Features](packages/test-generator/experimental/README.md)
 3. [Shared AI Utilities](packages/shared/experimental/README.md)

@@ -26,7 +26,7 @@ class ImprovementValidator {
       'db-schema',
       'doc-generator',
       'orchestrator-mcp',
-      'config-wizard'
+      'config-wizard',
     ];
   }
 
@@ -38,7 +38,7 @@ class ImprovementValidator {
 
     const metrics = {
       timestamp: new Date().toISOString(),
-      packages: {}
+      packages: {},
     };
 
     for (const pkg of this.packages) {
@@ -65,7 +65,7 @@ class ImprovementValidator {
         testCount: this.getTestCount(pkgPath),
 
         // Package Size
-        bundleSize: this.getBundleSize(pkgPath)
+        bundleSize: this.getBundleSize(pkgPath),
       };
     }
 
@@ -91,7 +91,13 @@ class ImprovementValidator {
     const current = await this.captureBaseline();
 
     console.log('\n📈 Improvement Report:\n');
-    console.log('Package'.padEnd(20) + 'Metric'.padEnd(15) + 'Before'.padEnd(10) + 'After'.padEnd(10) + 'Change');
+    console.log(
+      'Package'.padEnd(20) +
+        'Metric'.padEnd(15) +
+        'Before'.padEnd(10) +
+        'After'.padEnd(10) +
+        'Change'
+    );
     console.log('-'.repeat(65));
 
     let improvements = 0;
@@ -104,7 +110,14 @@ class ImprovementValidator {
       // Coverage should increase
       if (before.coverage && after.coverage) {
         const change = after.coverage.percent - before.coverage.percent;
-        this.reportChange(pkg, 'Coverage', before.coverage.percent, after.coverage.percent, change, true);
+        this.reportChange(
+          pkg,
+          'Coverage',
+          before.coverage.percent,
+          after.coverage.percent,
+          change,
+          true
+        );
         if (change > 0) improvements++;
         else if (change < 0) regressions++;
       }
@@ -120,7 +133,14 @@ class ImprovementValidator {
       // ESLint issues should decrease
       if (before.eslintIssues !== undefined && after.eslintIssues !== undefined) {
         const change = after.eslintIssues - before.eslintIssues;
-        this.reportChange(pkg, 'ESLint Issues', before.eslintIssues, after.eslintIssues, -change, false);
+        this.reportChange(
+          pkg,
+          'ESLint Issues',
+          before.eslintIssues,
+          after.eslintIssues,
+          -change,
+          false
+        );
         if (change < 0) improvements++;
         else if (change > 0) regressions++;
       }
@@ -153,7 +173,7 @@ class ImprovementValidator {
     try {
       execSync('npx eslint packages --format json > eslint-report.json', {
         cwd: path.join(__dirname, '..'),
-        stdio: 'pipe'
+        stdio: 'pipe',
       });
     } catch (e) {
       // ESLint exits with 1 if there are any issues
@@ -169,7 +189,7 @@ class ImprovementValidator {
     try {
       const tsOutput = execSync('npx tsc --noEmit --pretty false 2>&1', {
         cwd: path.join(__dirname, '..'),
-        encoding: 'utf-8'
+        encoding: 'utf-8',
       });
       const tsErrors = (tsOutput.match(/error TS/g) || []).length;
       console.log(`TypeScript: ${tsErrors} compilation errors`);
@@ -190,7 +210,7 @@ class ImprovementValidator {
         percent: coverage.total.statements.pct,
         statements: coverage.total.statements.pct,
         branches: coverage.total.branches.pct,
-        functions: coverage.total.functions.pct
+        functions: coverage.total.functions.pct,
       };
     }
     return null;
@@ -222,7 +242,9 @@ class ImprovementValidator {
 
     for (const file of files) {
       const content = fs.readFileSync(file, 'utf-8');
-      loc += content.split('\n').filter(line => line.trim() && !line.trim().startsWith('//')).length;
+      loc += content
+        .split('\n')
+        .filter(line => line.trim() && !line.trim().startsWith('//')).length;
     }
 
     return loc;
@@ -243,7 +265,7 @@ class ImprovementValidator {
       const output = execSync(`npx eslint src --format json`, {
         cwd: pkgPath,
         stdio: 'pipe',
-        encoding: 'utf-8'
+        encoding: 'utf-8',
       });
       const report = JSON.parse(output);
       return report.reduce((sum, file) => sum + file.messages.length, 0);
@@ -261,7 +283,7 @@ class ImprovementValidator {
   getTestCount(pkgPath) {
     const testFiles = [
       ...this.getAllFiles(path.join(pkgPath, 'src'), '.test.ts'),
-      ...this.getAllFiles(path.join(pkgPath, 'tests'), '.test.ts')
+      ...this.getAllFiles(path.join(pkgPath, 'tests'), '.test.ts'),
     ];
 
     let count = 0;
@@ -308,15 +330,14 @@ class ImprovementValidator {
 
   reportChange(pkg, metric, before, after, change, higherIsBetter) {
     const sign = change > 0 ? '+' : '';
-    const emoji = (higherIsBetter ? change > 0 : change < 0) ? '✅' :
-                   change === 0 ? '➖' : '⚠️';
+    const emoji = (higherIsBetter ? change > 0 : change < 0) ? '✅' : change === 0 ? '➖' : '⚠️';
 
     console.log(
       pkg.padEnd(20) +
-      metric.padEnd(15) +
-      String(before).padEnd(10) +
-      String(after).padEnd(10) +
-      `${sign}${change.toFixed(1)} ${emoji}`
+        metric.padEnd(15) +
+        String(before).padEnd(10) +
+        String(after).padEnd(10) +
+        `${sign}${change.toFixed(1)} ${emoji}`
     );
   }
 }

@@ -16,11 +16,13 @@ This document outlines standardized patterns to reduce manual updates across the
 ```
 
 **Auto-sync script:** `npm run version:sync`
+
 - Automatically updates all package.json files
 - No manual version editing needed
 - Prevents version mismatches
 
 **Usage in documentation:**
+
 ```bash
 # When releasing new version:
 1. Edit version.json only
@@ -32,12 +34,14 @@ This document outlines standardized patterns to reduce manual updates across the
 ### 2. Package Installation (EXCELLENT ✨)
 
 **Standardized to `@latest`:**
+
 ```bash
 npx @j0kz/mcp-agents@latest        # Installer
 npx @j0kz/smart-reviewer-mcp@latest  # Individual tools
 ```
 
 **Benefits:**
+
 - No version updates needed in documentation
 - Users always get latest stable version
 - Installation commands never become outdated
@@ -47,6 +51,7 @@ npx @j0kz/smart-reviewer-mcp@latest  # Individual tools
 ### 3. Test Count (NEEDS AUTOMATION ⚠️)
 
 **Current Problem:**
+
 - Hardcoded in 4+ places: README.md, wiki pages, CHANGELOG.md
 - Must be manually updated after adding/removing tests
 - Easy to forget and becomes outdated
@@ -66,23 +71,14 @@ const matches = output.match(/(\d+) passed/g);
 const total = matches.reduce((sum, m) => sum + parseInt(m.match(/\d+/)[0]), 0);
 
 // Update files
-const filesToUpdate = [
-  'README.md',
-  'wiki/Home.md'
-];
+const filesToUpdate = ['README.md', 'wiki/Home.md'];
 
 filesToUpdate.forEach(file => {
   let content = readFileSync(file, 'utf8');
   // Update badge
-  content = content.replace(
-    /tests-\d+_passing/g,
-    `tests-${total}_passing`
-  );
+  content = content.replace(/tests-\d+_passing/g, `tests-${total}_passing`);
   // Update table
-  content = content.replace(
-    /\| \*\*Tests\*\* \| \d+ passing/g,
-    `| **Tests** | ${total} passing`
-  );
+  content = content.replace(/\| \*\*Tests\*\* \| \d+ passing/g, `| **Tests** | ${total} passing`);
   writeFileSync(file, content);
 });
 
@@ -90,6 +86,7 @@ console.log(`✅ Updated test count to ${total} in all files`);
 ```
 
 **Add to package.json:**
+
 ```json
 {
   "scripts": {
@@ -99,6 +96,7 @@ console.log(`✅ Updated test count to ${total} in all files`);
 ```
 
 **Usage:**
+
 ```bash
 npm run update:test-count  # Auto-updates test count everywhere
 ```
@@ -106,6 +104,7 @@ npm run update:test-count  # Auto-updates test count everywhere
 ### 4. Code Coverage (NEEDS AUTOMATION ⚠️)
 
 **Current Problem:**
+
 - "53.91%" is hardcoded
 - Codecov badge doesn't auto-update in wiki
 - Coverage changes but docs don't reflect it
@@ -113,8 +112,10 @@ npm run update:test-count  # Auto-updates test count everywhere
 **Solution: Use Codecov Dynamic Badge**
 
 **In wiki/Home.md and README.md:**
+
 ```markdown
 <!-- Instead of hardcoded percentage -->
+
 [![Coverage](https://codecov.io/gh/j0KZ/mcp-agents/branch/main/graph/badge.svg)](https://codecov.io/gh/j0KZ/mcp-agents)
 ```
 
@@ -123,17 +124,18 @@ This badge auto-updates when CI runs! ✨
 ### 5. Package Count (STATIC, DOCUMENT IT 📝)
 
 **Current State:**
+
 - "9 MCP tools" mentioned in ~20 places
 - If we add a 10th tool, need to update everywhere
 
 **Solution A: Use Variable in Scripts**
 
 Create `scripts/get-package-count.js`:
+
 ```javascript
 import { readdirSync } from 'fs';
 
-const packages = readdirSync('packages')
-  .filter(p => p !== 'shared' && p !== 'config-wizard');
+const packages = readdirSync('packages').filter(p => p !== 'shared' && p !== 'config-wizard');
 
 console.log(packages.length); // Output: 9
 ```
@@ -141,6 +143,7 @@ console.log(packages.length); // Output: 9
 **Solution B: Document the Pattern**
 
 Create a replacement guide:
+
 ```bash
 # When adding new MCP tool:
 grep -r "9 MCP tools" . --include="*.md" -l | xargs sed -i 's/9 MCP tools/10 MCP tools/g'
@@ -149,6 +152,7 @@ grep -r "9 MCP tools" . --include="*.md" -l | xargs sed -i 's/9 MCP tools/10 MCP
 ### 6. Repository URLs (STANDARDIZE FORMAT 📝)
 
 **Current Issue:**
+
 - Some use `j0KZ`, some use `j0kz` (case sensitivity)
 - GitHub username: `j0KZ` (capital K, Z)
 - npm scope: `j0kz` (lowercase)
@@ -156,12 +160,13 @@ grep -r "9 MCP tools" . --include="*.md" -l | xargs sed -i 's/9 MCP tools/10 MCP
 **Standardization Rule:**
 
 ```markdown
-✅ GitHub URLs:     https://github.com/j0KZ/mcp-agents  (capital K, Z)
-✅ npm packages:    @j0kz/package-name                   (lowercase)
-✅ Wiki links:      [text](Wiki-Page-Name)              (PascalCase)
+✅ GitHub URLs: https://github.com/j0KZ/mcp-agents (capital K, Z)
+✅ npm packages: @j0kz/package-name (lowercase)
+✅ Wiki links: [text](Wiki-Page-Name) (PascalCase)
 ```
 
 **Add to .editorconfig:**
+
 ```ini
 [*.md]
 # Enforce consistent casing in URLs
@@ -177,6 +182,7 @@ grep -r "9 MCP tools" . --include="*.md" -l | xargs sed -i 's/9 MCP tools/10 MCP
 ## Installation
 
 ### Quick Install (Recommended)
+
 \`\`\`bash
 npx @j0kz/mcp-agents@latest
 \`\`\`
@@ -186,12 +192,12 @@ npx @j0kz/mcp-agents@latest
 **Claude Code:**
 \`\`\`json
 {
-  "mcpServers": {
-    "TOOL_NAME": {
-      "command": "npx",
-      "args": ["-y", "@j0kz/PACKAGE_NAME@latest"]
-    }
-  }
+"mcpServers": {
+"TOOL_NAME": {
+"command": "npx",
+"args": ["-y", "@j0kz/PACKAGE_NAME@latest"]
+}
+}
 }
 \`\`\`
 
@@ -201,6 +207,7 @@ Add the same configuration to \`.cursorrules\` or \`.windsurfrules\`
 
 **Usage:**
 When creating a new tool README, copy this template and replace:
+
 - `TOOL_NAME` → actual tool name
 - `PACKAGE_NAME` → actual npm package name
 
@@ -217,6 +224,7 @@ When creating a new tool README, copy this template and replace:
 **Auto-generate with script:**
 
 Create `scripts/generate-badges.js`:
+
 ```javascript
 import { readFileSync } from 'fs';
 
@@ -229,6 +237,7 @@ console.log(`[![npm version](https://img.shields.io/npm/v/@j0kz/${packageName})]
 ```
 
 **Usage:**
+
 ```bash
 node scripts/generate-badges.js smart-reviewer-mcp
 ```
@@ -298,13 +307,13 @@ tools.forEach(t => {
 
 ## 🎯 Benefits of Standardization
 
-| Before | After | Benefit |
-|--------|-------|---------|
-| Update version in 11 package.json files | Update version.json only | **90% less work** |
-| Update test count in 4 files manually | Run `npm run update:test-count` | **Automated** |
-| Hardcode coverage "53.91%" | Use dynamic Codecov badge | **Always accurate** |
-| Copy-paste installation code | Use template snippets | **Consistent** |
-| Remember correct URL casing | Documented standard + linter | **No mistakes** |
+| Before                                  | After                           | Benefit             |
+| --------------------------------------- | ------------------------------- | ------------------- |
+| Update version in 11 package.json files | Update version.json only        | **90% less work**   |
+| Update test count in 4 files manually   | Run `npm run update:test-count` | **Automated**       |
+| Hardcode coverage "53.91%"              | Use dynamic Codecov badge       | **Always accurate** |
+| Copy-paste installation code            | Use template snippets           | **Consistent**      |
+| Remember correct URL casing             | Documented standard + linter    | **No mistakes**     |
 
 ## 📝 Standardization Checklist
 

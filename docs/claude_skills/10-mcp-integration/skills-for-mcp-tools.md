@@ -9,6 +9,7 @@
 ### The Problem
 
 Your MCP tools provide powerful capabilities:
+
 - `@j0kz/smart-reviewer` - Code review and quality analysis
 - `@j0kz/test-generator` - Comprehensive test generation
 - `@j0kz/architecture-analyzer` - Dependency and architecture analysis
@@ -16,6 +17,7 @@ Your MCP tools provide powerful capabilities:
 - ... and 5 more tools
 
 **But users might not know:**
+
 - When to use each tool
 - How to combine tools effectively
 - What parameters produce best results
@@ -25,6 +27,7 @@ Your MCP tools provide powerful capabilities:
 ### The Solution: MCP Usage Skills
 
 Create skills that teach Claude:
+
 - ✅ **Which tool** to use for each scenario
 - ✅ **How to configure** tools effectively
 - ✅ **How to interpret** results
@@ -46,10 +49,12 @@ description: Documentation for smart-reviewer MCP tool
 # Smart Reviewer Documentation
 
 ## review_file Tool
+
 - **Input**: filePath (string)
 - **Output**: { issues: [...], metrics: {...} }
 
 ## batch_review Tool
+
 - **Input**: filePaths (string[])
 - **Output**: { results: [...] }
 ```
@@ -58,7 +63,7 @@ description: Documentation for smart-reviewer MCP tool
 
 ### ✅ Do: Workflow-Oriented Skill
 
-```markdown
+````markdown
 ---
 name: code-quality-workflow
 description: Guides systematic code quality improvement using smart-reviewer and test-generator MCP tools. Use when improving code quality, preparing for PR review, or auditing codebase.
@@ -80,6 +85,7 @@ Systematic approach to improving code quality using MCP tools.
 ### 1. Initial Assessment
 
 Identify files needing review:
+
 ```bash
 # For new/changed files
 git diff --name-only main...HEAD
@@ -87,17 +93,20 @@ git diff --name-only main...HEAD
 # For entire directory
 find src/ -name "*.ts" -o -name "*.js"
 ```
+````
 
 ### 2. Run Smart Review
 
 Use `review_file` MCP tool on each file:
 
 **Configuration:**
+
 - **severity: "strict"** - For production code
 - **severity: "moderate"** - For internal tools
 - **severity: "lenient"** - For prototypes
 
 **Workflow:**
+
 ```
 For each file:
   1. Run review_file with appropriate severity
@@ -113,17 +122,20 @@ Use `generate_auto_fixes` MCP tool:
 **Pareto Principle:** Tool identifies 20% of changes that fix 80% of issues.
 
 **Safe Fixes (Auto-Apply):**
+
 - Formatting corrections
 - Import organization
 - Simple type fixes
 - Consistent naming
 
 **Manual Fixes (Review Required):**
+
 - Logic changes
 - Refactoring suggestions
 - Architectural improvements
 
 **Workflow:**
+
 ```
 1. Run generate_auto_fixes with safeOnly: true
 2. Review suggested changes
@@ -136,6 +148,7 @@ Use `generate_auto_fixes` MCP tool:
 Use `generate_tests` MCP tool from test-generator:
 
 **Configuration:**
+
 ```json
 {
   "sourceFile": "path/to/reviewed-file.ts",
@@ -149,6 +162,7 @@ Use `generate_tests` MCP tool from test-generator:
 ```
 
 **Workflow:**
+
 ```
 For each fixed file:
   1. Identify functions lacking tests
@@ -171,6 +185,7 @@ Expected outcome:
 ```
 
 **Metrics to track:**
+
 - Issue count reduction
 - Complexity score change
 - Coverage percentage increase
@@ -210,40 +225,49 @@ Expected outcome:
 ### Smart Reviewer Output
 
 **Critical Issues:** Always fix before merging
+
 - Security vulnerabilities
 - Type safety violations
 - Resource leaks
 
 **Moderate Issues:** Fix if time permits
+
 - Code complexity warnings
 - Missing documentation
 - Inconsistent patterns
 
 **Minor Issues:** Consider for future cleanup
+
 - Style preferences
 - Micro-optimizations
 
 ### Test Generator Output
 
 **High-Value Tests:**
+
 - Edge cases (boundary conditions)
 - Error handling (exceptions, invalid input)
 - Integration points (API calls, database)
 
 **Lower Priority:**
+
 - Simple getters/setters (if well-typed)
 - Pure utility functions (if thoroughly tested elsewhere)
 
 ## Best Practices
 
 ### 1. Start Small
+
 Don't review entire codebase at once. Pick:
+
 - Recent changes (git diff)
 - High-traffic files (most imports)
 - Complex modules (high cyclomatic complexity)
 
 ### 2. Fix Progressively
+
 Address issues in order:
+
 1. Security vulnerabilities
 2. Type safety issues
 3. Critical logic bugs
@@ -251,13 +275,17 @@ Address issues in order:
 5. Style and formatting
 
 ### 3. Validate Continuously
+
 After each fix:
+
 - Re-run review
 - Run test suite
 - Check git diff (ensure changes are intentional)
 
 ### 4. Document Patterns
+
 If same issue appears repeatedly:
+
 - Document the pattern
 - Create linting rule
 - Add to team coding standards
@@ -328,6 +356,7 @@ Phase 4: Test Harness
 ### "Too many issues to fix"
 
 **Focus on Pareto principle:**
+
 1. Run `generate_auto_fixes`
 2. Apply safe fixes (20% effort, 80% resolution)
 3. Manually address remaining critical issues
@@ -335,9 +364,10 @@ Phase 4: Test Harness
 ### "Tool results seem inconsistent"
 
 **Check severity configuration:**
+
 ```json
 {
-  "severity": "strict"  // May flag more than needed
+  "severity": "strict" // May flag more than needed
 }
 ```
 
@@ -346,11 +376,13 @@ Try "moderate" for internal tools, "strict" for public APIs.
 ### "Generated tests are failing"
 
 **Common causes:**
+
 1. Edge case tests expose actual bugs (good!)
 2. Mock setup needs adjustment
 3. Test framework configuration issue
 
 **Resolution:**
+
 - Review test logic
 - Fix actual bugs if discovered
 - Adjust mocks for external dependencies
@@ -364,6 +396,7 @@ Try "moderate" for internal tools, "strict" for public APIs.
 ---
 
 **Related Documentation:**
+
 - [Project-Specific Patterns](project-specific-patterns.md)
 - [Automation Opportunities](automation-opportunities.md)
 - [Skills vs Tools](../01-overview/skills-vs-tools.md)

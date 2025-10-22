@@ -5,11 +5,7 @@
  */
 
 import { getClarificationOptions } from './workflow-selector.js';
-import {
-  getClarificationMessage,
-  getInvalidFocusMessage,
-  Language,
-} from '@j0kz/shared';
+import { getClarificationMessage, getInvalidFocusMessage, Language } from '@j0kz/shared';
 
 /**
  * Build clarification response when workflow/focus is missing

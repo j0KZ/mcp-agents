@@ -27,7 +27,8 @@ export const ORCHESTRATOR_MESSAGES = {
   invalidFocus: {
     message: {
       en: (focus: string) => `Invalid focus "${focus}". Please choose from valid options.`,
-      es: (focus: string) => `Enfoque inválido "${focus}". Por favor elige entre las opciones válidas.`,
+      es: (focus: string) =>
+        `Enfoque inválido "${focus}". Por favor elige entre las opciones válidas.`,
     },
     question: {
       en: 'What would you like me to focus on?',

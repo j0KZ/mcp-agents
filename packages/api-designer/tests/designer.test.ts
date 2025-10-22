@@ -10,7 +10,12 @@ describe('generateOpenAPI()', () => {
   });
 
   it('should generate OpenAPI spec with resources', () => {
-    const config = { name: 'Test API', version: '1.0.0', style: 'REST' as const, resources: ['users', 'posts'] };
+    const config = {
+      name: 'Test API',
+      version: '1.0.0',
+      style: 'REST' as const,
+      resources: ['users', 'posts'],
+    };
     const result = target.generateOpenAPI(config);
     expect(result.success).toBe(true);
     if (result.success) {
@@ -22,7 +27,12 @@ describe('generateOpenAPI()', () => {
   });
 
   it('should include authentication schemes when configured', () => {
-    const config = { name: 'Test API', version: '1.0.0', style: 'REST' as const, auth: { type: 'bearer' as const } };
+    const config = {
+      name: 'Test API',
+      version: '1.0.0',
+      style: 'REST' as const,
+      auth: { type: 'bearer' as const },
+    };
     const result = target.generateOpenAPI(config);
     expect(result.success).toBe(true);
     if (result.success) {
@@ -32,7 +42,12 @@ describe('generateOpenAPI()', () => {
   });
 
   it('should include baseUrl in servers when provided', () => {
-    const config = { name: 'Test API', version: '1.0.0', style: 'REST' as const, baseUrl: 'https://api.example.com/v1' };
+    const config = {
+      name: 'Test API',
+      version: '1.0.0',
+      style: 'REST' as const,
+      baseUrl: 'https://api.example.com/v1',
+    };
     const result = target.generateOpenAPI(config);
     expect(result.success).toBe(true);
     if (result.success) {
@@ -42,7 +57,12 @@ describe('generateOpenAPI()', () => {
   });
 
   it('should include description when provided', () => {
-    const config = { name: 'Test API', version: '1.0.0', style: 'REST' as const, description: 'Test description' };
+    const config = {
+      name: 'Test API',
+      version: '1.0.0',
+      style: 'REST' as const,
+      description: 'Test description',
+    };
     const result = target.generateOpenAPI(config);
     expect(result.success).toBe(true);
     if (result.success) {
@@ -52,20 +72,22 @@ describe('generateOpenAPI()', () => {
 
   it('should handle custom endpoints', () => {
     const config = { name: 'Test API', version: '1.0.0', style: 'REST' as const };
-    const endpoints = [{
-      path: '/test',
-      method: 'GET' as const,
-      summary: 'Test endpoint',
-      description: 'A test endpoint',
-      operationId: 'getTest',
-      tags: ['test'],
-      responses: {
-        '200': {
-          statusCode: 200,
-          description: 'Success',
-        }
-      }
-    }];
+    const endpoints = [
+      {
+        path: '/test',
+        method: 'GET' as const,
+        summary: 'Test endpoint',
+        description: 'A test endpoint',
+        operationId: 'getTest',
+        tags: ['test'],
+        responses: {
+          '200': {
+            statusCode: 200,
+            description: 'Success',
+          },
+        },
+      },
+    ];
     const result = target.generateOpenAPI(config, endpoints);
     expect(result.success).toBe(true);
     if (result.success) {
@@ -122,14 +144,24 @@ describe('designRESTEndpoints()', () => {
 
 describe('createGraphQLSchema()', () => {
   it('should create GraphQL schema with valid config', () => {
-    const config = { name: 'Test API', version: '1.0.0', style: 'GraphQL' as const, resources: ['User'] };
+    const config = {
+      name: 'Test API',
+      version: '1.0.0',
+      style: 'GraphQL' as const,
+      resources: ['User'],
+    };
     const result = target.createGraphQLSchema(config);
     expect(result).toBeDefined();
     expect(result.success).toBe(true);
   });
 
   it('should generate types and queries', () => {
-    const config = { name: 'Test API', version: '1.0.0', style: 'GraphQL' as const, resources: ['User', 'Post'] };
+    const config = {
+      name: 'Test API',
+      version: '1.0.0',
+      style: 'GraphQL' as const,
+      resources: ['User', 'Post'],
+    };
     const result = target.createGraphQLSchema(config);
     expect(result.success).toBe(true);
     if (result.success) {
@@ -140,7 +172,12 @@ describe('createGraphQLSchema()', () => {
   });
 
   it('should generate SDL string', () => {
-    const config = { name: 'Test API', version: '1.0.0', style: 'GraphQL' as const, resources: ['User'] };
+    const config = {
+      name: 'Test API',
+      version: '1.0.0',
+      style: 'GraphQL' as const,
+      resources: ['User'],
+    };
     const result = target.createGraphQLSchema(config);
     expect(result.success).toBe(true);
     if (result.success) {
@@ -152,7 +189,12 @@ describe('createGraphQLSchema()', () => {
   });
 
   it('should create getX and listX queries for each type', () => {
-    const config = { name: 'Test API', version: '1.0.0', style: 'GraphQL' as const, resources: ['User'] };
+    const config = {
+      name: 'Test API',
+      version: '1.0.0',
+      style: 'GraphQL' as const,
+      resources: ['User'],
+    };
     const result = target.createGraphQLSchema(config);
     expect(result.success).toBe(true);
     if (result.success) {
@@ -163,14 +205,16 @@ describe('createGraphQLSchema()', () => {
   });
 
   it('should accept custom GraphQL types array', () => {
-    const types = [{
-      name: 'CustomType',
-      kind: 'object' as const,
-      fields: [
-        { name: 'id', type: 'ID!' },
-        { name: 'customField', type: 'String!' }
-      ]
-    }];
+    const types = [
+      {
+        name: 'CustomType',
+        kind: 'object' as const,
+        fields: [
+          { name: 'id', type: 'ID!' },
+          { name: 'customField', type: 'String!' },
+        ],
+      },
+    ];
     const result = target.createGraphQLSchema(types);
     expect(result.success).toBe(true);
     if (result.success) {

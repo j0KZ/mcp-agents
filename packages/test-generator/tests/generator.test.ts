@@ -63,7 +63,7 @@ describe('TestGenerator', () => {
       const result = await generator.generateTests('/valid.ts', {
         framework: 'vitest',
         includeEdgeCases: true,
-        includeErrorCases: true
+        includeErrorCases: true,
       });
 
       expect(result.success).toBe(true);
@@ -78,7 +78,12 @@ describe('TestGenerator', () => {
       const code = 'export function test() { return true; }';
       vi.mocked(readFile).mockResolvedValue(code);
 
-      const frameworks: Array<'jest' | 'vitest' | 'mocha' | 'ava'> = ['jest', 'vitest', 'mocha', 'ava'];
+      const frameworks: Array<'jest' | 'vitest' | 'mocha' | 'ava'> = [
+        'jest',
+        'vitest',
+        'mocha',
+        'ava',
+      ];
 
       for (const framework of frameworks) {
         const result = await generator.generateTests('/test.ts', { framework });
@@ -104,7 +109,7 @@ describe('TestGenerator', () => {
 
       const result = await generator.generateTests('/divide.ts', {
         includeEdgeCases: true,
-        includeErrorCases: true
+        includeErrorCases: true,
       });
 
       expect(result.success).toBe(true);
@@ -122,7 +127,7 @@ describe('TestGenerator', () => {
       vi.mocked(readFile).mockResolvedValue(code);
 
       const result = await generator.generateTests('/multi.ts', {
-        coverage: 100
+        coverage: 100,
       });
 
       expect(result.coverage).toBeDefined();
@@ -185,7 +190,7 @@ describe('TestGenerator', () => {
       vi.mocked(readFile).mockResolvedValue(code);
 
       const result = await generator.generateTests('/service.ts', {
-        framework: 'vitest'
+        framework: 'vitest',
       });
 
       expect(result.success).toBe(true);
@@ -212,7 +217,7 @@ describe('TestGenerator', () => {
       vi.mocked(readFile).mockResolvedValue(code);
 
       const result = await generator.generateTests('/src/utils.ts', {
-        framework: 'vitest'
+        framework: 'vitest',
       });
 
       expect(result.testFile).toBeDefined();
@@ -227,7 +232,7 @@ describe('TestGenerator', () => {
       vi.mocked(readFile).mockResolvedValue(code);
 
       const result = await generator.generateTests('/calc.ts', {
-        coverage: 90
+        coverage: 90,
       });
 
       expect(result.estimatedCoverage).toBeDefined();
@@ -354,15 +359,14 @@ describe('TestGenerator', () => {
       vi.mocked(readFile).mockResolvedValue(code);
 
       const resultWith = await generator.generateTests('/div1.ts', {
-        includeEdgeCases: true
+        includeEdgeCases: true,
       });
 
       const resultWithout = await generator.generateTests('/div2.ts', {
-        includeEdgeCases: false
+        includeEdgeCases: false,
       });
 
       expect(resultWith.totalTests).toBeGreaterThanOrEqual(resultWithout.totalTests);
     });
   });
-
 });

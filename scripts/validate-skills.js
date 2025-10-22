@@ -29,7 +29,15 @@ const SKILLS_DIR = path.join(__dirname, '..', '.claude', 'skills');
 const PACKAGES_DIR = path.join(__dirname, '..', 'packages');
 
 // Configuration
-const REQUIRED_FIELDS = ['name', 'description', 'version', 'category', 'tags', 'mcp-tools', 'author'];
+const REQUIRED_FIELDS = [
+  'name',
+  'description',
+  'version',
+  'category',
+  'tags',
+  'mcp-tools',
+  'author',
+];
 const OPTIONAL_FIELDS = ['requires', 'capabilities'];
 
 const VALID_CATEGORIES = [
@@ -42,7 +50,7 @@ const VALID_CATEGORIES = [
   'monorepo',
   'standards',
   'release',
-  'testing'
+  'testing',
 ];
 
 // Validation results
@@ -53,7 +61,7 @@ const results = {
   warnings: 0,
   errors: [],
   warnings: [],
-  fixes: []
+  fixes: [],
 };
 
 /**
@@ -65,7 +73,7 @@ function parseYamlFrontmatter(content, filePath) {
     return {
       valid: false,
       error: 'No YAML frontmatter found',
-      metadata: null
+      metadata: null,
     };
   }
 
@@ -105,7 +113,7 @@ function parseYamlFrontmatter(content, filePath) {
   return {
     valid: true,
     error: null,
-    metadata
+    metadata,
   };
 }
 
@@ -116,7 +124,8 @@ function getAvailableMCPTools() {
   const tools = [];
 
   try {
-    const packages = fs.readdirSync(PACKAGES_DIR, { withFileTypes: true })
+    const packages = fs
+      .readdirSync(PACKAGES_DIR, { withFileTypes: true })
       .filter(dirent => dirent.isDirectory())
       .map(dirent => dirent.name);
 
@@ -184,14 +193,18 @@ function validateFieldFormats(metadata, skillId) {
   // Validate version
   if (metadata.version) {
     if (!/^\d+\.\d+\.\d+$/.test(metadata.version)) {
-      errors.push(`Field 'version' must follow semantic versioning (e.g., 1.0.0), got: ${metadata.version}`);
+      errors.push(
+        `Field 'version' must follow semantic versioning (e.g., 1.0.0), got: ${metadata.version}`
+      );
     }
   }
 
   // Validate category
   if (metadata.category) {
     if (!VALID_CATEGORIES.includes(metadata.category)) {
-      warnings.push(`Category '${metadata.category}' not in standard categories. Valid: ${VALID_CATEGORIES.join(', ')}`);
+      warnings.push(
+        `Category '${metadata.category}' not in standard categories. Valid: ${VALID_CATEGORIES.join(', ')}`
+      );
     }
   }
 
@@ -204,7 +217,9 @@ function validateFieldFormats(metadata, skillId) {
         warnings.push(`Field 'tags' is empty - add at least one tag`);
       }
       if (metadata.tags.length > 10) {
-        warnings.push(`Field 'tags' has ${metadata.tags.length} tags - consider reducing to 10 or fewer`);
+        warnings.push(
+          `Field 'tags' has ${metadata.tags.length} tags - consider reducing to 10 or fewer`
+        );
       }
     }
   }
@@ -232,7 +247,9 @@ function validateMCPToolReferences(metadata, skillId, availableTools) {
 
       // Check if tool exists in packages
       if (!availableTools.includes(tool)) {
-        warnings.push(`MCP tool '${tool}' not found in packages directory. Available: ${availableTools.join(', ')}`);
+        warnings.push(
+          `MCP tool '${tool}' not found in packages directory. Available: ${availableTools.join(', ')}`
+        );
       }
     }
   }
@@ -347,7 +364,7 @@ function validateSkill(skillPath, skillId, availableTools, options = {}) {
   return {
     errors: skillErrors,
     warnings: skillWarnings,
-    metadata
+    metadata,
   };
 }
 
@@ -358,7 +375,7 @@ function main() {
   const args = process.argv.slice(2);
   const options = {
     fix: args.includes('--fix'),
-    strict: args.includes('--strict')
+    strict: args.includes('--strict'),
   };
 
   console.log('🔍 Claude Skills Validator\n');
@@ -369,7 +386,8 @@ function main() {
   console.log(`\n📦 Found ${availableTools.length} MCP tools: ${availableTools.join(', ')}\n`);
 
   // Scan all skills
-  const skillDirs = fs.readdirSync(SKILLS_DIR, { withFileTypes: true })
+  const skillDirs = fs
+    .readdirSync(SKILLS_DIR, { withFileTypes: true })
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name)
     .filter(name => !['node_modules', '.git'].includes(name));

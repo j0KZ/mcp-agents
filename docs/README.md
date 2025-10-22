@@ -106,6 +106,7 @@ Reusable templates for documentation and configuration.
 10. **project-standardization** - Project standards and automation
 
 **Architecture**:
+
 - **Main skills**: 1,958 lines total (quick references, always loaded)
 - **Reference files**: 8,915 lines total (detailed guides, on-demand via grep/cat)
 - **Token savings**: ~5,468 tokens per skill load (3.9% vs 6.5% context usage)

@@ -39,7 +39,7 @@ console.log('-'.repeat(60));
 // Test incomplete config (like old format)
 const incompleteConfig = {
   command: 'npx',
-  args: ['-y', '@j0kz/smart-reviewer-mcp@latest']
+  args: ['-y', '@j0kz/smart-reviewer-mcp@latest'],
 };
 
 const { valid, normalized, fixes } = ConfigAdapter.validate(incompleteConfig);
@@ -128,12 +128,12 @@ function testMCPServer() {
         ...process.env,
         MCP_IDE: 'test-environment',
         MCP_LOCALE: 'en_US',
-      }
+      },
     });
 
     let stderrOutput = '';
 
-    server.stderr.on('data', (data) => {
+    server.stderr.on('data', data => {
       stderrOutput += data.toString();
     });
 
@@ -172,7 +172,7 @@ function testMCPServer() {
       resolve();
     }, 2000);
 
-    server.on('error', (error) => {
+    server.on('error', error => {
       console.log(`✗ Server error: ${error.message}`);
       reject(error);
     });

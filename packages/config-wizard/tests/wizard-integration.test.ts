@@ -20,7 +20,7 @@ describe('Wizard Integration Tests', () => {
         hasTests: true,
       })),
       detectTestFramework: vi.fn(async () => 'vitest'),
-      generateConfig: vi.fn(async (selections) => ({
+      generateConfig: vi.fn(async selections => ({
         mcpServers: selections.mcps.reduce((acc: any, mcp: string) => {
           acc[mcp] = { command: 'npx', args: [`@j0kz/${mcp}`] };
           return acc;
@@ -28,10 +28,8 @@ describe('Wizard Integration Tests', () => {
       })),
       validateConfig: vi.fn(async () => []),
       installMCPs: vi.fn(async () => undefined),
-      writeConfigFile: vi.fn(async (config, editor, path) =>
-        path || `.${editor}/config.json`
-      ),
-      inquirerPrompt: vi.fn(async (questions) => {
+      writeConfigFile: vi.fn(async (config, editor, path) => path || `.${editor}/config.json`),
+      inquirerPrompt: vi.fn(async questions => {
         // Simulate user selections
         return {
           editor: 'vscode',
@@ -41,7 +39,7 @@ describe('Wizard Integration Tests', () => {
           installGlobally: true,
         };
       }),
-      editorPrompt: vi.fn((defaultEditor) => ({
+      editorPrompt: vi.fn(defaultEditor => ({
         type: 'list',
         name: 'editor',
         message: 'Select editor',
@@ -149,11 +147,8 @@ describe('Wizard Integration Tests', () => {
     it('should validate config and handle issues', async () => {
       const depsWithIssues = {
         ...mockDeps,
-        validateConfig: vi.fn(async () => [
-          'Issue 1: Missing dependency',
-          'Issue 2: Invalid path',
-        ]),
-        inquirerPrompt: vi.fn(async (questions) => {
+        validateConfig: vi.fn(async () => ['Issue 1: Missing dependency', 'Issue 2: Invalid path']),
+        inquirerPrompt: vi.fn(async questions => {
           if (Array.isArray(questions)) {
             // Handle multiple questions
             const answers: any = {};
@@ -192,10 +187,7 @@ describe('Wizard Integration Tests', () => {
 
       await runWizard(args, mockDeps);
 
-      expect(mockDeps.installMCPs).toHaveBeenCalledWith(
-        expect.any(Array),
-        true
-      );
+      expect(mockDeps.installMCPs).toHaveBeenCalledWith(expect.any(Array), true);
     });
 
     it('should pass force flag to writeConfigFile', async () => {
@@ -267,11 +259,7 @@ describe('Wizard Integration Tests', () => {
       const selections = await gatherSelections(args, detected, mockDeps);
 
       expect(selections.editor).toBe('cursor');
-      expect(selections.mcps).toEqual([
-        'smart-reviewer',
-        'test-generator',
-        'security-scanner',
-      ]);
+      expect(selections.mcps).toEqual(['smart-reviewer', 'test-generator', 'security-scanner']);
       expect(selections.preferences.reviewSeverity).toBe('moderate');
       expect(selections.preferences.testFramework).toBe('jest');
       expect(selections.preferences.installGlobally).toBe(true);
@@ -291,11 +279,7 @@ describe('Wizard Integration Tests', () => {
 
       const selections = await gatherSelections(args, detected, mockDeps);
 
-      expect(selections.mcps).toEqual([
-        'smart-reviewer',
-        'test-generator',
-        'security-scanner',
-      ]);
+      expect(selections.mcps).toEqual(['smart-reviewer', 'test-generator', 'security-scanner']);
     });
 
     it('should use detected test framework when available', async () => {

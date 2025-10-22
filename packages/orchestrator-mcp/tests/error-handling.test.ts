@@ -38,14 +38,11 @@ describe('Workflow Error Handling', () => {
       const steps = (workflow as any).steps;
 
       expect(steps[0].config.params.filePaths).toEqual(specialFiles);
-      expect(steps[1].config.params.config.includePatterns).toEqual(
-        specialFiles
-      );
+      expect(steps[1].config.params.config.includePatterns).toEqual(specialFiles);
     });
 
     it('should handle very long file paths', () => {
-      const longPath =
-        'a'.repeat(100) + '/' + 'b'.repeat(100) + '/' + 'file.ts';
+      const longPath = 'a'.repeat(100) + '/' + 'b'.repeat(100) + '/' + 'file.ts';
       const workflow = createPreCommitWorkflow([longPath]);
 
       const steps = (workflow as any).steps;
@@ -93,11 +90,7 @@ describe('Workflow Error Handling', () => {
     });
 
     it('should handle absolute and relative paths together', () => {
-      const mixedPaths = [
-        '/absolute/path/file.ts',
-        './relative/file.ts',
-        '../parent/file.ts',
-      ];
+      const mixedPaths = ['/absolute/path/file.ts', './relative/file.ts', '../parent/file.ts'];
       const workflow = createPreCommitWorkflow(mixedPaths);
 
       const steps = (workflow as any).steps;
@@ -116,9 +109,7 @@ describe('Workflow Error Handling', () => {
       const workflow = createQualityAuditWorkflow('/project/path/');
 
       const steps = (workflow as any).steps;
-      expect(steps[0].config.params.outputPath).toBe(
-        '/project/path//reports/security.md'
-      );
+      expect(steps[0].config.params.outputPath).toBe('/project/path//reports/security.md');
     });
   });
 

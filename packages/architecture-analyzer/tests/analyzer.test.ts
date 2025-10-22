@@ -44,7 +44,7 @@ describe('ArchitectureAnalyzer', () => {
     it('should handle configuration options', async () => {
       const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
         maxDepth: 3,
-        detectCircular: true
+        detectCircular: true,
       });
       expect(result).toBeDefined();
     });
@@ -58,14 +58,14 @@ describe('ArchitectureAnalyzer', () => {
   describe('circular dependency detection', () => {
     it('should detect circular dependencies when enabled', async () => {
       const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
-        detectCircular: true
+        detectCircular: true,
       });
       expect(result).toBeDefined();
     });
 
     it('should return circular dependencies array', async () => {
       const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
-        detectCircular: true
+        detectCircular: true,
       });
       if (result.circularDependencies) {
         expect(Array.isArray(result.circularDependencies)).toBe(true);
@@ -92,7 +92,7 @@ describe('ArchitectureAnalyzer', () => {
   describe('depth limiting', () => {
     it('should respect maxDepth configuration', async () => {
       const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
-        maxDepth: 2
+        maxDepth: 2,
       });
       expect(result).toBeDefined();
     });
@@ -101,7 +101,7 @@ describe('ArchitectureAnalyzer', () => {
   describe('exclude patterns', () => {
     it('should support exclude patterns', async () => {
       const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
-        excludePatterns: ['node_modules', 'dist']
+        excludePatterns: ['node_modules', 'dist'],
       });
       expect(result).toBeDefined();
     });
@@ -110,7 +110,7 @@ describe('ArchitectureAnalyzer', () => {
   describe('graph generation', () => {
     it('should generate dependency graph when configured', async () => {
       const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
-        generateGraph: true
+        generateGraph: true,
       });
       expect(result).toBeDefined();
     });
@@ -121,8 +121,8 @@ describe('ArchitectureAnalyzer', () => {
       const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
         layerRules: {
           presentation: ['business'],
-          business: ['data']
-        }
+          business: ['data'],
+        },
       });
       expect(result).toBeDefined();
     });

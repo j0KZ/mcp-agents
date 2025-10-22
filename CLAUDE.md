@@ -14,6 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **RULE 2: ALWAYS confirm deletions with full context**
 
 When user asks to remove/delete anything, respond with:
+
 ```
 ⚠️ DELETION CONFIRMATION REQUIRED
 
@@ -30,6 +31,7 @@ Type "YES DELETE" to confirm, or anything else to cancel.
 **RULE 3: NEVER assume "remove" means delete**
 
 "Remove" could mean:
+
 - Remove from git tracking (but keep files)
 - Remove from documentation (but keep code)
 - Remove from build output (but keep source)
@@ -41,6 +43,7 @@ ALWAYS ask for clarification before deleting.
 **RULE 4: For research/experimental code - TRIPLE CHECK**
 
 If the code is in:
+
 - `experimental/` folders
 - `test-*/` directories
 - Research/prototype code
@@ -51,6 +54,7 @@ If the code is in:
 **RULE 5: Suggest alternatives before deletion**
 
 Before deleting, suggest:
+
 1. "Would you like me to move this to an archive folder instead?"
 2. "Should I add this to .gitignore to hide it from git?"
 3. "Do you want me to create a backup before deleting?"
@@ -66,6 +70,7 @@ Before deleting, suggest:
 For ANY substantial work (research, prototypes, experiments, new features), you MUST:
 
 1. **Create the log file FIRST** before starting work:
+
    ```
    logs/work-{YYYY-MM-DD}-{description}.md
    ```
@@ -98,6 +103,7 @@ For ANY substantial work (research, prototypes, experiments, new features), you 
 ### When to Create Logs
 
 **Create a work log when:**
+
 - ✅ Building new research/experimental code
 - ✅ Creating proof-of-concept implementations
 - ✅ Developing features that span multiple files
@@ -105,6 +111,7 @@ For ANY substantial work (research, prototypes, experiments, new features), you 
 - ✅ User explicitly asks to document the work
 
 **Don't create logs for:**
+
 - ❌ Simple bug fixes (1-2 line changes)
 - ❌ Routine maintenance tasks
 - ❌ Documentation-only updates
@@ -125,6 +132,7 @@ For ANY substantial work (research, prototypes, experiments, new features), you 
 **Full details:** [`.claude/references/architecture-patterns.md`](.claude/references/architecture-patterns.md)
 
 **Key Points:**
+
 - **Monorepo:** 9 published MCP tools + shared package + config wizard
 - **Modular pattern:** Extract constants/helpers/utilities when files exceed 300 LOC
 - **Shared package:** `@j0kz/shared` provides FileSystemManager, AnalysisCache, PerformanceMonitor, MCPPipeline
@@ -155,6 +163,7 @@ When given a task, think through the COMPLETE workflow and execute all logical f
 #### The "Audit → Fix → Document" Pattern
 
 **❌ BAD (Requires Multiple Prompts):**
+
 ```
 User: "audit the project"
 You: [runs audit, finds test count is wrong] "Test count is 366 but should be 388"
@@ -165,6 +174,7 @@ You: [updates wiki] "Updated wiki"
 ```
 
 **✅ GOOD (Complete Job in One Go):**
+
 ```
 User: "audit the project"
 You:
@@ -185,6 +195,7 @@ Note: Only ask before destructive actions (delete, force push, npm publish)
 #### Anticipate Logical Next Steps
 
 When you discover problems during analysis, **automatically fix them** if:
+
 - ✅ The fix is obvious (outdated docs, wrong counts, etc.)
 - ✅ The fix is safe (documentation, non-breaking changes)
 - ✅ It's part of completing the task (audit → update docs)
@@ -194,45 +205,49 @@ When you discover problems during analysis, **automatically fix them** if:
 #### Before Starting Any Task
 
 **1. Understand Current State FIRST**
-   ```bash
-   # Before proposing any new feature, check:
-   - Read relevant existing code
-   - Check scripts/ directory for existing automation
-   - Search @j0kz/shared for existing utilities
-   - Review tools.json for tool capabilities
-   - Check documentation for accuracy
-   ```
+
+```bash
+# Before proposing any new feature, check:
+- Read relevant existing code
+- Check scripts/ directory for existing automation
+- Search @j0kz/shared for existing utilities
+- Review tools.json for tool capabilities
+- Check documentation for accuracy
+```
 
 **2. Identify Real Gaps AND Fixable Issues**
-   - What's actually missing vs what already exists?
-   - What's wrong that you can fix immediately?
-   - Is this solving a real problem or adding complexity?
-   - Can existing code be enhanced instead of adding new code?
+
+- What's actually missing vs what already exists?
+- What's wrong that you can fix immediately?
+- Is this solving a real problem or adding complexity?
+- Can existing code be enhanced instead of adding new code?
 
 **3. Design Complete Solution (Not Just First Step)**
-   - Think: "What are ALL the steps to truly complete this?"
-   - Example: Audit → Fix Issues → Update Docs → Commit
-   - Don't stop halfway and wait for the user to prompt you again
-   - Start with the smallest change that solves the ENTIRE problem
+
+- Think: "What are ALL the steps to truly complete this?"
+- Example: Audit → Fix Issues → Update Docs → Commit
+- Don't stop halfway and wait for the user to prompt you again
+- Start with the smallest change that solves the ENTIRE problem
 
 **4. Execute Thoroughly**
-   - Fix what you find during analysis
-   - Update all related documentation
-   - Run verification steps
-   - Commit everything together
-   - Present complete results, not partial work
+
+- Fix what you find during analysis
+- Update all related documentation
+- Run verification steps
+- Commit everything together
+- Present complete results, not partial work
 
 ### Feature Audit Checklist
 
 Before implementing any feature, validate:
 
-| Question | Check |
-|----------|-------|
-| **Does this solve a real problem?** | Not "might be nice" - actual pain point |
-| **Does something already solve this?** | Search codebase, scripts/, shared/src/ |
-| **Is this the right place?** | Right package? Or better in shared? Or different tool? |
-| **What's the minimum version?** | Can it be simpler? Smaller? Reuse more? |
-| **Will users understand it?** | Simple API? Not too many options? |
+| Question                               | Check                                                  |
+| -------------------------------------- | ------------------------------------------------------ |
+| **Does this solve a real problem?**    | Not "might be nice" - actual pain point                |
+| **Does something already solve this?** | Search codebase, scripts/, shared/src/                 |
+| **Is this the right place?**           | Right package? Or better in shared? Or different tool? |
+| **What's the minimum version?**        | Can it be simpler? Smaller? Reuse more?                |
+| **Will users understand it?**          | Simple API? Not too many options?                      |
 
 ### Common Existing Features (Check Before Building)
 
@@ -243,6 +258,7 @@ Before implementing any feature, validate:
 ### Anti-Patterns to Avoid
 
 ❌ **Don't Do This:**
+
 1. Create new package when existing one can be enhanced
 2. Build validation that already exists in scripts/
 3. Add features without checking what workflows actually do
@@ -252,6 +268,7 @@ Before implementing any feature, validate:
 7. Create backups/rollback for read-only operations
 
 ✅ **Do This Instead:**
+
 1. Enhance existing packages (add to orchestrator, not new package)
 2. Reuse existing scripts (npm run version:sync, etc.)
 3. Understand tool domain (read-only? generates files? modifies code?)

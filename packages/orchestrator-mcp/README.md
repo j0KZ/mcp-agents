@@ -70,6 +70,7 @@ Orchestrator executes pre-merge workflow with quality focus
 ```
 
 **Bilingual Support:**
+
 ```text
 Usuario: "revisar mi código"
 
@@ -393,6 +394,7 @@ Execute a pre-built workflow.
 **Note:** Either `workflow` or `focus` must be provided. If neither is provided, the orchestrator will ask for clarification.
 
 **Focus Areas Map to Workflows:**
+
 - `security` → pre-commit workflow
 - `quality` → pre-merge workflow
 - `performance` → quality-audit workflow

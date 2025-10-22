@@ -4,7 +4,7 @@
  * BILINGUAL: Supports English and Spanish responses
  */
 import { getClarificationOptions } from './workflow-selector.js';
-import { getClarificationMessage, getInvalidFocusMessage, } from '@j0kz/shared';
+import { getClarificationMessage, getInvalidFocusMessage } from '@j0kz/shared';
 /**
  * Build clarification response when workflow/focus is missing
  * Returns response in specified language

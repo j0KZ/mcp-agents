@@ -29,7 +29,7 @@ describe('generateReadme()', () => {
   it('should support custom configuration', async () => {
     const result = await target.generateReadme('.', {
       includeInstallation: true,
-      includeUsage: true
+      includeUsage: true,
     });
     expect(result.content).toBeDefined();
   });
@@ -37,7 +37,7 @@ describe('generateReadme()', () => {
   it('should include sections when configured', async () => {
     const result = await target.generateReadme('.', {
       includeTOC: true,
-      includeBadges: true
+      includeBadges: true,
     });
     expect(result.content).toBeDefined();
   });
@@ -62,7 +62,7 @@ describe('generateApiDocs()', () => {
   it('should support configuration options', async () => {
     const result = await target.generateApiDocs('.', {
       includeInterfaces: true,
-      includeTypes: true
+      includeTypes: true,
     });
     expect(result.content).toBeDefined();
   });
@@ -92,21 +92,21 @@ describe('generateChangelog()', () => {
 
   it('should support conventional commits', async () => {
     const result = await target.generateChangelog(projectRoot, {
-      conventionalCommits: true
+      conventionalCommits: true,
     });
     expect(result.content).toBeDefined();
   });
 
   it('should group by type when configured', async () => {
     const result = await target.generateChangelog(projectRoot, {
-      groupByType: true
+      groupByType: true,
     });
     expect(result.content).toBeDefined();
   });
 
   it('should include authors when configured', async () => {
     const result = await target.generateChangelog(projectRoot, {
-      includeAuthors: true
+      includeAuthors: true,
     });
     expect(result.content).toBeDefined();
   });

@@ -19,28 +19,28 @@ class MutationTester {
       {
         name: 'Boolean Flip',
         pattern: /return true/g,
-        replacement: 'return false'
+        replacement: 'return false',
       },
       {
         name: 'Conditional Flip',
         pattern: /if \((.*?) === (.*?)\)/g,
-        replacement: 'if ($1 !== $2)'
+        replacement: 'if ($1 !== $2)',
       },
       {
         name: 'Arithmetic Change',
         pattern: /\+/g,
-        replacement: '-'
+        replacement: '-',
       },
       {
         name: 'Boundary Change',
         pattern: /<=/g,
-        replacement: '<'
+        replacement: '<',
       },
       {
         name: 'Return Early',
         pattern: /return (.*?);(\s+\w)/g,
-        replacement: 'return $1; return null;$2'
-      }
+        replacement: 'return $1; return null;$2',
+      },
     ];
   }
 
@@ -64,7 +64,7 @@ class MutationTester {
       killedMutations: 0,
       survivedMutations: 0,
       mutationScore: 0,
-      details: []
+      details: [],
     };
 
     // Get all source files
@@ -101,14 +101,15 @@ class MutationTester {
       total: 0,
       killed: 0,
       survived: 0,
-      mutations: []
+      mutations: [],
     };
 
     for (const mutation of this.mutations) {
       const matches = originalContent.match(mutation.pattern);
       if (!matches) continue;
 
-      for (let i = 0; i < Math.min(matches.length, 3); i++) { // Test up to 3 mutations per type
+      for (let i = 0; i < Math.min(matches.length, 3); i++) {
+        // Test up to 3 mutations per type
         results.total++;
 
         // Apply mutation
@@ -128,7 +129,7 @@ class MutationTester {
           results.mutations.push({
             type: mutation.name,
             status: 'SURVIVED',
-            location: matches[i]
+            location: matches[i],
           });
         } else {
           // Mutation killed (good - tests caught it)
@@ -136,7 +137,7 @@ class MutationTester {
           results.mutations.push({
             type: mutation.name,
             status: 'KILLED',
-            location: matches[i]
+            location: matches[i],
           });
         }
 
@@ -156,7 +157,7 @@ class MutationTester {
       execSync('npm test', {
         cwd: pkgPath,
         stdio: 'pipe',
-        timeout: 30000
+        timeout: 30000,
       });
       return true; // Tests passed
     } catch (e) {
@@ -209,7 +210,7 @@ class MutationTester {
 
     // Show survived mutations for improvement
     if (results.survivedMutations > 0) {
-      console.log('\n❌ Survived Mutations (tests didn\'t catch these):');
+      console.log("\n❌ Survived Mutations (tests didn't catch these):");
       for (const file of results.details) {
         const survived = file.mutations.filter(m => m.status === 'SURVIVED');
         if (survived.length > 0) {

@@ -204,7 +204,7 @@ describe('extractFunction()', () => {
       code,
       functionName: 'calculate',
       startLine: 3,
-      endLine: 3
+      endLine: 3,
     });
     expect(result).toBeDefined();
     expect(result.code).toBeDefined();
@@ -220,7 +220,7 @@ describe('extractFunction()', () => {
       code,
       functionName: 'add',
       startLine: 3,
-      endLine: 3
+      endLine: 3,
     });
     expect(result.code).toBeDefined();
   });

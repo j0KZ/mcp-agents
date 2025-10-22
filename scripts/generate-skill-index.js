@@ -79,7 +79,7 @@ function getFileStats(filePath) {
   return {
     lines,
     size,
-    sizeKB: (size / 1024).toFixed(1)
+    sizeKB: (size / 1024).toFixed(1),
   };
 }
 
@@ -88,7 +88,8 @@ function getFileStats(filePath) {
  */
 function scanSkills() {
   const skills = [];
-  const skillDirs = fs.readdirSync(SKILLS_DIR, { withFileTypes: true })
+  const skillDirs = fs
+    .readdirSync(SKILLS_DIR, { withFileTypes: true })
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name);
 
@@ -111,12 +112,13 @@ function scanSkills() {
       let referenceFiles = [];
 
       if (hasReferences) {
-        referenceFiles = fs.readdirSync(referencesDir)
+        referenceFiles = fs
+          .readdirSync(referencesDir)
           .filter(file => file.endsWith('.md'))
           .map(file => ({
             name: file,
             path: `references/${file}`,
-            ...getFileStats(path.join(referencesDir, file))
+            ...getFileStats(path.join(referencesDir, file)),
           }));
       }
 
@@ -125,9 +127,8 @@ function scanSkills() {
         ...metadata,
         stats,
         references: referenceFiles,
-        path: `${skillDir}/SKILL.md`
+        path: `${skillDir}/SKILL.md`,
       });
-
     } catch (error) {
       console.error(`❌ Error parsing ${skillDir}: ${error.message}`);
     }
@@ -197,7 +198,11 @@ function generateMarkdownIndex(skills) {
       markdown += `**Version:** ${skill.version}  \n`;
       markdown += `**Size:** ${skill.stats.lines} lines (${skill.stats.sizeKB} KB)  \n`;
 
-      if (skill['mcp-tools'] && Array.isArray(skill['mcp-tools']) && skill['mcp-tools'].length > 0) {
+      if (
+        skill['mcp-tools'] &&
+        Array.isArray(skill['mcp-tools']) &&
+        skill['mcp-tools'].length > 0
+      ) {
         markdown += `**MCP Tools:** ${skill['mcp-tools'].join(', ')}  \n`;
       }
 
@@ -274,14 +279,14 @@ function generateJsonRegistry(skills) {
       path: skill.path,
       stats: {
         lines: skill.stats.lines,
-        sizeKB: parseFloat(skill.stats.sizeKB)
+        sizeKB: parseFloat(skill.stats.sizeKB),
       },
       references: skill.references.map(ref => ({
         name: ref.name,
         path: `${skill.id}/${ref.path}`,
-        lines: ref.lines
-      }))
-    }))
+        lines: ref.lines,
+      })),
+    })),
   };
 }
 
@@ -307,8 +312,12 @@ function main() {
   console.log('📊 Summary:');
   console.log(`   Skills: ${skills.length}`);
   console.log(`   Categories: ${Object.keys(groupByCategory(skills)).length}`);
-  console.log(`   Total Lines: ${skills.reduce((sum, s) => sum + s.stats.lines, 0).toLocaleString()}`);
-  console.log(`   Total Size: ${skills.reduce((sum, s) => sum + parseFloat(s.stats.sizeKB), 0).toFixed(1)} KB`);
+  console.log(
+    `   Total Lines: ${skills.reduce((sum, s) => sum + s.stats.lines, 0).toLocaleString()}`
+  );
+  console.log(
+    `   Total Size: ${skills.reduce((sum, s) => sum + parseFloat(s.stats.sizeKB), 0).toFixed(1)} KB`
+  );
 
   console.log('\n✅ Skill index generation complete!\n');
 }

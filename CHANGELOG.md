@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - 2025-10-20
+## [Unreleased]
+
+---
+
+## [1.0.36] - 2025-10-21
 
 ### 🎯 Developer Experience Enhancements
 

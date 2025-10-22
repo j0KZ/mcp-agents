@@ -13,6 +13,7 @@ Skills use a hierarchical loading strategy to optimize context window usage whil
 **Purpose:** Enable skill discovery without context bloat
 
 **Content:** YAML frontmatter only
+
 ```yaml
 ---
 name: pdf-processing
@@ -31,6 +32,7 @@ description: Extracts text and tables from PDFs, fills forms, merges documents. 
 **Purpose:** Provide procedural knowledge when skill is activated
 
 **Content:** SKILL.md markdown body
+
 ```markdown
 # PDF Processing
 
@@ -40,7 +42,7 @@ description: Extracts text and tables from PDFs, fills forms, merges documents. 
 2. Execute `scripts/extract_text.py <input.pdf>`
 3. Parse output for structured data
 4. Handle errors gracefully
-...
+   ...
 ```
 
 **Token Cost:** <5,000 tokens (target <500 lines total)
@@ -54,6 +56,7 @@ description: Extracts text and tables from PDFs, fills forms, merges documents. 
 **Purpose:** Provide detailed references and executable code without context consumption
 
 **Content:**
+
 - Scripts (Python, JavaScript, bash)
 - Reference documentation (API specs, schemas)
 - Templates and assets (JSON, CSV, images)
@@ -143,6 +146,7 @@ Returns completed Excel file
 ```
 
 **Total Context Usage:**
+
 - Base system prompt: ~5,000 tokens
 - Skill metadata (10 skills): ~1,000 tokens
 - Two SKILL.md files: ~5,000 tokens
@@ -162,18 +166,23 @@ Returns completed Excel file
 User prompt with all instructions:
 
 # PDF Processing Instructions
+
 [1,000 lines of detailed guidance]
 
 # Error Handling
+
 [500 lines of edge cases]
 
 # API Reference
+
 [2,000 lines of documentation]
 
 # Excel Generation Instructions
+
 [1,500 lines of procedures]
 
 # Example Code
+
 [3,000 lines of samples]
 
 Total: ~8,000 lines × ~4 tokens/line = ~32,000 tokens
@@ -181,6 +190,7 @@ Per conversation!
 ```
 
 **Problems:**
+
 - Consumes 16% of 200k context window immediately
 - Same instructions repeated every conversation
 - Can't include extensive examples (too many tokens)
@@ -191,24 +201,25 @@ Per conversation!
 
 ```markdown
 Metadata (always loaded):
-  pdf-processing: "Extracts..." (~100 tokens)
-  xlsx-generation: "Creates..." (~100 tokens)
+pdf-processing: "Extracts..." (~100 tokens)
+xlsx-generation: "Creates..." (~100 tokens)
 
 Instructions (loaded when relevant):
-  pdf-processing/SKILL.md (~2,000 tokens)
-  xlsx-generation/SKILL.md (~3,000 tokens)
+pdf-processing/SKILL.md (~2,000 tokens)
+xlsx-generation/SKILL.md (~3,000 tokens)
 
 Resources (0 tokens until accessed):
-  pdf-processing/references/ERROR_HANDLING.md
-  pdf-processing/references/API_REFERENCE.md
-  pdf-processing/scripts/extract_tables.py
-  xlsx-generation/assets/table_template.json
-  xlsx-generation/references/ADVANCED_FORMATTING.md
+pdf-processing/references/ERROR_HANDLING.md
+pdf-processing/references/API_REFERENCE.md
+pdf-processing/scripts/extract_tables.py
+xlsx-generation/assets/table_template.json
+xlsx-generation/references/ADVANCED_FORMATTING.md
 
 Typical Usage: ~5,500 tokens total
 ```
 
 **Benefits:**
+
 - Consumes <3% of context window
 - Reusable across all conversations
 - Can bundle unlimited reference material
@@ -234,19 +245,20 @@ python pdf-processing/scripts/extract_tables.py input.pdf
 jq '.' xlsx-generation/assets/table_template.json
 ```
 
-**Key Mechanism:** Only command *output* enters context, not file contents or script code (unless explicitly read).
+**Key Mechanism:** Only command _output_ enters context, not file contents or script code (unless explicitly read).
 
 ### Example: Large Reference Document
 
 ```markdown
 Skill has 50-page API reference:
-  pdf-processing/references/API_REFERENCE.md (100,000 tokens if loaded)
+pdf-processing/references/API_REFERENCE.md (100,000 tokens if loaded)
 
 Claude's approach:
-  1. SKILL.md mentions: "For field mapping, see references/API_REFERENCE.md section 'Form Fields'"
-  2. Claude uses grep: `grep -A 20 "Form Fields" references/API_REFERENCE.md`
-  3. Only matching section (500 tokens) enters context
-  4. Remaining 99,500 tokens never loaded
+
+1. SKILL.md mentions: "For field mapping, see references/API_REFERENCE.md section 'Form Fields'"
+2. Claude uses grep: `grep -A 20 "Form Fields" references/API_REFERENCE.md`
+3. Only matching section (500 tokens) enters context
+4. Remaining 99,500 tokens never loaded
 ```
 
 **Result:** Skills can bundle massive reference materials (API docs, examples, datasets) without context penalties.
@@ -293,10 +305,12 @@ Some skills reference others:
 
 ```markdown
 # In xlsx-generation/SKILL.md
+
 For branded styling, load brand-guidelines skill to get:
-  - Primary colors
-  - Font selections
-  - Logo placement rules
+
+- Primary colors
+- Font selections
+- Logo placement rules
 ```
 
 Claude automatically loads dependent skills.
@@ -304,18 +318,21 @@ Claude automatically loads dependent skills.
 ### Activation Examples
 
 **Single Skill:**
+
 ```
 User: "Extract text from this PDF"
 Loaded: pdf-processing only
 ```
 
 **Multiple Skills (Composition):**
+
 ```
 User: "Create branded PowerPoint from this data"
 Loaded: pptx-generation + brand-guidelines
 ```
 
 **Nested Skills:**
+
 ```
 User: "Build API client following our standards"
 Loaded:
@@ -353,6 +370,7 @@ Loaded:
 ```
 
 **Workflow:**
+
 1. **csv-parser** skill extracts and validates data
 2. **data-viz** skill determines appropriate chart types
 3. **pptx-builder** skill creates slides with charts
@@ -366,29 +384,30 @@ Each skill contributes specialized knowledge; Claude orchestrates the complete w
 User: "Generate Q3 financial report following company standards"
 
 Skills Activated:
-  1. financial-modeling
-     - Load quarterly-report template
-     - Calculate standard metrics (revenue, margins, YoY growth)
-     - Apply accounting rules
 
-  2. data-visualization
-     - Select chart types (revenue: line, expenses: stacked bar)
-     - Apply financial-specific formatting (currency, percentages)
+1. financial-modeling
+   - Load quarterly-report template
+   - Calculate standard metrics (revenue, margins, YoY growth)
+   - Apply accounting rules
 
-  3. xlsx-generation
-     - Create multi-sheet workbook
-     - Build pivot tables
-     - Add charts with data ranges
+2. data-visualization
+   - Select chart types (revenue: line, expenses: stacked bar)
+   - Apply financial-specific formatting (currency, percentages)
 
-  4. brand-guidelines
-     - Apply company color palette
-     - Use approved fonts
-     - Include logo placement
+3. xlsx-generation
+   - Create multi-sheet workbook
+   - Build pivot tables
+   - Add charts with data ranges
 
-  5. compliance-checker
-     - Validate required disclosures present
-     - Check data sensitivity markings
-     - Ensure audit trail included
+4. brand-guidelines
+   - Apply company color palette
+   - Use approved fonts
+   - Include logo placement
+
+5. compliance-checker
+   - Validate required disclosures present
+   - Check data sensitivity markings
+   - Ensure audit trail included
 
 Claude orchestrates all five skills to produce compliant, branded report.
 ```
@@ -484,6 +503,7 @@ response = client.messages.create(
 ```
 
 **Beta Features:**
+
 - `code-execution-2025-08-25` - Enable bash/python execution (required for skills)
 - `files-api-2025-04-14` - Enable file generation and download
 - `skills-2025-10-02` - Enable skills feature
@@ -512,18 +532,23 @@ for block in response.content:
 ## Key Architectural Principles
 
 ### 1. Progressive Disclosure
+
 Load information hierarchically—metadata always, instructions when relevant, resources as needed.
 
 ### 2. Filesystem as Storage
+
 Leverage filesystem for unbounded content; only outputs consume context.
 
 ### 3. Composability
+
 Design skills to work independently and in combination.
 
 ### 4. Context Efficiency
+
 Challenge every token—"Does Claude really need this?"
 
 ### 5. Tool Orchestration
+
 Skills guide tool usage; tools execute actions.
 
 ---
@@ -537,6 +562,7 @@ Skills guide tool usage; tools execute actions.
 ---
 
 **Related Documentation:**
+
 - [What Are Skills?](what-are-skills.md)
 - [Skills vs Tools](skills-vs-tools.md)
 - [Context Efficiency](../04-best-practices/context-efficiency.md)

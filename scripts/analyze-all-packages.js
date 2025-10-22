@@ -22,7 +22,7 @@ async function analyzeWithSmartReviewer() {
     'refactor-assistant',
     'api-designer',
     'db-schema',
-    'doc-generator'
+    'doc-generator',
   ];
 
   const allIssues = [];
@@ -30,15 +30,27 @@ async function analyzeWithSmartReviewer() {
   let packageCount = 0;
 
   for (const pkg of packages) {
-    const mainFile = path.join(__dirname, '..', 'packages', pkg, 'src',
-      pkg === 'test-generator' ? 'generator.ts' :
-      pkg === 'smart-reviewer' ? 'analyzer.ts' :
-      pkg === 'security-scanner' ? 'scanner.ts' :
-      pkg === 'architecture-analyzer' ? 'analyzer.ts' :
-      pkg === 'refactor-assistant' ? 'refactorer.ts' :
-      pkg === 'api-designer' ? 'designer.ts' :
-      pkg === 'db-schema' ? 'designer.ts' :
-      'generator.ts'
+    const mainFile = path.join(
+      __dirname,
+      '..',
+      'packages',
+      pkg,
+      'src',
+      pkg === 'test-generator'
+        ? 'generator.ts'
+        : pkg === 'smart-reviewer'
+          ? 'analyzer.ts'
+          : pkg === 'security-scanner'
+            ? 'scanner.ts'
+            : pkg === 'architecture-analyzer'
+              ? 'analyzer.ts'
+              : pkg === 'refactor-assistant'
+                ? 'refactorer.ts'
+                : pkg === 'api-designer'
+                  ? 'designer.ts'
+                  : pkg === 'db-schema'
+                    ? 'designer.ts'
+                    : 'generator.ts'
     );
 
     try {
@@ -79,7 +91,7 @@ async function analyzeWithSecurityScanner() {
   try {
     const result = await scanner.scanProject(projectPath, {
       minSeverity: 'medium',
-      excludePatterns: ['node_modules', 'dist', 'coverage', '.git']
+      excludePatterns: ['node_modules', 'dist', 'coverage', '.git'],
     });
 
     console.log(`Total vulnerabilities: ${result.totalVulnerabilities}`);
@@ -112,7 +124,7 @@ async function analyzeArchitecture() {
     const result = await analyzer.analyze(projectPath, {
       detectCircular: true,
       generateGraph: false,
-      maxDepth: 3
+      maxDepth: 3,
     });
 
     console.log(`Modules analyzed: ${result.modules.length}`);

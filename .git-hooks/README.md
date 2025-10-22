@@ -6,11 +6,11 @@ Automated quality gates using MCP tools at git lifecycle points.
 
 ## Hooks Overview
 
-| Hook | When | What It Does | Time | Can Skip |
-|------|------|--------------|------|----------|
-| **pre-commit** | Before commit | Quick checks on staged files | ~30s | Yes (--no-verify) |
-| **commit-msg** | After commit message | Validate conventional commits | ~1s | Yes (--no-verify) |
-| **pre-push** | Before push | Comprehensive validation | ~2-5min | Yes (--no-verify) |
+| Hook           | When                 | What It Does                  | Time    | Can Skip          |
+| -------------- | -------------------- | ----------------------------- | ------- | ----------------- |
+| **pre-commit** | Before commit        | Quick checks on staged files  | ~30s    | Yes (--no-verify) |
+| **commit-msg** | After commit message | Validate conventional commits | ~1s     | Yes (--no-verify) |
+| **pre-push**   | Before push          | Comprehensive validation      | ~2-5min | Yes (--no-verify) |
 
 ---
 
@@ -34,16 +34,19 @@ cp .git-hooks/pre-push .git/hooks/pre-push
 ### pre-commit (Fast ~30s)
 
 **Runs:**
+
 1. ESLint on staged files
 2. Prettier format check
 3. TypeScript compilation check
 4. Smart-reviewer quick scan (moderate severity)
 
 **Skips if:**
+
 - No staged .ts/.js files
 - User adds `--no-verify` flag
 
 **Example:**
+
 ```bash
 git commit -m "fix: parser bug"
 # → Runs pre-commit checks automatically
@@ -57,11 +60,13 @@ git commit -m "fix: parser bug" --no-verify
 ### commit-msg (Ultra-fast ~1s)
 
 **Validates:**
+
 - Conventional commit format
 - Message length
 - Required components
 
 **Format:**
+
 ```text
 type(scope): description
 
@@ -73,6 +78,7 @@ type(scope): description
 **Valid types:** feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
 
 **Example valid:**
+
 ```text
 feat(smart-reviewer): add auto-fix suggestions
 fix: handle null pointer in parser
@@ -80,6 +86,7 @@ docs: update README with examples
 ```
 
 **Example invalid:**
+
 ```text
 Updated stuff          ❌ (no type)
 feature: added thing   ❌ (wrong type, use 'feat')
@@ -91,6 +98,7 @@ fix short msg          ❌ (description too short)
 ### pre-push (Comprehensive ~2-5min)
 
 **Runs:**
+
 1. All tests (npm test)
 2. Test coverage check (target: 75%)
 3. Build verification
@@ -98,10 +106,12 @@ fix short msg          ❌ (description too short)
 5. Architecture check (circular deps)
 
 **Skips if:**
+
 - Pushing to personal branch (not main/release/pr)
 - User adds `--no-verify` flag
 
 **Example:**
+
 ```bash
 git push origin feature/new-parser
 # → Runs pre-push checks
@@ -143,16 +153,19 @@ git push origin feature/new-parser --no-verify
 ## Bypassing Hooks
 
 **When to skip:**
+
 - ✅ WIP commits on personal branch
 - ✅ Emergency hotfix (but run manually after!)
 - ✅ Known failing test (but fix ASAP!)
 
 **When NOT to skip:**
+
 - ❌ Main/release branch commits
 - ❌ PR branches
 - ❌ Public branches
 
 **How to skip:**
+
 ```bash
 # Skip specific commit
 git commit --no-verify
@@ -174,6 +187,7 @@ chmod +x .git/hooks/pre-commit
 ### Hook not running
 
 **Check:**
+
 ```bash
 # Verify hooks are executable
 ls -la .git/hooks/
@@ -182,6 +196,7 @@ ls -la .git/hooks/
 ```
 
 **Fix:**
+
 ```bash
 chmod +x .git/hooks/pre-commit
 chmod +x .git/hooks/commit-msg
@@ -191,6 +206,7 @@ chmod +x .git/hooks/pre-push
 ### Hook failing incorrectly
 
 **Debug:**
+
 ```bash
 # Run hook manually
 .git/hooks/pre-commit
@@ -203,6 +219,7 @@ echo $?
 ### Hook too slow
 
 **Options:**
+
 1. Skip heavy checks on feature branches
 2. Run only on changed files
 3. Use `--no-verify` for WIP commits
@@ -215,12 +232,14 @@ echo $?
 **Hooks use standard development tools:**
 
 **pre-commit checks:**
+
 - ESLint: JavaScript/TypeScript linting
 - Prettier: Code formatting
 - TypeScript: Type checking and compilation
 - Basic code patterns: console.log (warning), debugger (error), TODO/FIXME (warning)
 
 **pre-push checks:**
+
 - Test suite: All tests via `npm test`
 - Coverage: Warns if below 75%
 - Build: Verify `npm run build` succeeds
@@ -234,6 +253,7 @@ echo $?
 ## Maintenance
 
 **Update hooks:**
+
 ```bash
 # Pull latest from repo
 git pull
@@ -243,6 +263,7 @@ npm run hooks:install
 ```
 
 **Add custom checks:**
+
 1. Edit `.git-hooks/pre-commit` (or other hook)
 2. Add your check before `exit 0`
 3. Reinstall: `npm run hooks:install`
@@ -257,6 +278,7 @@ npm run hooks:install
 **CI/CD (GitHub Actions):** Complete validation (~10-20min)
 
 Both are important:
+
 - Hooks = Catch issues early
 - CI/CD = Authoritative gate
 

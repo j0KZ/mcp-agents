@@ -18,7 +18,7 @@ class ExternalValidator {
       npmAudit: null,
       coverage: null,
       bundleSize: null,
-      dependencies: null
+      dependencies: null,
     };
   }
 
@@ -27,7 +27,7 @@ class ExternalValidator {
    */
   async runAll() {
     console.log('🔍 EXTERNAL VALIDATION SUITE');
-    console.log('=' .repeat(60));
+    console.log('='.repeat(60));
     console.log('Running independent third-party tools to validate code quality\n');
 
     await this.runESLintValidation();
@@ -52,7 +52,7 @@ class ExternalValidator {
       const eslintOutput = execSync('npx eslint packages/*/src --format json', {
         cwd: rootDir,
         encoding: 'utf-8',
-        stdio: 'pipe'
+        stdio: 'pipe',
       });
 
       const report = JSON.parse(eslintOutput);
@@ -70,7 +70,7 @@ class ExternalValidator {
         errors,
         warnings,
         total: errors + warnings,
-        files: report.length
+        files: report.length,
       };
 
       console.log(`  ❌ Errors: ${errors}`);
@@ -95,7 +95,7 @@ class ExternalValidator {
           errors,
           warnings,
           total: errors + warnings,
-          files: report.length
+          files: report.length,
         };
 
         console.log(`  ❌ Errors: ${errors}`);
@@ -116,7 +116,7 @@ class ExternalValidator {
     try {
       execSync('npx prettier --check packages/*/src/**/*.ts', {
         cwd: rootDir,
-        stdio: 'pipe'
+        stdio: 'pipe',
       });
       console.log('  ✅ All files formatted correctly');
       this.results.prettier = { formatted: true, issues: 0 };
@@ -150,8 +150,8 @@ class ExternalValidator {
           noUnusedLocals: true,
           noUnusedParameters: true,
           noImplicitReturns: true,
-          noFallthroughCasesInSwitch: true
-        }
+          noFallthroughCasesInSwitch: true,
+        },
       };
 
       fs.writeFileSync(
@@ -161,7 +161,7 @@ class ExternalValidator {
 
       const output = execSync('npx tsc --noEmit -p tsconfig.strict.json 2>&1', {
         cwd: rootDir,
-        encoding: 'utf-8'
+        encoding: 'utf-8',
       });
 
       const errors = (output.match(/error TS/g) || []).length;
@@ -193,7 +193,7 @@ class ExternalValidator {
       const output = execSync('npm audit --json', {
         cwd: rootDir,
         encoding: 'utf-8',
-        stdio: 'pipe'
+        stdio: 'pipe',
       });
 
       const audit = JSON.parse(output);
@@ -239,11 +239,17 @@ class ExternalValidator {
         // Run vitest with coverage
         execSync('npx vitest run --coverage --reporter=json', {
           cwd: path.join(rootDir, 'packages', pkg),
-          stdio: 'pipe'
+          stdio: 'pipe',
         });
 
         // Read coverage summary if it exists
-        const coverageFile = path.join(rootDir, 'packages', pkg, 'coverage', 'coverage-summary.json');
+        const coverageFile = path.join(
+          rootDir,
+          'packages',
+          pkg,
+          'coverage',
+          'coverage-summary.json'
+        );
         if (fs.existsSync(coverageFile)) {
           const coverage = JSON.parse(fs.readFileSync(coverageFile, 'utf-8'));
           const total = coverage.total;
@@ -253,10 +259,12 @@ class ExternalValidator {
             statements: total.statements.pct,
             branches: total.branches.pct,
             functions: total.functions.pct,
-            lines: total.lines.pct
+            lines: total.lines.pct,
           });
 
-          console.log(`    Coverage: ${total.lines.pct.toFixed(1)}% lines, ${total.statements.pct.toFixed(1)}% statements`);
+          console.log(
+            `    Coverage: ${total.lines.pct.toFixed(1)}% lines, ${total.statements.pct.toFixed(1)}% statements`
+          );
         }
       } catch (e) {
         console.log(`    ⚠️ Coverage failed for ${pkg}`);
@@ -292,7 +300,7 @@ class ExternalValidator {
           sizes.push({
             package: pkg,
             size: totalSize,
-            sizeKB: (totalSize / 1024).toFixed(2)
+            sizeKB: (totalSize / 1024).toFixed(2),
           });
         }
       }
@@ -320,7 +328,7 @@ class ExternalValidator {
       // Check for outdated dependencies
       const outdated = execSync('npm outdated --json', {
         cwd: rootDir,
-        encoding: 'utf-8'
+        encoding: 'utf-8',
       }).trim();
 
       const deps = outdated ? JSON.parse(outdated) : {};
@@ -333,7 +341,7 @@ class ExternalValidator {
         execSync('npx depcheck --version', { stdio: 'pipe' });
         const depcheckOutput = execSync('npx depcheck --json', {
           cwd: rootDir,
-          encoding: 'utf-8'
+          encoding: 'utf-8',
         });
 
         const depcheck = JSON.parse(depcheckOutput);
@@ -342,7 +350,7 @@ class ExternalValidator {
 
         this.results.dependencies = {
           outdated: outdatedCount,
-          unused: (depcheck.dependencies?.length || 0) + (depcheck.devDependencies?.length || 0)
+          unused: (depcheck.dependencies?.length || 0) + (depcheck.devDependencies?.length || 0),
         };
       } catch {
         this.results.dependencies = { outdated: outdatedCount };

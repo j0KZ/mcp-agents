@@ -10,7 +10,9 @@ import { MCPError } from '../src/errors/error-codes.js';
 describe('enhanced-error', () => {
   describe('fromMCPError', () => {
     it('should create enhanced error response from MCPError', () => {
-      const mcpError = new MCPError('REV_001', 'filePaths must be a non-empty array', { filePaths: [] });
+      const mcpError = new MCPError('REV_001', 'filePaths must be a non-empty array', {
+        filePaths: [],
+      });
       const enhanced = EnhancedError.fromMCPError(mcpError);
 
       expect(enhanced.success).toBe(false);
@@ -256,16 +258,66 @@ describe('enhanced-error', () => {
 
   describe('Error codes coverage', () => {
     const errorCodes = [
-      'TEST_001', 'TEST_002', 'TEST_003', 'TEST_004', 'TEST_005', 'TEST_006', 'TEST_007', 'TEST_008',
-      'REV_001', 'REV_002', 'REV_003', 'REV_004', 'REV_005',
-      'SEC_001', 'SEC_002', 'SEC_003', 'SEC_004',
-      'REF_001', 'REF_002', 'REF_003', 'REF_004', 'REF_005', 'REF_006',
-      'ARCH_001', 'ARCH_002', 'ARCH_003', 'ARCH_004',
-      'API_001', 'API_002', 'API_003', 'API_004', 'API_005', 'API_006',
-      'DB_001', 'DB_002', 'DB_003', 'DB_004', 'DB_005', 'DB_006', 'DB_007', 'DB_008', 'DB_009',
-      'DOC_001', 'DOC_002', 'DOC_003', 'DOC_004', 'DOC_005',
-      'ORCH_001', 'ORCH_002', 'ORCH_003', 'ORCH_004', 'ORCH_005', 'ORCH_006', 'ORCH_007', 'ORCH_008',
-      'VAL_001', 'VAL_002', 'VAL_003', 'VAL_004', 'VAL_005',
+      'TEST_001',
+      'TEST_002',
+      'TEST_003',
+      'TEST_004',
+      'TEST_005',
+      'TEST_006',
+      'TEST_007',
+      'TEST_008',
+      'REV_001',
+      'REV_002',
+      'REV_003',
+      'REV_004',
+      'REV_005',
+      'SEC_001',
+      'SEC_002',
+      'SEC_003',
+      'SEC_004',
+      'REF_001',
+      'REF_002',
+      'REF_003',
+      'REF_004',
+      'REF_005',
+      'REF_006',
+      'ARCH_001',
+      'ARCH_002',
+      'ARCH_003',
+      'ARCH_004',
+      'API_001',
+      'API_002',
+      'API_003',
+      'API_004',
+      'API_005',
+      'API_006',
+      'DB_001',
+      'DB_002',
+      'DB_003',
+      'DB_004',
+      'DB_005',
+      'DB_006',
+      'DB_007',
+      'DB_008',
+      'DB_009',
+      'DOC_001',
+      'DOC_002',
+      'DOC_003',
+      'DOC_004',
+      'DOC_005',
+      'ORCH_001',
+      'ORCH_002',
+      'ORCH_003',
+      'ORCH_004',
+      'ORCH_005',
+      'ORCH_006',
+      'ORCH_007',
+      'ORCH_008',
+      'VAL_001',
+      'VAL_002',
+      'VAL_003',
+      'VAL_004',
+      'VAL_005',
     ];
 
     it('should handle all defined error codes', () => {

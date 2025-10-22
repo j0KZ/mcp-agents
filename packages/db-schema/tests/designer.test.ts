@@ -27,10 +27,12 @@ describe('generateMigration()', () => {
   it('should generate migration from schema', () => {
     const schema = {
       database: 'postgres' as const,
-      tables: [{
-        name: 'users',
-        columns: [{ name: 'id', type: 'integer', primaryKey: true }]
-      }]
+      tables: [
+        {
+          name: 'users',
+          columns: [{ name: 'id', type: 'integer', primaryKey: true }],
+        },
+      ],
     };
     const result = target.generateMigration(schema, 'create initial schema');
     expect(result).toBeDefined();
@@ -43,10 +45,12 @@ describe('createERDiagram()', () => {
   it('should create ER diagram', () => {
     const schema = {
       database: 'postgres' as const,
-      tables: [{
-        name: 'users',
-        columns: [{ name: 'id', type: 'integer', primaryKey: true }]
-      }]
+      tables: [
+        {
+          name: 'users',
+          columns: [{ name: 'id', type: 'integer', primaryKey: true }],
+        },
+      ],
     };
     const result = target.createERDiagram(schema, {});
     expect(result).toBeDefined();
@@ -57,7 +61,7 @@ describe('createERDiagram()', () => {
   it('should support different formats', () => {
     const schema = {
       database: 'postgres' as const,
-      tables: [{ name: 'test', columns: [] }]
+      tables: [{ name: 'test', columns: [] }],
     };
     const mermaid = target.createERDiagram(schema, { format: 'mermaid' });
     expect(typeof mermaid).toBe('string');
@@ -69,13 +73,15 @@ describe('optimizeIndexes()', () => {
   it('should suggest index optimizations', () => {
     const schema = {
       database: 'postgres' as const,
-      tables: [{
-        name: 'users',
-        columns: [
-          { name: 'id', type: 'integer', primaryKey: true },
-          { name: 'email', type: 'varchar' }
-        ]
-      }]
+      tables: [
+        {
+          name: 'users',
+          columns: [
+            { name: 'id', type: 'integer', primaryKey: true },
+            { name: 'email', type: 'varchar' },
+          ],
+        },
+      ],
     };
     const result = target.optimizeIndexes(schema);
     expect(result).toBeDefined();
@@ -87,13 +93,15 @@ describe('normalizeSchema()', () => {
   it('should suggest normalization improvements', () => {
     const schema = {
       database: 'postgres' as const,
-      tables: [{
-        name: 'users',
-        columns: [
-          { name: 'id', type: 'integer', primaryKey: true },
-          { name: 'full_name', type: 'varchar' }
-        ]
-      }]
+      tables: [
+        {
+          name: 'users',
+          columns: [
+            { name: 'id', type: 'integer', primaryKey: true },
+            { name: 'full_name', type: 'varchar' },
+          ],
+        },
+      ],
     };
     const result = target.normalizeSchema(schema);
     expect(result).toBeDefined();
@@ -105,13 +113,15 @@ describe('generateSeedData()', () => {
   it('should generate seed data', () => {
     const schema = {
       database: 'postgres' as const,
-      tables: [{
-        name: 'users',
-        columns: [
-          { name: 'id', type: 'integer', primaryKey: true },
-          { name: 'name', type: 'varchar' }
-        ]
-      }]
+      tables: [
+        {
+          name: 'users',
+          columns: [
+            { name: 'id', type: 'integer', primaryKey: true },
+            { name: 'name', type: 'varchar' },
+          ],
+        },
+      ],
     };
     const result = target.generateSeedData(schema, 5);
     expect(result).toBeDefined();
@@ -122,10 +132,12 @@ describe('validateSchema()', () => {
   it('should validate schema', () => {
     const schema = {
       database: 'postgres' as const,
-      tables: [{
-        name: 'users',
-        columns: [{ name: 'id', type: 'integer', primaryKey: true }]
-      }]
+      tables: [
+        {
+          name: 'users',
+          columns: [{ name: 'id', type: 'integer', primaryKey: true }],
+        },
+      ],
     };
     const result = target.validateSchema(schema);
     expect(result).toBeDefined();
@@ -139,10 +151,12 @@ describe('analyzeSchema()', () => {
   it('should analyze schema complexity', () => {
     const schema = {
       database: 'postgres' as const,
-      tables: [{
-        name: 'users',
-        columns: [{ name: 'id', type: 'integer', primaryKey: true }]
-      }]
+      tables: [
+        {
+          name: 'users',
+          columns: [{ name: 'id', type: 'integer', primaryKey: true }],
+        },
+      ],
     };
     const result = target.analyzeSchema(schema);
     expect(result).toBeDefined();

@@ -20,7 +20,7 @@ try {
   // Run tests and capture output
   const output = execSync('npm test 2>&1', {
     encoding: 'utf8',
-    maxBuffer: 10 * 1024 * 1024 // 10MB buffer
+    maxBuffer: 10 * 1024 * 1024, // 10MB buffer
   });
 
   // Strip ANSI color codes (ESC [ ... m)
@@ -44,11 +44,7 @@ try {
   console.log(`✅ Found ${total} passing tests across ${matches.length} packages\n`);
 
   // Files to update
-  const filesToUpdate = [
-    'README.md',
-    'wiki/Home.md',
-    'CHANGELOG.md'
-  ];
+  const filesToUpdate = ['README.md', 'wiki/Home.md', 'CHANGELOG.md'];
 
   let updatedCount = 0;
 
@@ -103,7 +99,6 @@ try {
   console.log('   1. Review the changes: git diff');
   console.log('   2. Commit: git add -u && git commit -m "docs: update test count to ${total}"');
   console.log('   3. Republish wiki: powershell.exe -File publish-wiki.ps1');
-
 } catch (error) {
   console.error('❌ Error running tests or updating files:');
   console.error(error.message);

@@ -87,9 +87,9 @@ const result = await orchestrator.execute({
     requirements: {
       mustInclude: ['security', 'testing', 'architecture'],
       priority: 'quality',
-      timeConstraint: 300000 // 5 minutes
-    }
-  }
+      timeConstraint: 300000, // 5 minutes
+    },
+  },
 });
 
 console.log(result.plan); // See the execution plan
@@ -193,7 +193,7 @@ const analyzer = new PredictiveAnalyzer();
 
 const predictions = await analyzer.predictFuture({
   path: './src',
-  lookAheadDays: 30
+  lookAheadDays: 30,
 });
 
 // Prevent issues before they happen
@@ -371,11 +371,13 @@ You: "This file is too complex, help me refactor"
 ## Tips for Best Results
 
 ### 1. Let It Learn
+
 - **First 100 decisions:** System is learning your preferences
 - **After 500 decisions:** Accuracy typically hits 85%+
 - **After 1000 decisions:** System understands your codebase deeply
 
 ### 2. Provide Feedback
+
 ```
 Bad: Ignore suggestions you don't like
 Good: Reject them (system learns what you DON'T want)
@@ -385,11 +387,13 @@ Good: Only accept great ones (raises the bar)
 ```
 
 ### 3. Trust Predictions
+
 - **80%+ probability:** Usually accurate, act on it
 - **60-80%:** Worth investigating
 - **<60%:** Monitor but don't act yet
 
 ### 4. Review Evolution
+
 ```bash
 # Check what the system has learned
 npx @j0kz/orchestrator-mcp --show-learning
@@ -402,6 +406,7 @@ npx @j0kz/orchestrator-mcp --show-skills
 ```
 
 ### 5. Use Consensus for Important Decisions
+
 ```
 You: "Should I refactor this critical module?"
 
@@ -453,22 +458,26 @@ npx @j0kz/orchestrator-mcp evolution --experiments
 ## Troubleshooting
 
 ### "Tools not appearing in Claude"
+
 1. Check config file location: `%APPDATA%\Claude\claude_desktop_config.json`
 2. Verify JSON syntax (use JSONLint)
 3. Restart Claude Desktop completely
 4. Check Claude logs: `%APPDATA%\Claude\logs\`
 
 ### "Learning seems stuck at low accuracy"
+
 - Need more decisions (target: 100+ for initial learning)
 - Check if feedback loop is working: `engine.getStats()`
 - Verify production monitoring is enabled
 
 ### "Predictions seem random"
+
 - Need historical data (target: 50+ similar decisions)
 - Check pattern significance: should be >0.8
 - May need to retrain: `analyzer.retrain()`
 
 ### "Self-improvement not happening"
+
 - Check if improvement loop is running: `system.getStatus()`
 - Verify interval (default: 1 hour)
 - Check for errors in improvement log

@@ -9,6 +9,7 @@
 ### The Problem
 
 Creating skills manually requires:
+
 1. Understanding skill structure and best practices
 2. Writing effective YAML frontmatter
 3. Crafting imperative instructions
@@ -23,6 +24,7 @@ Creating skills manually requires:
 ### The Solution: `@j0kz/skill-generator` MCP Tool
 
 **Automated skill generation** from:
+
 - Existing code patterns
 - Project conventions
 - Tool usage history
@@ -42,6 +44,7 @@ Creating skills manually requires:
 **Purpose:** Analyze code patterns and generate skill that teaches Claude to follow those patterns.
 
 **Input:**
+
 ```json
 {
   "sourceFiles": ["src/utils/*.ts"],
@@ -51,6 +54,7 @@ Creating skills manually requires:
 ```
 
 **Process:**
+
 1. Parse source files
 2. Extract common patterns:
    - Function structure (pure functions, error handling)
@@ -61,7 +65,8 @@ Creating skills manually requires:
 4. Generate SKILL.md teaching these patterns
 
 **Output:**
-```markdown
+
+````markdown
 ---
 name: utility-functions-pattern
 description: Guides creation of utility functions following project conventions including pure functions, explicit typing, and JSDoc documentation. Use when creating new utility functions or refactoring existing ones.
@@ -74,6 +79,7 @@ Create utility functions following project conventions.
 ## Function Structure
 
 All utility functions should be:
+
 - **Pure**: No side effects, same input → same output
 - **Typed**: Explicit parameter and return types
 - **Documented**: JSDoc with examples
@@ -81,7 +87,7 @@ All utility functions should be:
 
 ## Pattern Template
 
-```typescript
+````typescript
 /**
  * [Brief description of what function does]
  *
@@ -105,7 +111,8 @@ export function functionName<T>(paramName: T): ReturnType {
 
   return result;
 }
-```
+````
+````
 
 ## Examples from Codebase
 
@@ -115,7 +122,8 @@ export function functionName<T>(paramName: T): ReturnType {
 
 [Auto-generated from existing test files]
 ...
-```
+
+````
 
 #### 2. `generate_skill_from_workflow`
 
@@ -130,9 +138,10 @@ export function functionName<T>(paramName: T): ReturnType {
     "Added @j0kz/test-generator"
   ]
 }
-```
+````
 
 **Process:**
+
 1. Analyze referenced tasks (git commits, file changes)
 2. Extract common steps:
    - Create package directory
@@ -146,7 +155,8 @@ export function functionName<T>(paramName: T): ReturnType {
 4. Generate procedural skill
 
 **Output:**
-```markdown
+
+````markdown
 ---
 name: create-mcp-tool
 description: Guides creation of new MCP tool in @j0kz/mcp-agents monorepo following established patterns. Use when adding new MCP tool package to the project.
@@ -175,6 +185,7 @@ npm init -y
 # Update package.json name
 sed -i 's/"name": ".*"/"name": "@j0kz\/[tool-name]"/' package.json
 ```
+````
 
 ## Step 2: Copy Template Files
 
@@ -185,7 +196,8 @@ sed -i 's/"name": ".*"/"name": "@j0kz\/[tool-name]"/' package.json
 ## Validation Checklist
 
 [Auto-generated from project conventions]
-```
+
+````
 
 #### 3. `generate_skill_from_docs`
 
@@ -198,9 +210,10 @@ sed -i 's/"name": ".*"/"name": "@j0kz\/[tool-name]"/' package.json
   "skillName": "api-design-patterns",
   "extractExamples": true
 }
-```
+````
 
 **Process:**
+
 1. Parse documentation (markdown, PDFs, wikis)
 2. Extract:
    - Guidelines and rules
@@ -217,6 +230,7 @@ sed -i 's/"name": ".*"/"name": "@j0kz\/[tool-name]"/' package.json
 **Purpose:** Improve existing skills based on usage feedback.
 
 **Input:**
+
 ```json
 {
   "skillName": "git-commit-helper",
@@ -226,6 +240,7 @@ sed -i 's/"name": ".*"/"name": "@j0kz\/[tool-name]"/' package.json
 ```
 
 **Process:**
+
 1. Load existing skill
 2. Analyze feedback and usage
 3. Identify improvement opportunities:
@@ -241,6 +256,7 @@ sed -i 's/"name": ".*"/"name": "@j0kz\/[tool-name]"/' package.json
 **Purpose:** Check skill quality before deployment.
 
 **Input:**
+
 ```json
 {
   "skillPath": "skills/my-skill"
@@ -248,6 +264,7 @@ sed -i 's/"name": ".*"/"name": "@j0kz\/[tool-name]"/' package.json
 ```
 
 **Process:**
+
 1. Validate structure (YAML, markdown formatting)
 2. Check constraints:
    - Name ≤64 chars
@@ -260,6 +277,7 @@ sed -i 's/"name": ".*"/"name": "@j0kz\/[tool-name]"/' package.json
 4. Suggest improvements
 
 **Output:**
+
 ```json
 {
   "valid": true,
@@ -320,20 +338,15 @@ packages/skill-generator/
 ### Core Utilities
 
 **Leverage `@j0kz/shared`:**
+
 ```typescript
-import {
-  FileSystemManager,
-  AnalysisCache,
-  PerformanceMonitor
-} from '@j0kz/shared';
+import { FileSystemManager, AnalysisCache, PerformanceMonitor } from '@j0kz/shared';
 
 // Parse source files
 const files = await FileSystemManager.readDirectory('src/');
 
 // Cache pattern analysis
-const patterns = await AnalysisCache.get('code-patterns', () =>
-  analyzeCodePatterns(files)
-);
+const patterns = await AnalysisCache.get('code-patterns', () => analyzeCodePatterns(files));
 
 // Monitor performance
 const metrics = PerformanceMonitor.track('skill-generation');
@@ -348,20 +361,20 @@ const metrics = PerformanceMonitor.track('skill-generation');
 async function generateTestingSkill() {
   // 1. Use test-generator to analyze test patterns
   const testPatterns = await testGenerator.analyzePatterns({
-    sourceFiles: ['**/*.test.ts']
+    sourceFiles: ['**/*.test.ts'],
   });
 
   // 2. Use smart-reviewer to identify quality test examples
   const qualityTests = await smartReviewer.batchReview({
     filePaths: testPatterns.exemplarTests,
-    config: { severity: 'strict' }
+    config: { severity: 'strict' },
   });
 
   // 3. Generate skill from best examples
   const skill = await generateSkill({
     patterns: testPatterns,
     exemplars: qualityTests.highQualityFiles,
-    type: 'testing-patterns'
+    type: 'testing-patterns',
   });
 
   return skill;
@@ -377,6 +390,7 @@ async function generateTestingSkill() {
 **Scenario:** New developer joins team, needs to learn coding patterns.
 
 **Solution:**
+
 ```bash
 # Generate skill from project's best code
 mcp-skill-generator generate-from-code \
@@ -393,6 +407,7 @@ mcp-skill-generator generate-from-code \
 **Scenario:** Team has ad-hoc deployment process, wants consistency.
 
 **Solution:**
+
 ```bash
 # Analyze successful deployments
 mcp-skill-generator generate-from-workflow \
@@ -409,6 +424,7 @@ mcp-skill-generator generate-from-workflow \
 **Scenario:** Have 50-page API guidelines doc, want Claude to apply them.
 
 **Solution:**
+
 ```bash
 # Convert docs to skill
 mcp-skill-generator generate-from-docs \
@@ -425,6 +441,7 @@ mcp-skill-generator generate-from-docs \
 **Scenario:** Skill works but could be better based on usage.
 
 **Solution:**
+
 ```bash
 # Enhance based on feedback
 mcp-skill-generator enhance-skill \
@@ -445,6 +462,7 @@ mcp-skill-generator enhance-skill \
 **Approaches:**
 
 1. **AST Parsing:**
+
    ```typescript
    import * as ts from 'typescript';
 
@@ -460,7 +478,7 @@ mcp-skill-generator enhance-skill \
        namingConventions: extractNaming(sourceFile),
        functionStructure: extractFunctions(sourceFile),
        typeUsage: extractTypes(sourceFile),
-       imports: extractImports(sourceFile)
+       imports: extractImports(sourceFile),
      };
 
      return patterns;
@@ -468,6 +486,7 @@ mcp-skill-generator enhance-skill \
    ```
 
 2. **Statistical Analysis:**
+
    ```typescript
    // Find most common patterns
    function findCommonPatterns(files: string[]) {
@@ -481,6 +500,7 @@ mcp-skill-generator enhance-skill \
    ```
 
 3. **Exemplar Selection:**
+
    ```typescript
    // Find best examples (highest quality, most typical)
    async function selectExemplars(files: string[]) {
@@ -500,12 +520,15 @@ mcp-skill-generator enhance-skill \
 ### Workflow Analysis
 
 **Data sources:**
+
 1. **Git history:**
+
    ```bash
    git log --all --pretty=format:"%H|%an|%ad|%s" --name-only
    ```
 
 2. **File system changes:**
+
    ```typescript
    // Compare task A and task B file changes
    const taskAFiles = getFilesInCommit(taskA);
@@ -515,6 +538,7 @@ mcp-skill-generator enhance-skill \
    ```
 
 3. **Command history (if available):**
+
    ```bash
    # Bash history
    ~/.bash_history
@@ -529,12 +553,12 @@ mcp-skill-generator enhance-skill \
 
 ```typescript
 interface SkillQuality {
-  structureScore: number;      // YAML valid, markdown formatted
-  descriptionScore: number;    // Specific, includes "when to use"
-  instructionScore: number;    // Imperative, clear, actionable
-  exampleScore: number;        // Relevant, well-formatted
-  tokenEfficiency: number;     // <5k tokens for instructions
-  overall: number;             // Weighted average
+  structureScore: number; // YAML valid, markdown formatted
+  descriptionScore: number; // Specific, includes "when to use"
+  instructionScore: number; // Imperative, clear, actionable
+  exampleScore: number; // Relevant, well-formatted
+  tokenEfficiency: number; // <5k tokens for instructions
+  overall: number; // Weighted average
 }
 
 function scoreSkill(skill: Skill): SkillQuality {
@@ -544,7 +568,7 @@ function scoreSkill(skill: Skill): SkillQuality {
     instructionScore: scoreInstructions(skill.body),
     exampleScore: scoreExamples(skill.examples),
     tokenEfficiency: estimateTokens(skill) / 5000,
-    overall: calculateWeightedScore(/* ... */)
+    overall: calculateWeightedScore(/* ... */),
   };
 }
 ```
@@ -554,24 +578,28 @@ function scoreSkill(skill: Skill): SkillQuality {
 ## Development Roadmap
 
 ### Phase 1: Foundation (v0.1.0)
+
 - [ ] Basic skill template generation
 - [ ] YAML frontmatter validation
 - [ ] Structure validation tool
 - [ ] Simple code pattern extraction
 
 ### Phase 2: Intelligence (v0.2.0)
+
 - [ ] AST-based pattern analysis
 - [ ] Workflow analysis from git history
 - [ ] Documentation parsing (markdown, PDF)
 - [ ] Exemplar selection
 
 ### Phase 3: Enhancement (v0.3.0)
+
 - [ ] Skill quality scoring
 - [ ] Usage-based improvement suggestions
 - [ ] Auto-enhancement based on feedback
 - [ ] Integration with smart-reviewer for exemplar selection
 
 ### Phase 4: Automation (v0.4.0)
+
 - [ ] Auto-generate skills on PR merge
 - [ ] Continuous skill improvement pipeline
 - [ ] Team collaboration features
@@ -624,6 +652,7 @@ packages/
 ---
 
 **Related Documentation:**
+
 - [Skills for MCP Tools](skills-for-mcp-tools.md)
 - [Development Workflow](../06-development-workflow/creation-process.md)
 - [Architecture](../01-overview/architecture.md)

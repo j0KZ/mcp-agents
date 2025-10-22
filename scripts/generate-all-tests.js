@@ -27,7 +27,7 @@ async function generateTestsForPackage(packageName) {
     'designer.ts',
     'refactorer.ts',
     'wizard.ts',
-    'orchestrator.ts'
+    'orchestrator.ts',
   ];
 
   let successCount = 0;
@@ -46,7 +46,7 @@ async function generateTestsForPackage(packageName) {
         framework: 'vitest',
         includeEdgeCases: true,
         includeErrorCases: true,
-        coverage: 80
+        coverage: 80,
       });
 
       if (result.success && result.code) {
@@ -59,7 +59,7 @@ async function generateTestsForPackage(packageName) {
           package: packageName,
           file,
           tests: result.totalTests,
-          coverage: result.estimatedCoverage
+          coverage: result.estimatedCoverage,
         });
       } else {
         console.log(`    ⚠️ No tests generated`);
@@ -89,7 +89,7 @@ async function main() {
     'db-schema',
     'doc-generator',
     'orchestrator-mcp',
-    'config-wizard'
+    'config-wizard',
   ];
 
   const allResults = [];
@@ -114,7 +114,9 @@ async function main() {
   if (allResults.length > 0) {
     console.log('\nGenerated tests by package:');
     for (const result of allResults) {
-      console.log(`  ${result.package}/${result.file}: ${result.tests} tests (${result.coverage}% coverage)`);
+      console.log(
+        `  ${result.package}/${result.file}: ${result.tests} tests (${result.coverage}% coverage)`
+      );
     }
   }
 

@@ -9,11 +9,13 @@
 ## What's Changed
 
 ### 🧪 Test Coverage Improvements
+
 - **Current tests:** 244 passing tests across all packages
 - **Coverage:** 14.09% statements, 66.25% branches, 65.56% functions
 - **Quality:** Functional but shallow (see [TESTING_STRATEGY.md](TESTING_STRATEGY.md))
 
 **Packages Enhanced:**
+
 - ✅ api-designer: 8 → 31 tests
 - ✅ test-generator: 10 → 26 tests
 - ✅ smart-reviewer: 4 → 25 tests
@@ -22,17 +24,20 @@
 - ✅ architecture-analyzer: 4 → 18 tests
 
 ### 📚 Documentation Added
+
 - ✅ [TESTING_STRATEGY.md](TESTING_STRATEGY.md) - Comprehensive testing guide
 - ✅ Test quality assessment and improvement roadmap
 - ✅ Code examples for high-quality tests
 - ✅ Anti-patterns to avoid
 
 ### 🗂️ Repository Organization
+
 - ✅ Moved temporary planning docs to `docs/planning/`
 - ✅ Updated `.gitignore` to exclude work-in-progress MDs
 - ✅ Cleaned up root directory
 
 ### 🔧 Build Fixes
+
 - ✅ Excluded `intelligent-generator-v2.ts` from test-generator build
 - ✅ All packages build successfully
 - ✅ All 255 tests passing
@@ -42,24 +47,28 @@
 ## Pre-Commit Checklist
 
 ### ✅ Code Quality
+
 - [x] All tests passing (255/255)
 - [x] Build successful across all packages
 - [x] No TypeScript errors
 - [x] No console.log statements in production code
 
 ### ✅ Documentation
+
 - [x] CHANGELOG.md updated
 - [x] README.md up to date
 - [x] Testing guide created
 - [x] All docs organized
 
 ### ✅ Git Hygiene
+
 - [x] Temporary files excluded via .gitignore
 - [x] Planning docs moved to docs/planning/
 - [x] No sensitive data in commits
 - [x] Branch is up to date
 
 ### ✅ npm Publishing
+
 - [x] All package.json files use version 1.0.34
 - [x] dist/ folders built and ready
 - [x] All packages have proper exports
@@ -70,6 +79,7 @@
 ## Files Modified (Summary)
 
 **Core Changes:**
+
 - `.gitignore` - Excludes temporary planning MDs
 - `packages/*/tests/*.test.ts` - 97 new tests added
 - `packages/test-generator/tsconfig.json` - Exclude v2 generator
@@ -77,6 +87,7 @@
 - `docs/planning/*` - Moved 6 temporary MD files
 
 **Deleted (moved to docs/planning/):**
+
 - QUICK_START_MCPS.md
 - RELEASE_NOTES_v1.0.34.md
 - ROADMAP_REVIEW_FINDINGS.md
@@ -147,6 +158,7 @@ git push --tags
 ## Post-Commit Actions
 
 ### Optional: Create Pull Request
+
 ```bash
 gh pr create \
   --title "test: Add 97 comprehensive tests across all packages" \
@@ -194,6 +206,7 @@ EOF
 ## Known Limitations
 
 ### Test Quality
+
 - Most tests are "smoke tests" that verify structure but not logic
 - Missing edge case coverage
 - No snapshot testing for generators
@@ -203,6 +216,7 @@ EOF
 **See [TESTING_STRATEGY.md](TESTING_STRATEGY.md) for improvement roadmap**
 
 ### Coverage Gaps
+
 - Statement coverage still low (14.09% vs 55% target)
 - Many advanced features in shared package untested
 - Missing property-based tests

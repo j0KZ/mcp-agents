@@ -210,9 +210,7 @@ describe('Workflows', () => {
       expect(steps[0].tool).toBe('security-scanner');
       expect(steps[0].config.action).toBe('generate_security_report');
       expect(steps[0].config.params.projectPath).toBe(projectPath);
-      expect(steps[0].config.params.outputPath).toBe(
-        `${projectPath}/reports/security.md`
-      );
+      expect(steps[0].config.params.outputPath).toBe(`${projectPath}/reports/security.md`);
     });
 
     it('should configure architecture analysis with graph generation', () => {
@@ -239,19 +237,13 @@ describe('Workflows', () => {
     });
 
     it('should create correct output path for security report', () => {
-      const paths = [
-        '/home/user/project',
-        'C:\\Users\\dev\\project',
-        './relative',
-      ];
+      const paths = ['/home/user/project', 'C:\\Users\\dev\\project', './relative'];
 
       paths.forEach(path => {
         const workflow = createQualityAuditWorkflow(path);
         const steps = (workflow as any).steps;
 
-        expect(steps[0].config.params.outputPath).toBe(
-          `${path}/reports/security.md`
-        );
+        expect(steps[0].config.params.outputPath).toBe(`${path}/reports/security.md`);
       });
     });
 
@@ -344,9 +336,7 @@ describe('Workflows', () => {
       const steps1 = (workflow1 as any).steps;
       const steps2 = (workflow2 as any).steps;
 
-      expect(steps1[0].config.params.filePaths).not.toEqual(
-        steps2[0].config.params.filePaths
-      );
+      expect(steps1[0].config.params.filePaths).not.toEqual(steps2[0].config.params.filePaths);
     });
 
     it('should support chaining workflows via factory function', () => {

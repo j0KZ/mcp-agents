@@ -34,7 +34,7 @@ export class Calculator {
     const result = await generator.generateTests(testFile, {
       framework: 'vitest',
       includeEdgeCases: true,
-      includeErrorCases: true
+      includeErrorCases: true,
     });
 
     console.log('✅ Success!');

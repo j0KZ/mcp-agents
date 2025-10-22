@@ -322,7 +322,9 @@ describe('Orchestrator Workflows', () => {
         const { getClarificationMessage } = await import('@j0kz/shared');
         const msg = getClarificationMessage('en');
 
-        expect(msg.message).toBe('To provide focused analysis, I need to know what aspect to check.');
+        expect(msg.message).toBe(
+          'To provide focused analysis, I need to know what aspect to check.'
+        );
         expect(msg.question).toBe('What would you like me to focus on?');
       });
 
@@ -330,7 +332,9 @@ describe('Orchestrator Workflows', () => {
         const { getClarificationMessage } = await import('@j0kz/shared');
         const msg = getClarificationMessage('es');
 
-        expect(msg.message).toBe('Para proporcionar un análisis enfocado, necesito saber qué aspecto verificar.');
+        expect(msg.message).toBe(
+          'Para proporcionar un análisis enfocado, necesito saber qué aspecto verificar.'
+        );
         expect(msg.question).toBe('¿En qué te gustaría que me enfocara?');
       });
     });
@@ -348,7 +352,9 @@ describe('Orchestrator Workflows', () => {
         const { getInvalidFocusMessage } = await import('@j0kz/shared');
         const msg = getInvalidFocusMessage('xyz', 'es');
 
-        expect(msg.message).toBe('Enfoque inválido "xyz". Por favor elige entre las opciones válidas.');
+        expect(msg.message).toBe(
+          'Enfoque inválido "xyz". Por favor elige entre las opciones válidas.'
+        );
         expect(msg.question).toBe('¿En qué te gustaría que me enfocara?');
       });
     });
@@ -387,7 +393,9 @@ describe('Orchestrator Workflows', () => {
         const response = buildInvalidFocusResponse('malo', 'es');
 
         const parsed = JSON.parse(response.content[0].text);
-        expect(parsed.message).toBe('Enfoque inválido "malo". Por favor elige entre las opciones válidas.');
+        expect(parsed.message).toBe(
+          'Enfoque inválido "malo". Por favor elige entre las opciones válidas.'
+        );
       });
     });
 

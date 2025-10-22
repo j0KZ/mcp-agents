@@ -178,6 +178,7 @@
 - Improved navigation and discoverability
 
 **ENHANCED in v1.0.34:**
+
 - ✅ Created `/internal` directory for non-public docs
 - ✅ Moved 23 internal files (reports, plans, phases, audits)
 - ✅ Updated .gitignore to exclude internal documentation

@@ -384,13 +384,14 @@ describe('i18n/tool-matcher', () => {
     });
 
     it('should have Spanish aliases for most tools', () => {
-      const toolsWithSpanish = Object.values(TOOL_NAME_MAPPINGS).filter(
-        mapping => mapping.aliases.some(alias =>
-          alias.includes('ar') || // Spanish verb endings
-          alias.includes('ción') ||
-          alias.includes('ción') ||
-          alias === 'salud' ||
-          alias === 'estado'
+      const toolsWithSpanish = Object.values(TOOL_NAME_MAPPINGS).filter(mapping =>
+        mapping.aliases.some(
+          alias =>
+            alias.includes('ar') || // Spanish verb endings
+            alias.includes('ción') ||
+            alias.includes('ción') ||
+            alias === 'salud' ||
+            alias === 'estado'
         )
       );
       // Most tools should have Spanish aliases
