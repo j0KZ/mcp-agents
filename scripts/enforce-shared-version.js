@@ -34,6 +34,11 @@ for (const pkgFile of packageFiles) {
   const pkg = JSON.parse(fs.readFileSync(pkgFile, 'utf8'));
   const pkgName = pkg.name || path.basename(path.dirname(pkgFile));
 
+  // Debug output
+  if (pkgName.includes('test-generator') || pkgName.includes('smart-reviewer')) {
+    console.log(`🔍 Checking ${pkgName}: dependencies[@j0kz/shared] = ${pkg.dependencies?.['@j0kz/shared']}`);
+  }
+
   // Check dependencies
   if (pkg.dependencies?.['@j0kz/shared']) {
     const currentVersion = pkg.dependencies['@j0kz/shared'];
