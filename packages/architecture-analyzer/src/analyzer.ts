@@ -98,7 +98,10 @@ export class ArchitectureAnalyzer {
       if (!graph.has(dep.from)) {
         graph.set(dep.from, []);
       }
-      graph.get(dep.from)!.push(dep.to);
+      const neighbors = graph.get(dep.from);
+      if (neighbors) {
+        neighbors.push(dep.to);
+      }
     }
 
     return graph;
@@ -218,9 +221,14 @@ export class ArchitectureAnalyzer {
     const totalModules = modules.length;
     const totalDependencies = dependencies.length;
 
-    const dependenciesPerModule = modules.map(
-      m => dependencies.filter(d => d.from === m.path).length
-    );
+    // Performance optimization: Pre-calculate dependency map for O(1) lookups
+    const dependencyCountMap = new Map<string, number>();
+    for (const dep of dependencies) {
+      const count = dependencyCountMap.get(dep.from) || 0;
+      dependencyCountMap.set(dep.from, count + 1);
+    }
+
+    const dependenciesPerModule = modules.map(m => dependencyCountMap.get(m.path) || 0);
 
     const averageDependenciesPerModule =
       totalModules > 0 ? Math.round(totalDependencies / totalModules) : 0;
