@@ -63,25 +63,18 @@ export class ArchitectureAnalyzer {
   }
 
   /**
-   * Detect circular dependencies
+   * Detect circular dependencies using Tarjan's algorithm (O(V+E) complexity)
    */
   private detectCircularDependencies(
     modules: Module[],
     dependencies: Dependency[]
   ): CircularDependency[] {
-    const cycles: CircularDependency[] = [];
     const graph = this.buildDependencyGraph(dependencies);
 
-    for (const module of modules) {
-      const visited = new Set<string>();
-      const path: string[] = [];
-      this.findCycles(module.path, graph, visited, path, cycles);
-    }
+    // Use Tarjan's algorithm for much better performance
+    const tarjanCycles = this.findCyclesTarjan(graph);
 
-    // Remove duplicate cycles
-    const uniqueCycles = this.deduplicateCycles(cycles);
-
-    return uniqueCycles.map(cycle => ({
+    return tarjanCycles.map(cycle => ({
       cycle,
       severity:
         cycle.length > CIRCULAR_DEPENDENCY_THRESHOLDS.LONG_CYCLE_LENGTH ? 'error' : 'warning',
@@ -108,62 +101,71 @@ export class ArchitectureAnalyzer {
   }
 
   /**
-   * Find cycles using DFS
+   * Tarjan's algorithm for finding strongly connected components (and cycles)
+   * Much more efficient: O(V+E) instead of O(V²)
    */
-  private findCycles(
-    node: string,
-    graph: Map<string, string[]>,
-    visited: Set<string>,
-    path: string[],
-    cycles: CircularDependency[]
-  ): void {
-    if (path.includes(node)) {
-      // Found a cycle
-      const cycleStart = path.indexOf(node);
-      const cycle = path.slice(cycleStart).concat(node);
-      cycles.push({ cycle, severity: 'warning' });
-      return;
-    }
+  private findCyclesTarjan(graph: Map<string, string[]>): string[][] {
+    const cycles: string[][] = [];
+    const index = new Map<string, number>();
+    const lowlink = new Map<string, number>();
+    const onStack = new Set<string>();
+    const stack: string[] = [];
+    let currentIndex = 0;
 
-    if (visited.has(node)) return;
+    // Helper function for Tarjan's DFS
+    const strongConnect = (node: string): void => {
+      // Set the depth index for node to the smallest unused index
+      index.set(node, currentIndex);
+      lowlink.set(node, currentIndex);
+      currentIndex++;
+      stack.push(node);
+      onStack.add(node);
 
-    visited.add(node);
-    path.push(node);
+      // Consider successors of node
+      const neighbors = graph.get(node) || [];
+      for (const neighbor of neighbors) {
+        if (!index.has(neighbor)) {
+          // Successor has not yet been visited; recurse on it
+          strongConnect(neighbor);
+          const nodeLowlink = lowlink.get(node) ?? currentIndex;
+          const neighborLowlink = lowlink.get(neighbor) ?? currentIndex;
+          lowlink.set(node, Math.min(nodeLowlink, neighborLowlink));
+        } else if (onStack.has(neighbor)) {
+          // Successor is in stack and hence in the current SCC
+          const nodeLowlink = lowlink.get(node) ?? currentIndex;
+          const neighborIndex = index.get(neighbor) ?? currentIndex;
+          lowlink.set(node, Math.min(nodeLowlink, neighborIndex));
+        }
+      }
 
-    const neighbors = graph.get(node) || [];
-    for (const neighbor of neighbors) {
-      this.findCycles(neighbor, graph, visited, [...path], cycles);
-    }
-  }
+      // If node is a root node, pop the stack and get SCC
+      if (lowlink.get(node) === index.get(node)) {
+        const scc: string[] = [];
+        let w: string | undefined;
+        do {
+          w = stack.pop();
+          if (w) {
+            onStack.delete(w);
+            scc.push(w);
+          }
+        } while (w && w !== node);
 
-  /**
-   * Remove duplicate cycles
-   */
-  private deduplicateCycles(cycles: CircularDependency[]): string[][] {
-    const seen = new Set<string>();
-    const unique: string[][] = [];
+        // Only keep SCCs with more than one node (these are cycles)
+        if (scc.length > 1) {
+          // Reverse to get proper cycle order
+          cycles.push(scc.reverse());
+        }
+      }
+    };
 
-    for (const cycle of cycles) {
-      const normalized = this.normalizeCycle(cycle.cycle);
-      const key = normalized.join('->');
-
-      if (!seen.has(key)) {
-        seen.add(key);
-        unique.push(cycle.cycle);
+    // Run Tarjan's algorithm on all unvisited nodes
+    for (const node of graph.keys()) {
+      if (!index.has(node)) {
+        strongConnect(node);
       }
     }
 
-    return unique;
-  }
-
-  /**
-   * Normalize cycle for comparison
-   */
-  private normalizeCycle(cycle: string[]): string[] {
-    // Find the lexicographically smallest element
-    const minElement = cycle.reduce((min, curr) => (curr < min ? curr : min), cycle[0]);
-    const minIndex = cycle.indexOf(minElement);
-    return [...cycle.slice(minIndex), ...cycle.slice(0, minIndex)];
+    return cycles;
   }
 
   /**
