@@ -27,6 +27,32 @@ const readFile = promisify(fs.readFile);
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat);
 
+// Performance optimization: Use Set for O(1) extension lookups
+const TEXT_EXTENSIONS = new Set([
+  '.js',
+  '.ts',
+  '.jsx',
+  '.tsx',
+  '.py',
+  '.java',
+  '.go',
+  '.rb',
+  '.php',
+  '.cs',
+  '.cpp',
+  '.c',
+  '.h',
+  '.sql',
+  '.sh',
+  '.json',
+  '.yaml',
+  '.yml',
+  '.xml',
+  '.html',
+  '.css',
+  '.env',
+]);
+
 // Global cache instance for security scans
 const scanCache = new AnalysisCache(300, 1800000); // 300 items, 30 min TTL
 
@@ -188,32 +214,8 @@ export async function scanProject(
       } else if (entry.isFile()) {
         // Only scan text files
         const ext = path.extname(entry.name);
-        const textExtensions = [
-          '.js',
-          '.ts',
-          '.jsx',
-          '.tsx',
-          '.py',
-          '.java',
-          '.go',
-          '.rb',
-          '.php',
-          '.cs',
-          '.cpp',
-          '.c',
-          '.h',
-          '.sql',
-          '.sh',
-          '.json',
-          '.yaml',
-          '.yml',
-          '.xml',
-          '.html',
-          '.css',
-          '.env',
-        ];
 
-        if (textExtensions.includes(ext)) {
+        if (TEXT_EXTENSIONS.has(ext)) {
           try {
             const fileFindings = await scanFile(fullPath, config);
             findings.push(...fileFindings);

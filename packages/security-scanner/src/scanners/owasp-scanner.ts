@@ -18,6 +18,28 @@ import { generateFindingId, extractCodeContext, isScannerFile } from '../utils.j
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+// Performance optimization: Compile regex patterns once at module level
+const DESERIALIZATION_PATTERNS = [
+  /pickle\.loads?\(/gi,
+  /yaml\.load\(/gi,
+  /unserialize\(/gi,
+  /JSON\.parse\(.{0,200}?(?:localStorage|sessionStorage|location\.)/gi,
+];
+
+const PATH_TRAVERSAL_PATTERN =
+  /(?:readFile|writeFile|open|unlink|rmdir|mkdir|stat)\s?\(.{0,200}?(?:\+|concat|\$\{)/gi;
+
+// Load crypto patterns once at module level
+const cryptoPatternsPath = join(__dirname, '../patterns', 'crypto-patterns.json');
+const cryptoPatternsData = JSON.parse(readFileSync(cryptoPatternsPath, 'utf-8'));
+
+const WEAK_CRYPTO_PATTERNS = cryptoPatternsData.weakAlgorithms.map(
+  (p: { pattern: string; algo: string }) => ({
+    pattern: new RegExp(p.pattern, 'gi'),
+    algo: p.algo,
+  })
+);
+
 /**
  * Perform OWASP Top 10 security checks
  */
@@ -30,16 +52,8 @@ export async function scanOWASP(context: FileScanContext): Promise<SecurityFindi
     return findings;
   }
 
-  // Load patterns from external JSON to avoid CodeQL false positives
-  const cryptoPatternsPath = join(__dirname, '../patterns', 'crypto-patterns.json');
-  const cryptoPatternsData = JSON.parse(readFileSync(cryptoPatternsPath, 'utf-8'));
-
-  const weakCryptoPatterns = cryptoPatternsData.weakAlgorithms.map((p: any) => ({
-    pattern: new RegExp(p.pattern, 'gi'),
-    algo: p.algo,
-  }));
-
-  for (const { pattern, algo } of weakCryptoPatterns) {
+  // Use pre-compiled patterns for better performance
+  for (const { pattern, algo } of WEAK_CRYPTO_PATTERNS) {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
@@ -66,14 +80,7 @@ export async function scanOWASP(context: FileScanContext): Promise<SecurityFindi
   }
 
   // Check for insecure deserialization
-  const deserializationPatterns = [
-    /pickle\.loads?\(/gi,
-    /yaml\.load\(/gi,
-    /unserialize\(/gi,
-    /JSON\.parse\(.{0,200}?(?:localStorage|sessionStorage|location\.)/gi,
-  ];
-
-  for (const pattern of deserializationPatterns) {
+  for (const pattern of DESERIALIZATION_PATTERNS) {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
       if (pattern.test(line)) {
@@ -103,12 +110,9 @@ export async function scanOWASP(context: FileScanContext): Promise<SecurityFindi
   }
 
   // Check for path traversal vulnerabilities
-  const pathTraversalPattern =
-    /(?:readFile|writeFile|open|unlink|rmdir|mkdir|stat)\s?\(.{0,200}?(?:\+|concat|\$\{)/gi;
-
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    if (pathTraversalPattern.test(line)) {
+    if (PATH_TRAVERSAL_PATTERN.test(line)) {
       const codeContext = extractCodeContext(context.content, i + 1);
 
       findings.push({

@@ -2,6 +2,9 @@ import { readFile, readdir, stat } from 'fs/promises';
 import { join, relative, sep } from 'path';
 import { Module, Dependency } from './types.js';
 
+// Performance optimization: Static regex compilation
+const SOURCE_FILE_PATTERN = /\.(js|ts|jsx|tsx|mjs|cjs)$/;
+
 export class ProjectScanner {
   /**
    * Scan project directory and extract modules
@@ -33,20 +36,33 @@ export class ProjectScanner {
   ): Promise<string[]> {
     const entries = await readdir(dir);
 
-    for (const entry of entries) {
-      const fullPath = join(dir, entry);
-      const stats = await stat(fullPath);
+    // Performance optimization: Batch stat operations with Promise.all
+    const entryPairs = await Promise.all(
+      entries.map(async entry => {
+        const fullPath = join(dir, entry);
+        const stats = await stat(fullPath);
+        return { entry, fullPath, stats };
+      })
+    );
 
+    // Process directories recursively (can be parallel)
+    const dirPromises: Promise<void>[] = [];
+
+    for (const { entry, fullPath, stats } of entryPairs) {
       // Check if should exclude
       const shouldExclude = excludePatterns.some(pattern => fullPath.includes(pattern));
       if (shouldExclude) continue;
 
       if (stats.isDirectory()) {
-        await this.findSourceFiles(fullPath, excludePatterns, files);
+        // Collect directory promises for parallel processing
+        dirPromises.push(this.findSourceFiles(fullPath, excludePatterns, files).then(() => {}));
       } else if (this.isSourceFile(entry)) {
         files.push(fullPath);
       }
     }
+
+    // Wait for all directory scans to complete
+    await Promise.all(dirPromises);
 
     return files;
   }
@@ -55,7 +71,7 @@ export class ProjectScanner {
    * Check if file is a source file
    */
   private isSourceFile(filename: string): boolean {
-    return /\.(js|ts|jsx|tsx|mjs|cjs)$/.test(filename);
+    return SOURCE_FILE_PATTERN.test(filename);
   }
 
   /**
