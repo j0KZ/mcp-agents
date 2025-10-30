@@ -9,7 +9,7 @@ import { CodeMetrics } from '../types.js';
  */
 export declare function getNestingDepth(lines: string[], index: number): number;
 /**
- * Find duplicate code blocks (simplified detection)
+ * Find duplicate code blocks (optimized O(n) detection using hashing)
  */
 export declare function findDuplicateBlocks(code: string): Array<{
     line1: number;

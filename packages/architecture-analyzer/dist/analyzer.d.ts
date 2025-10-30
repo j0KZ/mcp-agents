@@ -7,7 +7,7 @@ export declare class ArchitectureAnalyzer {
      */
     analyzeArchitecture(projectPath: string, config?: AnalysisConfig): Promise<ArchitectureAnalysis>;
     /**
-     * Detect circular dependencies
+     * Detect circular dependencies using Tarjan's algorithm (O(V+E) complexity)
      */
     private detectCircularDependencies;
     /**
@@ -15,17 +15,10 @@ export declare class ArchitectureAnalyzer {
      */
     private buildDependencyGraph;
     /**
-     * Find cycles using DFS
+     * Tarjan's algorithm for finding strongly connected components (and cycles)
+     * Much more efficient: O(V+E) instead of O(V²)
      */
-    private findCycles;
-    /**
-     * Remove duplicate cycles
-     */
-    private deduplicateCycles;
-    /**
-     * Normalize cycle for comparison
-     */
-    private normalizeCycle;
+    private findCyclesTarjan;
     /**
      * Detect layer violations
      */

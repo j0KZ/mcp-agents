@@ -137,6 +137,24 @@
         "Git hook integration"
       ],
       "wikiPage": "Orchestrator"
+    },
+    {
+      "id": "auto-pilot",
+      "name": "Auto-Pilot",
+      "package": "@j0kz/auto-pilot",
+      "description": "Zero-effort automation for lazy developers - fixes everything automatically",
+      "category": "automation",
+      "features": [
+        "Smart project detection (language, framework, tools)",
+        "File watching with auto-fix on save",
+        "Git hooks for automated quality",
+        "Intelligent auto-fixing (safe transformations)",
+        "Test generation for untested code",
+        "Security issue patching",
+        "Console/debugger statement removal",
+        "Zero configuration required"
+      ],
+      "wikiPage": "Auto-Pilot"
     }
   ],
   "categories": {
@@ -159,6 +177,10 @@
     "orchestration": {
       "name": "Workflow Orchestration",
       "description": "Chain tools together into automated workflows"
+    },
+    "automation": {
+      "name": "Automation",
+      "description": "Zero-effort automation tools for lazy developers"
     }
   }
 }

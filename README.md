@@ -9,7 +9,7 @@
 [![CI](https://github.com/j0KZ/mcp-agents/workflows/CI/badge.svg)](https://github.com/j0KZ/mcp-agents/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@j0kz/mcp-agents.svg)](https://www.npmjs.com/package/@j0kz/mcp-agents)
 [![codecov](https://codecov.io/gh/j0KZ/mcp-agents/branch/main/graph/badge.svg)](https://codecov.io/gh/j0KZ/mcp-agents)
-[![Tests](https://img.shields.io/badge/tests-647_passing-success.svg)](https://github.com/j0KZ/mcp-agents/actions)
+[![Tests](https://img.shields.io/badge/tests-551_passing-success.svg)](https://github.com/j0KZ/mcp-agents/actions)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -28,7 +28,7 @@ npx @j0kz/mcp-agents@latest
 That's it! The installer automatically:
 
 - ✅ Detects your editor (Claude, Cursor, Windsurf, Qoder, VS Code, Roo, etc.)
-- ✅ Configures all 9 MCP tools with universal compatibility
+- ✅ Configures all 10 MCP tools with universal compatibility
 - ✅ Adds proper `type: stdio` for maximum compatibility
 - ✅ Clears npm cache to prevent issues
 - ✅ Fixes malformed config files
@@ -771,6 +771,115 @@ After (7 lines, async/await):
 - CI/CD integration templates
 - Batch operations (multiple files/projects)
 - Custom pipeline creation
+
+</details>
+
+<details>
+<summary><b>🚀 Auto-Pilot</b> - Zero-effort automation for lazy developers (Click to expand)</summary>
+
+### How to Use
+
+#### The Laziest Way (One Command)
+
+```bash
+npx @j0kz/auto-pilot
+```
+
+That's it! Auto-Pilot will:
+- 🔍 Detect your project type automatically
+- 📦 Install git hooks for quality checks
+- 👀 Start watching files (auto-fix on save)
+- 🧪 Generate tests for untested code
+- 🔒 Fix security issues instantly
+- 🧹 Clean up code automatically
+
+#### English Examples
+
+```
+"Start auto-pilot"
+"Fix everything automatically"
+"Watch my files and fix on save"
+"Install automation hooks"
+"Make my code perfect without me doing anything"
+```
+
+#### Spanish Examples (Ejemplos en Español)
+
+```
+"Iniciar auto-pilot"
+"Arreglar todo automáticamente"
+"Observar mis archivos y corregir al guardar"
+"Instalar hooks de automatización"
+"Hacer mi código perfecto sin hacer nada"
+```
+
+### What You Get
+
+```javascript
+╔═══════════════════════════════════════════╗
+║        🚀 AUTO-PILOT v1.0.36              ║
+║   Zero-Effort Automation for Lazy Devs     ║
+╚═══════════════════════════════════════════╝
+
+📊 Detected: TypeScript React project with 234 files
+✅ Git hooks installed (pre-commit, pre-push)
+👀 Watching files for auto-fix...
+🔧 Fixed 47 issues automatically:
+  - Removed 12 console.log statements
+  - Fixed 8 == to ===
+  - Replaced 15 var with let/const
+  - Added JSDoc to 12 functions
+  - Generated tests for 5 untested files
+
+✅ Auto-Pilot ready! Just write code, I'll handle the rest.
+```
+
+### Features
+
+- **Smart Detection**: Automatically detects language, framework, tools
+- **File Watching**: Auto-fixes issues as you save files
+- **Git Hooks**: Ensures quality before commits/pushes
+- **Auto-Fix Engine**: Safely fixes common issues (console.log, ==, var, etc.)
+- **Test Generation**: Creates tests for untested code
+- **Zero Config**: Works out of the box, no setup needed
+- **Lazy Mode**: For developers who want perfect code without thinking
+
+### CLI Commands
+
+```bash
+auto-pilot              # Start everything (default)
+auto-pilot fix          # Fix all issues instantly
+auto-pilot watch        # Watch mode only
+auto-pilot detect       # Show what was detected
+auto-pilot doctor       # Health check
+auto-pilot lazy         # Ultra lazy mode 🦥
+```
+
+### Git Hooks Installed
+
+**Pre-commit**:
+- Auto-fixes staged files
+- Removes console statements
+- Runs prettier & ESLint
+- Generates missing tests
+
+**Pre-push**:
+- Runs full test suite
+- Checks coverage (>55%)
+- Security audit
+- Build verification
+
+**Commit-msg**:
+- Enforces conventional commits
+- Auto-fixes commit messages
+
+### The Laziness Scale
+
+- **Level 1**: You run tests manually → *Amateur*
+- **Level 2**: You have CI/CD → *Getting there*
+- **Level 3**: You use linters → *Decent*
+- **Level 4**: You have pre-commit hooks → *Good*
+- **Level 5**: You use Auto-Pilot → ***LEGENDARY LAZY*** 🦥
 
 </details>
 

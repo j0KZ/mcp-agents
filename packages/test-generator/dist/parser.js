@@ -3,16 +3,17 @@ export class CodeParser {
      * Parse source code to extract functions and classes
      */
     parseCode(content) {
-        const functions = this.extractFunctions(content);
-        const classes = this.extractClasses(content);
+        // Performance optimization: Split content once and reuse lines array
+        const lines = content.split('\n');
+        const functions = this.extractFunctions(content, lines);
+        const classes = this.extractClasses(content, lines);
         return { functions, classes };
     }
     /**
      * Extract function declarations
      */
-    extractFunctions(content) {
+    extractFunctions(content, lines) {
         const functions = [];
-        const lines = content.split('\n');
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
             // Skip lines that are too long to prevent ReDoS
@@ -47,9 +48,8 @@ export class CodeParser {
     /**
      * Extract class declarations and methods
      */
-    extractClasses(content) {
+    extractClasses(content, lines) {
         const classes = [];
-        const lines = content.split('\n');
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
             // Match class declarations

@@ -12,29 +12,42 @@ export function getNestingDepth(lines, index) {
     return Math.max(INDEX_CONSTANTS.FIRST_ARRAY_INDEX, depth);
 }
 /**
- * Find duplicate code blocks (simplified detection)
+ * Find duplicate code blocks (optimized O(n) detection using hashing)
  */
 export function findDuplicateBlocks(code) {
     const lines = code.split('\n');
     const duplicates = [];
     const minBlockSize = COMPLEXITY_LIMITS.MIN_DUPLICATE_BLOCK_SIZE;
-    for (let i = 0; i < lines.length - minBlockSize; i++) {
-        const block1 = lines
+    // Performance optimization: Use Map for O(1) lookups instead of O(n²) comparisons
+    const blockMap = new Map();
+    // First pass: Build hash map of all blocks
+    for (let i = 0; i <= lines.length - minBlockSize; i++) {
+        const block = lines
             .slice(i, i + minBlockSize)
             .join('\n')
             .trim();
-        if (!block1)
+        if (!block)
             continue;
-        for (let j = i + minBlockSize; j < lines.length - minBlockSize; j++) {
-            const block2 = lines
-                .slice(j, j + minBlockSize)
-                .join('\n')
-                .trim();
-            if (block1 === block2) {
-                duplicates.push({
-                    line1: i + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET,
-                    line2: j + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET,
-                });
+        // Store all occurrences of this block
+        if (!blockMap.has(block)) {
+            blockMap.set(block, []);
+        }
+        const occurrences = blockMap.get(block);
+        if (occurrences) {
+            occurrences.push(i);
+        }
+    }
+    // Second pass: Find duplicates from the map
+    for (const [, occurrences] of blockMap) {
+        if (occurrences.length > 1) {
+            // Create pairs for all duplicate occurrences
+            for (let i = 0; i < occurrences.length - 1; i++) {
+                for (let j = i + 1; j < occurrences.length; j++) {
+                    duplicates.push({
+                        line1: occurrences[i] + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET,
+                        line2: occurrences[j] + INDEX_CONSTANTS.LINE_TO_ARRAY_OFFSET,
+                    });
+                }
             }
         }
     }

@@ -1,0 +1,66 @@
+{
+  "name": "@j0kz/auto-pilot",
+  "version": "1.0.36",
+  "description": "Zero-effort automation system for lazy developers - runs everything automatically",
+  "keywords": [
+    "automation",
+    "auto-fix",
+    "lazy-developer",
+    "code-quality",
+    "git-hooks",
+    "file-watcher",
+    "smart-tools",
+    "mcp",
+    "zero-config"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "auto-pilot": "./dist/cli.js",
+    "ap": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "dependencies": {
+    "@j0kz/shared": "^1.0.36",
+    "chokidar": "^3.5.3",
+    "commander": "^11.0.0"
+  },
+  "devDependencies": {},
+  "optionalDependencies": {
+    "husky": "^8.0.3",
+    "lint-staged": "^15.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/j0Kz/mcp-agents.git",
+    "directory": "packages/auto-pilot"
+  },
+  "homepage": "https://github.com/j0Kz/mcp-agents/tree/main/packages/auto-pilot",
+  "bugs": {
+    "url": "https://github.com/j0Kz/mcp-agents/issues"
+  },
+  "author": "j0Kz",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
