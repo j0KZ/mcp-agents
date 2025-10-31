@@ -6,6 +6,87 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.1.0] - 2025-10-30
+
+### 🚀 Major Performance Improvements
+
+#### Tarjan's Algorithm Implementation
+- **50-200x faster cycle detection** in architecture-analyzer
+- Replaced naive recursive approach with O(V + E) algorithm
+- Significant improvement for large dependency graphs
+- Enables real-time analysis of complex projects
+
+#### Algorithmic Optimizations
+- Medium-impact optimizations across multiple tools
+- Quick-win performance improvements identified and implemented
+- Reduced memory usage in critical paths
+- Improved response times for all analysis operations
+
+### 📈 Massive Test Coverage Expansion
+
+- **632 total tests** (up from 366, +72.7% increase!)
+- Comprehensive edge case coverage added
+- Integration tests for all major workflows
+- 100% pass rate maintained
+- All packages now have robust test suites
+
+### 🎯 Skills System Optimization
+
+#### Claude Code Skills Optimized (7 of 10)
+- **modular-refactoring-pattern**: 757 → 541 lines (-28.5%)
+- **mcp-workflow-composition**: 839 → 590 lines (-29.7%)
+- **git-pr-workflow**: Optimized with 5 reference files
+- **testing-patterns-vitest**: Optimized with 4 reference files
+- **documentation-generation**: Optimized with 3 reference files
+- **mcp-troubleshooting**: Optimized with 3 reference files
+- **release-publishing-workflow**: Optimized with 3 reference files
+
+#### Optimization Benefits
+- **35% reduction** in initial token usage
+- **21 reference files** created for on-demand loading
+- Improved skill loading performance
+- Better organization with modular content structure
+- Cat command pattern for progressive disclosure
+
+### 🔧 Code Quality Improvements
+
+#### TypeScript Type Safety
+- Reduced `any` usage across codebase
+- Improved type inference
+- Stricter type checking enabled
+- Better IDE support and autocomplete
+
+#### Project Audit Fixes
+- Auto-pilot test corrections
+- Version synchronization improvements
+- Build process optimizations
+- Documentation accuracy updates
+
+### 📚 Documentation Updates
+
+- Test count badges updated (366 → 632)
+- Wiki synchronized with latest changes
+- Skills optimization guides created
+- Performance improvement documentation
+- Updated troubleshooting guides
+
+### 🔄 Infrastructure Updates
+
+- GitHub Actions: Updated setup-node from v5 to v6
+- CI/CD: Improved cache handling for npm
+- Version management: Enhanced synchronization scripts
+- Build process: Optimized for faster execution
+
+### 🐛 Bug Fixes
+
+- Fixed version synchronization issues
+- Resolved shared dependency version mismatches
+- Corrected test count reporting
+- Fixed CI cache invalidation problems
+- Removed debug output from production scripts
+
+---
+
 ## [1.0.36] - 2025-10-21
 
 ### 🎯 Developer Experience Enhancements
