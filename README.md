@@ -9,7 +9,7 @@
 [![CI](https://github.com/j0KZ/mcp-agents/workflows/CI/badge.svg)](https://github.com/j0KZ/mcp-agents/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@j0kz/mcp-agents.svg)](https://www.npmjs.com/package/@j0kz/mcp-agents)
 [![codecov](https://codecov.io/gh/j0KZ/mcp-agents/branch/main/graph/badge.svg)](https://codecov.io/gh/j0KZ/mcp-agents)
-[![Tests](https://img.shields.io/badge/tests-551_passing-success.svg)](https://github.com/j0KZ/mcp-agents/actions)
+[![Tests](https://img.shields.io/badge/tests-632_passing-success.svg)](https://github.com/j0KZ/mcp-agents/actions)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
