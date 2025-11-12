@@ -6,7 +6,27 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [1.1.0] - 2025-10-30
+## [1.1.0] - 2025-11-12
+
+### 🌍 Universal Skills System (NEW)
+
+#### 10 Project-Agnostic Developer Skills
+- **Created universal skills** that work in ANY project, ANY language
+- **Skills include**: quick-pr-review, debug-detective, performance-hunter, legacy-modernizer, zero-to-hero, test-coverage-boost, tech-debt-tracker, dependency-doctor, security-first, api-integration
+- **Each skill provides**: Quick start (30 seconds), WITH MCP approach (automated), WITHOUT MCP approach (manual), language-specific examples, pro tips
+
+#### Installation System
+- **Standalone installer**: `npx @j0kz/claude-skills` - installs skills in any project
+- **Universal installer**: `npx @j0kz/mcp-agents install` - installs tools + skills
+- **Auto-creates .claude folder** with proper structure and documentation
+- **Platform-specific scripts**: quick-setup.sh (Mac/Linux), quick-setup.ps1 (Windows)
+- **Smart project detection** and graceful fallbacks
+
+#### Documentation
+- **Comprehensive INSTALLATION.md** guide for all installation methods
+- **Skills index and usage guides** in .claude/universal-skills/
+- **README updates** with skill references and examples
+- **Manifest system** for skill tracking and versioning
 
 ### 🚀 Major Performance Improvements
 

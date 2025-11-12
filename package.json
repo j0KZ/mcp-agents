@@ -20,6 +20,11 @@
     "coverage:dashboard": "node scripts/coverage-dashboard.js",
     "benchmark": "node benchmarks/orchestrator-benchmark-simple.js",
     "install-all": "node scripts/install-all.js",
+    "install:tools": "npx @j0kz/mcp-agents@latest",
+    "install:skills": "node install.js skills",
+    "install:complete": "node install.js install",
+    "setup": "node install.js install",
+    "setup:quick": "npm run install:complete",
     "version:sync": "node scripts/sync-versions.js",
     "version:check-shared": "node scripts/enforce-shared-version.js",
     "update:test-count": "node scripts/update-test-count.js",
@@ -84,6 +89,10 @@
     "url": "https://github.com/j0kz/mcp-agents/issues"
   },
   "homepage": "https://github.com/j0kz/mcp-agents#readme",
+  "bin": {
+    "mcp-agents": "./install.js",
+    "claude-skills": "./scripts/install-claude-skills.js"
+  },
   "publishConfig": {
     "access": "public"
   }

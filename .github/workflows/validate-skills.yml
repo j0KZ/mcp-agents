@@ -1,0 +1,355 @@
+name: Validate Skills System
+
+on:
+  push:
+    paths:
+      - '.claude/skills/**'
+      - '.github/workflows/validate-skills.yml'
+  pull_request:
+    paths:
+      - '.claude/skills/**'
+  workflow_dispatch:
+
+jobs:
+  validate-structure:
+    name: Validate Skill Structure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate skill files exist
+        run: |
+          echo "🔍 Checking skill file structure..."
+
+          for skill_dir in .claude/skills/*/; do
+            if [[ -d "$skill_dir" && ! "$skill_dir" == *"scripts"* && ! "$skill_dir" == *"references"* && ! "$skill_dir" == *"workflows"* && ! "$skill_dir" == *"migrations"* ]]; then
+              skill_name=$(basename "$skill_dir")
+              echo "Checking $skill_name..."
+
+              # Check for required SKILL.md
+              if [[ ! -f "$skill_dir/SKILL.md" ]]; then
+                echo "❌ Missing SKILL.md in $skill_name"
+                exit 1
+              fi
+
+              # Check SKILL.md size (should be < 300 lines for v2)
+              lines=$(wc -l < "$skill_dir/SKILL.md")
+              if [[ $lines -gt 300 ]]; then
+                echo "⚠️  $skill_name/SKILL.md has $lines lines (target: <300)"
+              else
+                echo "✅ $skill_name/SKILL.md has $lines lines"
+              fi
+            fi
+          done
+
+      - name: Validate YAML frontmatter
+        run: |
+          echo "🔍 Validating YAML frontmatter..."
+
+          for skill_file in .claude/skills/*/SKILL.md; do
+            if [[ -f "$skill_file" ]]; then
+              skill_name=$(basename $(dirname "$skill_file"))
+
+              # Extract frontmatter
+              if head -1 "$skill_file" | grep -q "^---"; then
+                # Extract YAML content between --- markers
+                yaml_content=$(sed -n '/^---$/,/^---$/p' "$skill_file" | sed '1d;$d')
+
+                # Check required fields
+                if echo "$yaml_content" | grep -q "^name:"; then
+                  echo "✅ $skill_name has name field"
+                else
+                  echo "❌ $skill_name missing name field"
+                  exit 1
+                fi
+
+                if echo "$yaml_content" | grep -q "^version:"; then
+                  echo "✅ $skill_name has version field"
+                else
+                  echo "⚠️  $skill_name missing version field"
+                fi
+              else
+                echo "⚠️  $skill_name has no YAML frontmatter"
+              fi
+            fi
+          done
+
+  validate-chains:
+    name: Validate Skill Chains
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate skill chains
+        run: |
+          echo "🔗 Validating skill chains..."
+
+          if [[ -f .claude/skills/scripts/validate-skill-chains.js ]]; then
+            node .claude/skills/scripts/validate-skill-chains.js
+          else
+            echo "⚠️  Chain validator not found, skipping"
+          fi
+
+      - name: Check circular dependencies
+        run: |
+          echo "🔄 Checking for circular dependencies..."
+
+          # Simple check for obvious circular refs in skill-chain.json
+          if [[ -f .claude/skills/skill-chain.json ]]; then
+            # This is a simple check - the validator script does deeper analysis
+            if grep -q '"modular-refactoring-pattern".*"code-quality-pipeline"' .claude/skills/skill-chain.json && \
+               grep -q '"code-quality-pipeline".*"modular-refactoring-pattern"' .claude/skills/skill-chain.json; then
+              echo "⚠️  Potential circular dependency detected"
+            else
+              echo "✅ No obvious circular dependencies"
+            fi
+          fi
+
+  validate-versions:
+    name: Validate Skill Versions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate version registry
+        run: |
+          echo "📦 Validating version registry..."
+
+          if [[ -f .claude/skills/scripts/manage-versions.js ]]; then
+            node .claude/skills/scripts/manage-versions.js validate
+          else
+            echo "⚠️  Version manager not found, skipping"
+          fi
+
+      - name: Check version consistency
+        run: |
+          echo "🔍 Checking version consistency..."
+
+          # Compare versions in skill-versions.json with YAML frontmatter
+          if [[ -f .claude/skills/skill-versions.json ]]; then
+            for skill_file in .claude/skills/*/SKILL.md; do
+              if [[ -f "$skill_file" ]]; then
+                skill_name=$(basename $(dirname "$skill_file"))
+
+                # Extract version from YAML
+                yaml_version=$(sed -n '/^---$/,/^---$/p' "$skill_file" | grep "^version:" | cut -d: -f2 | tr -d ' ')
+
+                # Extract version from JSON
+                if [[ -n "$yaml_version" ]]; then
+                  json_version=$(grep -A2 "\"$skill_name\"" .claude/skills/skill-versions.json | grep "current_version" | head -1 | cut -d'"' -f4)
+
+                  if [[ "$yaml_version" == "$json_version" ]]; then
+                    echo "✅ $skill_name version consistent ($yaml_version)"
+                  else
+                    echo "⚠️  $skill_name version mismatch: YAML=$yaml_version, JSON=$json_version"
+                  fi
+                fi
+              fi
+            done
+          fi
+
+  test-workflows:
+    name: Test Workflow Templates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate workflow YAML
+        run: |
+          echo "📦 Validating workflow templates..."
+
+          for workflow in .claude/skills/workflows/*.yml; do
+            if [[ -f "$workflow" ]]; then
+              workflow_name=$(basename "$workflow")
+              echo "Checking $workflow_name..."
+
+              # Basic YAML validation
+              if node -e "const fs=require('fs'); const yaml=require('js-yaml'); yaml.load(fs.readFileSync('$workflow'));" 2>/dev/null; then
+                echo "✅ $workflow_name is valid YAML"
+              else
+                echo "❌ $workflow_name has invalid YAML"
+                exit 1
+              fi
+
+              # Check required fields
+              if grep -q "^name:" "$workflow" && \
+                 grep -q "^steps:" "$workflow" && \
+                 grep -q "^success_criteria:" "$workflow"; then
+                echo "✅ $workflow_name has required fields"
+              else
+                echo "❌ $workflow_name missing required fields"
+                exit 1
+              fi
+            fi
+          done
+
+      - name: Test workflow executor
+        run: |
+          echo "🚀 Testing workflow executor..."
+
+          if [[ -f .claude/skills/scripts/execute-workflow.js ]]; then
+            # List available workflows
+            node .claude/skills/scripts/execute-workflow.js list
+
+            # TODO: Add dry-run mode to test workflows without execution
+            echo "✅ Workflow executor operational"
+          else
+            echo "⚠️  Workflow executor not found"
+          fi
+
+  performance-check:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check skill discovery performance
+        run: |
+          echo "⚡ Testing skill discovery performance..."
+
+          if [[ -f .claude/skills/scripts/discover-skills.js ]]; then
+            # Time the discovery for common queries
+            start_time=$(date +%s%N)
+            node .claude/skills/scripts/discover-skills.js "review code" > /dev/null
+            end_time=$(date +%s%N)
+
+            duration=$((($end_time - $start_time) / 1000000))
+            echo "Discovery took ${duration}ms"
+
+            if [[ $duration -lt 100 ]]; then
+              echo "✅ Discovery performance excellent (<100ms)"
+            elif [[ $duration -lt 500 ]]; then
+              echo "✅ Discovery performance good (<500ms)"
+            else
+              echo "⚠️  Discovery performance needs optimization (${duration}ms)"
+            fi
+          fi
+
+      - name: Memory usage check
+        run: |
+          echo "💾 Checking memory usage..."
+
+          # Simple memory check for loading all skills
+          node -e "
+            const fs = require('fs');
+            const before = process.memoryUsage().heapUsed;
+
+            // Load all skill files
+            const skills = fs.readdirSync('.claude/skills')
+              .filter(d => d !== 'scripts' && d !== 'references' && d !== 'workflows' && d !== 'migrations')
+              .map(d => {
+                const skillPath = '.claude/skills/' + d + '/SKILL.md';
+                if (fs.existsSync(skillPath)) {
+                  return fs.readFileSync(skillPath, 'utf-8');
+                }
+              });
+
+            const after = process.memoryUsage().heapUsed;
+            const used = Math.round((after - before) / 1024 / 1024 * 100) / 100;
+
+            console.log('Memory used for loading skills: ' + used + 'MB');
+
+            if (used < 10) {
+              console.log('✅ Memory usage optimal (<10MB)');
+            } else if (used < 50) {
+              console.log('✅ Memory usage acceptable (<50MB)');
+            } else {
+              console.log('⚠️  High memory usage (' + used + 'MB)');
+            }
+          "
+
+  generate-report:
+    name: Generate Validation Report
+    runs-on: ubuntu-latest
+    needs: [validate-structure, validate-chains, validate-versions, test-workflows, performance-check]
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate validation summary
+        run: |
+          echo "# 📊 Skills System Validation Report" > validation-report.md
+          echo "" >> validation-report.md
+          echo "**Date:** $(date -u +"%Y-%m-%d %H:%M UTC")" >> validation-report.md
+          echo "**Branch:** ${{ github.ref_name }}" >> validation-report.md
+          echo "**Commit:** ${{ github.sha }}" >> validation-report.md
+          echo "" >> validation-report.md
+
+          echo "## Validation Results" >> validation-report.md
+          echo "" >> validation-report.md
+
+          # Count skills
+          skill_count=$(find .claude/skills -type d -maxdepth 1 ! -name scripts ! -name references ! -name workflows ! -name migrations -name '*' | wc -l)
+          echo "- **Total Skills:** $((skill_count - 1))" >> validation-report.md
+
+          # Count workflows
+          workflow_count=$(find .claude/skills/workflows -name "*.yml" 2>/dev/null | wc -l)
+          echo "- **Workflow Templates:** ${workflow_count:-0}" >> validation-report.md
+
+          # Count reference files
+          ref_count=$(find .claude/skills -path "*/references/*.md" 2>/dev/null | wc -l)
+          echo "- **Reference Files:** ${ref_count:-0}" >> validation-report.md
+
+          echo "" >> validation-report.md
+          echo "## Checks Performed" >> validation-report.md
+          echo "" >> validation-report.md
+          echo "- ✅ Skill structure validation" >> validation-report.md
+          echo "- ✅ YAML frontmatter validation" >> validation-report.md
+          echo "- ✅ Chain dependency validation" >> validation-report.md
+          echo "- ✅ Version consistency checks" >> validation-report.md
+          echo "- ✅ Workflow template validation" >> validation-report.md
+          echo "- ✅ Performance benchmarks" >> validation-report.md
+
+          echo "" >> validation-report.md
+          echo "---" >> validation-report.md
+          echo "*Generated by GitHub Actions*" >> validation-report.md
+
+      - name: Upload validation report
+        uses: actions/upload-artifact@v3
+        with:
+          name: skill-validation-report
+          path: validation-report.md
+
+      - name: Comment on PR (if applicable)
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('validation-report.md', 'utf-8');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: report
+            });

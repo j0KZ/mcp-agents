@@ -19,19 +19,29 @@
 
 ---
 
-## 🚀 One-Line Installation
+## 🚀 Quick Installation Options
 
+### Install MCP Tools (Automated AI Tools)
 ```bash
 npx @j0kz/mcp-agents@latest
 ```
 
-That's it! The installer automatically:
+### Install Universal Skills (Developer Guides)
+```bash
+npx @j0kz/claude-skills
+```
 
+### Install Everything (Tools + Skills)
+```bash
+npx @j0kz/mcp-agents install
+```
+
+The installer automatically:
 - ✅ Detects your editor (Claude, Cursor, Windsurf, Qoder, VS Code, Roo, etc.)
 - ✅ Configures all 10 MCP tools with universal compatibility
+- ✅ Downloads 10 universal developer skills (optional)
+- ✅ Creates .claude folder structure if needed
 - ✅ Adds proper `type: stdio` for maximum compatibility
-- ✅ Clears npm cache to prevent issues
-- ✅ Fixes malformed config files
 - ✅ Works in English and Spanish
 
 **Restart your editor and you're ready to go!**
@@ -110,7 +120,58 @@ After restarting your editor, try one of these commands:
 
 ---
 
-## 🔧 Detailed Usage Guide
+## 🌍 NEW: Universal Developer Skills
+
+**10 project-agnostic skills** that work in ANY codebase, ANY language:
+
+<details>
+<summary><b>📚 View Universal Skills</b> (Click to expand)</summary>
+
+### Installation
+```bash
+# Install skills in any project
+npx @j0kz/claude-skills
+
+# Or install with MCP tools
+npx @j0kz/mcp-agents install
+```
+
+### Available Skills
+
+| Skill | Purpose | Time to Apply |
+|-------|---------|---------------|
+| **quick-pr-review** | Pre-PR checklist | 30 seconds |
+| **debug-detective** | Systematic debugging | 5 minutes |
+| **performance-hunter** | Find bottlenecks | 10 minutes |
+| **legacy-modernizer** | Modernize old code | Incremental |
+| **zero-to-hero** | Master any codebase | 30 minutes |
+| **test-coverage-boost** | 0% to 80% coverage | 1-5 days |
+| **tech-debt-tracker** | Quantify technical debt | 1 hour |
+| **dependency-doctor** | Fix package issues | 30 minutes |
+| **security-first** | Security audit | 1 hour |
+| **api-integration** | Connect to any API | 2 hours |
+
+### Usage Examples
+```
+"Apply the debug-detective skill to find this bug"
+"Use quick-pr-review before creating my PR"
+"Follow zero-to-hero to understand this codebase"
+```
+
+Each skill includes:
+- ✅ Quick start (30-second value)
+- ✅ WITH MCP approach (automated)
+- ✅ WITHOUT MCP approach (manual)
+- ✅ Language-specific examples
+- ✅ Pro tips and metrics
+
+📖 [Full Skills Documentation](docs/universal-skills/INDEX.md)
+
+</details>
+
+---
+
+## 🔧 MCP Tools Usage Guide
 
 Each tool below includes **clear examples in English and Spanish** with expected outputs.
 
