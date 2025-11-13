@@ -2,6 +2,23 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 🌍 NEW: Universal Skills for ANY Project
+
+**10 project-agnostic developer skills** are now available in [`docs/universal-skills/`](docs/universal-skills/INDEX.md). These work in ANY codebase, ANY language, with or without MCP tools:
+
+- **Quick PR Review** - Pre-PR checklist (30 seconds)
+- **Debug Detective** - Systematic debugging
+- **Performance Hunter** - Find bottlenecks
+- **Legacy Modernizer** - Safe refactoring
+- **Zero to Hero** - Master any codebase
+- **Test Coverage Boost** - 0% to 80% coverage
+- **Tech Debt Tracker** - Quantify and prioritize
+- **Dependency Doctor** - Fix package issues
+- **Security First** - OWASP protection
+- **API Integration** - Connect any service
+
+📖 **[View All Universal Skills →](docs/universal-skills/INDEX.md)**
+
 ## ⚠️ CRITICAL SAFETY RULES - READ FIRST
 
 ### NEVER Delete Files Without Explicit Confirmation

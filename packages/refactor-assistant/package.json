@@ -22,7 +22,7 @@
     "start": "node dist/mcp-server.js"
   },
   "dependencies": {
-    "@j0kz/shared": "^1.0.36",
+    "@j0kz/shared": "^1.1.0",
     "@modelcontextprotocol/sdk": "^1.19.1",
     "typescript": "^5.3.3"
   },
