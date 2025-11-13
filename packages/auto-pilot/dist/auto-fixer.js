@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * AutoFixer: Automatically fixes common issues without user intervention
  * Smart enough to know what's safe to fix and what needs human review
@@ -102,7 +103,7 @@ export class AutoFixer {
                 console.log(`  ✅ Fixed ${fixes.length} issues in ${path.basename(filePath)}`);
                 // Run prettier if available (only on changed files)
                 try {
-                    const { stdout } = await execAsync(`npx prettier --write "${filePath}"`, {
+                    await execAsync(`npx prettier --write "${filePath}"`, {
                         cwd: process.cwd(),
                     });
                 }
@@ -124,7 +125,7 @@ export class AutoFixer {
         console.log('🔧 Running auto-fix on entire project...');
         try {
             // First try MCP tool
-            const { stdout } = await execAsync('npx @j0kz/smart-reviewer apply-auto-fixes --pattern "**/*.{js,ts,jsx,tsx}"', {
+            await execAsync('npx @j0kz/smart-reviewer apply-auto-fixes --pattern "**/*.{js,ts,jsx,tsx}"', {
                 cwd: process.cwd(),
             });
             console.log('✅ Auto-fix completed successfully');
@@ -223,7 +224,7 @@ export class AutoFixer {
         console.log(`  🧪 Generating tests for ${path.basename(filePath)}...`);
         try {
             // Try to use test-generator MCP tool
-            const { stdout } = await execAsync(`npx @j0kz/test-generator generate "${filePath}"`, {
+            await execAsync(`npx @j0kz/test-generator generate "${filePath}"`, {
                 cwd: process.cwd(),
             });
             console.log('  ✅ Tests generated successfully');

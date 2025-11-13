@@ -121,7 +121,7 @@ export class AutoFixer {
 
         // Run prettier if available (only on changed files)
         try {
-          const { stdout } = await execAsync(`npx prettier --write "${filePath}"`, {
+          await execAsync(`npx prettier --write "${filePath}"`, {
             cwd: process.cwd(),
           });
         } catch {
@@ -146,7 +146,7 @@ export class AutoFixer {
 
     try {
       // First try MCP tool
-      const { stdout } = await execAsync(
+      await execAsync(
         'npx @j0kz/smart-reviewer apply-auto-fixes --pattern "**/*.{js,ts,jsx,tsx}"',
         {
           cwd: process.cwd(),
@@ -264,7 +264,7 @@ export class AutoFixer {
 
     try {
       // Try to use test-generator MCP tool
-      const { stdout } = await execAsync(`npx @j0kz/test-generator generate "${filePath}"`, {
+      await execAsync(`npx @j0kz/test-generator generate "${filePath}"`, {
         cwd: process.cwd(),
       });
       console.log('  ✅ Tests generated successfully');
