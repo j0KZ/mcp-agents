@@ -1,13 +1,12 @@
-/* eslint-disable */
 /**
  * AutoFixer: Automatically fixes common issues without user intervention
  * Smart enough to know what's safe to fix and what needs human review
  */
 import { readFile, writeFile } from 'fs/promises';
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 import path from 'path';
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 export class AutoFixer {
     fixHistory = new Map();
     safeFixPatterns = new Map();
@@ -103,7 +102,7 @@ export class AutoFixer {
                 console.log(`  ✅ Fixed ${fixes.length} issues in ${path.basename(filePath)}`);
                 // Run prettier if available (only on changed files)
                 try {
-                    await execAsync(`npx prettier --write "${filePath}"`, {
+                    await execFileAsync('npx', ['prettier', '--write', filePath], {
                         cwd: process.cwd(),
                     });
                 }
@@ -125,7 +124,7 @@ export class AutoFixer {
         console.log('🔧 Running auto-fix on entire project...');
         try {
             // First try MCP tool
-            await execAsync('npx @j0kz/smart-reviewer apply-auto-fixes --pattern "**/*.{js,ts,jsx,tsx}"', {
+            await execFileAsync('npx', ['@j0kz/smart-reviewer', 'apply-auto-fixes', '--pattern', '**/*.{js,ts,jsx,tsx}'], {
                 cwd: process.cwd(),
             });
             console.log('✅ Auto-fix completed successfully');
@@ -197,7 +196,7 @@ export class AutoFixer {
      */
     async runSmartReviewerFix(filePath) {
         try {
-            await execAsync(`npx @j0kz/smart-reviewer apply-auto-fixes "${filePath}"`, {
+            await execFileAsync('npx', ['@j0kz/smart-reviewer', 'apply-auto-fixes', filePath], {
                 cwd: process.cwd(),
             });
         }
@@ -224,7 +223,7 @@ export class AutoFixer {
         console.log(`  🧪 Generating tests for ${path.basename(filePath)}...`);
         try {
             // Try to use test-generator MCP tool
-            await execAsync(`npx @j0kz/test-generator generate "${filePath}"`, {
+            await execFileAsync('npx', ['@j0kz/test-generator', 'generate', filePath], {
                 cwd: process.cwd(),
             });
             console.log('  ✅ Tests generated successfully');

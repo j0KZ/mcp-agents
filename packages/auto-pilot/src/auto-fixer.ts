@@ -4,11 +4,11 @@
  */
 
 import { readFile, writeFile } from 'fs/promises';
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 import path from 'path';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 export class AutoFixer {
   private fixHistory: Map<string, string[]> = new Map();
@@ -121,7 +121,7 @@ export class AutoFixer {
 
         // Run prettier if available (only on changed files)
         try {
-          await execAsync(`npx prettier --write "${filePath}"`, {
+          await execFileAsync('npx', ['prettier', '--write', filePath], {
             cwd: process.cwd(),
           });
         } catch {
@@ -146,8 +146,9 @@ export class AutoFixer {
 
     try {
       // First try MCP tool
-      await execAsync(
-        'npx @j0kz/smart-reviewer apply-auto-fixes --pattern "**/*.{js,ts,jsx,tsx}"',
+      await execFileAsync(
+        'npx',
+        ['@j0kz/smart-reviewer', 'apply-auto-fixes', '--pattern', '**/*.{js,ts,jsx,tsx}'],
         {
           cwd: process.cwd(),
         }
@@ -235,7 +236,7 @@ export class AutoFixer {
    */
   private async runSmartReviewerFix(filePath: string): Promise<void> {
     try {
-      await execAsync(`npx @j0kz/smart-reviewer apply-auto-fixes "${filePath}"`, {
+      await execFileAsync('npx', ['@j0kz/smart-reviewer', 'apply-auto-fixes', filePath], {
         cwd: process.cwd(),
       });
     } catch {
@@ -264,7 +265,7 @@ export class AutoFixer {
 
     try {
       // Try to use test-generator MCP tool
-      await execAsync(`npx @j0kz/test-generator generate "${filePath}"`, {
+      await execFileAsync('npx', ['@j0kz/test-generator', 'generate', filePath], {
         cwd: process.cwd(),
       });
       console.log('  ✅ Tests generated successfully');
