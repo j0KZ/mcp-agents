@@ -5,7 +5,6 @@
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import { readFile } from 'fs/promises';
-import path from 'path';
 const execAsync = promisify(exec);
 export class SmartAnalyzer {
     toolsAvailable = new Map();
@@ -85,7 +84,6 @@ export class SmartAnalyzer {
      */
     async analyzeFile(filePath) {
         const content = await readFile(filePath, 'utf-8');
-        const ext = path.extname(filePath);
         const analysis = {
             complexity: this.calculateComplexity(content),
             hasTests: await this.checkTestCoverage(filePath),

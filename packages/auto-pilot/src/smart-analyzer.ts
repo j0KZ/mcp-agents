@@ -102,7 +102,6 @@ export class SmartAnalyzer {
    */
   async analyzeFile(filePath: string): Promise<any> {
     const content = await readFile(filePath, 'utf-8');
-    const ext = path.extname(filePath);
 
     const analysis = {
       complexity: this.calculateComplexity(content),
