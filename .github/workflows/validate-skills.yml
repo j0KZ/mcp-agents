@@ -3,11 +3,11 @@ name: Validate Skills System
 on:
   push:
     paths:
-      - '.claude/skills/**'
+      - 'docs/universal-skills/**'
       - '.github/workflows/validate-skills.yml'
   pull_request:
     paths:
-      - '.claude/skills/**'
+      - 'docs/universal-skills/**'
   workflow_dispatch:
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "🔍 Checking skill file structure..."
 
-          for skill_dir in .claude/skills/*/; do
+          for skill_dir in docs/universal-skills/*/; do
             if [[ -d "$skill_dir" && ! "$skill_dir" == *"scripts"* && ! "$skill_dir" == *"references"* && ! "$skill_dir" == *"workflows"* && ! "$skill_dir" == *"migrations"* ]]; then
               skill_name=$(basename "$skill_dir")
               echo "Checking $skill_name..."
@@ -51,7 +51,7 @@ jobs:
         run: |
           echo "🔍 Validating YAML frontmatter..."
 
-          for skill_file in .claude/skills/*/SKILL.md; do
+          for skill_file in docs/universal-skills/*/SKILL.md; do
             if [[ -f "$skill_file" ]]; then
               skill_name=$(basename $(dirname "$skill_file"))
 
@@ -98,8 +98,8 @@ jobs:
         run: |
           echo "🔗 Validating skill chains..."
 
-          if [[ -f .claude/skills/scripts/validate-skill-chains.js ]]; then
-            node .claude/skills/scripts/validate-skill-chains.js
+          if [[ -f docs/universal-skills/scripts/validate-skill-chains.js ]]; then
+            node docs/universal-skills/scripts/validate-skill-chains.js
           else
             echo "⚠️  Chain validator not found, skipping"
           fi
@@ -109,10 +109,10 @@ jobs:
           echo "🔄 Checking for circular dependencies..."
 
           # Simple check for obvious circular refs in skill-chain.json
-          if [[ -f .claude/skills/skill-chain.json ]]; then
+          if [[ -f docs/universal-skills/skill-chain.json ]]; then
             # This is a simple check - the validator script does deeper analysis
-            if grep -q '"modular-refactoring-pattern".*"code-quality-pipeline"' .claude/skills/skill-chain.json && \
-               grep -q '"code-quality-pipeline".*"modular-refactoring-pattern"' .claude/skills/skill-chain.json; then
+            if grep -q '"modular-refactoring-pattern".*"code-quality-pipeline"' docs/universal-skills/skill-chain.json && \
+               grep -q '"code-quality-pipeline".*"modular-refactoring-pattern"' docs/universal-skills/skill-chain.json; then
               echo "⚠️  Potential circular dependency detected"
             else
               echo "✅ No obvious circular dependencies"
@@ -134,8 +134,8 @@ jobs:
         run: |
           echo "📦 Validating version registry..."
 
-          if [[ -f .claude/skills/scripts/manage-versions.js ]]; then
-            node .claude/skills/scripts/manage-versions.js validate
+          if [[ -f docs/universal-skills/scripts/manage-versions.js ]]; then
+            node docs/universal-skills/scripts/manage-versions.js validate
           else
             echo "⚠️  Version manager not found, skipping"
           fi
@@ -145,8 +145,8 @@ jobs:
           echo "🔍 Checking version consistency..."
 
           # Compare versions in skill-versions.json with YAML frontmatter
-          if [[ -f .claude/skills/skill-versions.json ]]; then
-            for skill_file in .claude/skills/*/SKILL.md; do
+          if [[ -f docs/universal-skills/skill-versions.json ]]; then
+            for skill_file in docs/universal-skills/*/SKILL.md; do
               if [[ -f "$skill_file" ]]; then
                 skill_name=$(basename $(dirname "$skill_file"))
 
@@ -155,7 +155,7 @@ jobs:
 
                 # Extract version from JSON
                 if [[ -n "$yaml_version" ]]; then
-                  json_version=$(grep -A2 "\"$skill_name\"" .claude/skills/skill-versions.json | grep "current_version" | head -1 | cut -d'"' -f4)
+                  json_version=$(grep -A2 "\"$skill_name\"" docs/universal-skills/skill-versions.json | grep "current_version" | head -1 | cut -d'"' -f4)
 
                   if [[ "$yaml_version" == "$json_version" ]]; then
                     echo "✅ $skill_name version consistent ($yaml_version)"
@@ -182,7 +182,7 @@ jobs:
         run: |
           echo "📦 Validating workflow templates..."
 
-          for workflow in .claude/skills/workflows/*.yml; do
+          for workflow in docs/universal-skills/workflows/*.yml; do
             if [[ -f "$workflow" ]]; then
               workflow_name=$(basename "$workflow")
               echo "Checking $workflow_name..."
@@ -211,9 +211,9 @@ jobs:
         run: |
           echo "🚀 Testing workflow executor..."
 
-          if [[ -f .claude/skills/scripts/execute-workflow.js ]]; then
+          if [[ -f docs/universal-skills/scripts/execute-workflow.js ]]; then
             # List available workflows
-            node .claude/skills/scripts/execute-workflow.js list
+            node docs/universal-skills/scripts/execute-workflow.js list
 
             # TODO: Add dry-run mode to test workflows without execution
             echo "✅ Workflow executor operational"
@@ -236,10 +236,10 @@ jobs:
         run: |
           echo "⚡ Testing skill discovery performance..."
 
-          if [[ -f .claude/skills/scripts/discover-skills.js ]]; then
+          if [[ -f docs/universal-skills/scripts/discover-skills.js ]]; then
             # Time the discovery for common queries
             start_time=$(date +%s%N)
-            node .claude/skills/scripts/discover-skills.js "review code" > /dev/null
+            node docs/universal-skills/scripts/discover-skills.js "review code" > /dev/null
             end_time=$(date +%s%N)
 
             duration=$((($end_time - $start_time) / 1000000))
@@ -264,10 +264,10 @@ jobs:
             const before = process.memoryUsage().heapUsed;
 
             // Load all skill files
-            const skills = fs.readdirSync('.claude/skills')
+            const skills = fs.readdirSync('docs/universal-skills')
               .filter(d => d !== 'scripts' && d !== 'references' && d !== 'workflows' && d !== 'migrations')
               .map(d => {
-                const skillPath = '.claude/skills/' + d + '/SKILL.md';
+                const skillPath = 'docs/universal-skills/' + d + '/SKILL.md';
                 if (fs.existsSync(skillPath)) {
                   return fs.readFileSync(skillPath, 'utf-8');
                 }
@@ -308,15 +308,15 @@ jobs:
           echo "" >> validation-report.md
 
           # Count skills
-          skill_count=$(find .claude/skills -type d -maxdepth 1 ! -name scripts ! -name references ! -name workflows ! -name migrations -name '*' | wc -l)
+          skill_count=$(find docs/universal-skills -type d -maxdepth 1 ! -name scripts ! -name references ! -name workflows ! -name migrations -name '*' | wc -l)
           echo "- **Total Skills:** $((skill_count - 1))" >> validation-report.md
 
           # Count workflows
-          workflow_count=$(find .claude/skills/workflows -name "*.yml" 2>/dev/null | wc -l)
+          workflow_count=$(find docs/universal-skills/workflows -name "*.yml" 2>/dev/null | wc -l)
           echo "- **Workflow Templates:** ${workflow_count:-0}" >> validation-report.md
 
           # Count reference files
-          ref_count=$(find .claude/skills -path "*/references/*.md" 2>/dev/null | wc -l)
+          ref_count=$(find docs/universal-skills -path "*/references/*.md" 2>/dev/null | wc -l)
           echo "- **Reference Files:** ${ref_count:-0}" >> validation-report.md
 
           echo "" >> validation-report.md
@@ -334,7 +334,7 @@ jobs:
           echo "*Generated by GitHub Actions*" >> validation-report.md
 
       - name: Upload validation report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: skill-validation-report
           path: validation-report.md
