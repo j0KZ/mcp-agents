@@ -39,7 +39,7 @@
   "devDependencies": {},
   "optionalDependencies": {
     "husky": "^8.0.3",
-    "lint-staged": "^15.0.0"
+    "lint-staged": "^16.2.6"
   },
   "publishConfig": {
     "access": "public"
