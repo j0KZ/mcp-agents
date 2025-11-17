@@ -6,6 +6,42 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.1.1] - 2025-11-17
+
+### 🔒 Security Fixes
+
+#### Critical Command Injection Vulnerability (CVE-78)
+- **Fixed command injection vulnerability** in @j0kz/auto-pilot package
+- **Severity**: High (CodeQL Security Alert)
+- **Impact**: Prevented arbitrary command execution via malicious file paths
+- **Solution**: Replaced `exec()` with `execFile()` to avoid shell interpretation
+- **Affected lines**: auto-fixer.ts lines 124, 238, 267
+- **No functional changes** - all tests pass, behavior unchanged
+
+### 🐛 Bug Fixes
+
+#### GitHub Actions Compatibility
+- **Fixed deprecated action versions** causing CI/CD failures
+- Updated actions/checkout, actions/setup-node to v4 (from non-existent v5/v6)
+- Updated codecov/codecov-action to v4 (from v5)
+- Updated github/codeql-action to v3 (from v4)
+- Updated actions/github-script to v7 (from v8)
+- Fixed validate-skills workflow paths from `.claude/skills/` to `docs/universal-skills/`
+
+#### Code Quality Improvements
+- **Removed unused variables** detected by CodeQL static analysis
+- Fixed unused `stdout` variables in auto-fixer.ts (3 occurrences)
+- Fixed unused `ext` variable in smart-analyzer.ts
+- Resolved ESLint warnings in source files
+
+### 🔧 Technical Details
+- All packages bumped to version 1.1.1
+- Security patch applied without breaking changes
+- Maintains backward compatibility
+- All 632 tests passing
+
+---
+
 ## [1.1.0] - 2025-11-12
 
 ### 🌍 Universal Skills System (NEW)

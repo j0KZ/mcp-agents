@@ -10,7 +10,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { homedir, platform } from 'os';
 import { join, dirname } from 'path';
 
-const VERSION = '1.1.0';
+const VERSION = '1.1.1';
 const TOOLS = [
   { pkg: '@j0kz/smart-reviewer-mcp', name: 'smart-reviewer', desc: 'Code review and quality analysis' },
   { pkg: '@j0kz/test-generator-mcp', name: 'test-generator', desc: 'Test suite generation' },
