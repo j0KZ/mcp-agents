@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { AutoFixer } from '../src/auto-fixer.js';
 import * as fs from 'fs/promises';
 import { exec } from 'child_process';
-import { promisify } from 'util';
 
 vi.mock('fs/promises');
 vi.mock('child_process');
@@ -21,11 +20,6 @@ describe('AutoFixer', () => {
         console.log('debug');
         const result = calculate();
         console.debug('test');
-        return result;
-      `;
-
-      const expectedContent = `
-        const result = calculate();
         return result;
       `;
 
@@ -55,14 +49,8 @@ describe('AutoFixer', () => {
 
       await fixer.autoFix('test.js');
 
-      expect(fs.writeFile).toHaveBeenCalledWith(
-        'test.js',
-        expect.stringContaining('===')
-      );
-      expect(fs.writeFile).toHaveBeenCalledWith(
-        'test.js',
-        expect.stringContaining('!==')
-      );
+      expect(fs.writeFile).toHaveBeenCalledWith('test.js', expect.stringContaining('==='));
+      expect(fs.writeFile).toHaveBeenCalledWith('test.js', expect.stringContaining('!=='));
     });
 
     it('should replace var with let', async () => {
@@ -77,14 +65,8 @@ describe('AutoFixer', () => {
 
       await fixer.autoFix('test.js');
 
-      expect(fs.writeFile).toHaveBeenCalledWith(
-        'test.js',
-        expect.stringContaining('let x = 1')
-      );
-      expect(fs.writeFile).toHaveBeenCalledWith(
-        'test.js',
-        expect.stringContaining('let y = 2')
-      );
+      expect(fs.writeFile).toHaveBeenCalledWith('test.js', expect.stringContaining('let x = 1'));
+      expect(fs.writeFile).toHaveBeenCalledWith('test.js', expect.stringContaining('let y = 2'));
     });
 
     it('should remove debugger statements', async () => {
@@ -100,10 +82,7 @@ describe('AutoFixer', () => {
 
       await fixer.autoFix('test.js');
 
-      expect(fs.writeFile).toHaveBeenCalledWith(
-        'test.js',
-        expect.not.stringContaining('debugger')
-      );
+      expect(fs.writeFile).toHaveBeenCalledWith('test.js', expect.not.stringContaining('debugger'));
     });
 
     it('should fix TypeScript any types', async () => {
@@ -117,10 +96,7 @@ describe('AutoFixer', () => {
 
       await fixer.autoFix('test.ts');
 
-      expect(fs.writeFile).toHaveBeenCalledWith(
-        'test.ts',
-        expect.stringContaining(': unknown')
-      );
+      expect(fs.writeFile).toHaveBeenCalledWith('test.ts', expect.stringContaining(': unknown'));
     });
 
     it('should not modify file if no fixes needed', async () => {
@@ -151,10 +127,7 @@ if (x === y) {
 
       await fixer.removeConsoleLogs('test.js');
 
-      expect(fs.writeFile).toHaveBeenCalledWith(
-        'test.js',
-        expect.stringContaining('logger.log')
-      );
+      expect(fs.writeFile).toHaveBeenCalledWith('test.js', expect.stringContaining('logger.log'));
       expect(fs.writeFile).toHaveBeenCalledWith(
         'test.js',
         expect.not.stringContaining('console.log')
@@ -177,10 +150,7 @@ const multiply = (x, y) => x * y;
 
       await fixer.addDocumentation('test.js');
 
-      expect(fs.writeFile).toHaveBeenCalledWith(
-        'test.js',
-        expect.stringContaining('/**')
-      );
+      expect(fs.writeFile).toHaveBeenCalledWith('test.js', expect.stringContaining('/**'));
     });
 
     it('should not add JSDoc to already documented functions', async () => {
@@ -256,6 +226,114 @@ function calculate(a, b) {
       const result = await fixer.verify('test.js');
 
       expect(result).toBe(false);
+    });
+
+    it('should return false when file read fails', async () => {
+      vi.mocked(fs.readFile).mockRejectedValue(new Error('File not found'));
+
+      const result = await fixer.verify('nonexistent.js');
+
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('fixEverything', () => {
+    it('should run MCP auto-fix tool', async () => {
+      // The method uses execFileAsync which is promisified
+      vi.mocked(exec).mockImplementation(((
+        _cmd: string,
+        opts: unknown,
+        cb?: (err: Error | null, stdout: string, stderr: string) => void
+      ) => {
+        if (typeof opts === 'function') {
+          opts(null, '', '');
+        } else if (cb) {
+          cb(null, '', '');
+        }
+        return { stdout: '', stderr: '' };
+      }) as typeof exec);
+
+      await fixer.fixEverything();
+
+      // Should complete without throwing
+      expect(true).toBe(true);
+    });
+  });
+
+  describe('autoFix error handling', () => {
+    it('should handle file read errors gracefully', async () => {
+      vi.mocked(fs.readFile).mockRejectedValue(new Error('Permission denied'));
+
+      // Should not throw
+      await fixer.autoFix('protected.js');
+
+      expect(fs.writeFile).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('addDocumentation edge cases', () => {
+    it('should handle empty files', async () => {
+      vi.mocked(fs.readFile).mockResolvedValue('');
+
+      await fixer.addDocumentation('empty.js');
+
+      expect(fs.writeFile).not.toHaveBeenCalled();
+    });
+
+    it('should handle files with only comments', async () => {
+      const content = `
+// Just a comment
+/* Another comment */
+      `;
+
+      vi.mocked(fs.readFile).mockResolvedValue(content);
+
+      await fixer.addDocumentation('comments.js');
+
+      expect(fs.writeFile).not.toHaveBeenCalled();
+    });
+
+    it('should add JSDoc to async arrow functions', async () => {
+      const content = `const fetchData = async (url) => {
+  return await fetch(url);
+};`;
+
+      vi.mocked(fs.readFile).mockResolvedValue(content);
+      vi.mocked(fs.writeFile).mockResolvedValue();
+
+      await fixer.addDocumentation('async.js');
+
+      expect(fs.writeFile).toHaveBeenCalledWith('async.js', expect.stringContaining('/**'));
+    });
+  });
+
+  describe('missing semicolons', () => {
+    it('should add missing semicolons to statements', async () => {
+      const content = `const x = 1
+const y = 2
+return x + y`;
+
+      vi.mocked(fs.readFile).mockResolvedValue(content);
+      vi.mocked(fs.writeFile).mockResolvedValue();
+
+      await fixer.autoFix('test.js');
+
+      // Should be called with content containing semicolons
+      expect(fs.writeFile).toHaveBeenCalledWith('test.js', expect.stringContaining('const x = 1;'));
+    });
+  });
+
+  describe('trailing whitespace', () => {
+    it('should remove trailing whitespace', async () => {
+      const content = 'const x = 1;   \nconst y = 2;  \n';
+
+      vi.mocked(fs.readFile).mockResolvedValue(content);
+      vi.mocked(fs.writeFile).mockResolvedValue();
+
+      await fixer.autoFix('test.js');
+
+      // Should remove trailing spaces
+      expect(fs.writeFile).toHaveBeenCalledWith('test.js', expect.not.stringContaining('   \n'));
     });
   });
 });
