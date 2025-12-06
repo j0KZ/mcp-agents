@@ -1,0 +1,29 @@
+{
+  "name": "@j0kz/claude-starter",
+  "version": "1.1.0",
+  "description": "Universal Claude Code starter kit with 10 developer skills",
+  "bin": {
+    "claude-starter": "./bin/install.js"
+  },
+  "files": [
+    "bin/",
+    "template/"
+  ],
+  "keywords": [
+    "claude",
+    "claude-code",
+    "ai",
+    "developer-tools",
+    "starter-kit"
+  ],
+  "author": "j0KZ",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/j0KZ/mcp-agents.git",
+    "directory": "starter-kit"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

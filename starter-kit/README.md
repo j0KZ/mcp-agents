@@ -1,0 +1,128 @@
+# Claude Code Starter Kit
+
+Universal starter kit with interactive component selection for any project.
+
+## Quick Install
+
+```bash
+# Interactive mode - choose what to install
+npx @j0kz/claude-starter
+
+# Install everything (skills + MCP tools + hcom-agents)
+npx @j0kz/claude-starter --all
+
+# Force overwrite existing files
+npx @j0kz/claude-starter --force
+```
+
+## Prerequisites (for Python components)
+
+For **hcom-agents** and **dashboard** components, you need a Python package manager:
+
+### Recommended: Install uv (fast Python package manager)
+
+```bash
+# macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows (PowerShell)
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# Or via pip
+pip install uv
+```
+
+The installer automatically detects uv and uses it for faster installs. Falls back to pip if uv is not available.
+
+## Available Components
+
+| Component | Description | Default |
+|-----------|-------------|---------|
+| **CLAUDE.md Template** | Universal starter template | Yes |
+| **Universal Skills** | 10 developer skills | Yes |
+| **MCP Tools** | 9 @j0kz MCP tools (smart-reviewer, test-generator, etc.) | No |
+| **References** | Work logs, patterns, troubleshooting guides | Yes |
+| **MCP Tools** | 9 @j0kz MCP tools | No |
+| **hcom-agents** | Agent coordination + token efficiency | No |
+| **Dashboard** | claude-comms live events & visualization | No |
+
+## What Gets Installed
+
+```
+your-project/
+├── CLAUDE.md                    # Universal template
+└── .claude/
+    ├── settings.json            # MCP tools config (if selected)
+    └── skills/                  # 10 universal skills
+        ├── quick-pr-review/
+        ├── debug-detective/
+        ├── performance-hunter/
+        ├── security-first/
+        ├── test-coverage-boost/
+        ├── zero-to-hero/
+        ├── legacy-modernizer/
+        ├── tech-debt-tracker/
+        ├── dependency-doctor/
+        └── api-integration/
+```
+
+## MCP Tools (Optional)
+
+When you select MCP tools, these are configured in `.claude/settings.json`:
+
+| Tool | Purpose |
+|------|---------|
+| smart-reviewer | Code review with auto-fix suggestions |
+| test-generator | Generate comprehensive test suites |
+| architecture-analyzer | Dependency graphs, circular deps |
+| security-scanner | OWASP vulnerability scanning |
+| refactor-assistant | Safe code refactoring |
+| doc-generator | API documentation generation |
+| orchestrator-mcp | Workflow automation |
+| api-designer | REST/GraphQL API design |
+| db-schema | Database schema design |
+
+## Dashboard (Optional)
+
+Installs claude-comms for:
+- Live event monitoring
+- Session visualization
+- Chat transcripts
+- Recursive clone capability
+
+## hcom-agents (Optional)
+
+Installs agent coordination layer with:
+- 5 built-in agents (orchestrator, reviewer, tester, architect, security)
+- Claude Code hooks integration
+- Token budget management
+- Decision persistence
+
+## Skills Overview
+
+| Skill | Purpose | Time |
+|-------|---------|------|
+| quick-pr-review | Pre-PR checklist | 30 sec |
+| debug-detective | Systematic debugging | 5-30 min |
+| performance-hunter | Find bottlenecks | 10-60 min |
+| security-first | OWASP protection | 1 hour |
+| test-coverage-boost | 0% to 80% coverage | 1-5 days |
+| zero-to-hero | Master any codebase | 30 min |
+| legacy-modernizer | Update old code | varies |
+| tech-debt-tracker | Track debt | 1 hour |
+| dependency-doctor | Fix packages | 30 min |
+| api-integration | Connect APIs | 2 hours |
+
+## After Installation
+
+1. **Edit CLAUDE.md** with your project details
+2. **Use skills** with Claude: "Use debug-detective to find this bug"
+3. **Restart Claude Code** if you installed MCP tools
+4. **Start dashboard** if installed: `claude-comms start`
+
+## Design Principles
+
+- **Project-agnostic** - no specific tech stack assumptions
+- **Language-neutral** - works with any programming language
+- **Modular** - install only what you need
+- **Self-contained** - no external dependencies required
