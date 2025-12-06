@@ -6,7 +6,6 @@
 import { exec, execFile } from 'child_process';
 import { promisify } from 'util';
 import { readFile } from 'fs/promises';
-import path from 'path';
 
 const execAsync = promisify(exec);
 const execFileAsync = promisify(execFile);
