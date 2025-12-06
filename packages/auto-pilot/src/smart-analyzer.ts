@@ -3,12 +3,13 @@
  * Integrates with all MCP tools and makes smart decisions
  */
 
-import { exec } from 'child_process';
+import { exec, execFile } from 'child_process';
 import { promisify } from 'util';
 import { readFile } from 'fs/promises';
 import path from 'path';
 
 const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 export class SmartAnalyzer {
   private toolsAvailable: Map<string, string> = new Map();
@@ -245,6 +246,7 @@ export class SmartAnalyzer {
 
   /**
    * Run an MCP tool
+   * Uses execFile to avoid shell command injection (CWE-78)
    */
   private async runTool(tool: string, command: string, args: any): Promise<any> {
     const toolPackage = this.toolsAvailable.get(tool);
@@ -252,9 +254,18 @@ export class SmartAnalyzer {
       throw new Error(`Tool ${tool} not available`);
     }
 
+    // Validate toolPackage against allowed list to prevent injection
+    const allowedPackages = Array.from(this.toolsAvailable.values());
+    if (!allowedPackages.includes(toolPackage)) {
+      throw new Error(`Invalid tool package: ${toolPackage}`);
+    }
+
     try {
-      const cmd = `npx ${toolPackage} ${command} ${JSON.stringify(args)}`;
-      const { stdout } = await execAsync(cmd, { cwd: process.cwd() });
+      // Use execFile instead of exec to avoid shell interpretation
+      // Arguments are passed as array, not interpolated into shell command
+      const { stdout } = await execFileAsync('npx', [toolPackage, command, JSON.stringify(args)], {
+        cwd: process.cwd(),
+      });
       return JSON.parse(stdout);
     } catch (error) {
       // Tool might not be installed or failed

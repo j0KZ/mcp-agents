@@ -44,6 +44,7 @@ export declare class SmartAnalyzer {
     scanSecurity(filePath: string): Promise<void>;
     /**
      * Run an MCP tool
+     * Uses execFile to avoid shell command injection (CWE-78)
      */
     private runTool;
     /**
