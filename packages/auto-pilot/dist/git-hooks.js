@@ -273,17 +273,11 @@ exit 0
             await execAsync('npx husky init', { cwd: process.cwd() });
             // Create hooks
             const huskyDir = path.join(process.cwd(), '.husky');
-            // Pre-commit
-            await writeFile(path.join(huskyDir, 'pre-commit'), `#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-npx @j0kz/auto-pilot pre-commit
+            // Pre-commit (v9 style - no husky.sh sourcing needed)
+            await writeFile(path.join(huskyDir, 'pre-commit'), `npx @j0kz/auto-pilot pre-commit
 `);
-            // Pre-push
-            await writeFile(path.join(huskyDir, 'pre-push'), `#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-npx @j0kz/auto-pilot pre-push
+            // Pre-push (v9 style - no husky.sh sourcing needed)
+            await writeFile(path.join(huskyDir, 'pre-push'), `npx @j0kz/auto-pilot pre-push
 `);
             console.log('✅ Husky configured successfully!');
         }

@@ -298,23 +298,17 @@ exit 0
       // Create hooks
       const huskyDir = path.join(process.cwd(), '.husky');
 
-      // Pre-commit
+      // Pre-commit (v9 style - no husky.sh sourcing needed)
       await writeFile(
         path.join(huskyDir, 'pre-commit'),
-        `#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-npx @j0kz/auto-pilot pre-commit
+        `npx @j0kz/auto-pilot pre-commit
 `
       );
 
-      // Pre-push
+      // Pre-push (v9 style - no husky.sh sourcing needed)
       await writeFile(
         path.join(huskyDir, 'pre-push'),
-        `#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-npx @j0kz/auto-pilot pre-push
+        `npx @j0kz/auto-pilot pre-push
 `
       );
 
