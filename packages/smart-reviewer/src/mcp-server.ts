@@ -14,8 +14,13 @@ import {
   EnhancedError,
   HealthChecker,
   VERSION as SHARED_VERSION,
+  ResponseFormat,
+  formatResponse,
+  truncateArray,
+  filterBySeverity,
 } from '@j0kz/shared';
 import { AutoFixer } from './auto-fixer.js';
+import { SMART_REVIEWER_TOOLS } from './constants/tool-definitions.js';
 
 const VERSION = '1.0.35';
 
@@ -62,128 +67,9 @@ class SmartReviewerServer {
   }
 
   private setupHandlers() {
-    // List available tools
+    // List available tools (with examples for improved accuracy - Anthropic Nov 2025)
     this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
-      tools: [
-        {
-          name: '__health',
-          description: 'Check MCP server health and diagnostics (internal tool)',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              verbose: {
-                type: 'boolean',
-                description: 'Include detailed diagnostic information',
-              },
-            },
-          },
-        },
-        {
-          name: 'review_file',
-          description:
-            'Review a code file and provide detailed analysis with issues, metrics, and suggestions',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              filePath: {
-                type: 'string',
-                description: 'Path to the file to review',
-              },
-              config: {
-                type: 'object',
-                description: 'Optional review configuration',
-                properties: {
-                  severity: {
-                    type: 'string',
-                    enum: ['strict', 'moderate', 'lenient'],
-                    description: 'Review severity level',
-                  },
-                  autoFix: {
-                    type: 'boolean',
-                    description: 'Automatically apply fixes when possible',
-                  },
-                  includeMetrics: {
-                    type: 'boolean',
-                    description: 'Include code metrics in the result',
-                  },
-                },
-              },
-            },
-            required: ['filePath'],
-          },
-        },
-        {
-          name: 'batch_review',
-          description: 'Review multiple files at once',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              filePaths: {
-                type: 'array',
-                items: { type: 'string' },
-                description: 'Array of file paths to review',
-              },
-              config: {
-                type: 'object',
-                description: 'Optional review configuration',
-              },
-            },
-            required: ['filePaths'],
-          },
-        },
-        {
-          name: 'apply_fixes',
-          description: 'Apply automatic fixes to a file',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              filePath: {
-                type: 'string',
-                description: 'Path to the file to fix',
-              },
-            },
-            required: ['filePath'],
-          },
-        },
-        {
-          name: 'generate_auto_fixes',
-          description:
-            'Generate automatic fixes using Pareto principle (20% fixes solve 80% issues). Returns preview without applying changes.',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              filePath: {
-                type: 'string',
-                description: 'Path to the file to analyze for auto-fixes',
-              },
-              safeOnly: {
-                type: 'boolean',
-                description: 'Only return safe fixes that can be auto-applied (default: false)',
-              },
-            },
-            required: ['filePath'],
-          },
-        },
-        {
-          name: 'apply_auto_fixes',
-          description:
-            'Apply generated auto-fixes to a file. SAFE: Creates backup before applying.',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              filePath: {
-                type: 'string',
-                description: 'Path to the file to fix',
-              },
-              safeOnly: {
-                type: 'boolean',
-                description: 'Only apply safe fixes (default: true)',
-              },
-            },
-            required: ['filePath'],
-          },
-        },
-      ],
+      tools: SMART_REVIEWER_TOOLS,
     }));
 
     // Handle tool calls
@@ -217,9 +103,14 @@ class SmartReviewerServer {
           }
 
           case 'review_file': {
-            const { filePath, config: _config } = args as {
+            const {
+              filePath,
+              config: _config,
+              response_format = 'detailed',
+            } = args as {
               filePath: string;
               config?: ReviewConfig;
+              response_format?: ResponseFormat;
             };
 
             // Use smart path resolution
@@ -246,20 +137,44 @@ class SmartReviewerServer {
 
             const result = await this.analyzer.analyzeFile(resolvedPath);
 
+            // Format response based on verbosity (Anthropic Advanced Tool Use - Nov 2025)
+            const formatted = formatResponse(
+              result,
+              { format: response_format },
+              {
+                minimal: r => ({
+                  score: r.overallScore,
+                  issueCount: r.issues.length,
+                }),
+                concise: r => ({
+                  score: r.overallScore,
+                  issueCount: r.issues.length,
+                  criticalIssues: filterBySeverity(r.issues, 'concise'),
+                  metrics: r.metrics,
+                }),
+                detailed: r => r,
+              }
+            );
+
             return {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify(result, null, 2),
+                  text: JSON.stringify(formatted, null, 2),
                 },
               ],
             };
           }
 
           case 'batch_review': {
-            const { filePaths, config: _config } = args as {
+            const {
+              filePaths,
+              config: _config,
+              response_format = 'detailed',
+            } = args as {
               filePaths: string[];
               config?: ReviewConfig;
+              response_format?: ResponseFormat;
             };
 
             // Validate input
@@ -283,18 +198,48 @@ class SmartReviewerServer {
               results,
             };
 
+            // Format response based on verbosity (Anthropic Advanced Tool Use - Nov 2025)
+            const formatted = formatResponse(
+              summary,
+              { format: response_format },
+              {
+                minimal: s => ({
+                  totalFiles: s.totalFiles,
+                  averageScore: s.averageScore,
+                  totalIssues: s.totalIssues,
+                }),
+                concise: s => ({
+                  totalFiles: s.totalFiles,
+                  averageScore: s.averageScore,
+                  totalIssues: s.totalIssues,
+                  results: truncateArray(
+                    s.results.map(r => ({
+                      file: r.file,
+                      score: r.overallScore,
+                      issueCount: r.issues.length,
+                    })),
+                    'concise'
+                  ),
+                }),
+                detailed: s => s,
+              }
+            );
+
             return {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify(summary, null, 2),
+                  text: JSON.stringify(formatted, null, 2),
                 },
               ],
             };
           }
 
           case 'apply_fixes': {
-            const { filePath } = args as { filePath: string };
+            const { filePath, response_format = 'detailed' } = args as {
+              filePath: string;
+              response_format?: ResponseFormat;
+            };
 
             // Validate file path to prevent path traversal
             const validatedPath = validateFilePath(filePath);
@@ -306,26 +251,43 @@ class SmartReviewerServer {
 
             await writeFile(validatedPath, fixedContent, 'utf-8');
 
+            const fixResult = {
+              success: true,
+              file: filePath,
+              fixesApplied: result.issues.filter(i => i.fix).length,
+            };
+
+            // Format response based on verbosity
+            const formatted = formatResponse(
+              fixResult,
+              { format: response_format },
+              {
+                minimal: r => ({ success: r.success, fixesApplied: r.fixesApplied }),
+                concise: r => r,
+                detailed: r => r,
+              }
+            );
+
             return {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify(
-                    {
-                      success: true,
-                      file: filePath,
-                      fixesApplied: result.issues.filter(i => i.fix).length,
-                    },
-                    null,
-                    2
-                  ),
+                  text: JSON.stringify(formatted, null, 2),
                 },
               ],
             };
           }
 
           case 'generate_auto_fixes': {
-            const { filePath, safeOnly = false } = args as { filePath: string; safeOnly?: boolean };
+            const {
+              filePath,
+              safeOnly = false,
+              response_format = 'detailed',
+            } = args as {
+              filePath: string;
+              safeOnly?: boolean;
+              response_format?: ResponseFormat;
+            };
 
             // Validate file path
             const validatedPath = validateFilePath(filePath);
@@ -340,39 +302,65 @@ class SmartReviewerServer {
 
             const diff = this.autoFixer.generateDiff(fixes);
 
+            const result = {
+              success: true,
+              file: filePath,
+              summary: {
+                total: fixes.length,
+                safe: fixes.filter(f => f.safe).length,
+                requiresReview: fixes.filter(f => !f.safe).length,
+              },
+              fixes: fixes.map(f => ({
+                type: f.type,
+                line: f.line,
+                description: f.description,
+                confidence: f.confidence,
+                safe: f.safe,
+                impact: f.impact,
+              })),
+              preview: diff,
+            };
+
+            // Format response based on verbosity
+            const formatted = formatResponse(
+              result,
+              { format: response_format },
+              {
+                minimal: r => ({
+                  success: r.success,
+                  total: r.summary.total,
+                  safe: r.summary.safe,
+                }),
+                concise: r => ({
+                  success: r.success,
+                  file: r.file,
+                  summary: r.summary,
+                  fixes: truncateArray(r.fixes, 'concise'),
+                }),
+                detailed: r => r,
+              }
+            );
+
             return {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify(
-                    {
-                      success: true,
-                      file: filePath,
-                      summary: {
-                        total: fixes.length,
-                        safe: fixes.filter(f => f.safe).length,
-                        requiresReview: fixes.filter(f => !f.safe).length,
-                      },
-                      fixes: fixes.map(f => ({
-                        type: f.type,
-                        line: f.line,
-                        description: f.description,
-                        confidence: f.confidence,
-                        safe: f.safe,
-                        impact: f.impact,
-                      })),
-                      preview: diff,
-                    },
-                    null,
-                    2
-                  ),
+                  text: JSON.stringify(formatted, null, 2),
                 },
               ],
             };
           }
 
           case 'apply_auto_fixes': {
-            const { filePath, safeOnly = true } = args as { filePath: string; safeOnly?: boolean };
+            const {
+              filePath,
+              safeOnly = true,
+              response_format = 'detailed',
+            } = args as {
+              filePath: string;
+              safeOnly?: boolean;
+              response_format?: ResponseFormat;
+            };
 
             // Validate file path
             const validatedPath = validateFilePath(filePath);
@@ -391,49 +379,59 @@ class SmartReviewerServer {
               const fixesToApply = safeOnly ? fixResult.fixes.filter(f => f.safe) : fixResult.fixes;
 
               if (fixesToApply.length === 0) {
+                const noFixResult = {
+                  success: true,
+                  message: 'No fixes to apply',
+                  file: filePath,
+                };
+                const formatted = formatResponse(
+                  noFixResult,
+                  { format: response_format },
+                  {
+                    minimal: r => ({ success: r.success }),
+                    concise: r => r,
+                    detailed: r => r,
+                  }
+                );
                 return {
-                  content: [
-                    {
-                      type: 'text',
-                      text: JSON.stringify(
-                        {
-                          success: true,
-                          message: 'No fixes to apply',
-                          file: filePath,
-                        },
-                        null,
-                        2
-                      ),
-                    },
-                  ],
+                  content: [{ type: 'text', text: JSON.stringify(formatted, null, 2) }],
                 };
               }
 
               // Apply fixes
               await writeFile(validatedPath, fixResult.fixedCode, 'utf-8');
 
+              const result = {
+                success: true,
+                file: filePath,
+                backup: backupPath,
+                fixesApplied: fixesToApply.length,
+                summary: fixResult.summary,
+                fixes: fixesToApply.map(f => ({
+                  type: f.type,
+                  line: f.line,
+                  description: f.description,
+                })),
+              };
+
+              // Format response based on verbosity
+              const formatted = formatResponse(
+                result,
+                { format: response_format },
+                {
+                  minimal: r => ({ success: r.success, fixesApplied: r.fixesApplied }),
+                  concise: r => ({
+                    success: r.success,
+                    file: r.file,
+                    fixesApplied: r.fixesApplied,
+                    summary: r.summary,
+                  }),
+                  detailed: r => r,
+                }
+              );
+
               return {
-                content: [
-                  {
-                    type: 'text',
-                    text: JSON.stringify(
-                      {
-                        success: true,
-                        file: filePath,
-                        backup: backupPath,
-                        fixesApplied: fixesToApply.length,
-                        summary: fixResult.summary,
-                        fixes: fixesToApply.map(f => ({
-                          type: f.type,
-                          line: f.line,
-                          description: f.description,
-                        })),
-                      },
-                      null,
-                      2
-                    ),
-                  },
-                ],
+                content: [{ type: 'text', text: JSON.stringify(formatted, null, 2) }],
               };
             } catch (error) {
               // Restore from backup on error

@@ -4,7 +4,8 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { TestGenerator } from './generator.js';
 import { writeFile } from 'fs/promises';
-import { MCPError, getErrorMessage } from '@j0kz/shared';
+import { MCPError, getErrorMessage, formatResponse, truncateArray, } from '@j0kz/shared';
+import { TEST_GENERATOR_TOOLS } from './constants/tool-definitions.js';
 class TestGeneratorServer {
     server;
     generator;
@@ -21,88 +22,9 @@ class TestGeneratorServer {
         this.setupHandlers();
     }
     setupHandlers() {
-        // List available tools
+        // List available tools (with examples for improved accuracy - Anthropic Nov 2025)
         this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
-            tools: [
-                {
-                    name: 'generate_tests',
-                    description: 'Generate comprehensive test suite for a source file with edge cases and error handling',
-                    inputSchema: {
-                        type: 'object',
-                        properties: {
-                            sourceFile: {
-                                type: 'string',
-                                description: 'Path to the source file to generate tests for',
-                            },
-                            config: {
-                                type: 'object',
-                                description: 'Test generation configuration',
-                                properties: {
-                                    framework: {
-                                        type: 'string',
-                                        enum: ['jest', 'mocha', 'vitest', 'ava'],
-                                        description: 'Test framework to use',
-                                    },
-                                    coverage: {
-                                        type: 'number',
-                                        description: 'Target coverage percentage',
-                                    },
-                                    includeEdgeCases: {
-                                        type: 'boolean',
-                                        description: 'Include edge case tests',
-                                    },
-                                    includeErrorCases: {
-                                        type: 'boolean',
-                                        description: 'Include error handling tests',
-                                    },
-                                },
-                            },
-                        },
-                        required: ['sourceFile'],
-                    },
-                },
-                {
-                    name: 'write_test_file',
-                    description: 'Generate tests and write directly to a test file',
-                    inputSchema: {
-                        type: 'object',
-                        properties: {
-                            sourceFile: {
-                                type: 'string',
-                                description: 'Path to the source file',
-                            },
-                            testFile: {
-                                type: 'string',
-                                description: 'Path where test file should be written (optional, auto-generated if not provided)',
-                            },
-                            config: {
-                                type: 'object',
-                                description: 'Test generation configuration',
-                            },
-                        },
-                        required: ['sourceFile'],
-                    },
-                },
-                {
-                    name: 'batch_generate',
-                    description: 'Generate tests for multiple files at once',
-                    inputSchema: {
-                        type: 'object',
-                        properties: {
-                            sourceFiles: {
-                                type: 'array',
-                                items: { type: 'string' },
-                                description: 'Array of source file paths',
-                            },
-                            config: {
-                                type: 'object',
-                                description: 'Test generation configuration',
-                            },
-                        },
-                        required: ['sourceFiles'],
-                    },
-                },
-            ],
+            tools: TEST_GENERATOR_TOOLS,
         }));
         // Handle tool calls
         this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
@@ -110,46 +32,55 @@ class TestGeneratorServer {
             try {
                 switch (name) {
                     case 'generate_tests': {
-                        const { sourceFile, config } = args;
+                        const { sourceFile, config, response_format = 'detailed', } = args;
                         const result = await this.generator.generateTests(sourceFile, config);
+                        const formatted = formatResponse({
+                            ...result,
+                            summary: {
+                                totalTests: result.totalTests,
+                                estimatedCoverage: `${result.estimatedCoverage}%`,
+                                testFile: result.testFile,
+                                framework: result.framework,
+                            },
+                        }, { format: response_format }, {
+                            minimal: r => ({
+                                totalTests: r.totalTests,
+                                estimatedCoverage: `${r.estimatedCoverage}%`,
+                            }),
+                            concise: r => ({
+                                totalTests: r.totalTests,
+                                estimatedCoverage: `${r.estimatedCoverage}%`,
+                                testFile: r.testFile,
+                                framework: r.framework,
+                            }),
+                            detailed: r => r,
+                        });
                         return {
-                            content: [
-                                {
-                                    type: 'text',
-                                    text: JSON.stringify({
-                                        ...result,
-                                        summary: {
-                                            totalTests: result.totalTests,
-                                            estimatedCoverage: `${result.estimatedCoverage}%`,
-                                            testFile: result.testFile,
-                                            framework: result.framework,
-                                        },
-                                    }, null, 2),
-                                },
-                            ],
+                            content: [{ type: 'text', text: JSON.stringify(formatted, null, 2) }],
                         };
                     }
                     case 'write_test_file': {
-                        const { sourceFile, testFile, config } = args;
+                        const { sourceFile, testFile, config, response_format = 'detailed', } = args;
                         const result = await this.generator.generateTests(sourceFile, config);
                         const outputPath = testFile || result.testFile;
                         await writeFile(outputPath, result.fullTestCode, 'utf-8');
+                        const writeResult = {
+                            success: true,
+                            testFile: outputPath,
+                            totalTests: result.totalTests,
+                            estimatedCoverage: `${result.estimatedCoverage}%`,
+                        };
+                        const formatted = formatResponse(writeResult, { format: response_format }, {
+                            minimal: r => ({ success: r.success, totalTests: r.totalTests }),
+                            concise: r => r,
+                            detailed: r => r,
+                        });
                         return {
-                            content: [
-                                {
-                                    type: 'text',
-                                    text: JSON.stringify({
-                                        success: true,
-                                        testFile: outputPath,
-                                        totalTests: result.totalTests,
-                                        estimatedCoverage: `${result.estimatedCoverage}%`,
-                                    }, null, 2),
-                                },
-                            ],
+                            content: [{ type: 'text', text: JSON.stringify(formatted, null, 2) }],
                         };
                     }
                     case 'batch_generate': {
-                        const { sourceFiles, config } = args;
+                        const { sourceFiles, config, response_format = 'detailed', } = args;
                         const results = await Promise.all(sourceFiles.map(file => this.generator.generateTests(file, config)));
                         // Write all test files
                         await Promise.all(results.map(result => writeFile(result.testFile, result.fullTestCode, 'utf-8')));
@@ -164,13 +95,17 @@ class TestGeneratorServer {
                                 coverage: `${r.estimatedCoverage}%`,
                             })),
                         };
+                        const formatted = formatResponse(summary, { format: response_format }, {
+                            minimal: s => ({
+                                totalFiles: s.totalFiles,
+                                totalTests: s.totalTests,
+                                averageCoverage: s.averageCoverage,
+                            }),
+                            concise: s => ({ ...s, results: truncateArray(s.results, 'concise') }),
+                            detailed: s => s,
+                        });
                         return {
-                            content: [
-                                {
-                                    type: 'text',
-                                    text: JSON.stringify(summary, null, 2),
-                                },
-                            ],
+                            content: [{ type: 'text', text: JSON.stringify(formatted, null, 2) }],
                         };
                     }
                     default:

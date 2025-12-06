@@ -9,7 +9,14 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 
-import { MCPError, getErrorMessage } from '@j0kz/shared';
+import {
+  MCPError,
+  getErrorMessage,
+  ResponseFormat,
+  formatResponse,
+  truncateArray,
+} from '@j0kz/shared';
+import { DB_SCHEMA_TOOLS } from './constants/tool-definitions.js';
 
 import {
   designSchema,
@@ -51,204 +58,10 @@ class DatabaseSchemaServer {
    * Setup tool request handlers
    */
   private setupToolHandlers(): void {
-    // List available tools
+    // List available tools - using enhanced definitions with examples
+    // Following Anthropic Advanced Tool Use best practices (Nov 2025)
     this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
-      tools: [
-        {
-          name: 'design_schema',
-          description:
-            'Design a database schema from plain text requirements. Supports PostgreSQL, MySQL, and MongoDB. Automatically extracts entities, relationships, and generates complete schema definitions.',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              requirements: {
-                type: 'string',
-                description:
-                  'Plain text description of data requirements (e.g., "Users have many orders. Orders contain products. Products belong to categories.")',
-              },
-              options: {
-                type: 'object',
-                description: 'Schema design options',
-                properties: {
-                  database: {
-                    type: 'string',
-                    enum: ['postgres', 'mysql', 'mongodb'],
-                    description: 'Target database type',
-                  },
-                  normalForm: {
-                    type: 'string',
-                    enum: ['1NF', '2NF', '3NF', 'BCNF'],
-                    description: 'Target normal form (default: 3NF)',
-                  },
-                  includeTimestamps: {
-                    type: 'boolean',
-                    description: 'Add created_at/updated_at columns (default: true)',
-                  },
-                  includeSoftDeletes: {
-                    type: 'boolean',
-                    description: 'Add deleted_at column (default: false)',
-                  },
-                  useUUIDs: {
-                    type: 'boolean',
-                    description: 'Use UUIDs instead of integers for primary keys (default: false)',
-                  },
-                  addIndexes: {
-                    type: 'boolean',
-                    description: 'Automatically add common indexes (default: true)',
-                  },
-                  addComments: {
-                    type: 'boolean',
-                    description: 'Add comments to tables and columns (default: true)',
-                  },
-                },
-                required: ['database'],
-              },
-            },
-            required: ['requirements', 'options'],
-          },
-        },
-        {
-          name: 'generate_migration',
-          description:
-            'Generate database migration files (up/down) from a schema definition. Supports SQL migrations for PostgreSQL/MySQL and mongosh commands for MongoDB.',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              schema: {
-                type: 'object',
-                description: 'Complete database schema object',
-              },
-              description: {
-                type: 'string',
-                description: 'Migration description (e.g., "create initial schema")',
-              },
-            },
-            required: ['schema', 'description'],
-          },
-        },
-        {
-          name: 'create_er_diagram',
-          description:
-            'Create an Entity-Relationship diagram from a schema. Supports Mermaid, PlantUML, and DBML formats. Perfect for documentation and visualization.',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              schema: {
-                type: 'object',
-                description: 'Complete database schema object',
-              },
-              options: {
-                type: 'object',
-                description: 'Diagram generation options',
-                properties: {
-                  format: {
-                    type: 'string',
-                    enum: ['mermaid', 'plantuml', 'dbml'],
-                    description: 'Output format (default: mermaid)',
-                  },
-                  includeColumns: {
-                    type: 'boolean',
-                    description: 'Include column details (default: true)',
-                  },
-                  includeIndexes: {
-                    type: 'boolean',
-                    description: 'Include index information (default: false)',
-                  },
-                  includeRelationships: {
-                    type: 'boolean',
-                    description: 'Show relationships between tables (default: true)',
-                  },
-                  theme: {
-                    type: 'string',
-                    enum: ['default', 'dark', 'neutral'],
-                    description: 'Diagram theme (default: default)',
-                  },
-                },
-              },
-            },
-            required: ['schema'],
-          },
-        },
-        {
-          name: 'optimize_indexes',
-          description:
-            'Analyze schema and suggest index optimizations. Identifies missing indexes on foreign keys, frequently filtered columns, and opportunities for compound indexes.',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              schema: {
-                type: 'object',
-                description: 'Complete database schema object',
-              },
-            },
-            required: ['schema'],
-          },
-        },
-        {
-          name: 'normalize_schema',
-          description:
-            'Suggest schema normalizations to improve data integrity and reduce redundancy. Identifies violations of 1NF, 2NF, 3NF, and BCNF with specific recommendations.',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              schema: {
-                type: 'object',
-                description: 'Complete database schema object',
-              },
-            },
-            required: ['schema'],
-          },
-        },
-        {
-          name: 'generate_seed_data',
-          description:
-            'Generate realistic seed data for testing. Creates mock records that respect foreign key constraints and data types.',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              schema: {
-                type: 'object',
-                description: 'Complete database schema object',
-              },
-              recordsPerTable: {
-                type: 'number',
-                description: 'Number of records to generate per table (default: 10)',
-              },
-            },
-            required: ['schema'],
-          },
-        },
-        {
-          name: 'validate_schema',
-          description:
-            'Validate schema for errors and best practice violations. Checks for missing primary keys, naming conventions, proper indexing, and more.',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              schema: {
-                type: 'object',
-                description: 'Complete database schema object',
-              },
-            },
-            required: ['schema'],
-          },
-        },
-        {
-          name: 'analyze_schema',
-          description:
-            'Analyze schema complexity and characteristics. Provides metrics on tables, columns, indexes, relationships, normal form, and estimated size.',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              schema: {
-                type: 'object',
-                description: 'Complete database schema object',
-              },
-            },
-            required: ['schema'],
-          },
-        },
-      ],
+      tools: DB_SCHEMA_TOOLS,
     }));
 
     // Handle tool execution
@@ -314,9 +127,14 @@ class DatabaseSchemaServer {
    * Handle design_schema tool
    */
   private async handleDesignSchema(args: any) {
-    const { requirements, options } = args as {
+    const {
+      requirements,
+      options,
+      response_format = 'detailed',
+    } = args as {
       requirements: string;
       options: SchemaDesignOptions;
+      response_format?: ResponseFormat;
     };
 
     if (!requirements || !options?.database) {
@@ -325,11 +143,34 @@ class DatabaseSchemaServer {
 
     const schema = designSchema(requirements, options);
 
+    const formatted = formatResponse(
+      schema,
+      { format: response_format },
+      {
+        minimal: r => ({
+          database: r.database,
+          tablesCount: r.tables?.length || 0,
+        }),
+        concise: r => ({
+          database: r.database,
+          tables: truncateArray(
+            (r.tables || []).map((t: any) => ({
+              name: t.name,
+              columnsCount: t.columns?.length || 0,
+            })),
+            'concise'
+          ),
+          relationshipsCount: r.relationships?.length || 0,
+        }),
+        detailed: r => r,
+      }
+    );
+
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(schema, null, 2),
+          text: JSON.stringify(formatted, null, 2),
         },
       ],
     };
@@ -339,22 +180,45 @@ class DatabaseSchemaServer {
    * Handle generate_migration tool
    */
   private async handleGenerateMigration(args: any) {
-    const { schema, description } = args as {
+    const {
+      schema,
+      description,
+      response_format = 'detailed',
+    } = args as {
       schema: DatabaseSchema;
       description: string;
+      response_format?: ResponseFormat;
     };
 
     if (!schema || !description) {
       throw new MCPError('DB_002');
     }
 
-    const migration = generateMigration(schema, description);
+    const migration = generateMigration(schema, description) as any;
+
+    const formatted = formatResponse(
+      migration,
+      { format: response_format },
+      {
+        minimal: (r: any) => ({
+          version: r.version,
+          hasUp: !!r.up,
+          hasDown: !!r.down,
+        }),
+        concise: (r: any) => ({
+          version: r.version,
+          description: r.description,
+          upPreview: r.up?.substring(0, 200) + (r.up?.length > 200 ? '...' : ''),
+        }),
+        detailed: (r: any) => r,
+      }
+    );
 
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(migration, null, 2),
+          text: JSON.stringify(formatted, null, 2),
         },
       ],
     };
@@ -367,9 +231,11 @@ class DatabaseSchemaServer {
     const {
       schema,
       options = { format: 'mermaid', includeColumns: true, includeRelationships: true },
+      response_format = 'detailed',
     } = args as {
       schema: DatabaseSchema;
       options?: ERDiagramOptions;
+      response_format?: ResponseFormat;
     };
 
     if (!schema) {
@@ -378,11 +244,30 @@ class DatabaseSchemaServer {
 
     const diagram = createERDiagram(schema, options);
 
+    // For diagrams, minimal/concise return metadata, detailed returns full diagram
+    const formatted = formatResponse(
+      { diagram, format: options.format || 'mermaid', tables: schema.tables?.length || 0 },
+      { format: response_format },
+      {
+        minimal: r => ({
+          format: r.format,
+          tables: r.tables,
+          length: r.diagram.length,
+        }),
+        concise: r => ({
+          format: r.format,
+          tables: r.tables,
+          preview: r.diagram.substring(0, 500) + (r.diagram.length > 500 ? '...' : ''),
+        }),
+        detailed: r => r.diagram,
+      }
+    );
+
     return {
       content: [
         {
           type: 'text',
-          text: diagram,
+          text: typeof formatted === 'string' ? formatted : JSON.stringify(formatted, null, 2),
         },
       ],
     };
@@ -392,19 +277,43 @@ class DatabaseSchemaServer {
    * Handle optimize_indexes tool
    */
   private async handleOptimizeIndexes(args: any) {
-    const { schema } = args as { schema: DatabaseSchema };
+    const { schema, response_format = 'detailed' } = args as {
+      schema: DatabaseSchema;
+      response_format?: ResponseFormat;
+    };
 
     if (!schema) {
       throw new MCPError('DB_003');
     }
 
-    const suggestions = optimizeIndexes(schema);
+    const suggestions = optimizeIndexes(schema) as any;
+
+    const formatted = formatResponse(
+      { suggestions },
+      { format: response_format },
+      {
+        minimal: (r: any) => ({
+          suggestionsCount: r.suggestions?.length || 0,
+        }),
+        concise: (r: any) => ({
+          suggestions: truncateArray(
+            (r.suggestions || []).map((s: any) => ({
+              table: s.table,
+              columns: s.columns,
+              type: s.type,
+            })),
+            'concise'
+          ),
+        }),
+        detailed: (r: any) => r,
+      }
+    );
 
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(suggestions, null, 2),
+          text: JSON.stringify(formatted, null, 2),
         },
       ],
     };
@@ -414,19 +323,39 @@ class DatabaseSchemaServer {
    * Handle normalize_schema tool
    */
   private async handleNormalizeSchema(args: any) {
-    const { schema } = args as { schema: DatabaseSchema };
+    const { schema, response_format = 'detailed' } = args as {
+      schema: DatabaseSchema;
+      response_format?: ResponseFormat;
+    };
 
     if (!schema) {
       throw new MCPError('DB_003');
     }
 
-    const suggestions = normalizeSchema(schema);
+    const suggestions = normalizeSchema(schema) as any;
+
+    const formatted = formatResponse(
+      { suggestions },
+      { format: response_format },
+      {
+        minimal: (r: any) => ({
+          suggestionsCount: r.suggestions?.length || 0,
+        }),
+        concise: (r: any) => ({
+          suggestions: truncateArray(
+            (r.suggestions || []).map((s: any) => ({ type: s.type, description: s.description })),
+            'concise'
+          ),
+        }),
+        detailed: (r: any) => r,
+      }
+    );
 
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(suggestions, null, 2),
+          text: JSON.stringify(formatted, null, 2),
         },
       ],
     };
@@ -436,22 +365,44 @@ class DatabaseSchemaServer {
    * Handle generate_seed_data tool
    */
   private async handleGenerateSeedData(args: any) {
-    const { schema, recordsPerTable = 10 } = args as {
+    const {
+      schema,
+      recordsPerTable = 10,
+      response_format = 'detailed',
+    } = args as {
       schema: DatabaseSchema;
       recordsPerTable?: number;
+      response_format?: ResponseFormat;
     };
 
     if (!schema) {
       throw new MCPError('DB_003');
     }
 
-    const seedData = generateSeedData(schema, recordsPerTable);
+    const seedData = generateSeedData(schema, recordsPerTable) as any;
+
+    const formatted = formatResponse(
+      { seedData },
+      { format: response_format },
+      {
+        minimal: (r: any) => ({
+          tablesCount: r.seedData?.length || 0,
+        }),
+        concise: (r: any) => ({
+          tables: (r.seedData || []).map((s: any) => ({
+            table: s.table,
+            recordsCount: s.records?.length || 0,
+          })),
+        }),
+        detailed: (r: any) => r,
+      }
+    );
 
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(seedData, null, 2),
+          text: JSON.stringify(formatted, null, 2),
         },
       ],
     };
@@ -461,19 +412,46 @@ class DatabaseSchemaServer {
    * Handle validate_schema tool
    */
   private async handleValidateSchema(args: any) {
-    const { schema } = args as { schema: DatabaseSchema };
+    const { schema, response_format = 'detailed' } = args as {
+      schema: DatabaseSchema;
+      response_format?: ResponseFormat;
+    };
 
     if (!schema) {
       throw new MCPError('DB_003');
     }
 
-    const validation = validateSchema(schema);
+    const validation = validateSchema(schema) as any;
+
+    const formatted = formatResponse(
+      validation,
+      { format: response_format },
+      {
+        minimal: (r: any) => ({
+          valid: r.valid,
+          errorsCount: r.errors?.length || 0,
+          warningsCount: r.warnings?.length || 0,
+        }),
+        concise: (r: any) => ({
+          valid: r.valid,
+          errors: truncateArray(
+            (r.errors || []).map((e: any) => ({ type: e.type, message: e.message })),
+            'concise'
+          ),
+          warnings: truncateArray(
+            (r.warnings || []).map((w: any) => ({ type: w.type, message: w.message })),
+            'concise'
+          ),
+        }),
+        detailed: (r: any) => r,
+      }
+    );
 
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(validation, null, 2),
+          text: JSON.stringify(formatted, null, 2),
         },
       ],
     };
@@ -483,19 +461,42 @@ class DatabaseSchemaServer {
    * Handle analyze_schema tool
    */
   private async handleAnalyzeSchema(args: any) {
-    const { schema } = args as { schema: DatabaseSchema };
+    const { schema, response_format = 'detailed' } = args as {
+      schema: DatabaseSchema;
+      response_format?: ResponseFormat;
+    };
 
     if (!schema) {
       throw new MCPError('DB_003');
     }
 
-    const analysis = analyzeSchema(schema);
+    const analysis = analyzeSchema(schema) as any;
+
+    const formatted = formatResponse(
+      analysis,
+      { format: response_format },
+      {
+        minimal: (r: any) => ({
+          tableCount: r.tableCount,
+          normalForm: r.normalForm,
+        }),
+        concise: (r: any) => ({
+          tableCount: r.tableCount,
+          columnCount: r.columnCount,
+          indexCount: r.indexCount,
+          relationshipCount: r.relationshipCount,
+          normalForm: r.normalForm,
+          complexity: r.complexity,
+        }),
+        detailed: (r: any) => r,
+      }
+    );
 
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(analysis, null, 2),
+          text: JSON.stringify(formatted, null, 2),
         },
       ],
     };

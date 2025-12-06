@@ -1,6 +1,8 @@
 /**
  * Shared types for all MCP tools
  */
+export * from './tool-examples.js';
+export * from './response-format.js';
 /**
  * Base result type for all MCP operations
  */

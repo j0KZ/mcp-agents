@@ -4,6 +4,7 @@
  * Enables modularity and integration between MCPs
  */
 export * from './types/index.js';
+export * from './helpers/index.js';
 export * from './utils/index.js';
 export * from './performance/index.js';
 export * from './integration/index.js';
@@ -20,6 +21,8 @@ export * from './runtime/index.js';
 export * from './config/index.js';
 export * from './health/index.js';
 export * from './i18n/index.js';
+export * from './tool-registry/index.js';
+export * from './telemetry/index.js';
 export declare const VERSION = "1.0.33";
 export declare const PACKAGE_NAME = "@j0kz/shared";
 //# sourceMappingURL=index.d.ts.map

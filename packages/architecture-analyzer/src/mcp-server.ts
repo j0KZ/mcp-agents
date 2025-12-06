@@ -5,7 +5,16 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { ArchitectureAnalyzer } from './analyzer.js';
 import { AnalysisConfig } from './types.js';
-import { validateDirectoryPath, validatePath, MCPError, getErrorMessage } from '@j0kz/shared';
+import {
+  validateDirectoryPath,
+  validatePath,
+  MCPError,
+  getErrorMessage,
+  ResponseFormat,
+  formatResponse,
+  truncateArray,
+} from '@j0kz/shared';
+import { ARCHITECTURE_ANALYZER_TOOLS } from './constants/tool-definitions.js';
 
 class ArchitectureAnalyzerServer {
   private server: Server;
@@ -30,85 +39,9 @@ class ArchitectureAnalyzerServer {
   }
 
   private setupHandlers() {
-    // List available tools
+    // List available tools (with examples for improved accuracy - Anthropic Nov 2025)
     this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
-      tools: [
-        {
-          name: 'analyze_architecture',
-          description:
-            'Analyze project architecture, detect circular dependencies, layer violations, and generate dependency graphs',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              projectPath: {
-                type: 'string',
-                description: 'Path to the project root directory',
-              },
-              config: {
-                type: 'object',
-                description: 'Analysis configuration',
-                properties: {
-                  maxDepth: {
-                    type: 'number',
-                    description: 'Maximum depth for directory traversal',
-                  },
-                  excludePatterns: {
-                    type: 'array',
-                    items: { type: 'string' },
-                    description: 'Patterns to exclude from analysis',
-                  },
-                  detectCircular: {
-                    type: 'boolean',
-                    description: 'Detect circular dependencies',
-                  },
-                  generateGraph: {
-                    type: 'boolean',
-                    description: 'Generate Mermaid dependency graph',
-                  },
-                  layerRules: {
-                    type: 'object',
-                    description:
-                      'Layer dependency rules (e.g., {"presentation": ["business"], "business": ["data"]})',
-                  },
-                },
-              },
-            },
-            required: ['projectPath'],
-          },
-        },
-        {
-          name: 'get_module_info',
-          description: 'Get detailed information about a specific module',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              projectPath: {
-                type: 'string',
-                description: 'Path to the project root',
-              },
-              modulePath: {
-                type: 'string',
-                description: 'Relative path to the module',
-              },
-            },
-            required: ['projectPath', 'modulePath'],
-          },
-        },
-        {
-          name: 'find_circular_deps',
-          description: 'Find all circular dependencies in the project',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              projectPath: {
-                type: 'string',
-                description: 'Path to the project root',
-              },
-            },
-            required: ['projectPath'],
-          },
-        },
-      ],
+      tools: ARCHITECTURE_ANALYZER_TOOLS,
     }));
 
     // Handle tool calls
@@ -118,39 +51,73 @@ class ArchitectureAnalyzerServer {
       try {
         switch (name) {
           case 'analyze_architecture': {
-            const { projectPath, config } = args as {
+            const {
+              projectPath,
+              config,
+              response_format = 'detailed',
+            } = args as {
               projectPath: string;
               config?: AnalysisConfig;
+              response_format?: ResponseFormat;
             };
             const validatedPath = validateDirectoryPath(projectPath);
             const result = await this.analyzer.analyzeArchitecture(validatedPath, config);
+
+            const formatted = formatResponse(
+              result,
+              { format: response_format },
+              {
+                minimal: r => ({
+                  totalModules: r.metrics.totalModules,
+                  circularDependencies: r.metrics.circularDependencies,
+                  layerViolations: r.metrics.layerViolations,
+                }),
+                concise: r => ({
+                  summary: {
+                    totalModules: r.metrics.totalModules,
+                    totalDependencies: r.metrics.totalDependencies,
+                    circularDependencies: r.metrics.circularDependencies,
+                    layerViolations: r.metrics.layerViolations,
+                    cohesion: `${r.metrics.cohesion}%`,
+                    coupling: `${r.metrics.coupling}%`,
+                  },
+                  modules: truncateArray(r.modules, 'concise'),
+                  circularDependencies: r.circularDependencies,
+                }),
+                detailed: r => ({
+                  summary: {
+                    totalModules: r.metrics.totalModules,
+                    totalDependencies: r.metrics.totalDependencies,
+                    circularDependencies: r.metrics.circularDependencies,
+                    layerViolations: r.metrics.layerViolations,
+                    cohesion: `${r.metrics.cohesion}%`,
+                    coupling: `${r.metrics.coupling}%`,
+                  },
+                  ...r,
+                }),
+              }
+            );
 
             return {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify(
-                    {
-                      summary: {
-                        totalModules: result.metrics.totalModules,
-                        totalDependencies: result.metrics.totalDependencies,
-                        circularDependencies: result.metrics.circularDependencies,
-                        layerViolations: result.metrics.layerViolations,
-                        cohesion: `${result.metrics.cohesion}%`,
-                        coupling: `${result.metrics.coupling}%`,
-                      },
-                      ...result,
-                    },
-                    null,
-                    2
-                  ),
+                  text: JSON.stringify(formatted, null, 2),
                 },
               ],
             };
           }
 
           case 'get_module_info': {
-            const { projectPath, modulePath } = args as { projectPath: string; modulePath: string };
+            const {
+              projectPath,
+              modulePath,
+              response_format = 'detailed',
+            } = args as {
+              projectPath: string;
+              modulePath: string;
+              response_format?: ResponseFormat;
+            };
             const validatedProjectPath = validateDirectoryPath(projectPath);
             const validatedModulePath = validatePath(modulePath);
             const result = await this.analyzer.analyzeArchitecture(validatedProjectPath);
@@ -163,49 +130,78 @@ class ArchitectureAnalyzerServer {
             const dependencies = result.dependencies.filter(d => d.from === validatedModulePath);
             const dependents = result.dependencies.filter(d => d.to === validatedModulePath);
 
+            const moduleResult = {
+              module,
+              dependencies,
+              dependents,
+              stats: {
+                dependencyCount: dependencies.length,
+                dependentCount: dependents.length,
+                linesOfCode: module.linesOfCode,
+              },
+            };
+
+            const formatted = formatResponse(
+              moduleResult,
+              { format: response_format },
+              {
+                minimal: r => ({
+                  path: r.module.path,
+                  dependencyCount: r.stats.dependencyCount,
+                  dependentCount: r.stats.dependentCount,
+                }),
+                concise: r => ({
+                  module: { path: r.module.path, linesOfCode: r.module.linesOfCode },
+                  stats: r.stats,
+                }),
+                detailed: r => r,
+              }
+            );
+
             return {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify(
-                    {
-                      module,
-                      dependencies,
-                      dependents,
-                      stats: {
-                        dependencyCount: dependencies.length,
-                        dependentCount: dependents.length,
-                        linesOfCode: module.linesOfCode,
-                      },
-                    },
-                    null,
-                    2
-                  ),
+                  text: JSON.stringify(formatted, null, 2),
                 },
               ],
             };
           }
 
           case 'find_circular_deps': {
-            const { projectPath } = args as { projectPath: string };
+            const { projectPath, response_format = 'detailed' } = args as {
+              projectPath: string;
+              response_format?: ResponseFormat;
+            };
             const validatedPath = validateDirectoryPath(projectPath);
             const result = await this.analyzer.analyzeArchitecture(validatedPath, {
               detectCircular: true,
               generateGraph: false,
             });
 
+            const circularResult = {
+              circularDependencies: result.circularDependencies,
+              count: result.circularDependencies.length,
+            };
+
+            const formatted = formatResponse(
+              circularResult,
+              { format: response_format },
+              {
+                minimal: r => ({ count: r.count }),
+                concise: r => ({
+                  count: r.count,
+                  circularDependencies: truncateArray(r.circularDependencies, 'concise'),
+                }),
+                detailed: r => r,
+              }
+            );
+
             return {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify(
-                    {
-                      circularDependencies: result.circularDependencies,
-                      count: result.circularDependencies.length,
-                    },
-                    null,
-                    2
-                  ),
+                  text: JSON.stringify(formatted, null, 2),
                 },
               ],
             };

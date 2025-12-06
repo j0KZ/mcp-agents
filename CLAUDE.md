@@ -2,6 +2,52 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 🔧 MCP Tool Discovery (Anthropic Advanced Tool Use - Nov 2025)
+
+**This monorepo has 50 MCP tools across 9 servers.** Use tool discovery instead of loading all definitions:
+
+### Available Tool Categories
+| Category | Tools | Examples |
+|----------|-------|----------|
+| **analysis** | 14 | `review_file`, `analyze_architecture` |
+| **generation** | 11 | `generate_tests`, `generate_docs` |
+| **security** | 5 | `scan_file`, `scan_secrets`, `scan_owasp` |
+| **refactoring** | 8 | `extract_function`, `remove_dead_code` |
+| **design** | 14 | `design_api`, `design_schema` |
+| **orchestration** | 6 | `run_workflow`, `search_tools` |
+
+### Tool Loading Strategy
+- **High-frequency (always loaded):** `review_file`, `generate_tests`, `analyze_architecture`, `run_workflow`
+- **Low-frequency (use `load_tool`):** All design tools (api-designer, db-schema), refactor-assistant tools
+
+### When to Use Tool Discovery
+```
+# Find tools by keyword
+search_tools({ query: "security vulnerability" })
+
+# Load a deferred tool
+load_tool({ toolName: "design_api", server: "api-designer" })
+
+# List all capabilities
+list_capabilities({})
+```
+
+### Response Format Optimization
+All tools support `response_format` parameter to reduce token usage:
+- `minimal` - Just success/fail + key metrics (~100 tokens)
+- `concise` - Summary without details (~500 tokens)
+- `detailed` - Full analysis (default, ~5000 tokens)
+
+**Example:** `review_file({ filePath: "src/index.ts", config: { response_format: "concise" } })`
+
+### Workflow Automation
+Instead of calling tools individually, use orchestrator workflows:
+- `pre-commit` - Review + Security scan (saves ~45s)
+- `pre-merge` - Full review + Architecture + Tests (saves ~4min)
+- `quality-audit` - Security report + Architecture + Docs
+
+---
+
 ## 🌍 NEW: Universal Skills for ANY Project
 
 **10 project-agnostic developer skills** are now available in [`docs/universal-skills/`](docs/universal-skills/INDEX.md). These work in ANY codebase, ANY language, with or without MCP tools:

@@ -9,15 +9,12 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-  Tool,
-} from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import { DOC_GENERATOR_TOOLS } from './constants/tool-definitions.js';
 import { generateJSDoc, generateReadme, generateApiDocs, generateChangelog } from './generator.js';
 import { JSDocConfig, ReadmeConfig, ApiDocsConfig, ChangelogConfig, DocError } from './types.js';
 import * as fs from 'fs';
-import { MCPError, getErrorMessage } from '@j0kz/shared';
+import { MCPError, getErrorMessage, ResponseFormat, formatResponse } from '@j0kz/shared';
 import { validateFilePath, validateDirectoryPath } from '@j0kz/shared';
 
 /**
@@ -37,263 +34,9 @@ const server = new Server(
 
 /**
  * Available MCP tools for documentation generation
+ * Following Anthropic Advanced Tool Use best practices (Nov 2025)
  */
-const TOOLS: Tool[] = [
-  {
-    name: 'generate_jsdoc',
-    description:
-      'Generate JSDoc comments for a TypeScript/JavaScript file. Analyzes functions, classes, and interfaces to produce comprehensive JSDoc documentation with parameter types, return values, and suggestions for missing documentation.',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        filePath: {
-          type: 'string',
-          description: 'Path to the source file to generate JSDoc for',
-        },
-        config: {
-          type: 'object',
-          description: 'JSDoc generation configuration',
-          properties: {
-            style: {
-              type: 'string',
-              enum: ['standard', 'google', 'typescript'],
-              description: 'JSDoc style preference',
-            },
-            addTodoTags: {
-              type: 'boolean',
-              description: 'Add @todo tags for missing documentation',
-            },
-            inferTypes: {
-              type: 'boolean',
-              description: 'Infer types from TypeScript',
-            },
-            includePrivate: {
-              type: 'boolean',
-              description: 'Include private members',
-            },
-          },
-        },
-      },
-      required: ['filePath'],
-    },
-  },
-  {
-    name: 'generate_readme',
-    description:
-      'Generate a comprehensive README.md file from project source code and package.json. Creates sections for installation, usage, API reference, badges, table of contents, and more.',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        projectPath: {
-          type: 'string',
-          description: 'Path to the project root directory',
-        },
-        config: {
-          type: 'object',
-          description: 'README generation configuration',
-          properties: {
-            projectName: {
-              type: 'string',
-              description: 'Project name for documentation header',
-            },
-            version: {
-              type: 'string',
-              description: 'Project version',
-            },
-            author: {
-              type: 'string',
-              description: 'Author information',
-            },
-            license: {
-              type: 'string',
-              description: 'License type',
-            },
-            includeInstallation: {
-              type: 'boolean',
-              description: 'Include installation section',
-            },
-            includeUsage: {
-              type: 'boolean',
-              description: 'Include usage examples',
-            },
-            includeAPI: {
-              type: 'boolean',
-              description: 'Include API reference',
-            },
-            includeContributing: {
-              type: 'boolean',
-              description: 'Include contributing guidelines',
-            },
-            includeBadges: {
-              type: 'boolean',
-              description: 'Include badges',
-            },
-            includeTOC: {
-              type: 'boolean',
-              description: 'Include table of contents',
-            },
-          },
-        },
-      },
-      required: ['projectPath'],
-    },
-  },
-  {
-    name: 'generate_api_docs',
-    description:
-      'Generate comprehensive API documentation from TypeScript/JavaScript source files. Extracts classes, interfaces, functions, parameters, and return types to create detailed API reference documentation.',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        projectPath: {
-          type: 'string',
-          description:
-            'Path to the project source directory (will recursively scan for .ts, .js, .tsx, .jsx files)',
-        },
-        config: {
-          type: 'object',
-          description: 'API documentation configuration',
-          properties: {
-            groupByCategory: {
-              type: 'boolean',
-              description: 'Group documentation by category',
-            },
-            includeTypes: {
-              type: 'boolean',
-              description: 'Include type definitions',
-            },
-            includeInterfaces: {
-              type: 'boolean',
-              description: 'Include interfaces',
-            },
-            includeEnums: {
-              type: 'boolean',
-              description: 'Include enums',
-            },
-            sortAlphabetically: {
-              type: 'boolean',
-              description: 'Sort members alphabetically',
-            },
-            includeTOC: {
-              type: 'boolean',
-              description: 'Include table of contents',
-            },
-            includeSourceLinks: {
-              type: 'boolean',
-              description: 'Include source code links',
-            },
-            repositoryUrl: {
-              type: 'string',
-              description: 'Repository URL for source links',
-            },
-          },
-        },
-      },
-      required: ['projectPath'],
-    },
-  },
-  {
-    name: 'generate_changelog',
-    description:
-      'Generate a changelog from git commit history using conventional commit format. Groups commits by type (features, fixes, docs, etc.) and optionally includes breaking changes, authors, and commit links.',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        projectPath: {
-          type: 'string',
-          description: 'Path to the git repository',
-        },
-        config: {
-          type: 'object',
-          description: 'Changelog generation configuration',
-          properties: {
-            commitLimit: {
-              type: 'number',
-              description: 'Number of commits to include (default: 100)',
-            },
-            fromTag: {
-              type: 'string',
-              description: 'Starting version tag',
-            },
-            toTag: {
-              type: 'string',
-              description: 'Ending version tag',
-            },
-            groupByType: {
-              type: 'boolean',
-              description: 'Group changes by type (feat, fix, etc.)',
-            },
-            includeMerges: {
-              type: 'boolean',
-              description: 'Include merge commits',
-            },
-            conventionalCommits: {
-              type: 'boolean',
-              description: 'Parse conventional commit format',
-            },
-            includeAuthors: {
-              type: 'boolean',
-              description: 'Include commit authors',
-            },
-            linkCommits: {
-              type: 'boolean',
-              description: 'Link to commit URLs',
-            },
-          },
-        },
-      },
-      required: ['projectPath'],
-    },
-  },
-  {
-    name: 'generate_full_docs',
-    description:
-      'Generate complete documentation suite including JSDoc, README, API documentation, and changelog all at once. This is a convenience tool that runs all documentation generators and saves the results to appropriate files.',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        projectPath: {
-          type: 'string',
-          description: 'Path to the project root directory',
-        },
-        sourceFiles: {
-          type: 'array',
-          description: 'Array of source files to generate JSDoc for',
-          items: {
-            type: 'string',
-          },
-        },
-        config: {
-          type: 'object',
-          description: 'Combined configuration for all documentation types',
-          properties: {
-            projectName: {
-              type: 'string',
-              description: 'Project name',
-            },
-            version: {
-              type: 'string',
-              description: 'Project version',
-            },
-            author: {
-              type: 'string',
-              description: 'Author information',
-            },
-            license: {
-              type: 'string',
-              description: 'License type',
-            },
-            writeFiles: {
-              type: 'boolean',
-              description: 'Write generated documentation to files (default: true)',
-            },
-          },
-        },
-      },
-      required: ['projectPath'],
-    },
-  },
-];
+const TOOLS = DOC_GENERATOR_TOOLS;
 
 /**
  * Register list_tools handler
@@ -311,87 +54,186 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
   try {
     switch (name) {
       case 'generate_jsdoc': {
-        const { filePath, config } = args as {
+        const {
+          filePath,
+          config,
+          response_format = 'detailed',
+        } = args as {
           filePath: string;
           config?: JSDocConfig;
+          response_format?: ResponseFormat;
         };
 
         // Validate file path to prevent path traversal
         const validatedPath = validateFilePath(filePath);
-        const result = await generateJSDoc(validatedPath, config);
+        const result = (await generateJSDoc(validatedPath, config)) as any;
+
+        const formatted = formatResponse(
+          result,
+          { format: response_format },
+          {
+            minimal: (r: any) => ({
+              filePath: r.filePath,
+              format: r.format,
+              itemsDocumented: r.metadata?.itemsDocumented || 0,
+            }),
+            concise: (r: any) => ({
+              filePath: r.filePath,
+              format: r.format,
+              metadata: r.metadata,
+              contentPreview: r.content?.substring(0, 500) + (r.content?.length > 500 ? '...' : ''),
+            }),
+            detailed: (r: any) => r,
+          }
+        );
 
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(result, null, 2),
+              text: JSON.stringify(formatted, null, 2),
             },
           ],
         };
       }
 
       case 'generate_readme': {
-        const { projectPath, config } = args as {
+        const {
+          projectPath,
+          config,
+          response_format = 'detailed',
+        } = args as {
           projectPath: string;
           config?: ReadmeConfig;
+          response_format?: ResponseFormat;
         };
 
         // Validate directory path to prevent path traversal
         const validatedPath = validateDirectoryPath(projectPath);
-        const result = await generateReadme(validatedPath, config);
+        const result = (await generateReadme(validatedPath, config)) as any;
+
+        const formatted = formatResponse(
+          result,
+          { format: response_format },
+          {
+            minimal: (r: any) => ({
+              filePath: r.filePath,
+              format: r.format,
+            }),
+            concise: (r: any) => ({
+              filePath: r.filePath,
+              format: r.format,
+              metadata: r.metadata,
+              contentPreview: r.content?.substring(0, 500) + (r.content?.length > 500 ? '...' : ''),
+            }),
+            detailed: (r: any) => r,
+          }
+        );
 
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(result, null, 2),
+              text: JSON.stringify(formatted, null, 2),
             },
           ],
         };
       }
 
       case 'generate_api_docs': {
-        const { projectPath, config } = args as {
+        const {
+          projectPath,
+          config,
+          response_format = 'detailed',
+        } = args as {
           projectPath: string;
           config?: ApiDocsConfig;
+          response_format?: ResponseFormat;
         };
 
         // Validate directory path to prevent path traversal
         const validatedPath = validateDirectoryPath(projectPath);
-        const result = await generateApiDocs(validatedPath, config);
+        const result = (await generateApiDocs(validatedPath, config)) as any;
+
+        const formatted = formatResponse(
+          result,
+          { format: response_format },
+          {
+            minimal: (r: any) => ({
+              filePath: r.filePath,
+              format: r.format,
+              itemsDocumented: r.metadata?.itemsDocumented || 0,
+            }),
+            concise: (r: any) => ({
+              filePath: r.filePath,
+              format: r.format,
+              metadata: r.metadata,
+              contentPreview: r.content?.substring(0, 500) + (r.content?.length > 500 ? '...' : ''),
+            }),
+            detailed: (r: any) => r,
+          }
+        );
 
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(result, null, 2),
+              text: JSON.stringify(formatted, null, 2),
             },
           ],
         };
       }
 
       case 'generate_changelog': {
-        const { projectPath, config } = args as {
+        const {
+          projectPath,
+          config,
+          response_format = 'detailed',
+        } = args as {
           projectPath: string;
           config?: ChangelogConfig;
+          response_format?: ResponseFormat;
         };
 
         // Validate directory path to prevent path traversal
         const validatedPath = validateDirectoryPath(projectPath);
-        const result = await generateChangelog(validatedPath, config);
+        const result = (await generateChangelog(validatedPath, config)) as any;
+
+        const formatted = formatResponse(
+          result,
+          { format: response_format },
+          {
+            minimal: (r: any) => ({
+              filePath: r.filePath,
+              format: r.format,
+            }),
+            concise: (r: any) => ({
+              filePath: r.filePath,
+              format: r.format,
+              metadata: r.metadata,
+              contentPreview: r.content?.substring(0, 500) + (r.content?.length > 500 ? '...' : ''),
+            }),
+            detailed: (r: any) => r,
+          }
+        );
 
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(result, null, 2),
+              text: JSON.stringify(formatted, null, 2),
             },
           ],
         };
       }
 
       case 'generate_full_docs': {
-        const { projectPath, sourceFiles, config } = args as {
+        const {
+          projectPath,
+          sourceFiles,
+          config,
+          response_format = 'detailed',
+        } = args as {
           projectPath: string;
           sourceFiles?: string[];
           config?: {
@@ -401,6 +243,7 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
             license?: string;
             writeFiles?: boolean;
           };
+          response_format?: ResponseFormat;
         };
 
         // Validate directory path to prevent path traversal
@@ -462,20 +305,40 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
           }
         }
 
+        const fullDocsResult = {
+          success: true,
+          message: 'Full documentation suite generated successfully',
+          results,
+          filesWritten: config?.writeFiles !== false,
+        };
+
+        const formatted = formatResponse(
+          fullDocsResult,
+          { format: response_format },
+          {
+            minimal: r => ({
+              success: r.success,
+              filesWritten: r.filesWritten,
+              filesGenerated: Object.keys(r.results).length,
+            }),
+            concise: r => ({
+              success: r.success,
+              message: r.message,
+              filesWritten: r.filesWritten,
+              readme: r.results.readme?.filePath,
+              apiDocs: r.results.apiDocs?.filePath,
+              changelog: r.results.changelog?.filePath || r.results.changelog?.error,
+              jsdocFiles: r.results.jsdoc?.length || 0,
+            }),
+            detailed: r => r,
+          }
+        );
+
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(
-                {
-                  success: true,
-                  message: 'Full documentation suite generated successfully',
-                  results,
-                  filesWritten: config?.writeFiles !== false,
-                },
-                null,
-                2
-              ),
+              text: JSON.stringify(formatted, null, 2),
             },
           ],
         };

@@ -6,210 +6,15 @@
  */
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { CallToolRequestSchema, ListToolsRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import { REFACTOR_ASSISTANT_TOOLS } from './constants/tool-definitions.js';
 import { extractFunction, convertToAsync, simplifyConditionals, removeDeadCode, applyDesignPattern, renameVariable, suggestRefactorings, calculateMetrics, } from './refactorer.js';
-import { MCPError, getErrorMessage } from '@j0kz/shared';
+import { MCPError, getErrorMessage, formatResponse, truncateArray, } from '@j0kz/shared';
 /**
- * MCP Tool definitions
+ * MCP Tool definitions - imported from constants for maintainability
+ * Following Anthropic Advanced Tool Use best practices (Nov 2025)
  */
-export const TOOLS = [
-    {
-        name: 'extract_function',
-        description: 'Extract a code block into a separate function with automatic parameter detection',
-        inputSchema: {
-            type: 'object',
-            properties: {
-                code: {
-                    type: 'string',
-                    description: 'Source code containing the block to extract',
-                },
-                functionName: {
-                    type: 'string',
-                    description: 'Name for the extracted function',
-                },
-                startLine: {
-                    type: 'number',
-                    description: 'Start line of the code block to extract (1-indexed)',
-                },
-                endLine: {
-                    type: 'number',
-                    description: 'End line of the code block to extract (1-indexed, inclusive)',
-                },
-                async: {
-                    type: 'boolean',
-                    description: 'Whether to make the extracted function async',
-                    default: false,
-                },
-                arrow: {
-                    type: 'boolean',
-                    description: 'Whether to use arrow function syntax',
-                    default: false,
-                },
-            },
-            required: ['code', 'functionName', 'startLine', 'endLine'],
-        },
-    },
-    {
-        name: 'convert_to_async',
-        description: 'Convert callback-based code to async/await syntax with proper error handling',
-        inputSchema: {
-            type: 'object',
-            properties: {
-                code: {
-                    type: 'string',
-                    description: 'Source code with callbacks to convert',
-                },
-                useTryCatch: {
-                    type: 'boolean',
-                    description: 'Wrap async code in try/catch blocks',
-                    default: true,
-                },
-            },
-            required: ['code'],
-        },
-    },
-    {
-        name: 'simplify_conditionals',
-        description: 'Simplify nested conditionals using guard clauses, ternary operators, and combined conditions',
-        inputSchema: {
-            type: 'object',
-            properties: {
-                code: {
-                    type: 'string',
-                    description: 'Source code with conditionals to simplify',
-                },
-                useGuardClauses: {
-                    type: 'boolean',
-                    description: 'Apply guard clauses for early returns',
-                    default: true,
-                },
-                useTernary: {
-                    type: 'boolean',
-                    description: 'Convert simple if/else to ternary operators',
-                    default: true,
-                },
-            },
-            required: ['code'],
-        },
-    },
-    {
-        name: 'remove_dead_code',
-        description: 'Remove dead code including unused variables, unreachable code, and unused imports',
-        inputSchema: {
-            type: 'object',
-            properties: {
-                code: {
-                    type: 'string',
-                    description: 'Source code to analyze and clean',
-                },
-                removeUnusedImports: {
-                    type: 'boolean',
-                    description: 'Remove unused import statements',
-                    default: true,
-                },
-                removeUnreachable: {
-                    type: 'boolean',
-                    description: 'Remove unreachable code after return statements',
-                    default: true,
-                },
-            },
-            required: ['code'],
-        },
-    },
-    {
-        name: 'apply_pattern',
-        description: 'Apply a design pattern to existing code (singleton, factory, observer, strategy, decorator, adapter, facade, proxy, command, chain-of-responsibility)',
-        inputSchema: {
-            type: 'object',
-            properties: {
-                code: {
-                    type: 'string',
-                    description: 'Source code to refactor with design pattern',
-                },
-                pattern: {
-                    type: 'string',
-                    enum: [
-                        'singleton',
-                        'factory',
-                        'observer',
-                        'strategy',
-                        'decorator',
-                        'adapter',
-                        'facade',
-                        'proxy',
-                        'command',
-                        'chain-of-responsibility',
-                    ],
-                    description: 'Design pattern to apply',
-                },
-                patternOptions: {
-                    type: 'object',
-                    description: 'Pattern-specific options (e.g., className for factory)',
-                },
-            },
-            required: ['code', 'pattern'],
-        },
-    },
-    {
-        name: 'rename_variable',
-        description: 'Rename a variable consistently throughout the code with word boundary detection',
-        inputSchema: {
-            type: 'object',
-            properties: {
-                code: {
-                    type: 'string',
-                    description: 'Source code containing the variable',
-                },
-                oldName: {
-                    type: 'string',
-                    description: 'Current variable name',
-                },
-                newName: {
-                    type: 'string',
-                    description: 'New variable name (must be valid identifier)',
-                },
-                includeComments: {
-                    type: 'boolean',
-                    description: 'Also rename variable in comments',
-                    default: false,
-                },
-            },
-            required: ['code', 'oldName', 'newName'],
-        },
-    },
-    {
-        name: 'suggest_refactorings',
-        description: 'Analyze code and provide intelligent refactoring suggestions based on best practices',
-        inputSchema: {
-            type: 'object',
-            properties: {
-                code: {
-                    type: 'string',
-                    description: 'Source code to analyze',
-                },
-                filePath: {
-                    type: 'string',
-                    description: 'Optional file path for context',
-                },
-            },
-            required: ['code'],
-        },
-    },
-    {
-        name: 'calculate_metrics',
-        description: 'Calculate code quality metrics including complexity, LOC, and maintainability index',
-        inputSchema: {
-            type: 'object',
-            properties: {
-                code: {
-                    type: 'string',
-                    description: 'Source code to analyze',
-                },
-            },
-            required: ['code'],
-        },
-    },
-];
+export const TOOLS = REFACTOR_ASSISTANT_TOOLS;
 /**
  * Create and configure MCP server
  */
@@ -246,6 +51,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     try {
         switch (name) {
             case 'extract_function': {
+                const response_format = args.response_format || 'detailed';
                 const options = {
                     functionName: args.functionName,
                     startLine: args.startLine,
@@ -254,79 +60,125 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     arrow: args.arrow,
                 };
                 const result = extractFunction(args.code, options);
+                const formatted = formatResponse(result, { format: response_format }, {
+                    minimal: (r) => ({ success: r.success, changesCount: r.changes?.length || 0 }),
+                    concise: (r) => ({
+                        success: r.success,
+                        changes: truncateArray(r.changes || [], 'concise'),
+                        warnings: r.warnings,
+                    }),
+                    detailed: (r) => r,
+                });
                 return {
                     content: [
                         {
                             type: 'text',
-                            text: JSON.stringify(result, null, 2),
+                            text: JSON.stringify(formatted, null, 2),
                         },
                     ],
                 };
             }
             case 'convert_to_async': {
+                const response_format = args.response_format || 'detailed';
                 const options = {
                     code: args.code,
                     useTryCatch: args.useTryCatch,
                 };
                 const result = convertToAsync(options);
+                const formatted = formatResponse(result, { format: response_format }, {
+                    minimal: (r) => ({ success: r.success, changesCount: r.changes?.length || 0 }),
+                    concise: (r) => ({
+                        success: r.success,
+                        changes: truncateArray(r.changes || [], 'concise'),
+                    }),
+                    detailed: (r) => r,
+                });
                 return {
                     content: [
                         {
                             type: 'text',
-                            text: JSON.stringify(result, null, 2),
+                            text: JSON.stringify(formatted, null, 2),
                         },
                     ],
                 };
             }
             case 'simplify_conditionals': {
+                const response_format = args.response_format || 'detailed';
                 const options = {
                     code: args.code,
                     useGuardClauses: args.useGuardClauses,
                     useTernary: args.useTernary,
                 };
                 const result = simplifyConditionals(options);
+                const formatted = formatResponse(result, { format: response_format }, {
+                    minimal: (r) => ({ success: r.success, changesCount: r.changes?.length || 0 }),
+                    concise: (r) => ({
+                        success: r.success,
+                        changes: truncateArray(r.changes || [], 'concise'),
+                    }),
+                    detailed: (r) => r,
+                });
                 return {
                     content: [
                         {
                             type: 'text',
-                            text: JSON.stringify(result, null, 2),
+                            text: JSON.stringify(formatted, null, 2),
                         },
                     ],
                 };
             }
             case 'remove_dead_code': {
+                const response_format = args.response_format || 'detailed';
                 const options = {
                     code: args.code,
                     removeUnusedImports: args.removeUnusedImports,
                     removeUnreachable: args.removeUnreachable,
                 };
                 const result = removeDeadCode(options);
+                const formatted = formatResponse(result, { format: response_format }, {
+                    minimal: (r) => ({ success: r.success, changesCount: r.changes?.length || 0 }),
+                    concise: (r) => ({
+                        success: r.success,
+                        changes: truncateArray(r.changes || [], 'concise'),
+                    }),
+                    detailed: (r) => r,
+                });
                 return {
                     content: [
                         {
                             type: 'text',
-                            text: JSON.stringify(result, null, 2),
+                            text: JSON.stringify(formatted, null, 2),
                         },
                     ],
                 };
             }
             case 'apply_pattern': {
+                const response_format = args.response_format || 'detailed';
                 const options = {
                     code: args.code,
                     pattern: args.pattern,
                     patternOptions: args.patternOptions,
                 };
                 const result = applyDesignPattern(options);
+                const formatted = formatResponse(result, { format: response_format }, {
+                    minimal: (r) => ({ success: r.success, changesCount: r.changes?.length || 0 }),
+                    concise: (r) => ({
+                        success: r.success,
+                        changes: truncateArray(r.changes || [], 'concise'),
+                    }),
+                    detailed: (r) => r,
+                });
                 return {
                     content: [
                         {
                             type: 'text',
-                            text: JSON.stringify(result, null, 2),
+                            text: JSON.stringify(formatted, null, 2),
                         },
                     ],
                 };
             }
             case 'rename_variable': {
+                const response_format = args.response_format || 'detailed';
                 const options = {
                     code: args.code,
                     oldName: args.oldName,
@@ -334,33 +186,64 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     includeComments: args.includeComments,
                 };
                 const result = renameVariable(options);
+                const formatted = formatResponse(result, { format: response_format }, {
+                    minimal: (r) => ({ success: r.success, changesCount: r.changes?.length || 0 }),
+                    concise: (r) => ({
+                        success: r.success,
+                        changes: truncateArray(r.changes || [], 'concise'),
+                    }),
+                    detailed: (r) => r,
+                });
                 return {
                     content: [
                         {
                             type: 'text',
-                            text: JSON.stringify(result, null, 2),
+                            text: JSON.stringify(formatted, null, 2),
                         },
                     ],
                 };
             }
             case 'suggest_refactorings': {
+                const response_format = args.response_format || 'detailed';
                 const suggestions = suggestRefactorings(args.code, args.filePath);
+                const formatted = formatResponse({ suggestions }, { format: response_format }, {
+                    minimal: r => ({ count: r.suggestions.length }),
+                    concise: r => ({
+                        count: r.suggestions.length,
+                        suggestions: truncateArray(r.suggestions.map((s) => ({ type: s.type, description: s.description })), 'concise'),
+                    }),
+                    detailed: r => r,
+                });
                 return {
                     content: [
                         {
                             type: 'text',
-                            text: JSON.stringify({ suggestions }, null, 2),
+                            text: JSON.stringify(formatted, null, 2),
                         },
                     ],
                 };
             }
             case 'calculate_metrics': {
+                const response_format = args.response_format || 'detailed';
                 const metrics = calculateMetrics(args.code);
+                const formatted = formatResponse({ metrics }, { format: response_format }, {
+                    minimal: (r) => ({
+                        complexity: r.metrics?.complexity,
+                        lines: r.metrics?.linesOfCode,
+                    }),
+                    concise: (r) => ({
+                        complexity: r.metrics?.complexity,
+                        lines: r.metrics?.linesOfCode,
+                        functions: r.metrics?.functionCount,
+                        maintainability: r.metrics?.maintainabilityIndex,
+                    }),
+                    detailed: (r) => r,
+                });
                 return {
                     content: [
                         {
                             type: 'text',
-                            text: JSON.stringify({ metrics }, null, 2),
+                            text: JSON.stringify(formatted, null, 2),
                         },
                     ],
                 };

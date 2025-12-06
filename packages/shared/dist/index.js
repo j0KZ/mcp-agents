@@ -5,6 +5,8 @@
  */
 // Core types and interfaces
 export * from './types/index.js';
+// Helper functions (Anthropic Advanced Tool Use - Nov 2025)
+export * from './helpers/index.js';
 // Shared utilities
 export * from './utils/index.js';
 // Performance optimization
@@ -37,6 +39,10 @@ export * from './config/index.js';
 export * from './health/index.js';
 // Internationalization
 export * from './i18n/index.js';
+// Tool Registry (Anthropic Advanced Tool Use - Phase 3)
+export * from './tool-registry/index.js';
+// Telemetry (Anthropic Advanced Tool Use - Phase 5.4)
+export * from './telemetry/index.js';
 export const VERSION = '1.0.33';
 export const PACKAGE_NAME = '@j0kz/shared';
 //# sourceMappingURL=index.js.map

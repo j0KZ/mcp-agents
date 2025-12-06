@@ -28,6 +28,10 @@ import {
   validatePath,
   MCPError,
   getErrorMessage,
+  ResponseFormat,
+  formatResponse,
+  truncateArray,
+  filterBySeverity,
 } from '@j0kz/shared';
 
 /**
@@ -159,10 +163,17 @@ function formatReportAsMarkdown(report: SecurityReport): string {
   return markdown;
 }
 
+import { SECURITY_SCANNER_TOOLS } from './constants/tool-definitions.js';
+
 /**
- * MCP Tools
+ * MCP Tools (with examples for improved accuracy - Anthropic Nov 2025)
  */
-const TOOLS: Tool[] = [
+const TOOLS: Tool[] = SECURITY_SCANNER_TOOLS as Tool[];
+
+/**
+ * Legacy tools definition (kept for reference)
+ */
+const _LEGACY_TOOLS: Tool[] = [
   {
     name: 'scan_file',
     description:
@@ -352,55 +363,105 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
   try {
     switch (name) {
       case 'scan_file': {
-        const { filePath, config } = args as { filePath: string; config?: ScanConfig };
+        const {
+          filePath,
+          config,
+          response_format = 'detailed',
+        } = args as {
+          filePath: string;
+          config?: ScanConfig;
+          response_format?: ResponseFormat;
+        };
         const validatedPath = validateFilePath(filePath);
         const findings = await scanFile(validatedPath, config);
+
+        const result = {
+          success: true,
+          filePath,
+          findingsCount: findings.length,
+          findings,
+        };
+
+        const formatted = formatResponse(
+          result,
+          { format: response_format },
+          {
+            minimal: r => ({ success: r.success, findingsCount: r.findingsCount }),
+            concise: r => ({
+              success: r.success,
+              filePath: r.filePath,
+              findingsCount: r.findingsCount,
+              findings: filterBySeverity(r.findings, 'concise'),
+            }),
+            detailed: r => r,
+          }
+        );
 
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(
-                {
-                  success: true,
-                  filePath,
-                  findingsCount: findings.length,
-                  findings,
-                },
-                null,
-                2
-              ),
+              text: JSON.stringify(formatted, null, 2),
             },
           ],
         };
       }
 
       case 'scan_project': {
-        const { projectPath, config } = args as { projectPath: string; config?: ScanConfig };
+        const {
+          projectPath,
+          config,
+          response_format = 'detailed',
+        } = args as {
+          projectPath: string;
+          config?: ScanConfig;
+          response_format?: ResponseFormat;
+        };
         const validatedPath = validateDirectoryPath(projectPath);
         const results = await scanProject(validatedPath, config);
+
+        const formatted = formatResponse(
+          { success: true, ...results },
+          { format: response_format },
+          {
+            minimal: r => ({
+              success: r.success,
+              securityScore: r.securityScore,
+              findingsCount: r.findings.length,
+              findingsBySeverity: r.findingsBySeverity,
+            }),
+            concise: r => ({
+              success: r.success,
+              securityScore: r.securityScore,
+              filesScanned: r.filesScanned,
+              scanDuration: r.scanDuration,
+              findingsBySeverity: r.findingsBySeverity,
+              findings: filterBySeverity(r.findings, 'concise'),
+              dependencyVulnerabilities: truncateArray(r.dependencyVulnerabilities, 'concise'),
+            }),
+            detailed: r => r,
+          }
+        );
 
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(
-                {
-                  success: true,
-                  ...results,
-                },
-                null,
-                2
-              ),
+              text: JSON.stringify(formatted, null, 2),
             },
           ],
         };
       }
 
       case 'scan_secrets': {
-        const { targetPath, customPatterns } = args as {
+        const {
+          targetPath,
+          customPatterns,
+          response_format = 'detailed',
+        } = args as {
           targetPath: string;
           customPatterns?: any[];
+          response_format?: ResponseFormat;
         };
 
         const validatedPath = validatePath(targetPath);
@@ -429,28 +490,45 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
           findings = results.findings;
         }
 
+        const result = {
+          success: true,
+          secretsFound: findings.length,
+          findings,
+        };
+
+        const formatted = formatResponse(
+          result,
+          { format: response_format },
+          {
+            minimal: r => ({ success: r.success, secretsFound: r.secretsFound }),
+            concise: r => ({
+              success: r.success,
+              secretsFound: r.secretsFound,
+              findings: filterBySeverity(r.findings, 'concise'),
+            }),
+            detailed: r => r,
+          }
+        );
+
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(
-                {
-                  success: true,
-                  secretsFound: findings.length,
-                  findings,
-                },
-                null,
-                2
-              ),
+              text: JSON.stringify(formatted, null, 2),
             },
           ],
         };
       }
 
       case 'scan_vulnerabilities': {
-        const { targetPath, vulnerabilityTypes } = args as {
+        const {
+          targetPath,
+          vulnerabilityTypes,
+          response_format = 'detailed',
+        } = args as {
           targetPath: string;
           vulnerabilityTypes: string[];
+          response_format?: ResponseFormat;
         };
 
         const validatedPath = validatePath(targetPath);
@@ -479,30 +557,49 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
         // Filter findings by requested types
         findings = findings.filter(f => vulnerabilityTypes.includes(f.type));
 
+        const result = {
+          success: true,
+          vulnerabilityTypes,
+          findingsCount: findings.length,
+          findings,
+        };
+
+        const formatted = formatResponse(
+          result,
+          { format: response_format },
+          {
+            minimal: r => ({ success: r.success, findingsCount: r.findingsCount }),
+            concise: r => ({
+              success: r.success,
+              vulnerabilityTypes: r.vulnerabilityTypes,
+              findingsCount: r.findingsCount,
+              findings: filterBySeverity(r.findings, 'concise'),
+            }),
+            detailed: r => r,
+          }
+        );
+
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(
-                {
-                  success: true,
-                  vulnerabilityTypes,
-                  findingsCount: findings.length,
-                  findings,
-                },
-                null,
-                2
-              ),
+              text: JSON.stringify(formatted, null, 2),
             },
           ],
         };
       }
 
       case 'generate_security_report': {
-        const { projectPath, outputPath, config } = args as {
+        const {
+          projectPath,
+          outputPath,
+          config,
+          response_format = 'detailed',
+        } = args as {
           projectPath: string;
           outputPath?: string;
           config?: ScanConfig;
+          response_format?: ResponseFormat;
         };
 
         const validatedProjectPath = validateDirectoryPath(projectPath);
@@ -516,11 +613,32 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
           fs.writeFileSync(validatedOutputPath, markdown, 'utf-8');
         }
 
+        // For reports, minimal/concise return summary, detailed returns full markdown
+        const formatted = formatResponse(
+          { report, markdown },
+          { format: response_format },
+          {
+            minimal: r => ({
+              securityScore: r.report.results.securityScore,
+              findingsCount: r.report.results.findings.length,
+              findingsBySeverity: r.report.results.findingsBySeverity,
+            }),
+            concise: r => ({
+              title: r.report.title,
+              summary: r.report.summary,
+              securityScore: r.report.results.securityScore,
+              findingsBySeverity: r.report.results.findingsBySeverity,
+              recommendations: r.report.recommendations,
+            }),
+            detailed: r => r.markdown,
+          }
+        );
+
         return {
           content: [
             {
               type: 'text',
-              text: markdown,
+              text: typeof formatted === 'string' ? formatted : JSON.stringify(formatted, null, 2),
             },
           ],
         };
