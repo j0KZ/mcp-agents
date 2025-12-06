@@ -16,7 +16,7 @@ export const MCPToolSchema = z.object({
   description: z.string().min(1),
   inputSchema: z.object({
     type: z.literal('object'),
-    properties: z.record(z.any()),
+    properties: z.record(z.string(), z.any()),
     required: z.array(z.string()).optional(),
     additionalProperties: z.boolean().optional(),
   }),
@@ -30,7 +30,7 @@ export const MCPRequestSchema = z.object({
   method: z.string(),
   params: z.object({
     name: z.string(),
-    arguments: z.record(z.any()).optional(),
+    arguments: z.record(z.string(), z.any()).optional(),
   }),
   id: z.union([z.string(), z.number()]),
 });
@@ -135,7 +135,7 @@ export class MCPProtocolValidator {
         }
 
         // Check for parameter descriptions
-        if (typeof paramSchema === 'object' && !paramSchema.description) {
+        if (typeof paramSchema === 'object' && paramSchema !== null && !('description' in paramSchema)) {
           warnings.push(`Parameter '${paramName}' lacks a description`);
         }
       }
@@ -148,7 +148,7 @@ export class MCPProtocolValidator {
       if (error instanceof z.ZodError) {
         return {
           valid: false,
-          errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`),
+          errors: error.issues.map((e: z.ZodIssue) => `${e.path.join('.')}: ${e.message}`),
         };
       }
       return {
@@ -188,7 +188,7 @@ export class MCPProtocolValidator {
       if (error instanceof z.ZodError) {
         return {
           valid: false,
-          errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`),
+          errors: error.issues.map((e: z.ZodIssue) => `${e.path.join('.')}: ${e.message}`),
         };
       }
       return {
@@ -345,7 +345,7 @@ export class MCPProtocolValidator {
       if (error instanceof z.ZodError) {
         return {
           valid: false,
-          errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`),
+          errors: error.issues.map((e: z.ZodIssue) => `${e.path.join('.')}: ${e.message}`),
         };
       }
       return {

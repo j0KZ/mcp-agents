@@ -12,38 +12,10 @@ export declare const MCPToolSchema: z.ZodObject<{
     inputSchema: z.ZodObject<{
         type: z.ZodLiteral<"object">;
         properties: z.ZodRecord<z.ZodString, z.ZodAny>;
-        required: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        required: z.ZodOptional<z.ZodArray<z.ZodString>>;
         additionalProperties: z.ZodOptional<z.ZodBoolean>;
-    }, "strip", z.ZodTypeAny, {
-        type: "object";
-        properties: Record<string, any>;
-        required?: string[] | undefined;
-        additionalProperties?: boolean | undefined;
-    }, {
-        type: "object";
-        properties: Record<string, any>;
-        required?: string[] | undefined;
-        additionalProperties?: boolean | undefined;
-    }>;
-}, "strip", z.ZodTypeAny, {
-    name: string;
-    description: string;
-    inputSchema: {
-        type: "object";
-        properties: Record<string, any>;
-        required?: string[] | undefined;
-        additionalProperties?: boolean | undefined;
-    };
-}, {
-    name: string;
-    description: string;
-    inputSchema: {
-        type: "object";
-        properties: Record<string, any>;
-        required?: string[] | undefined;
-        additionalProperties?: boolean | undefined;
-    };
-}>;
+    }, z.core.$strip>;
+}, z.core.$strip>;
 /**
  * MCP Request Schema
  */
@@ -53,31 +25,9 @@ export declare const MCPRequestSchema: z.ZodObject<{
     params: z.ZodObject<{
         name: z.ZodString;
         arguments: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
-    }, "strip", z.ZodTypeAny, {
-        name: string;
-        arguments?: Record<string, any> | undefined;
-    }, {
-        name: string;
-        arguments?: Record<string, any> | undefined;
-    }>;
-    id: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
-}, "strip", z.ZodTypeAny, {
-    params: {
-        name: string;
-        arguments?: Record<string, any> | undefined;
-    };
-    jsonrpc: "2.0";
-    method: string;
-    id: string | number;
-}, {
-    params: {
-        name: string;
-        arguments?: Record<string, any> | undefined;
-    };
-    jsonrpc: "2.0";
-    method: string;
-    id: string | number;
-}>;
+    }, z.core.$strip>;
+    id: z.ZodUnion<readonly [z.ZodString, z.ZodNumber]>;
+}, z.core.$strip>;
 /**
  * MCP Response Schema
  */
@@ -88,35 +38,9 @@ export declare const MCPResponseSchema: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
         data: z.ZodOptional<z.ZodAny>;
-    }, "strip", z.ZodTypeAny, {
-        code: number;
-        message: string;
-        data?: any;
-    }, {
-        code: number;
-        message: string;
-        data?: any;
-    }>>;
-    id: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
-}, "strip", z.ZodTypeAny, {
-    jsonrpc: "2.0";
-    id: string | number;
-    error?: {
-        code: number;
-        message: string;
-        data?: any;
-    } | undefined;
-    result?: any;
-}, {
-    jsonrpc: "2.0";
-    id: string | number;
-    error?: {
-        code: number;
-        message: string;
-        data?: any;
-    } | undefined;
-    result?: any;
-}>;
+    }, z.core.$strip>>;
+    id: z.ZodUnion<readonly [z.ZodString, z.ZodNumber]>;
+}, z.core.$strip>;
 export interface MCPValidationResult {
     valid: boolean;
     errors?: string[];

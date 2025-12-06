@@ -71,16 +71,16 @@ export declare const StandardFormatters: {
         metrics?: Record<string, unknown>;
     }>(result: T) => {
         minimal: () => {
-            score: number;
+            score: number | undefined;
             issueCount: number;
         };
         concise: () => {
-            score: number;
+            score: number | undefined;
             issueCount: number;
             topIssues: unknown[];
         } | {
             metrics: Record<string, unknown>;
-            score: number;
+            score: number | undefined;
             issueCount: number;
             topIssues: unknown[];
         };
@@ -120,8 +120,8 @@ export declare const StandardFormatters: {
         };
         concise: () => {
             success: boolean;
-            files: unknown[];
-            preview: string;
+            files: unknown[] | undefined;
+            preview: string | undefined;
         };
         detailed: () => T;
     };
