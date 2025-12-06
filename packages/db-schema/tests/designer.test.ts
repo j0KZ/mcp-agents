@@ -148,7 +148,7 @@ describe('validateSchema()', () => {
 });
 
 describe('analyzeSchema()', () => {
-  it('should analyze schema complexity', () => {
+  it('should analyze schema complexity as LOW for small schemas', () => {
     const schema = {
       database: 'postgres' as const,
       tables: [
@@ -162,6 +162,119 @@ describe('analyzeSchema()', () => {
     expect(result).toBeDefined();
     expect(result.tableCount).toBeDefined();
     expect(result.columnCount).toBeDefined();
-    expect(result.complexity).toBeDefined();
+    expect(result.complexity).toBe('LOW');
+  });
+
+  it('should analyze schema complexity as HIGH for large schemas', () => {
+    // Create schema with >20 tables to trigger HIGH complexity
+    const tables = Array.from({ length: 25 }, (_, i) => ({
+      name: `table_${i}`,
+      columns: [{ name: 'id', type: 'integer', primaryKey: true }],
+    }));
+
+    const schema = {
+      database: 'postgres' as const,
+      tables,
+      relationships: [],
+    };
+
+    const result = target.analyzeSchema(schema);
+    expect(result.complexity).toBe('HIGH');
+  });
+
+  it('should analyze schema complexity as HIGH for many relationships', () => {
+    const tables = [
+      { name: 'users', columns: [{ name: 'id', type: 'integer' }] },
+      { name: 'orders', columns: [{ name: 'id', type: 'integer' }] },
+    ];
+
+    // Create >30 relationships to trigger HIGH complexity
+    const relationships = Array.from({ length: 35 }, (_, i) => ({
+      name: `rel_${i}`,
+      type: 'ONE_TO_MANY' as const,
+      from: { table: 'users', column: 'id' },
+      to: { table: 'orders', column: 'user_id' },
+    }));
+
+    const schema = {
+      database: 'postgres' as const,
+      tables,
+      relationships,
+    };
+
+    const result = target.analyzeSchema(schema);
+    expect(result.complexity).toBe('HIGH');
+  });
+
+  it('should analyze schema complexity as MEDIUM for medium schemas', () => {
+    // Create schema with 10-20 tables to trigger MEDIUM complexity
+    const tables = Array.from({ length: 12 }, (_, i) => ({
+      name: `table_${i}`,
+      columns: [{ name: 'id', type: 'integer', primaryKey: true }],
+    }));
+
+    const schema = {
+      database: 'postgres' as const,
+      tables,
+      relationships: [],
+    };
+
+    const result = target.analyzeSchema(schema);
+    expect(result.complexity).toBe('MEDIUM');
+  });
+
+  it('should analyze schema complexity as MEDIUM for medium relationships', () => {
+    const tables = [{ name: 'users', columns: [{ name: 'id', type: 'integer' }] }];
+
+    // Create 16-30 relationships to trigger MEDIUM complexity (>15 but <=30)
+    const relationships = Array.from({ length: 20 }, (_, i) => ({
+      name: `rel_${i}`,
+      type: 'ONE_TO_MANY' as const,
+      from: { table: 'users', column: 'id' },
+      to: { table: 'orders', column: 'user_id' },
+    }));
+
+    const schema = {
+      database: 'postgres' as const,
+      tables,
+      relationships,
+    };
+
+    const result = target.analyzeSchema(schema);
+    expect(result.complexity).toBe('MEDIUM');
+  });
+
+  it('should include all analysis fields', () => {
+    const schema = {
+      database: 'postgres' as const,
+      tables: [
+        {
+          name: 'users',
+          columns: [
+            { name: 'id', type: 'integer', primaryKey: true },
+            { name: 'name', type: 'varchar' },
+          ],
+          indexes: [{ name: 'idx_name', columns: ['name'] }],
+        },
+      ],
+      relationships: [
+        {
+          name: 'user_orders',
+          type: 'ONE_TO_MANY' as const,
+          from: { table: 'users', column: 'id' },
+          to: { table: 'orders', column: 'user_id' },
+        },
+      ],
+    };
+
+    const result = target.analyzeSchema(schema);
+    expect(result.tableCount).toBe(1);
+    expect(result.columnCount).toBe(2);
+    expect(result.indexCount).toBe(1);
+    expect(result.relationshipCount).toBe(1);
+    expect(result.normalForm).toBeDefined();
+    expect(result.estimatedSize).toBeDefined();
+    expect(result.estimatedSize.rows).toBeDefined();
+    expect(result.estimatedSize.storage).toBeDefined();
   });
 });
