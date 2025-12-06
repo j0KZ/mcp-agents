@@ -168,7 +168,7 @@ import { SECURITY_SCANNER_TOOLS } from './constants/tool-definitions.js';
 /**
  * MCP Tools (with examples for improved accuracy - Anthropic Nov 2025)
  */
-const TOOLS: Tool[] = SECURITY_SCANNER_TOOLS as Tool[];
+const TOOLS: Tool[] = SECURITY_SCANNER_TOOLS as unknown as Tool[];
 
 /**
  * Legacy tools definition (kept for reference)
