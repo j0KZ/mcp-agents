@@ -232,13 +232,6 @@ export class AutoPilot {
     // Save configuration
     await this.writeJSON('.vscode/tasks.json', vscodeConfig);
 
-    // Create keybindings for lazy shortcuts
-    const keybindings = {
-      key: 'cmd+shift+f',
-      command: 'workbench.action.tasks.runTask',
-      args: 'Auto-Pilot: Fix This File',
-    };
-
     console.log('🎮 VS Code integration installed!');
   }
 
