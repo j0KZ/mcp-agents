@@ -34,9 +34,8 @@
   "dependencies": {
     "@j0kz/shared": "^1.1.1",
     "chokidar": "^3.5.3",
-    "commander": "^11.0.0"
+    "commander": "^14.0.2"
   },
-  "devDependencies": {},
   "optionalDependencies": {
     "husky": "^8.0.3",
     "lint-staged": "^15.0.0"
