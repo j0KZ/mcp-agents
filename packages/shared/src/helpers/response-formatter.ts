@@ -40,7 +40,6 @@ export function formatResponse<T, TMinimal, TConcise, TDetailed = T>(
   }
 ): FormattedResponse<TMinimal | TConcise | TDetailed> {
   const { format, includeMetadata, duration, version } = options;
-  const spec = RESPONSE_FORMAT_SPECS[format];
 
   let data: TMinimal | TConcise | TDetailed;
 
