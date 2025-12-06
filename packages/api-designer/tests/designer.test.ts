@@ -359,3 +359,19 @@ describe('GraphQLClient class', () => {
     expect(typeof instance.query).toBe('function');
   });
 });
+
+describe('generateMockServer() edge cases', () => {
+  it('should create mock server instance without framework', () => {
+    const spec = { openapi: '3.0.0', info: { title: 'Test', version: '1.0.0' }, paths: {} };
+    const config = {}; // No framework specified
+    const result = target.generateMockServer(spec, config);
+    expect(result).toBeDefined();
+  });
+
+  it('should handle error during mock server generation', () => {
+    // Pass invalid spec to trigger error
+    const result = target.generateMockServer(null as any, { framework: 'express' });
+    expect(result.success).toBe(false);
+    expect(result.errors).toBeDefined();
+  });
+});

@@ -135,7 +135,11 @@ export class MCPProtocolValidator {
         }
 
         // Check for parameter descriptions
-        if (typeof paramSchema === 'object' && paramSchema !== null && !('description' in paramSchema)) {
+        if (
+          typeof paramSchema === 'object' &&
+          paramSchema !== null &&
+          !('description' in paramSchema)
+        ) {
           warnings.push(`Parameter '${paramName}' lacks a description`);
         }
       }

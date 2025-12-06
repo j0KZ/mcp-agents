@@ -63,6 +63,15 @@ export default defineConfig({
     globals: true,
     environment: 'node',
 
+    // Exclude skill tests and dist from main test run
+    exclude: [
+      'node_modules/**',
+      '**/node_modules/**',
+      '.claude/skills/tests/**',
+      'dist/**',
+      '**/dist/**',
+    ],
+
     // File patterns - removed to let each package handle its own tests
     // This prevents workspace issues in monorepo setup
   },

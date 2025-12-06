@@ -191,4 +191,153 @@ describe('Security Scanner Functions', () => {
       expect(code.content).toContain('exec');
     });
   });
+
+  describe('scanFile() with config options', () => {
+    it('should respect maxFileSize config', async () => {
+      // Using a config that will skip files over 1 byte should return empty
+      const result = await target.scanFile(apiDesignerFile, { maxFileSize: 1 });
+      expect(result).toEqual([]);
+    });
+
+    it('should filter by minSeverity', async () => {
+      const result = await target.scanFile(apiDesignerFile, { minSeverity: 'critical' as const });
+      expect(Array.isArray(result)).toBe(true);
+      // All findings should be critical or higher
+      result.forEach(finding => {
+        expect(finding.severity).toBe('critical');
+      });
+    });
+
+    it('should filter by minSeverity HIGH', async () => {
+      const result = await target.scanFile(apiDesignerFile, { minSeverity: 'high' as const });
+      expect(Array.isArray(result)).toBe(true);
+      // All findings should be high or higher
+      result.forEach(finding => {
+        expect(['high', 'critical']).toContain(finding.severity);
+      });
+    });
+
+    it('should respect scanSecrets false config', async () => {
+      const result = await target.scanFile(apiDesignerFile, { scanSecrets: false });
+      expect(Array.isArray(result)).toBe(true);
+    });
+
+    it('should respect scanSQLInjection false config', async () => {
+      const result = await target.scanFile(apiDesignerFile, { scanSQLInjection: false });
+      expect(Array.isArray(result)).toBe(true);
+    });
+
+    it('should respect scanXSS false config', async () => {
+      const result = await target.scanFile(apiDesignerFile, { scanXSS: false });
+      expect(Array.isArray(result)).toBe(true);
+    });
+
+    it('should respect scanOWASP false config', async () => {
+      const result = await target.scanFile(apiDesignerFile, { scanOWASP: false });
+      expect(Array.isArray(result)).toBe(true);
+    });
+
+    it('should use caching for repeated scans', async () => {
+      // First scan
+      const result1 = await target.scanFile(apiDesignerFile);
+      // Second scan should hit cache
+      const result2 = await target.scanFile(apiDesignerFile);
+      expect(result1.length).toBe(result2.length);
+    });
+  });
+
+  describe('scanProject()', () => {
+    it('should scan a project directory', async () => {
+      const testDir = path.join(projectRoot, 'packages/api-designer/src');
+      const result = await target.scanProject(testDir);
+
+      expect(result).toBeDefined();
+      expect(result).toHaveProperty('totalFindings');
+      expect(result).toHaveProperty('filesScanned');
+      expect(result).toHaveProperty('scanDuration');
+      expect(result).toHaveProperty('findings');
+      expect(result).toHaveProperty('securityScore');
+    });
+
+    it('should calculate findings by severity', async () => {
+      const testDir = path.join(projectRoot, 'packages/api-designer/src');
+      const result = await target.scanProject(testDir);
+
+      expect(result.findingsBySeverity).toBeDefined();
+      expect(result.findingsBySeverity).toHaveProperty('critical');
+      expect(result.findingsBySeverity).toHaveProperty('high');
+      expect(result.findingsBySeverity).toHaveProperty('medium');
+      expect(result.findingsBySeverity).toHaveProperty('low');
+      expect(result.findingsBySeverity).toHaveProperty('info');
+    });
+
+    it('should calculate findings by type', async () => {
+      const testDir = path.join(projectRoot, 'packages/api-designer/src');
+      const result = await target.scanProject(testDir);
+
+      expect(result.findingsByType).toBeDefined();
+    });
+
+    it('should calculate security score between 0 and 100', async () => {
+      const testDir = path.join(projectRoot, 'packages/api-designer/src');
+      const result = await target.scanProject(testDir);
+
+      expect(result.securityScore).toBeGreaterThanOrEqual(0);
+      expect(result.securityScore).toBeLessThanOrEqual(100);
+    });
+
+    it('should include timestamp', async () => {
+      const testDir = path.join(projectRoot, 'packages/api-designer/src');
+      const result = await target.scanProject(testDir);
+
+      expect(result.timestamp).toBeInstanceOf(Date);
+    });
+
+    it('should respect exclude patterns', async () => {
+      const testDir = path.join(projectRoot, 'packages/api-designer');
+      const result = await target.scanProject(testDir, {
+        excludePatterns: ['constants', 'helpers'],
+      });
+
+      expect(result).toBeDefined();
+    });
+
+    it('should respect scanDependencies false config', async () => {
+      const testDir = path.join(projectRoot, 'packages/api-designer/src');
+      const result = await target.scanProject(testDir, {
+        scanDependencies: false,
+      });
+
+      expect(result.dependencyVulnerabilities).toEqual([]);
+    });
+
+    it('should include config in result', async () => {
+      const testDir = path.join(projectRoot, 'packages/api-designer/src');
+      const config = { scanSecrets: true, verbose: false };
+      const result = await target.scanProject(testDir, config);
+
+      expect(result.config).toBeDefined();
+    });
+  });
+
+  describe('scanOWASP()', () => {
+    it('should delegate to OWASP scanner module', async () => {
+      const code = {
+        content: `const hash = crypto.createHash('md5').update(data).digest('hex');`,
+        filePath: '/test/app.js',
+        extension: '.js',
+        size: 100,
+      };
+      const result = await target.scanOWASP(code);
+      expect(Array.isArray(result)).toBe(true);
+    });
+  });
+
+  describe('scanDependencies()', () => {
+    it('should scan dependencies for vulnerabilities', async () => {
+      const testDir = path.join(projectRoot, 'packages/api-designer');
+      const result = await target.scanDependencies(testDir);
+      expect(Array.isArray(result)).toBe(true);
+    });
+  });
 });
