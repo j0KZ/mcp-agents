@@ -524,5 +524,81 @@ const baz = 'qux';`,
       expect(findings[0].metadata).toBeDefined();
       expect(findings[0].metadata?.patternName).toBeDefined();
     });
+
+    it('should skip low entropy matches when entropyThreshold is set (lines 50-54)', async () => {
+      const context: FileScanContext = {
+        filePath: '/prod/config.js',
+        // Low entropy string: repetitive characters
+        content: `const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";`,
+        extension: '.js',
+        size: 100,
+      };
+
+      // Custom pattern with entropy threshold that requires high entropy
+      const customPatterns = [
+        {
+          name: 'High Entropy Token',
+          pattern: /token\s*=\s*"([a-z]{20,})"/gi,
+          description: 'Token with entropy check',
+          severity: SeverityLevel.HIGH as const,
+          entropyThreshold: 3.0, // Requires high entropy
+        },
+      ];
+
+      const findings = await scanForSecrets(context, customPatterns);
+
+      // Should skip the low entropy match
+      expect(findings.length).toBe(0);
+    });
+
+    it('should detect high entropy matches when entropyThreshold is set', async () => {
+      const context: FileScanContext = {
+        filePath: '/prod/config.js',
+        // High entropy string: random-looking characters
+        content: `const token = "abcdefghijklmnopqrstuvwxyz1234567890";`,
+        extension: '.js',
+        size: 100,
+      };
+
+      // Custom pattern with entropy threshold
+      const customPatterns = [
+        {
+          name: 'High Entropy Token',
+          pattern: /token\s*=\s*"([a-z0-9]{20,})"/gi,
+          description: 'Token with entropy check',
+          severity: SeverityLevel.HIGH as const,
+          entropyThreshold: 2.0, // Moderate entropy threshold
+        },
+      ];
+
+      const findings = await scanForSecrets(context, customPatterns);
+
+      // Should detect the high entropy match
+      expect(findings.length).toBeGreaterThan(0);
+    });
+
+    it('should correctly calculate entropy for random-looking strings', async () => {
+      const context: FileScanContext = {
+        filePath: '/prod/config.js',
+        // High entropy: diverse characters
+        content: `const secret = "aB3xY9zQ2wE5rT8uI1oP";`,
+        extension: '.js',
+        size: 100,
+      };
+
+      const customPatterns = [
+        {
+          name: 'Entropy Test',
+          pattern: /secret\s*=\s*"([a-zA-Z0-9]{10,})"/gi,
+          description: 'Entropy test pattern',
+          severity: SeverityLevel.MEDIUM as const,
+          entropyThreshold: 1.5,
+        },
+      ];
+
+      const findings = await scanForSecrets(context, customPatterns);
+
+      expect(findings.length).toBeGreaterThan(0);
+    });
   });
 });
