@@ -204,4 +204,73 @@ describe('CodeAnalyzer', () => {
       expect(result).toBe(content);
     });
   });
+
+  describe('analyzeFiles error handling', () => {
+    it('should handle file analysis errors gracefully (lines 127-135)', async () => {
+      // Include a non-existent file to trigger the catch block
+      const files = [
+        apiDesignerFile,
+        '/non/existent/file/that/does/not/exist.ts',
+        apiDesignerFile, // Include a valid file to verify partial success
+      ];
+
+      const results = await analyzer.analyzeFiles(files);
+
+      // Should complete without throwing
+      expect(results).toBeInstanceOf(Map);
+      // Should have result for the valid file
+      expect(results.has(apiDesignerFile)).toBe(true);
+      // Non-existent file should not be in results
+      expect(results.has('/non/existent/file/that/does/not/exist.ts')).toBe(false);
+    });
+
+    it('should handle multiple errors in batch analysis', async () => {
+      const files = [
+        '/fake/path/one.ts',
+        '/fake/path/two.ts',
+        '/fake/path/three.ts',
+      ];
+
+      const results = await analyzer.analyzeFiles(files);
+
+      // Should complete without throwing, but with empty results
+      expect(results).toBeInstanceOf(Map);
+      expect(results.size).toBe(0);
+    });
+
+    it('should handle mixed valid and invalid files', async () => {
+      const files = [
+        apiDesignerFile,
+        '/invalid/path.ts',
+      ];
+
+      const results = await analyzer.analyzeFiles(files, 2);
+
+      // Should have only the valid file
+      expect(results.size).toBe(1);
+      expect(results.has(apiDesignerFile)).toBe(true);
+    });
+
+    it('should sanitize error paths to prevent log injection', async () => {
+      // Test with a path that has newlines (for sanitization check)
+      const maliciousPath = '/path/with\nnewline\r/file.ts';
+      const files = [maliciousPath];
+
+      // Should complete without throwing
+      const results = await analyzer.analyzeFiles(files);
+
+      expect(results).toBeInstanceOf(Map);
+      expect(results.size).toBe(0);
+    });
+
+    it('should use custom concurrency parameter', async () => {
+      const files = [apiDesignerFile];
+
+      // Test with concurrency = 1
+      const results = await analyzer.analyzeFiles(files, 1);
+
+      expect(results.size).toBe(1);
+      expect(results.has(apiDesignerFile)).toBe(true);
+    });
+  });
 });

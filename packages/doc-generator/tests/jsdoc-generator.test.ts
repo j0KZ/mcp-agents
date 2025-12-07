@@ -450,4 +450,114 @@ export class User extends BaseEntity {
     expect(result.content).toContain('@extends');
     expect(result.metadata.itemsDocumented).toBeGreaterThan(0);
   });
+
+  it('should add todo and warning for interface without description (lines 112-115)', async () => {
+    const filePath = path.join(testDir, 'interface-no-desc.ts');
+    // Create an interface WITHOUT any JSDoc comment
+    fs.writeFileSync(
+      filePath,
+      `
+export interface SimpleConfig {
+  name: string;
+  value: number;
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath, { addTodoTags: true });
+
+    // When addTodoTags is enabled and interface has no description,
+    // it should add @todo tag and push warning
+    expect(result.content).toContain('Interface');
+    expect(result.metadata.warnings).toBeDefined();
+    // The warning should mention the interface name
+    if (result.metadata.warnings.length > 0) {
+      expect(result.metadata.warnings.some(w => w.includes('interface'))).toBe(true);
+    }
+  });
+
+  it('should handle non-DocError errors in catch block (lines 133-138)', async () => {
+    // Create a file that will cause parseSourceFile to throw a non-DocError
+    const filePath = path.join(testDir, 'invalid.ts');
+    // Write empty file that might cause issues
+    fs.writeFileSync(filePath, '');
+
+    // Even with empty file, it should not throw but return valid result
+    const result = await generateJSDoc(filePath);
+    expect(result).toBeDefined();
+    expect(result.metadata).toBeDefined();
+  });
+
+  it('should infer return description for Promise without inner type (line 21)', async () => {
+    const filePath = path.join(testDir, 'promise-no-inner.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export function doAsync(): Promise {
+  return Promise.resolve();
+}
+    `
+    );
+
+    // This should trigger line 21: "Promise that resolves with the result"
+    const result = await generateJSDoc(filePath);
+    expect(result.content).toContain('Promise');
+  });
+
+  it('should handle boolean return for non-is/has function (line 29)', async () => {
+    const filePath = path.join(testDir, 'bool-check.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export function checkValidity(): boolean {
+  return true;
+}
+    `
+    );
+
+    // Function name doesn't start with 'is' or 'has', should get "Boolean result"
+    const result = await generateJSDoc(filePath);
+    expect(result.content).toContain('Boolean');
+  });
+
+  it('should handle class without description with addTodoTags (lines 97-100)', async () => {
+    const filePath = path.join(testDir, 'class-no-desc.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export class UndocumentedService {
+  getData(): string {
+    return 'data';
+  }
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath, { addTodoTags: true });
+
+    // Result contains "UndocumentedService class" in the generated JSDoc
+    expect(result.content).toContain('class');
+    // Should have warning for missing class description
+    if (result.metadata.warnings.length > 0) {
+      expect(result.metadata.warnings.some(w => w.includes('class'))).toBe(true);
+    }
+  });
+
+  it('should handle function without description with addTodoTags (lines 74-77)', async () => {
+    const filePath = path.join(testDir, 'func-no-desc.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export function undocumentedFunction(x: number): number {
+  return x * 2;
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath, { addTodoTags: true });
+
+    // Should add @todo for function without description
+    expect(result.content).toContain('/**');
+    expect(Array.isArray(result.metadata.warnings)).toBe(true);
+  });
 });

@@ -1143,4 +1143,91 @@ describe('HealthChecker', () => {
       expect(perfIssue?.fix).toBe('Restart MCP server');
     });
   });
+
+  describe('catch block error paths', () => {
+    it('should handle error in checkPerformance catch block (lines 227-232)', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const checkerAny = checker as any;
+
+      // Mock process.memoryUsage to throw an error
+      const originalMemoryUsage = process.memoryUsage;
+      Object.defineProperty(process, 'memoryUsage', {
+        value: () => {
+          throw new Error('Memory check error');
+        },
+        configurable: true,
+      });
+
+      const result = await checker.check();
+
+      // Restore
+      Object.defineProperty(process, 'memoryUsage', {
+        value: originalMemoryUsage,
+        configurable: true,
+      });
+
+      // Performance check should fail gracefully
+      expect(result.checks.performance.passed).toBe(false);
+      expect(result.checks.performance.error).toBe('Memory check error');
+    });
+
+    it('should handle testFileAccess returning false (line 243-244)', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const checkerAny = checker as any;
+
+      // Test testFileAccess directly by passing non-existent file
+      const result = await checkerAny.testFileAccess('/nonexistent/path/file.txt', 0);
+      expect(result).toBe(false);
+    });
+
+    it('should handle checkDependencies catch block (lines 188-195)', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const checkerAny = checker as any;
+
+      // Mock require.resolve to throw for all modules
+      const originalResolve = require.resolve;
+      (require as any).resolve = () => {
+        throw new Error('Module not found');
+      };
+
+      // Call checkDependencies which will catch the error
+      const result = await checkerAny.checkDependencies();
+
+      // Restore
+      (require as any).resolve = originalResolve;
+
+      // Dependencies check should complete
+      expect(result.passed).toBe(false);
+    });
+
+    it('should handle checkFilesystem catch block (lines 155-162)', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const checkerAny = checker as any;
+
+      // Mock EnvironmentDetector to throw
+      const { EnvironmentDetector } = await import('../src/runtime/environment-detector.js');
+      const originalDetect = EnvironmentDetector.detect;
+      (EnvironmentDetector as any).detect = () => {
+        throw new Error('Environment detection error');
+      };
+
+      const result = await checkerAny.checkFilesystem();
+
+      // Restore
+      (EnvironmentDetector as any).detect = originalDetect;
+
+      // Filesystem check should fail gracefully
+      expect(result.passed).toBe(false);
+      expect(result.error).toBe('Environment detection error');
+    });
+
+    it('should handle checkModule returning false (lines 254-256)', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const checkerAny = checker as any;
+
+      // Test checkModule directly with non-existent module
+      const result = await checkerAny.checkModule('non-existent-module-xyz');
+      expect(result).toBe(false);
+    });
+  });
 });
