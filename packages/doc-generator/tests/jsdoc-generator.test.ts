@@ -560,4 +560,221 @@ export function undocumentedFunction(x: number): number {
     expect(result.content).toContain('/**');
     expect(Array.isArray(result.metadata.warnings)).toBe(true);
   });
+
+  it('should generate @param for function parameters with types (lines 64-67)', async () => {
+    const filePath = path.join(testDir, 'func-params.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export function processData(name: string, count: number, optional?: boolean): void {
+  console.log(name, count, optional);
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    expect(result.content).toContain('@param');
+    expect(result.content).toContain('name');
+    expect(result.content).toContain('count');
+  });
+
+  it('should handle class with implements clause (lines 93-95)', async () => {
+    const filePath = path.join(testDir, 'class-implements.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+interface Runnable {
+  run(): void;
+}
+
+interface Disposable {
+  dispose(): void;
+}
+
+/**
+ * Worker class that implements multiple interfaces
+ */
+export class Worker implements Runnable, Disposable {
+  run(): void {}
+  dispose(): void {}
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    expect(result.content).toContain('@implements');
+  });
+
+  it('should handle function with return type and infer description (lines 69-72)', async () => {
+    const filePath = path.join(testDir, 'func-return.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export function calculate(a: number, b: number): number {
+  return a + b;
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    expect(result.content).toContain('@returns');
+    expect(result.content).toContain('number');
+  });
+
+  it('should handle array return type inference (line 35)', async () => {
+    const filePath = path.join(testDir, 'func-array-return.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export function getItems(): string[] {
+  return ['a', 'b'];
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    expect(result.content).toContain('@returns');
+  });
+
+  it('should handle any return type (line 36)', async () => {
+    const filePath = path.join(testDir, 'func-any-return.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export function getData(): any {
+  return {};
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    expect(result.content).toContain('@returns');
+  });
+
+  it('should handle string return type (line 32)', async () => {
+    const filePath = path.join(testDir, 'func-string-return.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export function getName(): string {
+  return 'name';
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    expect(result.content).toContain('@returns');
+    expect(result.content).toContain('string');
+  });
+
+  it('should handle void return type (line 34)', async () => {
+    const filePath = path.join(testDir, 'func-void-return.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export function doNothing(): void {
+  // nothing
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    expect(result.content).toContain('@returns');
+  });
+
+  it('should handle generic return type (line 38)', async () => {
+    const filePath = path.join(testDir, 'func-generic-return.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export function getConfig(): AppConfig {
+  return {} as AppConfig;
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    expect(result.content).toContain('@returns');
+  });
+
+  it('should throw DocError for non-existent file (lines 46-48)', async () => {
+    const nonExistentPath = path.join(testDir, 'does-not-exist.ts');
+
+    await expect(generateJSDoc(nonExistentPath)).rejects.toThrow();
+  });
+
+  it('should handle Promise<void> return type (line 19)', async () => {
+    const filePath = path.join(testDir, 'func-promise-void.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export async function initialize(): Promise<void> {
+  // init
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    expect(result.content).toContain('@returns');
+    expect(result.content).toContain('Promise');
+  });
+
+  it('should handle Promise with inner type (line 20)', async () => {
+    const filePath = path.join(testDir, 'func-promise-type.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export async function fetchUser(): Promise<User> {
+  return {} as User;
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    expect(result.content).toContain('@returns');
+    expect(result.content).toContain('Promise');
+  });
+
+  it('should handle isXxx function for boolean return (lines 26-27)', async () => {
+    const filePath = path.join(testDir, 'func-is-check.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export function isValid(value: any): boolean {
+  return !!value;
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    expect(result.content).toContain('@returns');
+    expect(result.content).toContain('boolean');
+  });
+
+  it('should handle hasXxx function for boolean return (lines 26-27)', async () => {
+    const filePath = path.join(testDir, 'func-has-check.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export function hasAccess(user: any): boolean {
+  return user.role === 'admin';
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    expect(result.content).toContain('@returns');
+  });
 });
