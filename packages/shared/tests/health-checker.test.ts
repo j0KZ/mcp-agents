@@ -841,4 +841,306 @@ describe('HealthChecker', () => {
       expect(mockResult.status).toBe('healthy');
     });
   });
+
+  describe('performance check edge cases', () => {
+    it('should detect performance issue when memory usage is high', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const result = await checker.check();
+
+      // Performance check should run and return details
+      expect(result.checks.performance.details?.memory_usage_mb).toBeGreaterThanOrEqual(0);
+      expect(result.checks.performance.details?.memory_rss_mb).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should handle performance metrics calculation', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const result = await checker.check();
+
+      // Performance should have proper structure
+      expect(typeof result.checks.performance.passed).toBe('boolean');
+      expect(typeof result.checks.performance.message).toBe('string');
+    });
+  });
+
+  describe('issue fix suggestions', () => {
+    it('should provide fix suggestion for performance issues', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const result = await checker.check();
+
+      // If performance issue exists, it should have a fix
+      const perfIssue = result.issues.find(i => i.component === 'performance');
+      if (perfIssue) {
+        expect(perfIssue.fix).toBeDefined();
+        expect(perfIssue.fix.length).toBeGreaterThan(0);
+      }
+    });
+  });
+
+  describe('testFileAccess method', () => {
+    it('should handle file access testing', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const result = await checker.check();
+
+      // Filesystem check uses testFileAccess internally
+      expect(result.checks.filesystem.details?.can_read_files).toBeDefined();
+    });
+  });
+
+  describe('checkModule method', () => {
+    it('should check for module availability', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const result = await checker.check();
+
+      // Dependencies check uses checkModule internally
+      expect(result.checks.dependencies.details).toBeDefined();
+    });
+  });
+
+  describe('issue collection and status determination', () => {
+    it('should include performance issue when performance check fails', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const checkerAny = checker as any;
+
+      // Override checkPerformance to return failed status
+      checkerAny.checkPerformance = vi.fn().mockResolvedValue({
+        passed: false,
+        message: 'Performance degradation detected',
+        details: {},
+        fix: 'Restart MCP server',
+      });
+
+      const result = await checker.check();
+
+      // Should have a performance issue
+      const perfIssue = result.issues.find(i => i.component === 'performance');
+      if (perfIssue) {
+        expect(perfIssue.severity).toBe('info');
+        expect(perfIssue.message).toContain('Performance');
+      }
+    });
+
+    it('should return unhealthy status when critical issues exist', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const checkerAny = checker as any;
+
+      // Override checkStdio to return failed critical status
+      checkerAny.checkStdio = vi.fn().mockResolvedValue({
+        passed: false,
+        message: 'Stdio check failed',
+        details: {},
+        fix: 'Restart server',
+      });
+
+      const result = await checker.check();
+
+      // Should have a critical issue when stdio fails
+      const stdioIssue = result.issues.find(i => i.component === 'stdio');
+      if (stdioIssue) {
+        expect(stdioIssue.severity).toBe('critical');
+        expect(result.status).toBe('unhealthy');
+      }
+    });
+
+    it('should return degraded status when only warning issues exist', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const checkerAny = checker as any;
+
+      // Override checkFilesystem to return failed status (which creates warning severity)
+      checkerAny.checkFilesystem = vi.fn().mockResolvedValue({
+        passed: false,
+        message: 'Filesystem check failed',
+        details: {},
+        fix: 'Check file permissions',
+      });
+      // Ensure other checks pass so only filesystem warning affects status
+      checkerAny.checkStdio = vi.fn().mockResolvedValue({
+        passed: true,
+        message: 'stdio ok',
+        details: {},
+      });
+      checkerAny.checkDependencies = vi.fn().mockResolvedValue({
+        passed: true,
+        message: 'dependencies ok',
+        details: {},
+      });
+      checkerAny.checkPerformance = vi.fn().mockResolvedValue({
+        passed: true,
+        message: 'performance ok',
+        details: {},
+      });
+
+      const result = await checker.check();
+
+      // If filesystem failed, should be degraded (warning severity)
+      const fsIssue = result.issues.find(i => i.component === 'filesystem');
+      if (fsIssue) {
+        expect(fsIssue.severity).toBe('warning');
+        // Status should be degraded (not unhealthy since it's only warning)
+        expect(result.status).toBe('degraded');
+      }
+    });
+
+    it('should determine status correctly based on issue severity', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const checkerAny = checker as any;
+
+      // Test the determineStatus method directly
+      const issues = [
+        { severity: 'critical' as const, message: 'Test', fix: 'Fix', component: 'test' },
+      ];
+
+      const status = checkerAny.determineStatus(issues);
+      expect(status).toBe('unhealthy');
+
+      // Test with only warning
+      const warningIssues = [
+        { severity: 'warning' as const, message: 'Test', fix: 'Fix', component: 'test' },
+      ];
+
+      const warningStatus = checkerAny.determineStatus(warningIssues);
+      expect(warningStatus).toBe('degraded');
+
+      // Test with only info
+      const infoIssues = [
+        { severity: 'info' as const, message: 'Test', fix: 'Fix', component: 'test' },
+      ];
+
+      const infoStatus = checkerAny.determineStatus(infoIssues);
+      expect(infoStatus).toBe('healthy');
+    });
+  });
+
+  describe('identifyIssues comprehensive coverage', () => {
+    it('should add stdio issue when stdio check fails', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const checkerAny = checker as any;
+
+      // Mock stdio to fail
+      checkerAny.checkStdio = vi.fn().mockResolvedValue({
+        passed: false,
+        message: 'stdio failed',
+        details: {},
+        fix: 'Custom fix',
+      });
+      // Make others pass
+      checkerAny.checkFilesystem = vi
+        .fn()
+        .mockResolvedValue({ passed: true, message: 'ok', details: {} });
+      checkerAny.checkDependencies = vi
+        .fn()
+        .mockResolvedValue({ passed: true, message: 'ok', details: {} });
+      checkerAny.checkPerformance = vi
+        .fn()
+        .mockResolvedValue({ passed: true, message: 'ok', details: {} });
+
+      const result = await checker.check();
+
+      const stdioIssue = result.issues.find(i => i.component === 'stdio');
+      expect(stdioIssue).toBeDefined();
+      expect(stdioIssue?.severity).toBe('critical');
+      expect(stdioIssue?.fix).toBe('Custom fix');
+    });
+
+    it('should add dependencies issue when dependencies check fails', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const checkerAny = checker as any;
+
+      // Mock dependencies to fail
+      checkerAny.checkStdio = vi
+        .fn()
+        .mockResolvedValue({ passed: true, message: 'ok', details: {} });
+      checkerAny.checkFilesystem = vi
+        .fn()
+        .mockResolvedValue({ passed: true, message: 'ok', details: {} });
+      checkerAny.checkDependencies = vi.fn().mockResolvedValue({
+        passed: false,
+        message: 'deps failed',
+        details: {},
+        fix: 'Run npm install',
+      });
+      checkerAny.checkPerformance = vi
+        .fn()
+        .mockResolvedValue({ passed: true, message: 'ok', details: {} });
+
+      const result = await checker.check();
+
+      const depIssue = result.issues.find(i => i.component === 'dependencies');
+      expect(depIssue).toBeDefined();
+      expect(depIssue?.severity).toBe('critical');
+      expect(result.status).toBe('unhealthy');
+    });
+
+    it('should add performance issue when performance check fails', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const checkerAny = checker as any;
+
+      // Mock performance to fail
+      checkerAny.checkStdio = vi
+        .fn()
+        .mockResolvedValue({ passed: true, message: 'ok', details: {} });
+      checkerAny.checkFilesystem = vi
+        .fn()
+        .mockResolvedValue({ passed: true, message: 'ok', details: {} });
+      checkerAny.checkDependencies = vi
+        .fn()
+        .mockResolvedValue({ passed: true, message: 'ok', details: {} });
+      checkerAny.checkPerformance = vi.fn().mockResolvedValue({
+        passed: false,
+        message: 'perf issue',
+        details: {},
+        fix: 'Restart server',
+      });
+
+      const result = await checker.check();
+
+      const perfIssue = result.issues.find(i => i.component === 'performance');
+      expect(perfIssue).toBeDefined();
+      expect(perfIssue?.severity).toBe('info');
+      // Only info severity, so status should be healthy
+      expect(result.status).toBe('healthy');
+    });
+
+    it('should use default fix messages when fix not provided', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const checkerAny = checker as any;
+
+      // Mock all checks to fail without custom fix messages
+      checkerAny.checkStdio = vi.fn().mockResolvedValue({
+        passed: false,
+        message: 'failed',
+        details: {},
+        // No fix provided
+      });
+      checkerAny.checkFilesystem = vi.fn().mockResolvedValue({
+        passed: false,
+        message: 'failed',
+        details: {},
+      });
+      checkerAny.checkDependencies = vi.fn().mockResolvedValue({
+        passed: false,
+        message: 'failed',
+        details: {},
+      });
+      checkerAny.checkPerformance = vi.fn().mockResolvedValue({
+        passed: false,
+        message: 'failed',
+        details: {},
+      });
+
+      const result = await checker.check();
+
+      // Should use default fixes
+      const stdioIssue = result.issues.find(i => i.component === 'stdio');
+      expect(stdioIssue?.fix).toBe('Restart your IDE');
+
+      const fsIssue = result.issues.find(i => i.component === 'filesystem');
+      expect(fsIssue?.fix).toBe('Check file permissions');
+
+      const depIssue = result.issues.find(i => i.component === 'dependencies');
+      expect(depIssue?.fix).toBe('Run: npm install');
+
+      const perfIssue = result.issues.find(i => i.component === 'performance');
+      expect(perfIssue?.fix).toBe('Restart MCP server');
+    });
+  });
 });

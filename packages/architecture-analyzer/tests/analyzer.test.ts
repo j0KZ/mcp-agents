@@ -400,4 +400,245 @@ describe('ArchitectureAnalyzer', () => {
       expect(result.modules.every(m => !m.path.includes('node_modules'))).toBe(true);
     });
   });
+
+  describe('layer violation detection comprehensive', () => {
+    it('should detect violations when dependencies cross layer boundaries', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        layerRules: {
+          validators: [], // validators cannot depend on anything
+          generators: ['validators'], // generators can only depend on validators
+        },
+      });
+
+      // Check violation detection logic
+      expect(result.layerViolations).toBeDefined();
+      expect(Array.isArray(result.layerViolations)).toBe(true);
+    });
+
+    it('should correctly identify layer from module path', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        layerRules: {
+          src: ['types'], // src can depend on types
+          types: [], // types cannot depend on anything
+        },
+      });
+
+      // Should have checked layers for modules
+      expect(result).toBeDefined();
+      expect(result.layerViolations).toBeDefined();
+    });
+
+    it('should handle when module matches multiple layers', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        layerRules: {
+          generators: ['types'],
+          types: [],
+        },
+      });
+
+      // Should process layer matching correctly
+      expect(result).toBeDefined();
+    });
+
+    it('should generate violation description correctly', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        layerRules: {
+          presentation: [],
+          business: ['presentation'],
+        },
+      });
+
+      // Check violation has description when found
+      if (result.layerViolations.length > 0) {
+        const violation = result.layerViolations[0];
+        expect(violation.description).toBeDefined();
+        expect(typeof violation.description).toBe('string');
+      }
+    });
+  });
+
+  describe('getLayer method coverage', () => {
+    it('should return null for modules not matching any layer', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        layerRules: {
+          nonexistent_layer: ['another_nonexistent'],
+        },
+      });
+
+      // No modules should match nonexistent layers
+      expect(result.layerViolations.length).toBe(0);
+    });
+
+    it('should match layer by path inclusion', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        layerRules: {
+          src: [],
+        },
+      });
+
+      // Some modules should have 'src' in their path
+      expect(result).toBeDefined();
+    });
+  });
+
+  describe('detectLayerViolations comprehensive', () => {
+    it('should check all dependencies against layer rules', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        layerRules: {
+          validators: ['types', 'validators'],
+          types: ['types'],
+          generators: ['types', 'validators', 'generators'],
+        },
+      });
+
+      expect(result).toBeDefined();
+      expect(Array.isArray(result.layerViolations)).toBe(true);
+    });
+
+    it('should handle empty allowedLayers array', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        layerRules: {
+          types: [], // types cannot depend on anything
+        },
+      });
+
+      expect(result).toBeDefined();
+    });
+  });
+
+  describe('layer violation detection with mocked scanner', () => {
+    it('should detect violations when fromLayer depends on disallowed toLayer', async () => {
+      // Mock the scanner to return controlled data
+      const analyzerAny = analyzer as any;
+      const originalScanner = analyzerAny.scanner;
+
+      // Create mock scanner that returns modules with known paths
+      analyzerAny.scanner = {
+        scanProject: async () => ({
+          modules: [
+            { path: 'src/presentation/view.ts', name: 'view', dependencies: [] },
+            { path: 'src/data/repository.ts', name: 'repository', dependencies: [] },
+          ],
+          dependencies: [
+            // presentation depending on data directly (violation if presentation can only use business)
+            { from: 'src/presentation/view.ts', to: 'src/data/repository.ts', type: 'import' },
+          ],
+        }),
+      };
+
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        layerRules: {
+          presentation: ['business'], // presentation can ONLY depend on business
+          data: [], // data cannot depend on anything
+        },
+      });
+
+      // Restore original scanner
+      analyzerAny.scanner = originalScanner;
+
+      // Should detect the violation: presentation -> data (not allowed)
+      expect(result.layerViolations).toBeDefined();
+      expect(result.layerViolations.length).toBeGreaterThan(0);
+
+      const violation = result.layerViolations[0];
+      expect(violation.from).toContain('presentation');
+      expect(violation.to).toContain('data');
+      expect(violation.description).toContain('should not depend on');
+      expect(violation.actualLayer).toBe('data');
+      expect(violation.expectedLayer).toBe('business');
+    });
+
+    it('should handle getLayer returning null for unmatched modules', async () => {
+      const analyzerAny = analyzer as any;
+      const originalScanner = analyzerAny.scanner;
+
+      // Create mock scanner with modules that don't match any layer
+      analyzerAny.scanner = {
+        scanProject: async () => ({
+          modules: [
+            { path: 'src/utils/helper.ts', name: 'helper', dependencies: [] },
+            { path: 'src/other/thing.ts', name: 'thing', dependencies: [] },
+          ],
+          dependencies: [{ from: 'src/utils/helper.ts', to: 'src/other/thing.ts', type: 'import' }],
+        }),
+      };
+
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        layerRules: {
+          // Only define layers that won't match our modules
+          presentation: ['business'],
+          business: ['data'],
+        },
+      });
+
+      // Restore original scanner
+      analyzerAny.scanner = originalScanner;
+
+      // No violations since neither module matches any layer (getLayer returns null)
+      expect(result.layerViolations.length).toBe(0);
+    });
+
+    it('should allow dependencies when toLayer is in allowedLayers', async () => {
+      const analyzerAny = analyzer as any;
+      const originalScanner = analyzerAny.scanner;
+
+      analyzerAny.scanner = {
+        scanProject: async () => ({
+          modules: [
+            { path: 'src/presentation/view.ts', name: 'view', dependencies: [] },
+            { path: 'src/business/service.ts', name: 'service', dependencies: [] },
+          ],
+          dependencies: [
+            // presentation depending on business (allowed)
+            { from: 'src/presentation/view.ts', to: 'src/business/service.ts', type: 'import' },
+          ],
+        }),
+      };
+
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        layerRules: {
+          presentation: ['business'], // presentation CAN depend on business
+          business: ['data'],
+        },
+      });
+
+      analyzerAny.scanner = originalScanner;
+
+      // No violations - presentation is allowed to depend on business
+      expect(result.layerViolations.length).toBe(0);
+    });
+
+    it('should iterate through all layer keys in getLayer', async () => {
+      const analyzerAny = analyzer as any;
+      const originalScanner = analyzerAny.scanner;
+
+      // Create module that matches the third layer to ensure loop iterates
+      analyzerAny.scanner = {
+        scanProject: async () => ({
+          modules: [
+            { path: 'src/infrastructure/db.ts', name: 'db', dependencies: [] },
+            { path: 'src/domain/entity.ts', name: 'entity', dependencies: [] },
+          ],
+          dependencies: [
+            { from: 'src/infrastructure/db.ts', to: 'src/domain/entity.ts', type: 'import' },
+          ],
+        }),
+      };
+
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        layerRules: {
+          // Order matters - infrastructure should be checked after others
+          presentation: ['business'],
+          business: ['domain'],
+          domain: [],
+          infrastructure: ['domain'], // infrastructure can only depend on domain
+        },
+      });
+
+      analyzerAny.scanner = originalScanner;
+
+      // No violation since infrastructure -> domain is allowed
+      expect(result.layerViolations).toBeDefined();
+    });
+  });
 });

@@ -334,4 +334,120 @@ export function process(): Result {
 
     expect(result.content).toContain('Result');
   });
+
+  it('should generate param documentation with type info (lines 64-70)', async () => {
+    const filePath = path.join(testDir, 'params-detailed.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export function processUser(id: number, name: string, email?: string): void {
+  console.log(id, name, email);
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    // Should include @param with type
+    expect(result.content).toContain('@param');
+    expect(result.content).toContain('number');
+    expect(result.content).toContain('string');
+  });
+
+  it('should generate class documentation with description (lines 82-88)', async () => {
+    const filePath = path.join(testDir, 'class-doc.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+/**
+ * A user service class
+ */
+export class UserService {
+  getUser(): void {}
+}
+
+export class EmptyClass {}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    // Should contain class documentation
+    expect(result.content).toContain('Class');
+    expect(result.metadata.itemsDocumented).toBeGreaterThan(0);
+  });
+
+  it('should add todo for interface without description (lines 112-115)', async () => {
+    const filePath = path.join(testDir, 'interface-todo.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export interface UndocumentedInterface {
+  prop: string;
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath, { addTodoTags: true });
+
+    // Check that interface is documented
+    expect(result.content).toContain('Interface');
+    // Warnings array should exist (may or may not have entries)
+    expect(Array.isArray(result.metadata.warnings)).toBe(true);
+  });
+
+  it('should handle function with multiple params without existing doc', async () => {
+    const filePath = path.join(testDir, 'multi-params.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+export function createUser(
+  name: string,
+  age: number,
+  email?: string,
+  role?: string
+): { id: number } {
+  return { id: 1 };
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    // Generator runs successfully
+    expect(result.format).toBe('markdown');
+    expect(result.metadata.filesProcessed).toBe(1);
+  });
+
+  it('should handle class with extends and methods', async () => {
+    const filePath = path.join(testDir, 'class-extended.ts');
+    fs.writeFileSync(
+      filePath,
+      `
+class BaseEntity {
+  id: number = 0;
+}
+
+/**
+ * User entity with profile information
+ */
+export class User extends BaseEntity {
+  name: string = '';
+
+  getName(): string {
+    return this.name;
+  }
+
+  setName(value: string): void {
+    this.name = value;
+  }
+}
+    `
+    );
+
+    const result = await generateJSDoc(filePath);
+
+    expect(result.content).toContain('@extends');
+    expect(result.metadata.itemsDocumented).toBeGreaterThan(0);
+  });
 });
