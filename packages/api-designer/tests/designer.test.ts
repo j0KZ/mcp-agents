@@ -785,3 +785,24 @@ describe('generateGraphQLSDL mutations branch', () => {
     expect(result.errors?.length).toBeGreaterThan(0);
   });
 });
+
+describe('designRESTEndpoints() additional tests', () => {
+  it('should handle empty resources array gracefully', () => {
+    const config = { name: 'Test API', version: '1.0.0', style: 'REST' as const };
+    const result = target.designRESTEndpoints([], config);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data).toEqual([]);
+    }
+  });
+
+  it('should include metadata with generation timestamp', () => {
+    const config = { name: 'Test API', version: '1.0.0', style: 'REST' as const };
+    const result = target.designRESTEndpoints(['users'], config);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.metadata).toBeDefined();
+      expect(result.metadata.generatedAt).toBeDefined();
+    }
+  });
+});
