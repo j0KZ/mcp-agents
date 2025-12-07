@@ -168,8 +168,9 @@ describe('ArchitectureAnalyzer Extended', () => {
       });
       // If there are dependencies, graph should have edges
       if (result.dependencies.length > 0) {
-        // Edges are in format "nodeId --> nodeId"
-        const edgeCount = (result.dependencyGraph.match(/-->/g) || []).length;
+        // Edges are in format "nodeId --> nodeId" (Mermaid arrow syntax)
+        // Using split instead of regex to avoid CodeQL false positive (js/bad-tag-filter)
+        const edgeCount = result.dependencyGraph.split(' --> ').length - 1;
         expect(edgeCount).toBeGreaterThan(0);
       }
     });
