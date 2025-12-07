@@ -379,4 +379,104 @@ const y: any;
       }
     });
   });
+
+  describe('scanSecurity console output', () => {
+    it('should log security issues when found', async () => {
+      const tempFile = path.join(packageRoot, 'temp-test-security-log.ts');
+      const riskyCode = 'const password = "secret";';
+
+      await fs.writeFile(tempFile, riskyCode);
+      const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+      try {
+        await analyzer.scanSecurity(tempFile);
+        expect(consoleLogSpy).toHaveBeenCalled();
+      } finally {
+        consoleLogSpy.mockRestore();
+        await fs.unlink(tempFile);
+      }
+    });
+
+    it('should log no issues message when clean', async () => {
+      const tempFile = path.join(packageRoot, 'temp-test-security-clean.ts');
+      const cleanCode = 'const x = 1;';
+
+      await fs.writeFile(tempFile, cleanCode);
+      const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+      try {
+        await analyzer.scanSecurity(tempFile);
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Security'));
+      } finally {
+        consoleLogSpy.mockRestore();
+        await fs.unlink(tempFile);
+      }
+    });
+  });
+
+  describe('fullScan edge cases', () => {
+    it('should include all analysis components', async () => {
+      const result = await analyzer.fullScan();
+
+      // fullScan returns issues, metrics, suggestions, critical
+      expect(result).toHaveProperty('issues');
+      expect(result).toHaveProperty('metrics');
+      expect(result).toHaveProperty('suggestions');
+      expect(result).toHaveProperty('critical');
+    });
+
+    it('should handle files with only comments via analyzeFile', async () => {
+      const tempFile = path.join(packageRoot, 'temp-test-comments.ts');
+      const code = '// This is a comment\n/* Multi-line comment */';
+
+      await fs.writeFile(tempFile, code);
+
+      try {
+        const result = await analyzer.analyzeFile(tempFile);
+        expect(result.complexity).toBe(1);
+      } finally {
+        await fs.unlink(tempFile);
+      }
+    });
+  });
+
+  describe('analyzeFile edge cases', () => {
+    it('should handle empty file', async () => {
+      const tempFile = path.join(packageRoot, 'temp-test-empty.ts');
+
+      await fs.writeFile(tempFile, '');
+
+      try {
+        const result = await analyzer.analyzeFile(tempFile);
+        expect(result.complexity).toBe(1);
+        expect(result.quality).toBeDefined();
+      } finally {
+        await fs.unlink(tempFile);
+      }
+    });
+
+    it('should handle file with only whitespace', async () => {
+      const tempFile = path.join(packageRoot, 'temp-test-whitespace.ts');
+
+      await fs.writeFile(tempFile, '   \n   \n   ');
+
+      try {
+        const result = await analyzer.analyzeFile(tempFile);
+        expect(result.complexity).toBe(1);
+      } finally {
+        await fs.unlink(tempFile);
+      }
+    });
+  });
+
+  describe('runTool private method via type assertion', () => {
+    it('should throw error for unknown tool', async () => {
+      // Access private method via type assertion
+      const analyzerAny = analyzer as any;
+
+      await expect(analyzerAny.runTool('unknown-tool', 'command', {})).rejects.toThrow(
+        'Tool unknown-tool not available'
+      );
+    });
+  });
 });

@@ -315,6 +315,38 @@ return x + y`;
       // Should be called with content containing semicolons
       expect(fs.writeFile).toHaveBeenCalledWith('test.js', expect.stringContaining('const x = 1;'));
     });
+
+    it('should add missing semicolons to import statements', async () => {
+      const content = `import { foo } from './foo'
+import bar from './bar'`;
+
+      vi.mocked(fs.readFile).mockResolvedValue(content);
+      vi.mocked(fs.writeFile).mockResolvedValue();
+
+      await fixer.autoFix('test.js');
+
+      // Should be called with content containing semicolons after imports
+      expect(fs.writeFile).toHaveBeenCalledWith(
+        'test.js',
+        expect.stringContaining("import { foo } from './foo';")
+      );
+    });
+
+    it('should add missing semicolons to export statements', async () => {
+      const content = `export const x = 1
+export default y`;
+
+      vi.mocked(fs.readFile).mockResolvedValue(content);
+      vi.mocked(fs.writeFile).mockResolvedValue();
+
+      await fixer.autoFix('test.js');
+
+      // Should be called with content containing semicolons after exports
+      expect(fs.writeFile).toHaveBeenCalledWith(
+        'test.js',
+        expect.stringContaining('export const x = 1;')
+      );
+    });
   });
 
   describe('trailing whitespace', () => {

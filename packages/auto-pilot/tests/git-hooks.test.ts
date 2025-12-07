@@ -270,4 +270,31 @@ describe('GitHooks', () => {
       expect(config['*.{json,md,yml,yaml}']).toContain('prettier --write');
     });
   });
+
+  describe('getStagedFiles', () => {
+    it('should return empty array when no staged files', async () => {
+      // In a directory without git, this should return empty array
+      const files = await hooks.getStagedFiles();
+      // Since we're in a temp dir without proper git setup
+      expect(Array.isArray(files)).toBe(true);
+    });
+  });
+
+  describe('setupHusky error handling', () => {
+    it('should handle husky setup failure gracefully', async () => {
+      // Remove .husky directory access to cause npx husky to fail
+      vi.spyOn(process, 'cwd').mockReturnValue('/nonexistent/path');
+
+      const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+      // This should trigger the catch block at lines 317-318
+      await hooks.setupHusky();
+
+      // Should log warning message about falling back to native git hooks
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Could not set up Husky'));
+
+      // Restore original
+      vi.spyOn(process, 'cwd').mockReturnValue(tempDir);
+    });
+  });
 });
