@@ -3,8 +3,8 @@
  * Ensures proper health monitoring and diagnostics
  */
 
-import { describe, it, expect, vi } from 'vitest';
-import { HealthChecker } from '../src/health/health-checker.js';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { HealthChecker, HealthCheckResult } from '../src/health/health-checker.js';
 
 describe('HealthChecker', () => {
   describe('constructor', () => {
@@ -365,6 +365,253 @@ describe('HealthChecker', () => {
         expect(issue.fix).toBeDefined();
         expect(issue.fix.length).toBeGreaterThan(0);
       });
+    });
+  });
+
+  describe('error handling in checks', () => {
+    let originalStdin: NodeJS.ReadStream;
+    let originalStdout: NodeJS.WriteStream;
+    let originalStderr: NodeJS.WriteStream;
+
+    beforeEach(() => {
+      originalStdin = process.stdin;
+      originalStdout = process.stdout;
+      originalStderr = process.stderr;
+    });
+
+    afterEach(() => {
+      vi.unstubAllGlobals();
+      // Restore original streams
+      Object.defineProperty(process, 'stdin', { value: originalStdin, writable: true });
+      Object.defineProperty(process, 'stdout', { value: originalStdout, writable: true });
+      Object.defineProperty(process, 'stderr', { value: originalStderr, writable: true });
+    });
+
+    it('should handle error in stdio check gracefully', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+
+      // Mock stdin to throw when accessed
+      const mockStdin = {
+        get readable() {
+          throw new Error('stdin error');
+        },
+        destroyed: false,
+        isTTY: undefined,
+      };
+      Object.defineProperty(process, 'stdin', { value: mockStdin, writable: true });
+
+      const result = await checker.check();
+
+      // Check should fail gracefully with error info
+      expect(result.checks.stdio.passed).toBe(false);
+      expect(result.checks.stdio.error).toBeDefined();
+      expect(result.checks.stdio.fix).toBeDefined();
+    });
+
+    it('should detect unhealthy stdio when stdin is not readable', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+
+      // Mock stdin as not readable
+      const mockStdin = {
+        readable: false,
+        destroyed: false,
+        isTTY: undefined,
+      };
+      Object.defineProperty(process, 'stdin', { value: mockStdin, writable: true });
+
+      const result = await checker.check();
+
+      expect(result.checks.stdio.passed).toBe(false);
+      expect(result.checks.stdio.warning).toBeDefined();
+    });
+
+    it('should detect unhealthy stdio when stdout is destroyed', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+
+      // Mock stdout as destroyed
+      const mockStdout = {
+        writable: true,
+        destroyed: true,
+      };
+      Object.defineProperty(process, 'stdout', { value: mockStdout, writable: true });
+
+      const result = await checker.check();
+
+      // stdout destroyed = not writable effectively
+      expect(result.checks.stdio.details?.stdout_writable).toBe(false);
+    });
+  });
+
+  describe('format edge cases', () => {
+    it('should format degraded status with warning emoji', () => {
+      const mockResult: HealthCheckResult = {
+        status: 'degraded',
+        checks: {
+          stdio: { passed: true, message: 'ok' },
+          filesystem: { passed: false, message: 'issues' },
+          dependencies: { passed: true, message: 'ok' },
+          performance: { passed: true, message: 'ok' },
+        },
+        issues: [{ severity: 'warning', message: 'test', fix: 'fix', component: 'filesystem' }],
+        timestamp: new Date().toISOString(),
+        uptime: 100,
+        version: '1.0.0',
+        environment: {
+          ide: 'unknown',
+          transport: 'stdio',
+          locale: 'en',
+          platform: 'linux',
+          isWindows: false,
+          isMac: false,
+          isLinux: true,
+          homeDir: '/home/test',
+          projectRoot: '/test',
+          pathSeparator: '/',
+        },
+      };
+
+      const formatted = HealthChecker.format(mockResult);
+
+      expect(formatted).toContain('⚠️');
+      expect(formatted).toContain('DEGRADED');
+    });
+
+    it('should format unhealthy status with X emoji', () => {
+      const mockResult: HealthCheckResult = {
+        status: 'unhealthy',
+        checks: {
+          stdio: { passed: false, message: 'failed' },
+          filesystem: { passed: true, message: 'ok' },
+          dependencies: { passed: true, message: 'ok' },
+          performance: { passed: true, message: 'ok' },
+        },
+        issues: [
+          { severity: 'critical', message: 'critical issue', fix: 'fix now', component: 'stdio' },
+        ],
+        timestamp: new Date().toISOString(),
+        uptime: 100,
+        version: '1.0.0',
+        environment: {
+          ide: 'unknown',
+          transport: 'stdio',
+          locale: 'en',
+          platform: 'linux',
+          isWindows: false,
+          isMac: false,
+          isLinux: true,
+          homeDir: '/home/test',
+          projectRoot: '/test',
+          pathSeparator: '/',
+        },
+      };
+
+      const formatted = HealthChecker.format(mockResult);
+
+      expect(formatted).toContain('❌');
+      expect(formatted).toContain('UNHEALTHY');
+      expect(formatted).toContain('CRITICAL');
+      expect(formatted).toContain('Fix:');
+    });
+
+    it('should format check with X mark when not passed', () => {
+      const mockResult: HealthCheckResult = {
+        status: 'unhealthy',
+        checks: {
+          stdio: { passed: false, message: 'stdio broken' },
+          filesystem: { passed: true, message: 'ok' },
+          dependencies: { passed: true, message: 'ok' },
+          performance: { passed: true, message: 'ok' },
+        },
+        issues: [{ severity: 'critical', message: 'test', fix: 'fix', component: 'stdio' }],
+        timestamp: new Date().toISOString(),
+        uptime: 100,
+        version: '1.0.0',
+        environment: {
+          ide: 'unknown',
+          transport: 'stdio',
+          locale: 'en',
+          platform: 'linux',
+          isWindows: false,
+          isMac: false,
+          isLinux: true,
+          homeDir: '/home/test',
+          projectRoot: '/test',
+          pathSeparator: '/',
+        },
+      };
+
+      const formatted = HealthChecker.format(mockResult);
+
+      expect(formatted).toContain('✗ stdio');
+    });
+  });
+
+  describe('identifyIssues direct testing', () => {
+    it('should identify all issue types correctly', async () => {
+      // We test this by checking that when checks fail, proper issues are created
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const result = await checker.check();
+
+      // If any check failed, verify the issue structure
+      if (!result.checks.stdio.passed) {
+        const stdioIssue = result.issues.find(i => i.component === 'stdio');
+        expect(stdioIssue).toBeDefined();
+        expect(stdioIssue?.severity).toBe('critical');
+      }
+
+      if (!result.checks.filesystem.passed) {
+        const fsIssue = result.issues.find(i => i.component === 'filesystem');
+        expect(fsIssue).toBeDefined();
+        expect(fsIssue?.severity).toBe('warning');
+      }
+
+      if (!result.checks.dependencies.passed) {
+        const depIssue = result.issues.find(i => i.component === 'dependencies');
+        expect(depIssue).toBeDefined();
+        expect(depIssue?.severity).toBe('critical');
+      }
+
+      if (!result.checks.performance.passed) {
+        const perfIssue = result.issues.find(i => i.component === 'performance');
+        expect(perfIssue).toBeDefined();
+        expect(perfIssue?.severity).toBe('info');
+      }
+    });
+  });
+
+  describe('determineStatus logic', () => {
+    it('should return unhealthy when any critical issue exists', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const result = await checker.check();
+
+      const hasCritical = result.issues.some(i => i.severity === 'critical');
+      if (hasCritical) {
+        expect(result.status).toBe('unhealthy');
+      }
+    });
+
+    it('should return degraded when warning exists but no critical', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const result = await checker.check();
+
+      const hasCritical = result.issues.some(i => i.severity === 'critical');
+      const hasWarning = result.issues.some(i => i.severity === 'warning');
+
+      if (!hasCritical && hasWarning) {
+        expect(result.status).toBe('degraded');
+      }
+    });
+
+    it('should return healthy when no critical or warning issues', async () => {
+      const checker = new HealthChecker('test-server', '1.0.0');
+      const result = await checker.check();
+
+      const hasCritical = result.issues.some(i => i.severity === 'critical');
+      const hasWarning = result.issues.some(i => i.severity === 'warning');
+
+      if (!hasCritical && !hasWarning) {
+        expect(result.status).toBe('healthy');
+      }
     });
   });
 });

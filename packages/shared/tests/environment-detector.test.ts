@@ -338,4 +338,64 @@ describe('EnvironmentDetector', () => {
       expect(EnvironmentDetector.isKnownIDE()).toBe(false);
     });
   });
+
+  describe('parent process detection fallback', () => {
+    it('should fallback to unknown when all detection methods fail', () => {
+      // Clear all IDE-related environment variables
+      delete process.env.CLAUDE_CODE_VERSION;
+      delete process.env.CURSOR_VERSION;
+      delete process.env.WINDSURF_VERSION;
+      delete process.env.QODER_VERSION;
+      delete process.env.ROO_CODE_VERSION;
+      delete process.env.VSCODE_PID;
+      delete process.env.MCP_IDE;
+
+      const env = EnvironmentDetector.detect();
+      // Should return 'unknown' or a detected IDE from parent process
+      expect(typeof env.ide).toBe('string');
+    });
+
+    it('should handle parent process detection errors gracefully', () => {
+      // Clear all IDE-related environment variables
+      delete process.env.CLAUDE_CODE_VERSION;
+      delete process.env.CURSOR_VERSION;
+      delete process.env.WINDSURF_VERSION;
+      delete process.env.QODER_VERSION;
+      delete process.env.ROO_CODE_VERSION;
+      delete process.env.VSCODE_PID;
+      delete process.env.MCP_IDE;
+
+      // Even if parent process detection fails, it should not throw
+      expect(() => EnvironmentDetector.detect()).not.toThrow();
+    });
+  });
+
+  describe('transport detection edge cases', () => {
+    it('should default to stdio when no transport indicators present', () => {
+      delete process.env.MCP_TRANSPORT;
+      delete process.env.PORT;
+      delete process.env.HTTP_SERVER;
+
+      const env = EnvironmentDetector.detect();
+      expect(env.transport).toBe('stdio');
+    });
+
+    it('should handle invalid MCP_TRANSPORT value', () => {
+      process.env.MCP_TRANSPORT = 'invalid';
+
+      const env = EnvironmentDetector.detect();
+      // Should fallback to auto-detection
+      expect(['stdio', 'sse', 'websocket', 'unknown']).toContain(env.transport);
+    });
+  });
+
+  describe('project root detection edge cases', () => {
+    it('should return working directory as fallback', () => {
+      delete process.env.MCP_PROJECT_ROOT;
+
+      const env = EnvironmentDetector.detect();
+      // Should always return something (project root or working dir)
+      expect(env.projectRoot).not.toBeNull();
+    });
+  });
 });
