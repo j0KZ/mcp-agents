@@ -47,6 +47,7 @@ export default defineConfig({
         '**/constants/**', // Constant definitions
         'packages/*/src/constants.ts',
         'installer/**', // Standalone package
+        '**/cli.ts', // CLI entry points
       ],
 
       // Include only source files (not dist)
