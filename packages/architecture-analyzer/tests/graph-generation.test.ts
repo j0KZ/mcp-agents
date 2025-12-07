@@ -65,9 +65,10 @@ describe('ArchitectureAnalyzer - Dependency Graph', () => {
       excludePatterns: [],
     });
 
-    // Should have edges: a->b, b->c
+    // Should have edges: a->b, b->c (Mermaid arrow syntax)
     expect(result.dependencies.length).toBeGreaterThanOrEqual(2);
-    const edgeCount = (result.dependencyGraph.match(/-->/g) || []).length;
+    // Using split instead of regex to avoid CodeQL false positive (js/bad-tag-filter)
+    const edgeCount = result.dependencyGraph.split(' --> ').length - 1;
     expect(edgeCount).toBeGreaterThanOrEqual(2);
   });
 
