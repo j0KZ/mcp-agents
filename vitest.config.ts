@@ -48,6 +48,7 @@ export default defineConfig({
         'packages/*/src/constants.ts',
         'installer/**', // Standalone package
         '**/cli.ts', // CLI entry points
+        '**/benchmark-*.ts', // Benchmark CLI scripts
       ],
 
       // Include only source files (not dist)

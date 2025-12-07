@@ -4,6 +4,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { generateClaudeCodeConfig } from '../src/generators/claude-code.js';
+import { generateCursorConfig } from '../src/generators/cursor.js';
 import { generateConfig } from '../src/generators/index.js';
 import type { WizardSelections } from '../src/wizard.js';
 
@@ -17,6 +18,28 @@ describe('Config Generators', () => {
       installGlobally: true,
     },
   };
+
+  describe('Cursor Generator', () => {
+    it('should generate same config as Claude Code (wrapper function)', () => {
+      const cursorConfig = generateCursorConfig(mockSelections);
+      const claudeConfig = generateClaudeCodeConfig(mockSelections);
+
+      // Cursor uses same format as Claude Code
+      expect(cursorConfig).toEqual(claudeConfig);
+    });
+
+    it('should include mcpServers property', () => {
+      const config = generateCursorConfig(mockSelections);
+      expect(config).toHaveProperty('mcpServers');
+    });
+
+    it('should include selected MCPs', () => {
+      const config = generateCursorConfig(mockSelections);
+      expect(config.mcpServers).toHaveProperty('smart-reviewer');
+      expect(config.mcpServers).toHaveProperty('security-scanner');
+      expect(config.mcpServers).toHaveProperty('test-generator');
+    });
+  });
 
   describe('Claude Code Generator', () => {
     it('should generate valid config structure', () => {
@@ -83,6 +106,7 @@ describe('Config Generators', () => {
     });
 
     it('should use universal config for unknown editor', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const invalidSelections = { ...mockSelections, editor: 'unknown' as any };
       const config = await generateConfig(invalidSelections);
       // Should fall back to universal config

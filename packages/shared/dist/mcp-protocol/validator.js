@@ -83,7 +83,9 @@ export class MCPProtocolValidator {
                     warnings.push(`Parameter '${paramName}' should use camelCase naming`);
                 }
                 // Check for parameter descriptions
-                if (typeof paramSchema === 'object' && paramSchema !== null && !('description' in paramSchema)) {
+                if (typeof paramSchema === 'object' &&
+                    paramSchema !== null &&
+                    !('description' in paramSchema)) {
                     warnings.push(`Parameter '${paramName}' lacks a description`);
                 }
             }
