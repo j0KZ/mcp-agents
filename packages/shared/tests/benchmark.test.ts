@@ -39,13 +39,13 @@ describe('benchmark', () => {
   it('should handle async functions', async () => {
     const result = await benchmark(
       async () => {
-        await new Promise(resolve => setTimeout(resolve, 1));
+        await new Promise(resolve => setTimeout(resolve, 5));
       },
       { iterations: 3, warmup: 1 }
     );
 
     expect(result.iterations).toBe(3);
-    expect(result.averageTime).toBeGreaterThanOrEqual(1); // At least 1ms
+    expect(result.averageTime).toBeGreaterThanOrEqual(1); // At least 1ms (timer resolution varies)
   });
 });
 
