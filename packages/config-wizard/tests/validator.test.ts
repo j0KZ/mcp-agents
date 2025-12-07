@@ -284,4 +284,22 @@ describe('Config Validator', () => {
       expect(issues.some(i => i.includes('Node.js 18+ required'))).toBe(true);
     });
   });
+
+  describe('edge cases for validation', () => {
+    it('should validate successfully with valid inputs', async () => {
+      const issues = await validateConfig(mockSelections, mockDetected);
+      // Should not have critical errors for valid inputs
+      expect(issues.some(i => i.includes('Unknown editor'))).toBe(false);
+    });
+
+    it('should handle editor with no config path', async () => {
+      // Test with an unknown editor to trigger line 44
+      const invalidSelections = {
+        ...mockSelections,
+        editor: 'unknown-editor',
+      };
+      const issues = await validateConfig(invalidSelections, mockDetected);
+      expect(issues.some(i => i.includes('Unknown editor'))).toBe(true);
+    });
+  });
 });

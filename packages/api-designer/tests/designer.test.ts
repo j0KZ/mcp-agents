@@ -766,4 +766,22 @@ describe('generateGraphQLSDL mutations branch', () => {
       expect(result.data.sdl).toContain('getUser');
     }
   });
+
+  it('should handle catch block when type iteration throws (line 122-126)', () => {
+    // Create a types array with a type that will cause an error during iteration
+    const problematicTypes = [
+      {
+        get name(): string {
+          throw new Error('Simulated error during name access');
+        },
+        kind: 'object' as const,
+        fields: [],
+      },
+    ];
+
+    const result = target.createGraphQLSchema(problematicTypes as any);
+    expect(result.success).toBe(false);
+    expect(result.errors).toBeDefined();
+    expect(result.errors?.length).toBeGreaterThan(0);
+  });
 });
