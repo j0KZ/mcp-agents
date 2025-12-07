@@ -14,6 +14,7 @@ description: Go from zero knowledge to codebase expert in ANY project, ANY size,
 ## 🎯 When to Use This Skill
 
 Use when you need to:
+
 - Join a new project/team
 - Contribute to open source
 - Debug unfamiliar code
@@ -24,6 +25,7 @@ Use when you need to:
 ## ⚡ The 15-Minute Quick Start
 
 ### WITH MCP Tools:
+
 ```
 "Give me a complete overview of this codebase"
 "Show me the architecture and main components"
@@ -63,6 +65,7 @@ ls .*rc .env* config/ conf/ 2>/dev/null
 ### 1. Understand the Purpose
 
 **Read Documentation:**
+
 ```bash
 # Check for docs
 cat README.md | head -50
@@ -74,6 +77,7 @@ grep -r "TODO\|FIXME\|NOTE" --include="*.js" | head -20
 ```
 
 **Understand the Domain:**
+
 ```bash
 # What does this project do?
 # Look for domain-specific terms
@@ -86,6 +90,7 @@ grep -roh '\b[A-Z][a-z]+[A-Z][a-zA-Z]*\b' --include="*.py" | sort | uniq -c | so
 ### 2. Map the Architecture
 
 **Identify Layers:**
+
 ```bash
 # Common architectural patterns
 ls -la | grep -E "controller|service|model|view|repository|handler|router|middleware"
@@ -101,17 +106,19 @@ find . -name "pom.xml" -o -name "build.gradle"
 ```
 
 **Trace Data Flow:**
+
 ```javascript
 // Add strategic console.logs to trace execution
-console.trace('🔍 TRACE:');  // Shows call stack
+console.trace('🔍 TRACE:'); // Shows call stack
 
 // Or use debugger
-debugger;  // Breakpoint when dev tools open
+debugger; // Breakpoint when dev tools open
 ```
 
 ### 3. Find the Core
 
 **The 80/20 Rule - Find the 20% that matters:**
+
 ```bash
 # Most modified files (probably important)
 git log --pretty=format: --name-only | sort | uniq -c | sort -rn | head -10
@@ -128,6 +135,7 @@ grep -r "import\|require" --include="*.js" | cut -d'"' -f2 | sort | uniq -c | so
 ### 1. Run the Project
 
 **Setup Checklist:**
+
 ```bash
 # 1. Install dependencies
 npm install    # Node.js
@@ -148,6 +156,7 @@ python manage.py runserver
 ```
 
 **Make it Work:**
+
 ```bash
 # Common issues and fixes:
 
@@ -168,6 +177,7 @@ export $(cat .env | xargs)  # Load .env file
 ### 2. Follow User Journeys
 
 **Pick One Feature and Trace It:**
+
 ```markdown
 ## User Login Flow Trace
 
@@ -195,6 +205,7 @@ export $(cat .env | xargs)  # Load .env file
 ### 3. Understand Patterns
 
 **Identify Coding Patterns:**
+
 ```javascript
 // Common patterns to look for:
 
@@ -252,6 +263,7 @@ grep -r "function\|class" --include="*.js" | grep -v "//" | grep -v "/\*"
 ### 2. Make Safe Changes
 
 **Start with Non-Breaking Changes:**
+
 - Add tests for untested code
 - Improve error messages
 - Add logging/monitoring
@@ -283,6 +295,7 @@ cat Jenkinsfile
 # Codebase Analysis: [Project Name]
 
 ## Overview
+
 - **Purpose**: [What does it do?]
 - **Language**: [Primary languages]
 - **Framework**: [Main frameworks]
@@ -291,21 +304,25 @@ cat Jenkinsfile
 - **Activity**: [Commits per month]
 
 ## Architecture
+
 - **Pattern**: [MVC, Microservices, etc.]
 - **Database**: [Type and version]
 - **External Services**: [APIs, queues, etc.]
 
 ## Key Components
+
 1. **[Component Name]**: [Purpose]
    - Location: `path/to/component`
    - Responsibility: [What it does]
 
 ## Entry Points
+
 - Main: `src/index.js`
 - API: `server/app.js`
 - CLI: `bin/cli.js`
 
 ## Data Flow
+
 1. User request → Router
 2. Router → Controller
 3. Controller → Service
@@ -313,25 +330,30 @@ cat Jenkinsfile
 5. Response → User
 
 ## Testing
+
 - Framework: [Jest, Pytest, etc.]
 - Coverage: [Percentage]
 - CI/CD: [Platform]
 
 ## Quick Start
+
 \`\`\`bash
 npm install
 npm run dev
 \`\`\`
 
 ## Key Files to Understand
+
 1. `src/core/App.js` - Application entry
 2. `config/database.js` - DB configuration
 3. `routes/index.js` - API routes
 
 ## Gotchas
+
 - [Common issues and solutions]
 
 ## Team Conventions
+
 - Style: [Linter configuration]
 - Commits: [Convention used]
 - PRs: [Review process]
@@ -340,8 +362,10 @@ npm run dev
 ## 💡 Pro Tips for Fast Learning
 
 ### The "Teach It" Method:
+
 ```markdown
 After 1 hour of exploration, explain the codebase as if teaching someone:
+
 1. What problem does it solve?
 2. How is it organized?
 3. What are the main components?
@@ -350,6 +374,7 @@ After 1 hour of exploration, explain the codebase as if teaching someone:
 ```
 
 ### The "Break and Fix" Method:
+
 ```javascript
 // Intentionally break something
 throw new Error('LEARNING: What calls this?');
@@ -359,8 +384,10 @@ throw new Error('LEARNING: What calls this?');
 ```
 
 ### The "Question List" Method:
+
 ```markdown
 ## Questions to Answer:
+
 - [ ] How does authentication work?
 - [ ] Where is business logic?
 - [ ] How is data validated?
@@ -373,6 +400,7 @@ throw new Error('LEARNING: What calls this?');
 ## 🎯 Success Metrics
 
 You understand the codebase when you can:
+
 - ✅ Run it locally without help
 - ✅ Add a simple feature
 - ✅ Fix a bug independently
@@ -384,6 +412,7 @@ You understand the codebase when you can:
 ## 🚨 Common Pitfalls
 
 ### Don't:
+
 - ❌ Refactor before understanding
 - ❌ Judge code quality too quickly
 - ❌ Ignore existing patterns
@@ -391,6 +420,7 @@ You understand the codebase when you can:
 - ❌ Assume anything - verify!
 
 ### Do:
+
 - ✅ Ask questions early
 - ✅ Document as you learn
 - ✅ Respect existing conventions

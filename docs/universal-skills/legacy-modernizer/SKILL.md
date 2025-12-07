@@ -14,6 +14,7 @@ description: Modernize legacy code safely in ANY project without breaking existi
 ## 🎯 When to Use This Skill
 
 Use when dealing with:
+
 - Code written 5+ years ago
 - No tests or documentation
 - "Don't touch - it works" code
@@ -30,6 +31,7 @@ Use when dealing with:
 ### Phase 1: UNDERSTAND (Don't Touch Yet!)
 
 #### WITH MCP Tools:
+
 ```
 "Analyze the architecture and dependencies of [legacy module]"
 "Document how this legacy code works"
@@ -38,6 +40,7 @@ Use when dealing with:
 #### WITHOUT MCP:
 
 **1. Map the Territory:**
+
 ```bash
 # Find all files related to the feature
 grep -r "LegacyClass" --include="*.js" --include="*.py" --include="*.java"
@@ -53,6 +56,7 @@ grep -r "require\|import\|include" legacy_module/ >> legacy_analysis.md
 ```
 
 **2. Document Current Behavior:**
+
 ```javascript
 // Add temporary logging to understand flow
 function legacyFunction(data) {
@@ -66,6 +70,7 @@ function legacyFunction(data) {
 ### Phase 2: PROTECT (Add Safety Net)
 
 #### WITH MCP (Test Generator):
+
 ```
 "Generate characterization tests for this legacy code"
 ```
@@ -73,6 +78,7 @@ function legacyFunction(data) {
 #### WITHOUT MCP:
 
 **Characterization Tests (Capture Current Behavior):**
+
 ```javascript
 // Not testing if it's "right", just what it currently does
 describe('Legacy System - Current Behavior', () => {
@@ -83,7 +89,7 @@ describe('Legacy System - Current Behavior', () => {
     expect(result).toEqual({
       status: 'OK',
       data: 'TEST', // Even if this seems wrong!
-      timestamp: expect.any(Number)
+      timestamp: expect.any(Number),
     });
   });
 
@@ -95,6 +101,7 @@ describe('Legacy System - Current Behavior', () => {
 ```
 
 **Golden Master Testing:**
+
 ```bash
 # Capture current outputs
 for input in test_inputs/*; do
@@ -111,6 +118,7 @@ done
 ### Phase 3: ISOLATE (Strangler Fig Pattern)
 
 **Wrap Legacy Code:**
+
 ```javascript
 // Step 1: Create wrapper (Facade)
 class ModernInterface {
@@ -140,6 +148,7 @@ class ModernInterface {
 #### Safe Modernization Patterns:
 
 **1. Branch by Abstraction:**
+
 ```javascript
 class DataProcessor {
   constructor(useModern = false) {
@@ -164,11 +173,12 @@ class DataProcessor {
 ```
 
 **2. Parallel Run (Verify Compatibility):**
+
 ```javascript
 async function processWithVerification(data) {
   const [legacyResult, modernResult] = await Promise.all([
     legacyProcess(data),
-    modernProcess(data)
+    modernProcess(data),
   ]);
 
   // Compare results
@@ -188,12 +198,13 @@ async function processWithVerification(data) {
 ### 1. Callback Hell → Promises/Async
 
 **Before (Legacy):**
+
 ```javascript
-getData(function(err, data) {
+getData(function (err, data) {
   if (err) return handleError(err);
-  processData(data, function(err, result) {
+  processData(data, function (err, result) {
     if (err) return handleError(err);
-    saveResult(result, function(err) {
+    saveResult(result, function (err) {
       if (err) return handleError(err);
       done();
     });
@@ -202,6 +213,7 @@ getData(function(err, data) {
 ```
 
 **After (Modern):**
+
 ```javascript
 async function modernFlow() {
   try {
@@ -218,6 +230,7 @@ async function modernFlow() {
 ### 2. Global Variables → Module Pattern
 
 **Before (Legacy):**
+
 ```javascript
 var globalConfig = {};
 var globalState = {};
@@ -229,6 +242,7 @@ function doSomething() {
 ```
 
 **After (Modern):**
+
 ```javascript
 class AppModule {
   constructor(config) {
@@ -248,12 +262,14 @@ export default AppModule;
 ### 3. SQL Injection → Parameterized Queries
 
 **Before (Legacy - DANGEROUS):**
+
 ```javascript
 const query = `SELECT * FROM users WHERE id = ${userId}`;
 db.query(query);
 ```
 
 **After (Modern - SAFE):**
+
 ```javascript
 const query = 'SELECT * FROM users WHERE id = ?';
 db.query(query, [userId]);
@@ -264,12 +280,12 @@ db.query(query, [userId]);
 ```javascript
 // Mapping old to new
 const DEPENDENCY_MAP = {
-  'request': 'axios',           // HTTP client
-  'async': 'native-promises',   // Flow control
-  'underscore': 'lodash',       // Utilities
-  'bower': 'npm',              // Package management
-  'grunt': 'webpack',          // Build tool
-  'jquery': 'vanilla-js',      // DOM manipulation
+  request: 'axios', // HTTP client
+  async: 'native-promises', // Flow control
+  underscore: 'lodash', // Utilities
+  bower: 'npm', // Package management
+  grunt: 'webpack', // Build tool
+  jquery: 'vanilla-js', // DOM manipulation
 };
 
 // Safe migration approach:
@@ -282,6 +298,7 @@ const DEPENDENCY_MAP = {
 ## 📊 Modernization Checklist
 
 ### Security Fixes (Priority 1):
+
 - [ ] SQL injection vulnerabilities
 - [ ] XSS vulnerabilities
 - [ ] Hardcoded secrets removed
@@ -290,6 +307,7 @@ const DEPENDENCY_MAP = {
 - [ ] HTTPS enforcement
 
 ### Code Quality (Priority 2):
+
 - [ ] Global variables eliminated
 - [ ] Callbacks → Promises/Async
 - [ ] Var → Let/Const
@@ -298,6 +316,7 @@ const DEPENDENCY_MAP = {
 - [ ] Dead code removed
 
 ### Performance (Priority 3):
+
 - [ ] Database queries optimized
 - [ ] Caching implemented
 - [ ] Lazy loading added
@@ -305,6 +324,7 @@ const DEPENDENCY_MAP = {
 - [ ] Memory leaks fixed
 
 ### Developer Experience (Priority 4):
+
 - [ ] Tests added (>60% coverage)
 - [ ] Documentation written
 - [ ] Linting configured
@@ -317,27 +337,30 @@ Watch for these danger signs:
 
 ```javascript
 // 🚨 Date handling
-new Date('2024-01-01')  // Timezone issues!
+new Date('2024-01-01'); // Timezone issues!
 
 // 🚨 Type coercion
-if (value == true)  // Use === instead
+if (value == true)
+  // Use === instead
 
-// 🚨 Eval usage
-eval(userInput)  // Security nightmare!
+  // 🚨 Eval usage
+  eval(userInput); // Security nightmare!
 
 // 🚨 Synchronous I/O
-const data = fs.readFileSync()  // Blocks everything!
+const data = fs.readFileSync(); // Blocks everything!
 
 // 🚨 Magic numbers
-if (status === 2)  // What does 2 mean?
+if (status === 2)
+  // What does 2 mean?
 
-// 🚨 No error handling
-JSON.parse(data)  // Will crash on bad input
+  // 🚨 No error handling
+  JSON.parse(data); // Will crash on bad input
 ```
 
 ## 💡 Migration Strategies by Language
 
 ### JavaScript → Modern JS:
+
 ```bash
 # Use automated tools first
 npx lebab --transform arrow,let,template legacy.js -o modern.js
@@ -350,6 +373,7 @@ npx tsc --allowJs --checkJs
 ```
 
 ### Python 2 → Python 3:
+
 ```bash
 # Automated conversion
 2to3 -w legacy.py
@@ -361,6 +385,7 @@ unicode()        → str()
 ```
 
 ### jQuery → Vanilla JS:
+
 ```javascript
 // jQuery
 $('#element').hide();
@@ -381,6 +406,7 @@ Track modernization progress:
 ## Legacy Modernization Scorecard
 
 ### Week 1 | Week 4 | Week 8
+
 ----------|---------|--------
 Coverage: 0% | 45% | 78%
 Security Issues: 12 | 6 | 1

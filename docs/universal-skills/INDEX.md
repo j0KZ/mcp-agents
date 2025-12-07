@@ -10,12 +10,14 @@
 ## 🌍 What Are Universal Skills?
 
 These are **project-agnostic skills** that work in ANY codebase, regardless of:
+
 - **Programming language** (JavaScript, Python, Java, Go, etc.)
 - **Framework** (React, Django, Spring, Rails, etc.)
 - **Project type** (Web, API, CLI, Mobile, Desktop)
 - **MCP tools** (Enhanced with MCP, but work without)
 
 Each skill provides:
+
 - ✅ **WITH MCP**: Automated solutions using MCP tools
 - ✅ **WITHOUT MCP**: Manual approaches and commands
 - ✅ **Language-agnostic** patterns and techniques
@@ -28,35 +30,45 @@ Each skill provides:
 ### 🎯 Development Workflow (5 skills)
 
 #### 1. [Quick PR Review](quick-pr-review/SKILL.md)
+
 **Universal pre-PR checklist for ANY project**
+
 - Self-review before creating pull requests
 - Works with any version control system
 - Language-agnostic quality checks
 - 30-second to 3-minute workflow
 
 #### 2. [Zero to Hero](zero-to-hero/SKILL.md)
+
 **Master any codebase from scratch**
+
 - Onboard to new projects quickly
 - Understand architecture patterns
 - Find core components
 - Contribute within hours, not days
 
 #### 3. [Legacy Modernizer](legacy-modernizer/SKILL.md)
+
 **Safely modernize old code without breaking**
+
 - Strangler Fig pattern
 - Characterization tests
 - Incremental refactoring
 - Works with 20-year-old code
 
 #### 4. [Tech Debt Tracker](tech-debt-tracker/SKILL.md)
+
 **Manage technical debt like financial debt**
+
 - Quantify debt in hours/dollars
 - Prioritization matrix
 - ROI calculations
 - Convince management to invest
 
 #### 5. [API Integration](api-integration/SKILL.md)
+
 **Connect to any third-party service**
+
 - OAuth, JWT, API keys
 - Webhook handling
 - Rate limiting & retries
@@ -65,14 +77,18 @@ Each skill provides:
 ### 🔍 Problem Solving (2 skills)
 
 #### 6. [Debug Detective](debug-detective/SKILL.md)
+
 **Systematic debugging for ANY bug type**
+
 - 5-step debug protocol
 - Works in any language
 - Find root cause fast
 - Emergency procedures included
 
 #### 7. [Performance Hunter](performance-hunter/SKILL.md)
+
 **Find and fix bottlenecks anywhere**
+
 - Profile any language
 - Database optimization
 - Memory leak detection
@@ -81,21 +97,27 @@ Each skill provides:
 ### 🛡️ Quality & Security (3 skills)
 
 #### 8. [Test Coverage Boost](test-coverage-boost/SKILL.md)
+
 **Go from 0% to 80% coverage systematically**
+
 - Priority-based test writing
 - Works with any test framework
 - Mocking strategies
 - Coverage goals by project type
 
 #### 9. [Security First](security-first/SKILL.md)
+
 **OWASP Top 10 protection checklist**
+
 - Find hardcoded secrets
 - SQL injection prevention
 - XSS protection
 - Universal security patterns
 
 #### 10. [Dependency Doctor](dependency-doctor/SKILL.md)
+
 **Heal package management problems**
+
 - Version conflict resolution
 - Security vulnerability fixes
 - Dependency bloat diet
@@ -115,6 +137,7 @@ npx @j0kz/mcp-agents@latest
 ```
 
 Then use natural language:
+
 ```
 "Run quick PR review on my staged changes"
 "Find performance bottlenecks in my application"
@@ -142,12 +165,15 @@ git bisect start              # Find breaking commit
 ## 💡 Key Features
 
 ### Progressive Enhancement
+
 - **Basic**: Manual commands work everywhere
 - **Better**: Scripts and automation
 - **Best**: MCP tools for 10x speed
 
 ### Language Agnostic
+
 Each skill shows examples in multiple languages:
+
 - JavaScript/Node.js
 - Python
 - Java
@@ -156,6 +182,7 @@ Each skill shows examples in multiple languages:
 - And adapts to others
 
 ### Real-World Focus
+
 - Solve actual developer pain points
 - Based on common daily tasks
 - Time-saving techniques
@@ -168,16 +195,19 @@ Each skill shows examples in multiple languages:
 ### By Experience Level
 
 **Junior Developer:**
+
 1. Start with: [Zero to Hero](zero-to-hero/SKILL.md)
 2. Then: [Debug Detective](debug-detective/SKILL.md)
 3. Finally: [Test Coverage Boost](test-coverage-boost/SKILL.md)
 
 **Mid-Level Developer:**
+
 1. Focus on: [Quick PR Review](quick-pr-review/SKILL.md)
 2. Master: [Performance Hunter](performance-hunter/SKILL.md)
 3. Learn: [API Integration](api-integration/SKILL.md)
 
 **Senior Developer:**
+
 1. Use: [Legacy Modernizer](legacy-modernizer/SKILL.md)
 2. Track: [Tech Debt Tracker](tech-debt-tracker/SKILL.md)
 3. Enforce: [Security First](security-first/SKILL.md)
@@ -185,21 +215,25 @@ Each skill shows examples in multiple languages:
 ### By Project Phase
 
 **Starting New Project:**
+
 - [Security First](security-first/SKILL.md)
 - [Dependency Doctor](dependency-doctor/SKILL.md)
 - [Test Coverage Boost](test-coverage-boost/SKILL.md)
 
 **Joining Existing Project:**
+
 - [Zero to Hero](zero-to-hero/SKILL.md)
 - [Debug Detective](debug-detective/SKILL.md)
 - [Quick PR Review](quick-pr-review/SKILL.md)
 
 **Maintaining Legacy Code:**
+
 - [Legacy Modernizer](legacy-modernizer/SKILL.md)
 - [Tech Debt Tracker](tech-debt-tracker/SKILL.md)
 - [Performance Hunter](performance-hunter/SKILL.md)
 
 **Integrating Services:**
+
 - [API Integration](api-integration/SKILL.md)
 - [Security First](security-first/SKILL.md)
 - [Debug Detective](debug-detective/SKILL.md)
@@ -209,6 +243,7 @@ Each skill shows examples in multiple languages:
 ## 🎯 Success Metrics
 
 You're using these skills effectively when:
+
 - ✅ PR reviews take < 5 minutes
 - ✅ Debug time reduced by 50%
 - ✅ Test coverage > 70%
@@ -248,6 +283,7 @@ graph LR
 ## 🔄 Continuous Improvement
 
 ### Weekly Practice
+
 - **Monday**: Review PRs using [Quick PR Review](quick-pr-review/SKILL.md)
 - **Tuesday**: Hunt performance issues
 - **Wednesday**: Boost test coverage
@@ -255,6 +291,7 @@ graph LR
 - **Friday**: Update dependencies and security scan
 
 ### Monthly Goals
+
 - Increase test coverage by 10%
 - Reduce average debug time by 20%
 - Modernize one legacy module
@@ -266,6 +303,7 @@ graph LR
 ## 📝 Contributing
 
 Want to add a universal skill? It should be:
+
 1. **Language-agnostic** - Works in any programming language
 2. **Framework-independent** - Not tied to specific tools
 3. **Problem-focused** - Solves a real developer pain point
@@ -277,6 +315,7 @@ Want to add a universal skill? It should be:
 ## 🚀 Remember
 
 These skills are **universal** - learn them once, use them everywhere:
+
 - In your current job
 - In your next job
 - In open source projects

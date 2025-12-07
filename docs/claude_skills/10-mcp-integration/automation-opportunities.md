@@ -66,7 +66,7 @@ Creating skills manually requires:
 
 **Output:**
 
-````markdown
+`````markdown
 ---
 name: utility-functions-pattern
 description: Guides creation of utility functions following project conventions including pure functions, explicit typing, and JSDoc documentation. Use when creating new utility functions or refactoring existing ones.
@@ -112,7 +112,9 @@ export function functionName<T>(paramName: T): ReturnType {
   return result;
 }
 ````
-````
+`````
+
+```
 
 ## Examples from Codebase
 
@@ -123,22 +125,20 @@ export function functionName<T>(paramName: T): ReturnType {
 [Auto-generated from existing test files]
 ...
 
-````
+```
 
 #### 2. `generate_skill_from_workflow`
 
 **Purpose:** Observe Claude's repeated workflows and codify them into reusable skills.
 
 **Input:**
+
 ```json
 {
   "workflowDescription": "Creating new MCP tool in monorepo",
-  "referenceTasks": [
-    "Added @j0kz/smart-reviewer",
-    "Added @j0kz/test-generator"
-  ]
+  "referenceTasks": ["Added @j0kz/smart-reviewer", "Added @j0kz/test-generator"]
 }
-````
+```
 
 **Process:**
 

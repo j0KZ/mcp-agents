@@ -14,6 +14,7 @@ description: Diagnose and heal dependency issues in ANY package manager, ANY lan
 ## 🎯 When to Use This Skill
 
 Use when experiencing:
+
 - Security vulnerabilities in dependencies
 - Version conflicts ("dependency hell")
 - Broken builds after updates
@@ -63,6 +64,7 @@ cargo outdated
 ### 1. Security Vulnerabilities 🚨
 
 #### WITH MCP (Security Scanner):
+
 ```
 "Scan my dependencies for security vulnerabilities"
 "Fix all high-severity security issues"
@@ -71,6 +73,7 @@ cargo outdated
 #### WITHOUT MCP:
 
 **Diagnosis:**
+
 ```bash
 # JavaScript
 npm audit --json | jq '.metadata.vulnerabilities'
@@ -85,6 +88,7 @@ bundle audit check
 ```
 
 **Treatment:**
+
 ```bash
 # Auto-fix (JavaScript)
 npm audit fix
@@ -100,6 +104,7 @@ pip install --upgrade package-name
 ```
 
 **Prevention:**
+
 ```json
 // package.json - Add security check to CI
 {
@@ -113,11 +118,13 @@ pip install --upgrade package-name
 ### 2. Version Conflicts (Dependency Hell) 🔥
 
 **Symptoms:**
+
 - "Cannot resolve dependency tree"
 - "Peer dependency not satisfied"
 - Different versions required by different packages
 
 **Diagnosis:**
+
 ```bash
 # Find conflicts
 npm ls package-name
@@ -131,6 +138,7 @@ pipdeptree -p package-name
 ```
 
 **Treatment:**
+
 ```bash
 # JavaScript - Resolution strategies
 
@@ -157,6 +165,7 @@ pip install -r requirements.txt
 ### 3. Bloated Dependencies 🎈
 
 **Diagnosis - Find the Culprits:**
+
 ```bash
 # JavaScript - Analyze bundle size
 npm install -g npm-check
@@ -170,14 +179,15 @@ npx webpack-bundle-analyzer stats.json
 ```
 
 **Treatment - Diet Plan:**
+
 ```javascript
 // 1. Find lighter alternatives
 const HEAVY_TO_LIGHT = {
-  'moment': 'dayjs',          // 67kb → 2kb
-  'lodash': 'lodash-es',      // Tree-shakeable
-  'request': 'node-fetch',    // 300kb → 25kb
-  'bluebird': 'native',       // Use native promises
-  'jquery': 'vanilla',        // No dependency
+  moment: 'dayjs', // 67kb → 2kb
+  lodash: 'lodash-es', // Tree-shakeable
+  request: 'node-fetch', // 300kb → 25kb
+  bluebird: 'native', // Use native promises
+  jquery: 'vanilla', // No dependency
 };
 
 // 2. Import only what you need
@@ -192,6 +202,7 @@ const heavyLib = () => import('heavy-library');
 ```
 
 **Bundle Size Budget:**
+
 ```json
 // package.json
 {
@@ -207,6 +218,7 @@ const heavyLib = () => import('heavy-library');
 ### 4. Outdated Dependencies 📅
 
 **Safe Update Strategy:**
+
 ```bash
 # 1. Check what needs updating
 npm outdated
@@ -226,28 +238,30 @@ npm test
 ```
 
 **Automated Updates with Checks:**
+
 ```yaml
 # GitHub Dependabot config
 # .github/dependabot.yml
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     open-pull-requests-limit: 10
     groups:
       minor-and-patch:
         patterns:
-          - "*"
+          - '*'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
 ```
 
 ### 5. Ghost Dependencies 👻
 
 **Find Unused Dependencies:**
+
 ```bash
 # JavaScript
 npx depcheck
@@ -260,6 +274,7 @@ pip-autoremove -l
 ```
 
 **Clean Up:**
+
 ```bash
 # Remove unused
 npm uninstall package-name
@@ -318,10 +333,10 @@ const weeklyMaintenance = async () => {
     "critical-lib": "1.2.3",
 
     // Patch updates only (recommended for prod)
-    "stable-lib": "~1.2.3",  // 1.2.x
+    "stable-lib": "~1.2.3", // 1.2.x
 
     // Minor updates (good for dev)
-    "modern-lib": "^1.2.3",  // 1.x.x
+    "modern-lib": "^1.2.3", // 1.x.x
 
     // Latest (danger zone!)
     "experimental": "*"
@@ -409,13 +424,13 @@ const getMetrics = async () => {
 function calculateHealth(metrics) {
   let score = 100;
 
-  score -= metrics.vulnerable * 10;  // -10 per vulnerability
-  score -= metrics.outdated * 2;     // -2 per outdated
-  score -= metrics.unused * 3;       // -3 per unused
-  score -= metrics.duplicates;       // -1 per duplicate
+  score -= metrics.vulnerable * 10; // -10 per vulnerability
+  score -= metrics.outdated * 2; // -2 per outdated
+  score -= metrics.unused * 3; // -3 per unused
+  score -= metrics.duplicates; // -1 per duplicate
 
-  if (metrics.total > 100) score -= 10;  // Too many deps
-  if (metrics.size > 100_000_000) score -= 10;  // Too large
+  if (metrics.total > 100) score -= 10; // Too many deps
+  if (metrics.size > 100_000_000) score -= 10; // Too large
 
   return Math.max(0, score);
 }
@@ -427,23 +442,27 @@ function calculateHealth(metrics) {
 # Security Policy
 
 ## Automated Checks
+
 - CI runs `npm audit` on every PR
 - Dependabot creates PRs for security updates
 - Weekly security report via GitHub Actions
 
 ## Severity Levels
+
 - **Critical**: Fix immediately, hotfix to production
 - **High**: Fix within 24 hours
 - **Moderate**: Fix within 1 week
 - **Low**: Fix in next release
 
 ## Approved Sources
+
 ✅ npm official registry
 ✅ GitHub packages (our org)
 ❌ Random GitHub repos
 ❌ Unverified registries
 
 ## License Requirements
+
 ✅ MIT, Apache 2.0, BSD
 ⚠️ GPL (check with legal)
 ❌ Proprietary, AGPL
@@ -457,7 +476,7 @@ function calculateHealth(metrics) {
 // dependency-budget.js
 const BUDGET = {
   maxDependencies: 50,
-  maxSize: 50_000_000,  // 50MB
+  maxSize: 50_000_000, // 50MB
   maxDepth: 3,
   allowedLicenses: ['MIT', 'Apache-2.0', 'BSD'],
   bannedPackages: ['left-pad', 'is-odd'],
@@ -486,6 +505,7 @@ function checkBudget(packageName) {
 ## Why This Dependency?
 
 ### Package: stripe
+
 **Purpose**: Payment processing
 **Alternatives considered**: PayPal SDK, Square
 **Why chosen**: Best API, good docs
@@ -493,6 +513,7 @@ function checkBudget(packageName) {
 **Owner**: Payment team
 
 ### Package: lodash
+
 **Purpose**: Utility functions
 **Alternatives considered**: Ramda, native
 **Why chosen**: Team familiarity

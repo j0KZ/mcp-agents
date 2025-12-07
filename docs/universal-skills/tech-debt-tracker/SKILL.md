@@ -14,6 +14,7 @@ description: Track, prioritize, and pay down technical debt systematically in AN
 ## 🎯 When to Use This Skill
 
 Use when you need to:
+
 - Convince management to allocate time for refactoring
 - Prioritize which debt to pay first
 - Track debt accumulation over time
@@ -24,6 +25,7 @@ Use when you need to:
 ## ⚡ Quick Debt Assessment (5 minutes)
 
 ### WITH MCP Tools:
+
 ```
 "Analyze technical debt in this codebase"
 "Find code quality issues and prioritize them"
@@ -75,6 +77,7 @@ INADVERTENT             |   done it"
 ## Critical (P0) - Immediate Action Required
 
 ### 1. SQL Injection Vulnerability in User Search
+
 - **Location**: `api/search.js:45-67`
 - **Impact**: High - Security risk
 - **Effort**: 2 hours
@@ -86,6 +89,7 @@ INADVERTENT             |   done it"
 ## High (P1) - Plan This Quarter
 
 ### 2. No Caching Layer
+
 - **Location**: Entire API
 - **Impact**: High - Performance, costs
 - **Effort**: 1 week
@@ -97,6 +101,7 @@ INADVERTENT             |   done it"
 ## Medium (P2) - Schedule When Possible
 
 ### 3. Callback Hell in Payment Module
+
 - **Location**: `services/payment/*`
 - **Impact**: Medium - Maintainability
 - **Effort**: 3 days
@@ -108,6 +113,7 @@ INADVERTENT             |   done it"
 ## Low (P3) - Nice to Have
 
 ### 4. Inconsistent Naming Convention
+
 - **Location**: Throughout codebase
 - **Impact**: Low - Developer experience
 - **Effort**: 1 day
@@ -125,12 +131,12 @@ INADVERTENT             |   done it"
 // Technical Debt Cost Calculator
 function calculateDebtCost(debt) {
   const {
-    timeToBuild,        // Original implementation time
-    currentFixTime,     // Time to fix now
-    futureFixTime,      // Time to fix in 6 months
-    bugFixOverhead,     // Extra time per bug due to debt
-    bugsPerMonth,       // Average bugs in this area
-    developerRate       // Cost per hour
+    timeToBuild, // Original implementation time
+    currentFixTime, // Time to fix now
+    futureFixTime, // Time to fix in 6 months
+    bugFixOverhead, // Extra time per bug due to debt
+    bugsPerMonth, // Average bugs in this area
+    developerRate, // Cost per hour
   } = debt;
 
   // Principal (initial debt)
@@ -145,19 +151,19 @@ function calculateDebtCost(debt) {
   return {
     principal,
     monthlyInterest,
-    sixMonthTotal: principal + (monthlyInterest * 6) + compoundedCost,
-    breakEvenMonths: principal / monthlyInterest
+    sixMonthTotal: principal + monthlyInterest * 6 + compoundedCost,
+    breakEvenMonths: principal / monthlyInterest,
   };
 }
 
 // Example
 const authDebt = calculateDebtCost({
-  timeToBuild: 40,      // Original: 1 week
-  currentFixTime: 80,   // Now: 2 weeks to refactor
-  futureFixTime: 120,   // Later: 3 weeks (more dependencies)
-  bugFixOverhead: 4,    // Each bug takes 4 extra hours
-  bugsPerMonth: 3,      // 3 auth bugs per month
-  developerRate: 100    // $100/hour
+  timeToBuild: 40, // Original: 1 week
+  currentFixTime: 80, // Now: 2 weeks to refactor
+  futureFixTime: 120, // Later: 3 weeks (more dependencies)
+  bugFixOverhead: 4, // Each bug takes 4 extra hours
+  bugsPerMonth: 3, // 3 auth bugs per month
+  developerRate: 100, // $100/hour
 });
 
 console.log(`Fix now: $${authDebt.principal}`);
@@ -191,31 +197,31 @@ function prioritizeDebt(debts) {
   return debts
     .map(debt => ({
       ...debt,
-      score: calculatePriority(debt)
+      score: calculatePriority(debt),
     }))
     .sort((a, b) => b.score - a.score);
 }
 
 function calculatePriority(debt) {
   const weights = {
-    security: 10,      // Security issues first
-    performance: 8,    // Then performance
+    security: 10, // Security issues first
+    performance: 8, // Then performance
     maintainability: 5, // Then code quality
-    developer_exp: 3,  // Then DX
-    cosmetic: 1       // Lowest priority
+    developer_exp: 3, // Then DX
+    cosmetic: 1, // Lowest priority
   };
 
   const factors = {
     customerImpact: debt.affectsCustomers ? 2 : 1,
     frequency: debt.touchedOften ? 1.5 : 1,
     teamSize: debt.blocksTeam ? 1.5 : 1,
-    trend: debt.gettingWorse ? 2 : 1
+    trend: debt.gettingWorse ? 2 : 1,
   };
 
   const baseScore = weights[debt.category] || 1;
   const multiplier = Object.values(factors).reduce((a, b) => a * b, 1);
 
-  return baseScore * multiplier / debt.effort;
+  return (baseScore * multiplier) / debt.effort;
 }
 ```
 
@@ -282,6 +288,7 @@ git log --format=format: --name-only | \
 ## 📈 Debt Paydown Strategies
 
 ### 1. The Boy Scout Rule
+
 ```javascript
 // "Leave code better than you found it"
 // When touching a file, fix one small thing
@@ -292,7 +299,8 @@ function authenticate(user, pass) {
 
   // While here, fix this TODO:
   // TODO: Hash password
-  if (user.password == pass) { // Was using ==
+  if (user.password == pass) {
+    // Was using ==
     return true;
   }
 }
@@ -301,33 +309,39 @@ function authenticate(user, pass) {
 function authenticate(user, pass) {
   // New feature code here
 
-  if (user.password === pass) { // Fixed to ===
+  if (user.password === pass) {
+    // Fixed to ===
     return true;
   }
 }
 ```
 
 ### 2. Debt Sprint (20% Time)
+
 ```markdown
 ## Debt Sprint Planning
 
 ### Sprint 14: Tech Debt Focus
+
 - **Allocation**: 20% of sprint (2 days)
 - **Goal**: Reduce critical debt by 30%
 
 #### Selected Debt Items:
+
 1. ✅ Upgrade React 16 → 18 (8h)
 2. ✅ Fix memory leak in WebSocket (4h)
 3. ⏳ Add indexes to slow queries (2h)
 4. ⏳ Extract payment module (6h)
 
 #### Results:
+
 - Performance: +40% faster
 - Bugs: -3 per week
 - Developer happiness: +2 points
 ```
 
 ### 3. Refactoring Branch Strategy
+
 ```bash
 # Create long-lived refactor branch
 git checkout -b refactor/payment-system
@@ -347,21 +361,21 @@ git commit -m "refactor: Extract helpers from payment system"
 // Track debt metrics over time
 const debtMetrics = {
   // Code metrics
-  codeComplexity: 42,        // Cyclomatic complexity
-  duplicateCode: 12,         // Percentage
-  testCoverage: 67,          // Percentage
+  codeComplexity: 42, // Cyclomatic complexity
+  duplicateCode: 12, // Percentage
+  testCoverage: 67, // Percentage
 
   // Dependency metrics
-  outdatedDeps: 23,          // Count
-  securityVulns: 3,          // Count
+  outdatedDeps: 23, // Count
+  securityVulns: 3, // Count
 
   // Time metrics
-  avgBugFixTime: 6.5,        // Hours
-  deployFrequency: 2.3,      // Per week
+  avgBugFixTime: 6.5, // Hours
+  deployFrequency: 2.3, // Per week
 
   // Quality metrics
-  bugRate: 8.2,              // Per week
-  techDebtRatio: 0.35,       // Debt / total development time
+  bugRate: 8.2, // Per week
+  techDebtRatio: 0.35, // Debt / total development time
 };
 
 // Generate trend report
@@ -369,12 +383,12 @@ function generateDebtReport(current, previous) {
   const report = {
     improved: [],
     degraded: [],
-    unchanged: []
+    unchanged: [],
   };
 
   for (const [key, value] of Object.entries(current)) {
     const prev = previous[key];
-    const change = ((value - prev) / prev * 100).toFixed(1);
+    const change = (((value - prev) / prev) * 100).toFixed(1);
 
     if (Math.abs(change) < 5) {
       report.unchanged.push(key);
@@ -392,6 +406,7 @@ function generateDebtReport(current, previous) {
 ## 🚦 When to Pay Debt vs When to Declare Bankruptcy
 
 ### Pay the Debt When:
+
 - Cost of fixing < 2x cost of working around it
 - Touches core business logic
 - Blocks new features
@@ -399,6 +414,7 @@ function generateDebtReport(current, previous) {
 - Team morale issue
 
 ### Declare Bankruptcy (Rewrite) When:
+
 - Fix cost > 5x original build cost
 - Technology is obsolete
 - Original assumptions completely wrong
@@ -408,6 +424,7 @@ function generateDebtReport(current, previous) {
 ## 💡 Debt Prevention
 
 ### During Development:
+
 ```javascript
 // Document debt as you create it
 function quickHack(data) {
@@ -427,8 +444,10 @@ function quickHack(data) {
 ```
 
 ### Code Review Checklist:
+
 ```markdown
 ## Tech Debt Review
+
 - [ ] No new debt without documentation
 - [ ] Debt has owner and deadline
 - [ ] Impact is quantified
@@ -439,25 +458,30 @@ function quickHack(data) {
 ## 📋 Debt Communication Template
 
 ### For Management:
+
 ```markdown
 ## Technical Debt Impact Report
 
 ### Current State:
+
 - **Total Debt**: 320 hours
 - **Monthly Interest**: 48 hours (15%)
 - **Bug Rate Impact**: +40% due to debt
 
 ### Business Impact:
+
 - Feature velocity: -30%
 - Customer complaints: +25%
 - Developer turnover risk: High
 
 ### Proposal:
+
 - Invest 80 hours this quarter
 - Reduce interest to 20 hours/month
 - ROI: 3 months
 
 ### If We Don't Act:
+
 - 6-month projection: 640 hours debt
 - Potential system rewrite needed
 - Cost: $250,000

@@ -36,15 +36,15 @@ The installer automatically detects uv and uses it for faster installs. Falls ba
 
 ## Available Components
 
-| Component | Description | Default |
-|-----------|-------------|---------|
-| **CLAUDE.md Template** | Universal starter template | Yes |
-| **Universal Skills** | 10 developer skills | Yes |
-| **MCP Tools** | 9 @j0kz MCP tools (smart-reviewer, test-generator, etc.) | No |
-| **References** | Work logs, patterns, troubleshooting guides | Yes |
-| **MCP Tools** | 9 @j0kz MCP tools | No |
-| **hcom-agents** | Agent coordination + token efficiency | No |
-| **Dashboard** | claude-comms live events & visualization | No |
+| Component              | Description                                              | Default |
+| ---------------------- | -------------------------------------------------------- | ------- |
+| **CLAUDE.md Template** | Universal starter template                               | Yes     |
+| **Universal Skills**   | 10 developer skills                                      | Yes     |
+| **MCP Tools**          | 9 @j0kz MCP tools (smart-reviewer, test-generator, etc.) | No      |
+| **References**         | Work logs, patterns, troubleshooting guides              | Yes     |
+| **MCP Tools**          | 9 @j0kz MCP tools                                        | No      |
+| **hcom-agents**        | Agent coordination + token efficiency                    | No      |
+| **Dashboard**          | claude-comms live events & visualization                 | No      |
 
 ## What Gets Installed
 
@@ -70,21 +70,22 @@ your-project/
 
 When you select MCP tools, these are configured in `.claude/settings.json`:
 
-| Tool | Purpose |
-|------|---------|
-| smart-reviewer | Code review with auto-fix suggestions |
-| test-generator | Generate comprehensive test suites |
-| architecture-analyzer | Dependency graphs, circular deps |
-| security-scanner | OWASP vulnerability scanning |
-| refactor-assistant | Safe code refactoring |
-| doc-generator | API documentation generation |
-| orchestrator-mcp | Workflow automation |
-| api-designer | REST/GraphQL API design |
-| db-schema | Database schema design |
+| Tool                  | Purpose                               |
+| --------------------- | ------------------------------------- |
+| smart-reviewer        | Code review with auto-fix suggestions |
+| test-generator        | Generate comprehensive test suites    |
+| architecture-analyzer | Dependency graphs, circular deps      |
+| security-scanner      | OWASP vulnerability scanning          |
+| refactor-assistant    | Safe code refactoring                 |
+| doc-generator         | API documentation generation          |
+| orchestrator-mcp      | Workflow automation                   |
+| api-designer          | REST/GraphQL API design               |
+| db-schema             | Database schema design                |
 
 ## Dashboard (Optional)
 
 Installs claude-comms for:
+
 - Live event monitoring
 - Session visualization
 - Chat transcripts
@@ -93,6 +94,7 @@ Installs claude-comms for:
 ## hcom-agents (Optional)
 
 Installs agent coordination layer with:
+
 - 5 built-in agents (orchestrator, reviewer, tester, architect, security)
 - Claude Code hooks integration
 - Token budget management
@@ -100,18 +102,18 @@ Installs agent coordination layer with:
 
 ## Skills Overview
 
-| Skill | Purpose | Time |
-|-------|---------|------|
-| quick-pr-review | Pre-PR checklist | 30 sec |
-| debug-detective | Systematic debugging | 5-30 min |
-| performance-hunter | Find bottlenecks | 10-60 min |
-| security-first | OWASP protection | 1 hour |
-| test-coverage-boost | 0% to 80% coverage | 1-5 days |
-| zero-to-hero | Master any codebase | 30 min |
-| legacy-modernizer | Update old code | varies |
-| tech-debt-tracker | Track debt | 1 hour |
-| dependency-doctor | Fix packages | 30 min |
-| api-integration | Connect APIs | 2 hours |
+| Skill               | Purpose              | Time      |
+| ------------------- | -------------------- | --------- |
+| quick-pr-review     | Pre-PR checklist     | 30 sec    |
+| debug-detective     | Systematic debugging | 5-30 min  |
+| performance-hunter  | Find bottlenecks     | 10-60 min |
+| security-first      | OWASP protection     | 1 hour    |
+| test-coverage-boost | 0% to 80% coverage   | 1-5 days  |
+| zero-to-hero        | Master any codebase  | 30 min    |
+| legacy-modernizer   | Update old code      | varies    |
+| tech-debt-tracker   | Track debt           | 1 hour    |
+| dependency-doctor   | Fix packages         | 30 min    |
+| api-integration     | Connect APIs         | 2 hours   |
 
 ## After Installation
 

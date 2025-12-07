@@ -38,8 +38,8 @@ const SKILLS_CONFIG = {
     { id: 'tech-debt-tracker', name: 'Tech Debt Tracker', time: '1 hour setup', impact: 'MEDIUM' },
     { id: 'dependency-doctor', name: 'Dependency Doctor', time: '30 minutes', impact: 'MEDIUM' },
     { id: 'security-first', name: 'Security First', time: '1 hour', impact: 'CRITICAL' },
-    { id: 'api-integration', name: 'API Integration', time: '2 hours', impact: 'MEDIUM' }
-  ]
+    { id: 'api-integration', name: 'API Integration', time: '2 hours', impact: 'MEDIUM' },
+  ],
 };
 
 // Utility functions
@@ -47,7 +47,7 @@ function downloadFile(url, filepath) {
   return new Promise((resolve, reject) => {
     const file = fs.createWriteStream(filepath);
 
-    const request = https.get(url, (response) => {
+    const request = https.get(url, response => {
       if (response.statusCode === 200) {
         response.pipe(file);
         file.on('finish', () => {
@@ -66,7 +66,7 @@ function downloadFile(url, filepath) {
       }
     });
 
-    request.on('error', (err) => {
+    request.on('error', err => {
       file.close();
       fs.unlinkSync(filepath);
       reject(err);
@@ -124,10 +124,7 @@ async function installSkills() {
   // Download INDEX first
   console.log('  📋 Downloading skills index...');
   try {
-    await downloadFile(
-      `${SKILLS_CONFIG.baseUrl}/INDEX.md`,
-      path.join(skillsDir, 'INDEX.md')
-    );
+    await downloadFile(`${SKILLS_CONFIG.baseUrl}/INDEX.md`, path.join(skillsDir, 'INDEX.md'));
   } catch (error) {
     console.error('  ❌ Failed to download index:', error.message);
   }
@@ -187,19 +184,16 @@ ${error.message}
       name: s.name,
       time: s.time,
       impact: s.impact,
-      path: `${s.id}/SKILL.md`
+      path: `${s.id}/SKILL.md`,
     })),
     stats: {
       total: SKILLS_CONFIG.skills.length,
       successful,
-      failed
-    }
+      failed,
+    },
   };
 
-  fs.writeFileSync(
-    path.join(skillsDir, 'manifest.json'),
-    JSON.stringify(manifest, null, 2)
-  );
+  fs.writeFileSync(path.join(skillsDir, 'manifest.json'), JSON.stringify(manifest, null, 2));
 
   // Create quick usage guide
   const usageGuide = `# Quick Skills Usage Guide
@@ -250,24 +244,25 @@ async function main() {
   showBanner();
 
   // Check if we're in a git repository or project
-  const isProject = fs.existsSync('package.json') ||
-                   fs.existsSync('.git') ||
-                   fs.existsSync('pom.xml') ||
-                   fs.existsSync('requirements.txt') ||
-                   fs.existsSync('go.mod');
+  const isProject =
+    fs.existsSync('package.json') ||
+    fs.existsSync('.git') ||
+    fs.existsSync('pom.xml') ||
+    fs.existsSync('requirements.txt') ||
+    fs.existsSync('go.mod');
 
   if (!isProject) {
     console.log('⚠️  Warning: No project detected in current directory');
     console.log('   Current directory:', process.cwd());
-    console.log('\n   It\'s recommended to run this in your project root.\n');
+    console.log("\n   It's recommended to run this in your project root.\n");
 
     const readline = (await import('readline')).createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
 
     await new Promise(resolve => {
-      readline.question('Continue anyway? (y/N): ', (answer) => {
+      readline.question('Continue anyway? (y/N): ', answer => {
         readline.close();
         if (answer.toLowerCase() !== 'y') {
           console.log('Installation cancelled.');
@@ -304,7 +299,6 @@ async function main() {
       console.log('\n⚠️  Some skills failed to download.');
       console.log('   View them online or try again later.');
     }
-
   } catch (error) {
     console.error('\n❌ Installation failed:', error.message);
     console.log('\n📖 Alternative: View skills online at:');

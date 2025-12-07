@@ -7,6 +7,7 @@
 ## 🔍 Smart Reviewer
 
 ### Basic Commands
+
 ```
 "Review my code"
 "Find code smells in this file"
@@ -16,6 +17,7 @@
 ```
 
 ### Specific Requests
+
 ```
 "Review my React component for performance"
 "Check this function for security issues"
@@ -29,6 +31,7 @@
 ## 🧪 Test Generator
 
 ### Basic Commands
+
 ```
 "Generate tests for this file"
 "I need 95% test coverage"
@@ -38,6 +41,7 @@
 ```
 
 ### Specific Scenarios
+
 ```
 "Generate tests for my UserService class"
 "Add tests for error handling"
@@ -51,6 +55,7 @@
 ## 🏗️ Architecture Analyzer
 
 ### Basic Commands
+
 ```
 "Analyze my project architecture"
 "Find circular dependencies"
@@ -60,6 +65,7 @@
 ```
 
 ### Specific Analysis
+
 ```
 "Is my code following clean architecture?"
 "Show me all dependencies of UserService"
@@ -73,6 +79,7 @@
 ## 🛡️ Security Scanner
 
 ### Basic Commands
+
 ```
 "Scan for security vulnerabilities"
 "Check for SQL injection"
@@ -82,6 +89,7 @@
 ```
 
 ### Focused Scans
+
 ```
 "Deep scan my payment module"
 "Check for XSS vulnerabilities"
@@ -95,6 +103,7 @@
 ## 🔧 Refactor Assistant
 
 ### Basic Commands
+
 ```
 "Refactor this code"
 "Extract this into a function"
@@ -104,6 +113,7 @@
 ```
 
 ### Pattern Application
+
 ```
 "Apply Strategy pattern here"
 "Convert to Factory pattern"
@@ -117,6 +127,7 @@
 ## 🌐 API Designer
 
 ### Basic Commands
+
 ```
 "Design REST API for user management"
 "Generate OpenAPI specification"
@@ -126,6 +137,7 @@
 ```
 
 ### Specific Designs
+
 ```
 "Design pagination for this endpoint"
 "Add authentication to API"
@@ -139,6 +151,7 @@
 ## 🗄️ DB Schema Designer
 
 ### Basic Commands
+
 ```
 "Design database schema for e-commerce"
 "Generate migration files"
@@ -148,6 +161,7 @@
 ```
 
 ### Specific Tasks
+
 ```
 "Design user and roles tables"
 "Add audit columns to all tables"
@@ -161,6 +175,7 @@
 ## 📚 Doc Generator
 
 ### Basic Commands
+
 ```
 "Generate README"
 "Create API documentation"
@@ -170,6 +185,7 @@
 ```
 
 ### Specific Documentation
+
 ```
 "Document this class with examples"
 "Generate Swagger docs"
@@ -183,6 +199,7 @@
 ## 🎯 Orchestrator (Workflows)
 
 ### Pre-Built Workflows
+
 ```
 "Run pre-commit checks"
 "Full quality audit"
@@ -192,6 +209,7 @@
 ```
 
 ### Custom Workflows
+
 ```
 "Review, test, and scan my changes"
 "Check everything before I deploy"
@@ -205,6 +223,7 @@
 ## 🤖 Auto-Pilot
 
 ### Basic Commands
+
 ```
 "Enable auto-pilot for this project"
 "Auto-fix on save"
@@ -214,6 +233,7 @@
 ```
 
 ### Specific Automation
+
 ```
 "Automatically fix issues as I code"
 "Keep my code at 90% test coverage"
@@ -227,51 +247,61 @@
 ## 📊 Common Workflows
 
 ### Starting New Feature
+
 ```
 "I'm starting a new authentication feature, help me set it up properly"
 ```
 
 ### Before Pull Request
+
 ```
 "I'm about to create a PR, run all quality checks"
 ```
 
 ### Code Review
+
 ```
 "Review these changes like a senior developer would"
 ```
 
 ### Debugging
+
 ```
 "This code isn't working, help me find the issue"
 ```
 
 ### Performance Issues
+
 ```
 "My app is slow, find performance bottlenecks"
 ```
 
 ### Security Audit
+
 ```
 "Full security audit before production deployment"
 ```
 
 ### Legacy Code
+
 ```
 "Help me refactor this 5-year-old legacy code safely"
 ```
 
 ### Test Coverage
+
 ```
 "Get my test coverage from 30% to 80%"
 ```
 
 ### Documentation
+
 ```
 "Generate complete documentation for my project"
 ```
 
 ### Architecture Review
+
 ```
 "Is my architecture scalable and maintainable?"
 ```
@@ -281,26 +311,31 @@
 ## 💡 Pro Combinations
 
 ### The Perfect PR
+
 ```
 "Review my code, fix issues, generate tests, check security, and update docs"
 ```
 
 ### The Quality Boost
+
 ```
 "Apply Pareto fixes, add missing tests, and reduce complexity"
 ```
 
 ### The Security Special
+
 ```
 "Deep security scan, generate security tests, and fix all vulnerabilities"
 ```
 
 ### The Refactor Special
+
 ```
 "Analyze architecture, refactor complex code, and maintain test coverage"
 ```
 
 ### The Documentation Blitz
+
 ```
 "Generate README, API docs, JSDoc comments, and changelog"
 ```
@@ -310,27 +345,32 @@
 ## 🎮 Power User Tips
 
 ### Be Specific
+
 ```
 ❌ "Fix my code"
 ✅ "Fix complexity issues in authService.js"
 ```
 
 ### Chain Commands
+
 ```
 "Review my code" → "Now auto-fix the issues" → "Generate tests for the changes"
 ```
 
 ### Focus Areas
+
 ```
 "Focus on security" | "Focus on performance" | "Focus on maintainability"
 ```
 
 ### Set Thresholds
+
 ```
 "Coverage must be >80%" | "Complexity must be <10" | "Security score >9/10"
 ```
 
 ### Natural Language Works
+
 ```
 "This function is a mess"
 "I'm worried about SQL injection"
@@ -343,26 +383,31 @@
 ## 🚦 Quick Decisions
 
 ### "Should I refactor?"
+
 ```
 "Analyze complexity and suggest if refactoring is needed"
 ```
 
 ### "Is this secure?"
+
 ```
 "Quick security check on this authentication code"
 ```
 
 ### "Why is this slow?"
+
 ```
 "Find performance bottlenecks in this code"
 ```
 
 ### "Is this tested enough?"
+
 ```
 "Check test coverage and quality"
 ```
 
 ### "Will this break anything?"
+
 ```
 "Check for breaking changes and dependencies"
 ```

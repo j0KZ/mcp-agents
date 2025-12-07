@@ -14,6 +14,7 @@ description: Universal security checklist and fixes for ANY project type or lang
 ## 🎯 When to Use This Skill
 
 Use BEFORE:
+
 - Deploying to production
 - Handling sensitive data
 - Opening API endpoints
@@ -25,6 +26,7 @@ Use BEFORE:
 ## ⚡ 5-Minute Security Audit
 
 ### WITH MCP (Security Scanner):
+
 ```
 "Run complete security audit on my codebase"
 "Find and fix all OWASP Top 10 vulnerabilities"
@@ -54,16 +56,18 @@ grep -r "req.body\|req.query\|req.params" --include="*.js" | grep -v "validate\|
 ### 1. Injection (SQL, NoSQL, Command) 💉
 
 **Vulnerable Code:**
+
 ```javascript
 // ❌ NEVER DO THIS
 const query = `SELECT * FROM users WHERE id = ${req.params.id}`;
-db.query(query);  // SQL Injection!
+db.query(query); // SQL Injection!
 
 // ❌ Command injection
-exec(`ping ${userInput}`);  // Dangerous!
+exec(`ping ${userInput}`); // Dangerous!
 ```
 
 **Secure Code:**
+
 ```javascript
 // ✅ Parameterized queries
 const query = 'SELECT * FROM users WHERE id = ?';
@@ -80,6 +84,7 @@ spawn('ping', [userInput], { shell: false });
 ### 2. Broken Authentication 🔐
 
 **Security Checklist:**
+
 ```javascript
 // ✅ Strong password requirements
 function validatePassword(password) {
@@ -89,31 +94,33 @@ function validatePassword(password) {
     hasLowerCase: /[a-z]/.test(password),
     hasNumbers: /\d/.test(password),
     hasSpecialChar: /[!@#$%^&*]/.test(password),
-    notCommon: !commonPasswords.includes(password)
+    notCommon: !commonPasswords.includes(password),
   };
 
   return Object.values(requirements).every(req => req);
 }
 
 // ✅ Secure session management
-app.use(session({
-  secret: process.env.SESSION_SECRET,  // From environment
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: true,      // HTTPS only
-    httpOnly: true,    // No JS access
-    maxAge: 3600000,   // 1 hour
-    sameSite: 'strict' // CSRF protection
-  }
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET, // From environment
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: true, // HTTPS only
+      httpOnly: true, // No JS access
+      maxAge: 3600000, // 1 hour
+      sameSite: 'strict', // CSRF protection
+    },
+  })
+);
 
 // ✅ Rate limiting
 const rateLimit = require('express-rate-limit');
 const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,  // 15 minutes
-  max: 5,  // 5 attempts
-  message: 'Too many login attempts'
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 attempts
+  message: 'Too many login attempts',
 });
 app.post('/login', loginLimiter, loginHandler);
 ```
@@ -121,10 +128,11 @@ app.post('/login', loginLimiter, loginHandler);
 ### 3. Sensitive Data Exposure 🔒
 
 **Never Store in Code:**
+
 ```javascript
 // ❌ WRONG
-const API_KEY = "sk_live_abcd1234";
-const DB_PASSWORD = "admin123";
+const API_KEY = 'sk_live_abcd1234';
+const DB_PASSWORD = 'admin123';
 
 // ✅ CORRECT - Use environment variables
 const API_KEY = process.env.API_KEY;
@@ -150,7 +158,7 @@ function encrypt(text) {
   return {
     encrypted,
     iv: iv.toString('hex'),
-    authTag: authTag.toString('hex')
+    authTag: authTag.toString('hex'),
   };
 }
 ```
@@ -160,7 +168,7 @@ function encrypt(text) {
 ```javascript
 // ❌ Vulnerable XML parsing
 const libxmljs = require('libxmljs');
-const doc = libxmljs.parseXml(userInput);  // XXE vulnerable!
+const doc = libxmljs.parseXml(userInput); // XXE vulnerable!
 
 // ✅ Safe XML parsing
 const parser = new DOMParser();
@@ -170,7 +178,7 @@ const doc = parser.parseFromString(userInput, 'text/xml');
 const options = {
   xmlMode: true,
   recognizeSelfClosing: true,
-  decodeEntities: false  // Disable entity expansion
+  decodeEntities: false, // Disable entity expansion
 };
 ```
 
@@ -180,7 +188,7 @@ const options = {
 // ❌ No authorization check
 app.get('/api/user/:id', (req, res) => {
   const user = User.findById(req.params.id);
-  res.json(user);  // Anyone can see any user!
+  res.json(user); // Anyone can see any user!
 });
 
 // ✅ Proper authorization
@@ -195,7 +203,7 @@ app.get('/api/user/:id', authenticate, (req, res) => {
 });
 
 // ✅ Role-based access control (RBAC)
-const authorize = (roles) => {
+const authorize = roles => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({ error: 'Insufficient permissions' });
@@ -274,12 +282,12 @@ res.set('X-Content-Type-Options', 'nosniff');
 ```javascript
 // ❌ Dangerous deserialization
 const userData = JSON.parse(req.body.data);
-eval(userData.code);  // Code execution!
+eval(userData.code); // Code execution!
 
 // ✅ Validate before deserializing
 const schema = Joi.object({
   name: Joi.string().required(),
-  age: Joi.number().min(0).max(120)
+  age: Joi.number().min(0).max(120),
 });
 
 const { error, value } = schema.validate(JSON.parse(req.body.data));
@@ -336,19 +344,19 @@ function logSecurityEvent(event, user, details) {
     user: user?.id,
     ip: user?.ip,
     timestamp: new Date().toISOString(),
-    details
+    details,
   });
 }
 
 // Usage
 logSecurityEvent('FAILED_LOGIN', req.user, {
   attempts: failedAttempts,
-  ip: req.ip
+  ip: req.ip,
 });
 
 logSecurityEvent('UNAUTHORIZED_ACCESS', req.user, {
   resource: req.path,
-  method: req.method
+  method: req.method,
 });
 ```
 
@@ -360,7 +368,7 @@ const bcrypt = require('bcrypt');
 
 // Hashing
 async function hashPassword(password) {
-  const saltRounds = 12;  // Higher = more secure but slower
+  const saltRounds = 12; // Higher = more secure but slower
   return await bcrypt.hash(password, saltRounds);
 }
 
@@ -392,8 +400,8 @@ const apiSecurity = {
 
   // 2. Rate limiting
   rateLimit: {
-    windowMs: 15 * 60 * 1000,  // 15 minutes
-    max: 100  // requests per window
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // requests per window
   },
 
   // 3. Input validation
@@ -404,7 +412,7 @@ const apiSecurity = {
   // 4. CORS configuration
   cors: {
     origin: process.env.ALLOWED_ORIGINS?.split(',') || false,
-    credentials: true
+    credentials: true,
   },
 
   // 5. API versioning
@@ -414,10 +422,10 @@ const apiSecurity = {
   bodyLimit: '10mb',
 
   // 7. Timeout
-  timeout: 30000,  // 30 seconds
+  timeout: 30000, // 30 seconds
 
   // 8. HTTPS only
-  httpsOnly: true
+  httpsOnly: true,
 };
 ```
 
@@ -427,6 +435,7 @@ const apiSecurity = {
 ## Pre-Deployment Security Checklist
 
 ### Code Security
+
 - [ ] No hardcoded secrets
 - [ ] All inputs validated
 - [ ] SQL queries parameterized
@@ -437,12 +446,14 @@ const apiSecurity = {
 - [ ] Rate limiting configured
 
 ### Dependencies
+
 - [ ] `npm audit` shows 0 vulnerabilities
 - [ ] All packages from trusted sources
 - [ ] Lock file committed
 - [ ] Licenses reviewed
 
 ### Configuration
+
 - [ ] Environment variables used
 - [ ] HTTPS enforced
 - [ ] Security headers set
@@ -452,6 +463,7 @@ const apiSecurity = {
 - [ ] Source maps disabled in production
 
 ### Data Protection
+
 - [ ] Passwords hashed (bcrypt)
 - [ ] Sensitive data encrypted
 - [ ] PII fields marked
@@ -459,6 +471,7 @@ const apiSecurity = {
 - [ ] Backups encrypted
 
 ### Infrastructure
+
 - [ ] Firewall rules configured
 - [ ] Ports minimized
 - [ ] SSH keys only (no passwords)

@@ -14,6 +14,7 @@ description: Find and fix performance bottlenecks in ANY language or framework
 ## 🎯 When to Use This Skill
 
 Use when experiencing:
+
 - Slow page loads
 - High CPU/memory usage
 - Sluggish UI responses
@@ -24,6 +25,7 @@ Use when experiencing:
 ## ⚡ Quick Wins (80/20 Rule)
 
 ### The Big 5 Performance Killers (Check These First):
+
 1. **N+1 Queries** - Multiple DB calls in loops
 2. **Missing Indexes** - Unindexed database queries
 3. **Large Bundles** - Unoptimized assets/dependencies
@@ -33,6 +35,7 @@ Use when experiencing:
 ## 🔍 Step 1: MEASURE (Don't Guess!)
 
 ### WITH MCP Tools:
+
 ```
 "Profile the performance of [feature/endpoint/page]"
 "Find performance bottlenecks in my application"
@@ -41,6 +44,7 @@ Use when experiencing:
 ### WITHOUT MCP:
 
 #### Quick Measurements:
+
 ```bash
 # Overall response time
 time curl http://localhost:3000/api/endpoint
@@ -55,6 +59,7 @@ console.timeEnd('query');
 ```
 
 #### Browser Performance (Frontend):
+
 ```javascript
 // Add performance marks
 performance.mark('myFeature-start');
@@ -71,6 +76,7 @@ performance.getEntriesByType('measure');
 ### Universal Profiling by Language:
 
 #### JavaScript/Node.js:
+
 ```bash
 # Built-in profiler
 node --inspect app.js
@@ -83,6 +89,7 @@ console.timeEnd('operation');
 ```
 
 #### Python:
+
 ```python
 import cProfile
 import pstats
@@ -93,6 +100,7 @@ stats.sort_stats('cumulative').print_stats(10)
 ```
 
 #### Java:
+
 ```bash
 # Use JProfiler or VisualVM
 jstack <pid>  # Thread dump
@@ -100,12 +108,14 @@ jmap -histo <pid>  # Memory histogram
 ```
 
 #### Go:
+
 ```go
 import _ "net/http/pprof"
 // Visit http://localhost:6060/debug/pprof/
 ```
 
 #### Database Profiling:
+
 ```sql
 -- PostgreSQL
 EXPLAIN ANALYZE SELECT ...;
@@ -124,6 +134,7 @@ db.collection.find().explain("executionStats")
 ### 1. Database Optimization
 
 #### WITH MCP (DB Schema Designer):
+
 ```
 "Optimize my database queries for performance"
 ```
@@ -131,6 +142,7 @@ db.collection.find().explain("executionStats")
 #### WITHOUT MCP:
 
 **N+1 Query Fix:**
+
 ```javascript
 // BAD: N+1 queries
 const users = await getUsers();
@@ -143,6 +155,7 @@ const usersWithPosts = await getUsersWithPosts(); // 1 query!
 ```
 
 **Add Indexes:**
+
 ```sql
 -- Find slow queries first
 -- PostgreSQL
@@ -158,6 +171,7 @@ CREATE INDEX idx_posts_user_created ON posts(user_id, created_at);
 ### 2. Frontend Optimization
 
 **Bundle Size:**
+
 ```bash
 # Analyze bundle
 npm run build -- --stats
@@ -170,6 +184,7 @@ webpack-bundle-analyzer stats.json
 ```
 
 **React/Vue Specific:**
+
 ```javascript
 // Use React.memo/Vue.computed
 const ExpensiveComponent = React.memo(({ data }) => {
@@ -183,6 +198,7 @@ import { FixedSizeList } from 'react-window';
 ### 3. Backend Optimization
 
 **Caching Strategy:**
+
 ```javascript
 // Memory cache for frequently accessed data
 const cache = new Map();
@@ -203,6 +219,7 @@ async function getExpensiveData(key) {
 ```
 
 **Async/Parallel Processing:**
+
 ```javascript
 // BAD: Sequential
 for (const item of items) {
@@ -213,14 +230,13 @@ for (const item of items) {
 const pLimit = require('p-limit');
 const limit = pLimit(5); // Max 5 concurrent
 
-await Promise.all(
-  items.map(item => limit(() => processItem(item)))
-);
+await Promise.all(items.map(item => limit(() => processItem(item))));
 ```
 
 ### 4. Memory Optimization
 
 **Find Memory Leaks:**
+
 ```javascript
 // Node.js
 if (global.gc) {
@@ -237,6 +253,7 @@ if (global.gc) {
 ```
 
 **Fix Common Leaks:**
+
 ```javascript
 // Clean up event listeners
 componentWillUnmount() {
@@ -279,6 +296,7 @@ const fastQuery = monitor(slowQuery, 'UserQuery', 50);
 ## 🚀 Quick Performance Checklist
 
 ### Frontend:
+
 - [ ] Bundle size < 300KB (gzipped)
 - [ ] First Contentful Paint < 1.8s
 - [ ] Time to Interactive < 3.8s
@@ -288,6 +306,7 @@ const fastQuery = monitor(slowQuery, 'UserQuery', 50);
 - [ ] Service worker for caching
 
 ### Backend:
+
 - [ ] API response time < 200ms (p95)
 - [ ] Database queries < 50ms
 - [ ] Connection pooling configured
@@ -297,6 +316,7 @@ const fastQuery = monitor(slowQuery, 'UserQuery', 50);
 - [ ] Background jobs for heavy tasks
 
 ### Database:
+
 - [ ] All queries use indexes
 - [ ] No N+1 queries
 - [ ] Connection pool sized correctly
@@ -308,6 +328,7 @@ const fastQuery = monitor(slowQuery, 'UserQuery', 50);
 ## 💡 Language-Specific Quick Wins
 
 ### Node.js:
+
 ```javascript
 // Use cluster for multi-core
 const cluster = require('cluster');
@@ -321,6 +342,7 @@ if (cluster.isMaster) {
 ```
 
 ### Python:
+
 ```python
 # Use built-in accelerators
 from functools import lru_cache
@@ -332,6 +354,7 @@ def expensive_function(param):
 ```
 
 ### Java:
+
 ```java
 // Use StringBuilder for string concatenation
 StringBuilder sb = new StringBuilder();
@@ -343,18 +366,21 @@ for (String s : strings) {
 ## 🎯 Performance Goals by Type
 
 ### Web Application:
+
 - Page load: < 3 seconds
 - API calls: < 500ms
 - Search: < 200ms
 - Form submit: < 1 second
 
 ### Mobile App:
+
 - Launch: < 2 seconds
 - Screen transition: < 300ms
 - List scroll: 60 FPS
 - Network retry: Exponential backoff
 
 ### API Service:
+
 - p50 latency: < 50ms
 - p95 latency: < 200ms
 - p99 latency: < 1 second
@@ -366,6 +392,7 @@ for (String s : strings) {
 ## Performance Optimization Report
 
 ### Metric | Before | After | Improvement
+
 ---------|---------|--------|-------------
 Page Load | 4.2s | 1.8s | -57%
 API Response | 800ms | 180ms | -77%
@@ -373,6 +400,7 @@ Memory Usage | 512MB | 320MB | -37%
 Bundle Size | 1.2MB | 420KB | -65%
 
 ### Changes Made:
+
 1. Added database indexes
 2. Implemented caching layer
 3. Enabled gzip compression

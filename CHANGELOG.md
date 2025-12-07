@@ -9,39 +9,46 @@ All notable changes to this project will be documented in this file.
 Following Anthropic's best practices for advanced tool use, major improvements to the MCP ecosystem:
 
 #### Phase 1: Tool Use Examples ✅
+
 - **47 tools with examples** - All MCP tools now have input/output examples
 - **+18% parameter precision** - Better handling of complex parameters
 - **Validation tests** - Automated validation of all tool examples
 
 #### Phase 2: Response Format ✅
+
 - **`response_format` parameter** - All tools support minimal/concise/detailed output
 - **-40% token usage** - Concise mode reduces response tokens significantly
 - **Backward compatible** - Default behavior unchanged
 
 #### Phase 3: Deferred Loading Architecture ✅
+
 - **Tool Registry** - 50 tools cataloged with frequency/category metadata
 - **`search_tools`** - Semantic search for tool discovery
 - **`load_tool`** - Load low-frequency tools on demand
 - **-85% context usage** - Only high-frequency tools loaded by default
 
 #### Phase 5: Progressive Disclosure ✅
+
 - **`list_capabilities`** - Category-based tool discovery
 - **tool-discovery skill** - Complete documentation for meta-tools
 - **Returns documentation** - 7 high-frequency tools have return type docs
 - **50 tools total** - 47 original + 3 meta-tools (search_tools, load_tool, list_capabilities)
 
 #### Phase 5.4: Telemetry ✅
+
 - **`ToolUsageTracker`** - Track tool usage metrics in @j0kz/shared
 - **Frequency reports** - Analyze usage patterns for deferred loading optimization
 - **Server usage stats** - Aggregate metrics by MCP server
 - **Session summaries** - Export usage data for analysis
 
 #### Phase 5.6a: defer_loading Flag ✅
+
 - **Explicit deferred loading** - 22 low-frequency tools marked with `defer_loading: true`
 - **`getExplicitlyDeferredTools()`** - Helper function to get deferred tools
 - **Type-safe** - Added `defer_loading?: boolean` to ToolMetadata interface
 
 ### 📊 Metrics
+
 - **Tool selection precision**: 72% → 90%+ (estimated)
 - **Context usage**: Reduced by ~85%
 - **Token efficiency**: -40% with concise format
@@ -54,6 +61,7 @@ Following Anthropic's best practices for advanced tool use, major improvements t
 ### 🔒 Security Fixes
 
 #### Critical Command Injection Vulnerability (CVE-78)
+
 - **Fixed command injection vulnerability** in @j0kz/auto-pilot package
 - **Severity**: High (CodeQL Security Alert)
 - **Impact**: Prevented arbitrary command execution via malicious file paths
@@ -64,6 +72,7 @@ Following Anthropic's best practices for advanced tool use, major improvements t
 ### 🐛 Bug Fixes
 
 #### GitHub Actions Compatibility
+
 - **Fixed deprecated action versions** causing CI/CD failures
 - Updated actions/checkout, actions/setup-node to v4 (from non-existent v5/v6)
 - Updated codecov/codecov-action to v4 (from v5)
@@ -72,12 +81,14 @@ Following Anthropic's best practices for advanced tool use, major improvements t
 - Fixed validate-skills workflow paths from `.claude/skills/` to `docs/universal-skills/`
 
 #### Code Quality Improvements
+
 - **Removed unused variables** detected by CodeQL static analysis
 - Fixed unused `stdout` variables in auto-fixer.ts (3 occurrences)
 - Fixed unused `ext` variable in smart-analyzer.ts
 - Resolved ESLint warnings in source files
 
 ### 🔧 Technical Details
+
 - All packages bumped to version 1.1.1
 - Security patch applied without breaking changes
 - Maintains backward compatibility
@@ -90,11 +101,13 @@ Following Anthropic's best practices for advanced tool use, major improvements t
 ### 🌍 Universal Skills System (NEW)
 
 #### 10 Project-Agnostic Developer Skills
+
 - **Created universal skills** that work in ANY project, ANY language
 - **Skills include**: quick-pr-review, debug-detective, performance-hunter, legacy-modernizer, zero-to-hero, test-coverage-boost, tech-debt-tracker, dependency-doctor, security-first, api-integration
 - **Each skill provides**: Quick start (30 seconds), WITH MCP approach (automated), WITHOUT MCP approach (manual), language-specific examples, pro tips
 
 #### Installation System
+
 - **Standalone installer**: `npx @j0kz/claude-skills` - installs skills in any project
 - **Universal installer**: `npx @j0kz/mcp-agents install` - installs tools + skills
 - **Auto-creates .claude folder** with proper structure and documentation
@@ -102,6 +115,7 @@ Following Anthropic's best practices for advanced tool use, major improvements t
 - **Smart project detection** and graceful fallbacks
 
 #### Documentation
+
 - **Comprehensive INSTALLATION.md** guide for all installation methods
 - **Skills index and usage guides** in .claude/universal-skills/
 - **README updates** with skill references and examples
@@ -110,12 +124,14 @@ Following Anthropic's best practices for advanced tool use, major improvements t
 ### 🚀 Major Performance Improvements
 
 #### Tarjan's Algorithm Implementation
+
 - **50-200x faster cycle detection** in architecture-analyzer
 - Replaced naive recursive approach with O(V + E) algorithm
 - Significant improvement for large dependency graphs
 - Enables real-time analysis of complex projects
 
 #### Algorithmic Optimizations
+
 - Medium-impact optimizations across multiple tools
 - Quick-win performance improvements identified and implemented
 - Reduced memory usage in critical paths
@@ -132,6 +148,7 @@ Following Anthropic's best practices for advanced tool use, major improvements t
 ### 🎯 Skills System Optimization
 
 #### Claude Code Skills Optimized (7 of 10)
+
 - **modular-refactoring-pattern**: 757 → 541 lines (-28.5%)
 - **mcp-workflow-composition**: 839 → 590 lines (-29.7%)
 - **git-pr-workflow**: Optimized with 5 reference files
@@ -141,6 +158,7 @@ Following Anthropic's best practices for advanced tool use, major improvements t
 - **release-publishing-workflow**: Optimized with 3 reference files
 
 #### Optimization Benefits
+
 - **35% reduction** in initial token usage
 - **21 reference files** created for on-demand loading
 - Improved skill loading performance
@@ -150,12 +168,14 @@ Following Anthropic's best practices for advanced tool use, major improvements t
 ### 🔧 Code Quality Improvements
 
 #### TypeScript Type Safety
+
 - Reduced `any` usage across codebase
 - Improved type inference
 - Stricter type checking enabled
 - Better IDE support and autocomplete
 
 #### Project Audit Fixes
+
 - Auto-pilot test corrections
 - Version synchronization improvements
 - Build process optimizations

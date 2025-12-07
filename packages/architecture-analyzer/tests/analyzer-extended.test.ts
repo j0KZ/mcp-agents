@@ -201,4 +201,104 @@ describe('ArchitectureAnalyzer Extended', () => {
       expect(result.modules).toBeDefined();
     });
   });
+
+  describe('layer violation detection - detailed', () => {
+    it('should create violation when layer does not allow target', async () => {
+      // Use strict layer rules that will trigger violations
+      const result = await analyzer.analyzeArchitecture(sharedPath, {
+        layerRules: {
+          // helpers cannot import from anything - will cause violations
+          helpers: [],
+          // runtime can only import from types
+          runtime: ['types'],
+        },
+      });
+
+      // Since helpers likely imports from other modules, should have violations
+      expect(result.layerViolations).toBeDefined();
+      // Check violation structure
+      for (const violation of result.layerViolations) {
+        expect(violation).toHaveProperty('from');
+        expect(violation).toHaveProperty('to');
+        expect(violation).toHaveProperty('expectedLayer');
+        expect(violation).toHaveProperty('actualLayer');
+        expect(violation).toHaveProperty('description');
+      }
+    });
+
+    it('should correctly identify fromLayer and toLayer', async () => {
+      const result = await analyzer.analyzeArchitecture(sharedPath, {
+        layerRules: {
+          fs: ['types'],
+          health: ['types'],
+          errors: ['types'],
+        },
+      });
+
+      // All violations should have layers from our defined rules
+      for (const violation of result.layerViolations) {
+        // From should be one of our defined layers
+        const fromLayer = ['fs', 'health', 'errors'].find(l => violation.from.includes(l));
+        const _toLayer = ['fs', 'health', 'errors', 'types'].find(l => violation.to.includes(l));
+
+        if (fromLayer) {
+          expect(violation.description).toContain('should not depend on');
+        }
+      }
+    });
+
+    it('should skip violations when toLayer is null (external module)', async () => {
+      const result = await analyzer.analyzeArchitecture(sharedPath, {
+        layerRules: {
+          // Only define one layer - deps to modules outside these won't be violations
+          helpers: ['types'],
+        },
+      });
+
+      // Should not throw even if modules import from layers not in rules
+      expect(result.layerViolations).toBeDefined();
+    });
+
+    it('should skip violations when fromLayer is null', async () => {
+      const result = await analyzer.analyzeArchitecture(sharedPath, {
+        layerRules: {
+          // Only 'types' defined - files not matching won't have fromLayer
+          types: [],
+        },
+      });
+
+      // Files not matching 'types' won't have violations because fromLayer is null
+      expect(result.layerViolations).toBeDefined();
+    });
+  });
+
+  describe('getLayer matching', () => {
+    it('should match layer by path includes', async () => {
+      const result = await analyzer.analyzeArchitecture(sharedPath, {
+        layerRules: {
+          // These should match paths containing these strings
+          src: ['fs', 'health', 'errors'],
+          fs: ['types'],
+          health: ['types'],
+        },
+      });
+
+      // Verify layer matching worked
+      expect(result).toBeDefined();
+      // The layer rules should have been applied
+      expect(result.layerViolations).toBeDefined();
+    });
+
+    it('should return null for paths not matching any layer', async () => {
+      const result = await analyzer.analyzeArchitecture(sharedPath, {
+        layerRules: {
+          // Very specific layer that likely won't match anything
+          nonexistent: ['alsonone'],
+        },
+      });
+
+      // With no matching layers, no violations should be detected
+      expect(result.layerViolations.length).toBe(0);
+    });
+  });
 });

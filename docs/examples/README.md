@@ -9,6 +9,7 @@
 ## 🎯 Quick Navigation
 
 ### By Tool
+
 1. [Smart Reviewer Examples](./tools/smart-reviewer.md) - Code quality analysis & auto-fixes
 2. [Test Generator Examples](./tools/test-generator.md) - Automatic test creation
 3. [Architecture Analyzer Examples](./tools/architecture-analyzer.md) - Dependency & structure analysis
@@ -21,6 +22,7 @@
 10. [Auto-Pilot Examples](./tools/auto-pilot.md) - Zero-config automation
 
 ### By Use Case
+
 - [🚀 Starting a New Project](./cookbook/new-project.md)
 - [🔍 Code Review Before PR](./cookbook/pre-pr-review.md)
 - [🛡️ Security Audit](./cookbook/security-audit.md)
@@ -37,27 +39,32 @@
 Every example includes:
 
 ### 1. **The Prompt** - What you type in Claude/Cursor
+
 ```
 "Review my authentication module for security issues"
 ```
 
 ### 2. **What Happens** - Behind the scenes action
+
 - Tool analyzes your code
 - Specific patterns detected
 - Decisions made by AI
 
 ### 3. **The Output** - What you get back
+
 - Detailed findings
 - Suggested fixes
 - Generated code
 
 ### 4. **Before/After** - See the transformation
+
 ```javascript
 // BEFORE: Complex, buggy code
 // AFTER: Clean, tested, secure code
 ```
 
 ### 5. **Try It Yourself** - Copy-paste ready
+
 - Exact commands to run
 - Sample files to test with
 - Expected results
@@ -69,11 +76,13 @@ Every example includes:
 ### Example 1: "My code is messy, help!"
 
 **You type:**
+
 ```
 "Review and auto-fix my index.js file"
 ```
 
 **Smart Reviewer responds with:**
+
 - 12 code smells detected
 - 8 auto-fixed immediately
 - 4 require manual review
@@ -84,11 +93,13 @@ Every example includes:
 ### Example 2: "I need tests but I'm lazy"
 
 **You type:**
+
 ```
 "Generate comprehensive tests for my UserService class"
 ```
 
 **Test Generator creates:**
+
 - 15 test cases
 - 5 edge cases
 - 3 error scenarios
@@ -100,11 +111,13 @@ Every example includes:
 ### Example 3: "Is my app secure?"
 
 **You type:**
+
 ```
 "Scan my entire project for vulnerabilities"
 ```
 
 **Security Scanner finds:**
+
 - 2 SQL injection risks
 - 1 hardcoded API key
 - 3 missing input validations
@@ -118,6 +131,7 @@ Every example includes:
 ## 📖 The Cookbook - Complete Workflows
 
 ### 🎯 Pre-Commit Quality Check
+
 **Goal:** Never push bad code again
 
 ```bash
@@ -135,6 +149,7 @@ Every example includes:
 [Full recipe →](./cookbook/pre-pr-review.md)
 
 ### 🏗️ Legacy Code Modernization
+
 **Goal:** Transform that 5-year-old spaghetti code
 
 ```bash
@@ -156,12 +171,15 @@ Every example includes:
 ## 💡 Pro Tips
 
 ### Combine Tools for Power
+
 ```
 "Review my code, generate tests, and check security - all at once"
 ```
+
 The Orchestrator handles everything in parallel!
 
 ### Use Natural Language
+
 ```
 "This function is too complex, make it simpler"
 "I'm worried about SQL injection, check my queries"
@@ -169,6 +187,7 @@ The Orchestrator handles everything in parallel!
 ```
 
 ### Iterate Quickly
+
 ```
 You: "Review my code"
 AI: [provides feedback]
@@ -203,6 +222,7 @@ Want to try without installing? Check our playground:
 ## 🚦 Getting Started
 
 1. **Install the tools:**
+
    ```bash
    npx @j0kz/mcp-agents@latest
    ```
@@ -218,6 +238,7 @@ Want to try without installing? Check our playground:
 ## 📚 Complete Examples Index
 
 ### Smart Reviewer
+
 - [Auto-fix messy code](./tools/smart-reviewer.md#auto-fix-messy-code)
 - [Reduce complexity](./tools/smart-reviewer.md#reduce-complexity)
 - [Find code smells](./tools/smart-reviewer.md#find-code-smells)
@@ -225,6 +246,7 @@ Want to try without installing? Check our playground:
 - [Pre-commit review](./tools/smart-reviewer.md#pre-commit-review)
 
 ### Test Generator
+
 - [Generate from scratch](./tools/test-generator.md#generate-from-scratch)
 - [Add edge cases](./tools/test-generator.md#edge-cases)
 - [Mock dependencies](./tools/test-generator.md#mock-dependencies)
@@ -232,6 +254,7 @@ Want to try without installing? Check our playground:
 - [Test async functions](./tools/test-generator.md#async-testing)
 
 ### Architecture Analyzer
+
 - [Find circular dependencies](./tools/architecture-analyzer.md#circular-deps)
 - [Generate dependency graphs](./tools/architecture-analyzer.md#dep-graphs)
 - [Check layer violations](./tools/architecture-analyzer.md#layer-violations)

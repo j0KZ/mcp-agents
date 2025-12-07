@@ -7,6 +7,7 @@
 ## The Complete Pre-PR Workflow
 
 ### What You Type in Claude/Cursor
+
 ```
 "I'm about to create a PR. Run a complete quality check on my changes"
 ```
@@ -39,7 +40,9 @@ graph TD
 ## Real-World Example
 
 ### Initial State
+
 You've been working on a new feature - a user authentication module. Your changes include:
+
 - `src/auth/authService.js` - Main authentication logic
 - `src/auth/tokenManager.js` - JWT token handling
 - `src/controllers/userController.js` - Updated endpoints
@@ -48,17 +51,20 @@ You've been working on a new feature - a user authentication module. Your change
 ### Step 1: Smart Reviewer Analysis
 
 **Tool Output:**
+
 ```markdown
 ## Smart Review Report
 
 ### Code Quality Issues (15 found, 12 auto-fixed)
 
 ✅ **Auto-Fixed:**
+
 - Removed 3 unused variables
 - Fixed 5 inconsistent indentations
 - Added 4 missing semicolons
 
 ⚠️ **Manual Review Required:**
+
 1. **High Complexity** in authService.authenticate()
    - Cyclomatic complexity: 12 (threshold: 10)
    - Suggestion: Extract validation logic
@@ -73,12 +79,14 @@ You've been working on a new feature - a user authentication module. Your change
 ### Step 2: Security Scanner
 
 **Tool Output:**
-```markdown
+
+````markdown
 ## Security Scan Report
 
 ### 🔴 Critical Issues (1)
 
 1. **SQL Injection Risk** at userController.js:78
+
 ```javascript
 // BEFORE (Your Code):
 const user = await db.query(`SELECT * FROM users WHERE email = '${email}'`);
@@ -86,6 +94,7 @@ const user = await db.query(`SELECT * FROM users WHERE email = '${email}'`);
 // REQUIRED FIX:
 const user = await db.query('SELECT * FROM users WHERE email = ?', [email]);
 ```
+````
 
 ### 🟡 Medium Issues (2)
 
@@ -98,10 +107,12 @@ const user = await db.query('SELECT * FROM users WHERE email = ?', [email]);
    - Fix: Add express-rate-limit
 
 ### 🟢 Passed Checks ✅
+
 - No hardcoded credentials
 - No exposed sensitive data
 - Input validation present
-```
+
+````
 
 ### Step 3: Test Coverage Check
 
@@ -137,21 +148,24 @@ describe('AuthService', () => {
 
 // Generated: validators.test.js
 // ... 12 test cases
-```
+````
 
 **New Coverage:** 87% 🎉
 
 ### Step 4: Architecture Check
 
 **Architecture Analyzer Output:**
-```markdown
+
+````markdown
 ## Architecture Analysis
 
 ### ✅ Clean Architecture Maintained
+
 - Proper layer separation (controllers → services → data)
 - No circular dependencies detected
 
 ### ⚠️ Suggestions
+
 1. **High Coupling** between authService and tokenManager
    - Coupling score: 0.8 (threshold: 0.5)
    - Consider dependency injection
@@ -161,6 +175,7 @@ describe('AuthService', () => {
    - Add AuthProvider interface for flexibility
 
 ### Dependency Graph
+
 ```mermaid
 graph LR
     userController --> authService
@@ -169,7 +184,9 @@ graph LR
     tokenManager --> jwt
     userController --> validators
 ```
-```
+````
+
+````
 
 ### Step 5: Documentation Update
 
@@ -189,7 +206,8 @@ graph LR
 ✅ Created CHANGELOG entry
 
 ### Suggested Commit Message
-```
+````
+
 feat(auth): implement JWT-based authentication system
 
 - Add authService with login/logout/refresh capabilities
@@ -202,17 +220,20 @@ Tests: Added 47 new test cases
 Docs: Updated API documentation
 
 Closes #123
+
 ```
+
 ```
 
 ---
 
 ## Final Checklist Output
 
-```markdown
+````markdown
 # Pre-PR Checklist ✅
 
 ## Quality Metrics
+
 - ✅ Code Quality Score: 8.5/10
 - ✅ Test Coverage: 87%
 - ✅ Security Score: 9/10
@@ -221,15 +242,18 @@ Closes #123
 ## Required Actions Before PR
 
 ### 🔴 Must Fix (Blocking)
+
 1. [ ] Fix SQL injection in userController.js:78
 2. [ ] Move JWT secret to environment variable
 
 ### 🟡 Should Fix (Recommended)
+
 1. [ ] Refactor high complexity in authService.authenticate()
 2. [ ] Extract duplicated code to shared utility
 3. [ ] Add rate limiting to auth endpoints
 
 ### 🟢 Ready
+
 - ✅ All tests passing
 - ✅ Documentation updated
 - ✅ No console.logs in production code
@@ -237,6 +261,7 @@ Closes #123
 - ✅ Build successful
 
 ## Commands to Run
+
 ```bash
 # After fixing required issues:
 git add .
@@ -244,27 +269,35 @@ git commit -m "feat(auth): implement JWT-based authentication system"
 git push origin feature/auth-system
 # Create PR with the generated description
 ```
+````
 
 ## PR Description Template
-Use this for your PR:
----
+
+## Use this for your PR:
+
 ### What does this PR do?
+
 Implements JWT-based authentication system with refresh tokens
 
 ### Why are we doing this?
+
 To secure API endpoints and manage user sessions
 
 ### How to test
+
 1. Run `npm test` - all tests should pass
 2. Try login: `POST /api/auth/login` with valid credentials
 3. Verify token refresh works after expiry
 
 ### Checklist
+
 - [x] Tests added/updated
 - [x] Documentation updated
 - [x] Security review completed
 - [x] No breaking changes
+
 ---
+
 ```
 
 ---
@@ -273,29 +306,37 @@ To secure API endpoints and manage user sessions
 
 ### Quick Check (2 minutes)
 ```
+
 "Quick pre-PR check - just the essentials"
+
 ```
 - Runs: Smart Reviewer (critical only) + Security Scanner
 - Best for: Small changes, hot fixes
 
 ### Thorough Review (10 minutes)
 ```
+
 "Thorough pre-PR review with all checks"
+
 ```
 - Runs: All tools in sequence
 - Best for: Feature branches, major changes
 
 ### Focus on Security
 ```
+
 "Pre-PR security audit for my payment module"
+
 ```
 - Runs: Security Scanner (deep) + Test Generator (security tests)
 - Best for: Sensitive code, payment/auth features
 
 ### Focus on Performance
 ```
+
 "Pre-PR performance check"
-```
+
+````
 - Runs: Smart Reviewer (complexity) + Architecture Analyzer
 - Best for: Algorithm changes, data processing
 
@@ -316,9 +357,10 @@ if [ $? -ne 0 ]; then
     echo "Pre-commit checks failed. Fix issues and try again."
     exit 1
 fi
-```
+````
 
 ### Pre-Push Hook
+
 ```bash
 # .git/hooks/pre-push
 #!/bin/sh
@@ -337,6 +379,7 @@ fi
 ## CI/CD Integration
 
 ### GitHub Actions
+
 ```yaml
 name: Pre-PR Check
 
@@ -378,21 +421,27 @@ jobs:
 ## Common Issues and Solutions
 
 ### "Too many issues to fix manually"
+
 ```
 You: "Auto-fix everything that's safe to fix"
 ```
+
 Smart Reviewer will fix all safe issues, leaving only critical ones for manual review.
 
 ### "Tests are failing after generation"
+
 ```
 You: "The generated tests are failing, help me fix them"
 ```
+
 Test Generator will analyze failures and update tests with correct expectations.
 
 ### "Security scanner is too strict"
+
 ```
 You: "Security check but ignore info-level warnings"
 ```
+
 Focuses only on critical and high-severity issues.
 
 ---
@@ -400,24 +449,31 @@ Focuses only on critical and high-severity issues.
 ## Pro Tips
 
 ### 1. Run Early and Often
+
 Don't wait until you're done coding. Run checks periodically:
+
 ```
 "Quick quality check on what I've written so far"
 ```
 
 ### 2. Focus on Problem Areas
+
 If you know a file is complex:
+
 ```
 "Deep review on authService.js - I think it's too complex"
 ```
 
 ### 3. Learn from Patterns
+
 The tools learn your codebase patterns. After 10+ PRs:
+
 - Auto-fixes become more accurate
 - Suggestions match your style guide
 - Tests follow your conventions
 
 ### 4. Create Custom Workflows
+
 ```javascript
 // .mcp/workflows/our-pre-pr.json
 {
@@ -436,6 +492,7 @@ The tools learn your codebase patterns. After 10+ PRs:
 ## Success Metrics
 
 Teams using this workflow report:
+
 - **70% fewer** PR review comments
 - **90% fewer** security issues in production
 - **50% faster** PR approval time
@@ -454,6 +511,7 @@ Ready to try it?
 ---
 
 **See Also:**
+
 - [Security Audit Workflow](./security-audit.md)
 - [Test Coverage Workflow](./test-coverage.md)
 - [Legacy Refactor Workflow](./legacy-refactor.md)

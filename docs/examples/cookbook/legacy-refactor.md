@@ -7,6 +7,7 @@
 ## The Legacy Refactoring Strategy
 
 ### What You Type
+
 ```
 "Help me safely refactor this legacy codebase without breaking anything"
 ```
@@ -32,10 +33,12 @@ graph TD
 ### Initial Assessment
 
 **Architecture Analyzer Report:**
-```markdown
+
+````markdown
 ## Legacy System Analysis 📊
 
 ### System Overview
+
 - **Language:** PHP 5.3 (EOL 2014!)
 - **Framework:** None (custom)
 - **Database:** MySQL 5.1
@@ -45,6 +48,7 @@ graph TD
 - **Average Complexity:** 24.7 (extremely high)
 
 ### Architecture Problems
+
 1. **No separation of concerns** - HTML, SQL, PHP mixed
 2. **Global state everywhere** - 147 global variables
 3. **Include hell** - Circular includes, 89 require statements
@@ -54,17 +58,22 @@ graph TD
 7. **Security issues** - SQL injection, XSS vulnerabilities
 
 ### Coupling Analysis
+
 ```mermaid
 graph TD
     Everything[312 files] --> Everything
 ```
+````
+
 **Result:** Everything depends on everything 😱
 
 ### Risk Assessment
+
 - **Refactoring Risk:** EXTREME
 - **Business Risk if Not Refactored:** CRITICAL
 - **Estimated Technical Debt:** 4,800 hours
-```
+
+````
 
 ---
 
@@ -176,7 +185,7 @@ class CheckoutCharacterizationTest extends PHPUnit_Framework_TestCase
         }
     }
 }
-```
+````
 
 ### Step 2: Add Logging Seam
 
@@ -701,15 +710,17 @@ if (FeatureFlag::isEnabled('new_checkout', $_SESSION['user_id'])) {
 ## Refactoring Results 📊
 
 ### Code Quality
-| Metric | Before | After | Improvement |
-|--------|--------|-------|------------|
-| Cyclomatic Complexity | 24.7 | 4.2 | 83% reduction |
-| Lines per File | 532 | 87 | 84% reduction |
-| Dependencies | 147 globals | 12 injected | 92% reduction |
-| SQL Queries | 1,247 inline | 0 inline | 100% removed |
-| Test Coverage | 0% | 78% | +78% |
+
+| Metric                | Before       | After       | Improvement   |
+| --------------------- | ------------ | ----------- | ------------- |
+| Cyclomatic Complexity | 24.7         | 4.2         | 83% reduction |
+| Lines per File        | 532          | 87          | 84% reduction |
+| Dependencies          | 147 globals  | 12 injected | 92% reduction |
+| SQL Queries           | 1,247 inline | 0 inline    | 100% removed  |
+| Test Coverage         | 0%           | 78%         | +78%          |
 
 ### Architecture
+
 - ✅ Clean separation of concerns
 - ✅ Dependency injection
 - ✅ Repository pattern
@@ -718,11 +729,13 @@ if (FeatureFlag::isEnabled('new_checkout', $_SESSION['user_id'])) {
 - ✅ Composer packages
 
 ### Performance
+
 - Page load: 2.3s → 0.8s (65% faster)
 - Memory usage: 32MB → 12MB (62% reduction)
 - Database queries: 47 → 8 per page (83% reduction)
 
 ### Security
+
 - ✅ SQL injection fixed
 - ✅ XSS vulnerabilities fixed
 - ✅ CSRF protection added
@@ -730,6 +743,7 @@ if (FeatureFlag::isEnabled('new_checkout', $_SESSION['user_id'])) {
 - ✅ Password hashing upgraded
 
 ### Maintenance
+
 - Deploy time: 45min → 5min
 - Bug fix time: ~4 hours → ~30 minutes
 - New feature time: ~2 weeks → ~2 days
@@ -740,18 +754,23 @@ if (FeatureFlag::isEnabled('new_checkout', $_SESSION['user_id'])) {
 ## Refactoring Patterns Catalog
 
 ### 1. The Seam Pattern
+
 Find places to insert new code without changing existing behavior.
 
 ### 2. The Sprout Pattern
+
 Grow new code next to old code, gradually taking over.
 
 ### 3. The Wrap Pattern
+
 Wrap legacy code in new interface, hide complexity.
 
 ### 4. The Branch by Abstraction
+
 Create abstraction, implement new version, switch over.
 
 ### 5. The Parallel Run
+
 Run old and new side-by-side, compare results.
 
 ---
@@ -789,18 +808,23 @@ Run old and new side-by-side, compare results.
 ## Common Legacy Pitfalls and Solutions
 
 ### Pitfall: "Big Bang" Refactoring
+
 **Solution:** Incremental, always shippable
 
 ### Pitfall: No Tests Before Refactoring
+
 **Solution:** Characterization tests first
 
 ### Pitfall: Changing Behavior During Refactoring
+
 **Solution:** Separate refactoring from bug fixes
 
 ### Pitfall: Not Measuring Progress
+
 **Solution:** Track metrics continuously
 
 ### Pitfall: Working in Isolation
+
 **Solution:** Pair programming, code reviews
 
 ---

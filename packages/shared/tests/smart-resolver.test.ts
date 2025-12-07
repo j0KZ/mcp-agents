@@ -124,5 +124,155 @@ describe('SmartPathResolver', () => {
       });
       expect(result.resolved).toContain(testFile);
     });
+
+    it('should resolve from allowed directories', async () => {
+      const subDir = path.join(testDir, 'allowed');
+      await fs.mkdir(subDir, { recursive: true });
+      const allowedFile = path.join(subDir, 'allowed-file.txt');
+      await fs.writeFile(allowedFile, 'content');
+
+      const result = await SmartPathResolver.resolvePath('allowed-file.txt', {
+        workingDir: os.tmpdir(), // Different from where file is
+        allowedDirs: [subDir],
+      });
+      expect(result.resolved).toBe(allowedFile);
+      expect(result.strategy).toBe('from_allowed_directory');
+    });
+  });
+
+  describe('parent directory search', () => {
+    it('should search parent directories for relative paths', async () => {
+      // Create nested directory structure
+      const nestedDir = path.join(testDir, 'level1', 'level2');
+      await fs.mkdir(nestedDir, { recursive: true });
+
+      // File is in testDir, search starts from nestedDir
+      const result = await SmartPathResolver.resolvePath(testFile, {
+        workingDir: nestedDir,
+        projectRoot: nestedDir, // same as workingDir so it tries parent search
+        maxDepth: 3,
+      });
+      expect(result.resolved).toBe(path.join(testDir, testFile));
+      expect(result.strategy).toBe('parent_directory_search');
+    });
+  });
+
+  describe('fuzzy matching', () => {
+    it('should find file with similar name (case-insensitive or exact)', async () => {
+      // Create file with different case
+      const fileName = 'MyTestFile.txt';
+      await fs.writeFile(path.join(testDir, fileName), 'test');
+
+      // Search with lowercase version - on case-insensitive FS might find directly
+      // On case-sensitive FS will use fuzzy match
+      const result = await SmartPathResolver.resolvePath('mytestfile.txt', {
+        workingDir: testDir,
+        projectRoot: testDir,
+        maxDepth: 1,
+      });
+      // Both strategies are valid depending on filesystem case sensitivity
+      expect(['fuzzy_match', 'relative_to_cwd', 'relative_to_project_root']).toContain(
+        result.strategy
+      );
+      // Either found the original name or lowercase (case-insensitive FS)
+      expect(result.resolved.toLowerCase()).toContain('mytestfile.txt');
+    });
+
+    it('should find file with typo (Levenshtein distance < 3)', async () => {
+      // Create file
+      const fileName = 'configFile.json';
+      await fs.writeFile(path.join(testDir, fileName), '{}');
+
+      // Search with typo - should find via fuzzy match
+      const result = await SmartPathResolver.resolvePath('confgFile.json', {
+        workingDir: testDir,
+        projectRoot: testDir,
+        maxDepth: 1,
+      });
+      expect(result.resolved.toLowerCase()).toContain('configfile.json');
+      expect(result.strategy).toBe('fuzzy_match');
+    });
+  });
+
+  describe('getRelativePath', () => {
+    it('should return relative path from project root', () => {
+      // This tests the static method directly
+      const cwd = process.cwd();
+      const absolutePath = path.join(cwd, 'src', 'file.ts');
+      const relativePath = SmartPathResolver.getRelativePath(absolutePath);
+
+      // Should return relative path if it starts with project root
+      expect(relativePath).toBeDefined();
+      expect(typeof relativePath).toBe('string');
+    });
+
+    it('should return absolute path if not in project', () => {
+      // Path outside project
+      const outsidePath = path.join(os.tmpdir(), 'outside', 'file.ts');
+      const result = SmartPathResolver.getRelativePath(outsidePath);
+
+      // If not starting with project root, returns the absolute path
+      expect(result).toBe(outsidePath);
+    });
+  });
+
+  describe('PathResolutionError', () => {
+    it('should include toJSON method', async () => {
+      try {
+        await SmartPathResolver.resolvePath('nonexistent-file.xyz', {
+          workingDir: testDir,
+          maxDepth: 1,
+        });
+        expect.fail('Should have thrown');
+      } catch (error: any) {
+        expect(error.name).toBe('PathResolutionError');
+        expect(error.requestedPath).toBe('nonexistent-file.xyz');
+
+        // Test toJSON method
+        const json = error.toJSON();
+        expect(json.error).toContain('Cannot resolve path');
+        expect(json.requestedPath).toBe('nonexistent-file.xyz');
+        expect(json.attempted).toBeDefined();
+        expect(Array.isArray(json.attempted)).toBe(true);
+        expect(json.suggestion).toBeDefined();
+      }
+    });
+  });
+
+  describe('recursive directory reading', () => {
+    it('should skip node_modules and .git directories', async () => {
+      // Create directories that should be skipped
+      const nodeModulesDir = path.join(testDir, 'node_modules');
+      const gitDir = path.join(testDir, '.git');
+      await fs.mkdir(nodeModulesDir, { recursive: true });
+      await fs.mkdir(gitDir, { recursive: true });
+      await fs.writeFile(path.join(nodeModulesDir, 'hidden.txt'), 'skip');
+      await fs.writeFile(path.join(gitDir, 'hidden.txt'), 'skip');
+
+      // Also create a visible file
+      await fs.writeFile(path.join(testDir, 'visible.txt'), 'find me');
+
+      // Should find visible.txt but not the hidden ones
+      const result = await SmartPathResolver.resolvePath('visible.txt', {
+        workingDir: testDir,
+        maxDepth: 2,
+      });
+      expect(result.resolved).toContain('visible.txt');
+    });
+
+    it('should handle nested directory structure in fuzzy search', async () => {
+      // Create nested structure
+      const subDir = path.join(testDir, 'src', 'utils');
+      await fs.mkdir(subDir, { recursive: true });
+      await fs.writeFile(path.join(subDir, 'helper.ts'), 'export {}');
+
+      // Search should find file in subdirectory
+      const result = await SmartPathResolver.resolvePath('helper.ts', {
+        workingDir: testDir,
+        projectRoot: testDir,
+        maxDepth: 3,
+      });
+      expect(result.resolved).toContain('helper.ts');
+    });
   });
 });

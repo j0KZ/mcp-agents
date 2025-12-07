@@ -2,10 +2,7 @@
  * Tests for Tool Usage Tracker (Phase 5.4: Metrics and Telemetry)
  */
 import { describe, it, expect, beforeEach } from 'vitest';
-import {
-  ToolUsageTracker,
-  createTrackerWithRegistry,
-} from '../src/telemetry/index.js';
+import { ToolUsageTracker, createTrackerWithRegistry } from '../src/telemetry/index.js';
 
 describe('ToolUsageTracker', () => {
   let tracker: ToolUsageTracker;
@@ -102,7 +99,7 @@ describe('ToolUsageTracker', () => {
       const metrics = tracker.getAllMetrics();
       expect(metrics.length).toBe(3);
 
-      const toolNames = metrics.map((m) => m.toolName);
+      const toolNames = metrics.map(m => m.toolName);
       expect(toolNames).toContain('review_file');
       expect(toolNames).toContain('generate_tests');
       expect(toolNames).toContain('scan_security');
@@ -139,11 +136,7 @@ describe('ToolUsageTracker', () => {
     it('should identify unused tools from registered list', () => {
       tracker.track('review_file', 100, true);
 
-      const report = tracker.getFrequencyReport([
-        'review_file',
-        'generate_tests',
-        'scan_security',
-      ]);
+      const report = tracker.getFrequencyReport(['review_file', 'generate_tests', 'scan_security']);
 
       expect(report.unused).toContain('generate_tests');
       expect(report.unused).toContain('scan_security');
@@ -161,7 +154,7 @@ describe('ToolUsageTracker', () => {
       const report = tracker.getFrequencyReport();
 
       expect(report.recommendations.length).toBeGreaterThan(0);
-      const rec = report.recommendations.find((r) => r.toolName === 'review_file');
+      const rec = report.recommendations.find(r => r.toolName === 'review_file');
       expect(rec).toBeDefined();
       expect(rec?.suggestedFrequency).toBe('high');
     });
@@ -197,12 +190,12 @@ describe('ToolUsageTracker', () => {
 
       const usage = tracker.getServerUsage();
 
-      const reviewerUsage = usage.find((u) => u.server === 'smart-reviewer');
+      const reviewerUsage = usage.find(u => u.server === 'smart-reviewer');
       expect(reviewerUsage).toBeDefined();
       expect(reviewerUsage?.totalCalls).toBe(3);
       expect(reviewerUsage?.mostUsedTool).toBe('review_file');
 
-      const testGenUsage = usage.find((u) => u.server === 'test-generator');
+      const testGenUsage = usage.find(u => u.server === 'test-generator');
       expect(testGenUsage).toBeDefined();
       expect(testGenUsage?.totalCalls).toBe(1);
     });
@@ -238,9 +231,7 @@ describe('ToolUsageTracker', () => {
 
       expect(summary.sessionStart).toBeInstanceOf(Date);
       expect(summary.sessionEnd).toBeInstanceOf(Date);
-      expect(summary.sessionEnd.getTime()).toBeGreaterThanOrEqual(
-        summary.sessionStart.getTime()
-      );
+      expect(summary.sessionEnd.getTime()).toBeGreaterThanOrEqual(summary.sessionStart.getTime());
     });
 
     it('should return top 5 tools sorted by call count', () => {

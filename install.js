@@ -22,48 +22,54 @@ const colors = {
   green: '\x1b[32m',
   red: '\x1b[31m',
   yellow: '\x1b[33m',
-  cyan: '\x1b[36m'
+  cyan: '\x1b[36m',
 };
 
 const log = {
-  success: (msg) => console.log(`${colors.green}✅ ${msg}${colors.reset}`),
-  error: (msg) => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
-  info: (msg) => console.log(`${colors.yellow}${msg}${colors.reset}`),
-  cyan: (msg) => console.log(`${colors.cyan}${msg}${colors.reset}`)
+  success: msg => console.log(`${colors.green}✅ ${msg}${colors.reset}`),
+  error: msg => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
+  info: msg => console.log(`${colors.yellow}${msg}${colors.reset}`),
+  cyan: msg => console.log(`${colors.cyan}${msg}${colors.reset}`),
 };
 
 // Banner
 function showBanner() {
-  console.log(colors.green + `
+  console.log(
+    colors.green +
+      `
 ╔════════════════════════════════════════╗
 ║   🚀 MCP Tools + Skills Installer      ║
 ║   One command, complete setup          ║
 ╚════════════════════════════════════════╝
-` + colors.reset);
+` +
+      colors.reset
+  );
 }
 
 // Download file helper
 function downloadFile(url, filepath) {
   return new Promise((resolve, reject) => {
     const file = fs.createWriteStream(filepath);
-    https.get(url, (response) => {
-      if (response.statusCode === 302 || response.statusCode === 301) {
-        // Handle redirect
-        https.get(response.headers.location, (redirectResponse) => {
-          redirectResponse.pipe(file);
+    https
+      .get(url, response => {
+        if (response.statusCode === 302 || response.statusCode === 301) {
+          // Handle redirect
+          https.get(response.headers.location, redirectResponse => {
+            redirectResponse.pipe(file);
+            file.on('finish', () => {
+              file.close();
+              resolve();
+            });
+          });
+        } else {
+          response.pipe(file);
           file.on('finish', () => {
             file.close();
             resolve();
           });
-        });
-      } else {
-        response.pipe(file);
-        file.on('finish', () => {
-          file.close();
-          resolve();
-        });
-      }
-    }).on('error', reject);
+        }
+      })
+      .on('error', reject);
   });
 }
 
@@ -76,7 +82,7 @@ async function installTools() {
     // Run the MCP installer
     execSync('npx @j0kz/mcp-agents@latest', {
       stdio: 'inherit',
-      shell: true
+      shell: true,
     });
     log.success('MCP Tools installed successfully!');
     return true;
@@ -143,44 +149,44 @@ Simply ask Claude to use a specific skill:
   const skills = [
     {
       name: 'quick-pr-review',
-      description: 'Universal pre-PR checklist - 30 seconds to better PRs'
+      description: 'Universal pre-PR checklist - 30 seconds to better PRs',
     },
     {
       name: 'debug-detective',
-      description: 'Systematic debugging for any language or bug type'
+      description: 'Systematic debugging for any language or bug type',
     },
     {
       name: 'performance-hunter',
-      description: 'Find the 20% causing 80% of performance issues'
+      description: 'Find the 20% causing 80% of performance issues',
     },
     {
       name: 'legacy-modernizer',
-      description: 'Safely modernize 20-year-old code without breaking'
+      description: 'Safely modernize 20-year-old code without breaking',
     },
     {
       name: 'zero-to-hero',
-      description: 'Master any codebase in hours, not weeks'
+      description: 'Master any codebase in hours, not weeks',
     },
     {
       name: 'test-coverage-boost',
-      description: 'Strategic path from 0% to 80% test coverage'
+      description: 'Strategic path from 0% to 80% test coverage',
     },
     {
       name: 'tech-debt-tracker',
-      description: 'Quantify technical debt in hours and dollars'
+      description: 'Quantify technical debt in hours and dollars',
     },
     {
       name: 'dependency-doctor',
-      description: 'Diagnose and heal package management problems'
+      description: 'Diagnose and heal package management problems',
     },
     {
       name: 'security-first',
-      description: 'OWASP Top 10 protection checklist'
+      description: 'OWASP Top 10 protection checklist',
     },
     {
       name: 'api-integration',
-      description: 'Universal patterns for any third-party API'
-    }
+      description: 'Universal patterns for any third-party API',
+    },
   ];
 
   const baseUrl = 'https://raw.githubusercontent.com/j0KZ/mcp-agents/main/docs/universal-skills';
@@ -188,10 +194,7 @@ Simply ask Claude to use a specific skill:
   try {
     // Download INDEX.md
     console.log('  📥 Downloading skill index...');
-    await downloadFile(
-      `${baseUrl}/INDEX.md`,
-      path.join(skillsDir, 'INDEX.md')
-    );
+    await downloadFile(`${baseUrl}/INDEX.md`, path.join(skillsDir, 'INDEX.md'));
 
     // Download each skill with progress
     let completed = 0;
@@ -203,10 +206,7 @@ Simply ask Claude to use a specific skill:
       const skillDir = path.join(skillsDir, skill.name);
       fs.mkdirSync(skillDir, { recursive: true });
 
-      await downloadFile(
-        `${baseUrl}/${skill.name}/SKILL.md`,
-        path.join(skillDir, 'SKILL.md')
-      );
+      await downloadFile(`${baseUrl}/${skill.name}/SKILL.md`, path.join(skillDir, 'SKILL.md'));
     }
 
     // Create a skills manifest for Claude
@@ -217,16 +217,13 @@ Simply ask Claude to use a specific skill:
         description: s.description,
         path: `${s.name}/SKILL.md`,
         type: 'universal',
-        compatibility: 'any-project'
+        compatibility: 'any-project',
       })),
       created: new Date().toISOString(),
-      source: 'https://github.com/j0KZ/mcp-agents'
+      source: 'https://github.com/j0KZ/mcp-agents',
     };
 
-    fs.writeFileSync(
-      path.join(skillsDir, 'manifest.json'),
-      JSON.stringify(manifest, null, 2)
-    );
+    fs.writeFileSync(path.join(skillsDir, 'manifest.json'), JSON.stringify(manifest, null, 2));
 
     log.success(`✅ Universal skills installed in ${path.relative(process.cwd(), skillsDir)}/`);
     log.info('📖 Claude can now access these skills automatically when you open this project');

@@ -39,10 +39,11 @@ describe('TestGenerator', () => {
     });
 
     it('should handle files exceeding size limit', async () => {
-      const largeContent = 'x'.repeat(200 * 1024); // 200KB
+      // MAX_FILE_SIZE is 1MB = 1_000_000 bytes, so we need more than that
+      const largeContent = 'x'.repeat(1_000_001); // Just over 1MB
       vi.mocked(readFile).mockResolvedValue(largeContent);
 
-      await expect(generator.generateTests('/large.ts')).rejects.toThrow('TEST_GEN_008');
+      await expect(generator.generateTests('/large.ts')).rejects.toThrow('TEST_GEN_007');
     });
 
     it('should generate tests for valid TypeScript file', async () => {
@@ -367,6 +368,59 @@ describe('TestGenerator', () => {
       });
 
       expect(resultWith.totalTests).toBeGreaterThanOrEqual(resultWithout.totalTests);
+    });
+
+    it('should generate constructor test for class with constructor', async () => {
+      const code = `
+        export class UserService {
+          private users: string[] = [];
+
+          constructor(initialUsers?: string[]) {
+            if (initialUsers) {
+              this.users = initialUsers;
+            }
+          }
+
+          getUsers() { return this.users; }
+        }
+      `;
+
+      vi.mocked(readFile).mockResolvedValue(code);
+
+      const result = await generator.generateTests('/constructor.ts');
+
+      expect(result.success).toBe(true);
+      expect(result.code).toContain('UserService');
+      expect(result.code).toContain('instance');
+    });
+
+    it('should handle ENOENT error specifically', async () => {
+      const error = new Error('File not found') as NodeJS.ErrnoException;
+      error.code = 'ENOENT';
+      vi.mocked(readFile).mockRejectedValue(error);
+
+      await expect(generator.generateTests('/missing.ts')).rejects.toThrow('TEST_GEN_003');
+    });
+
+    it('should handle EACCES error specifically', async () => {
+      const error = new Error('Permission denied') as NodeJS.ErrnoException;
+      error.code = 'EACCES';
+      vi.mocked(readFile).mockRejectedValue(error);
+
+      await expect(generator.generateTests('/noaccess.ts')).rejects.toThrow('TEST_GEN_004');
+    });
+
+    it('should handle files with no testable code', async () => {
+      const code = `
+        // Just comments
+        /* No functions or classes */
+        type SomeType = string;
+        interface SomeInterface {}
+      `;
+
+      vi.mocked(readFile).mockResolvedValue(code);
+
+      await expect(generator.generateTests('/notestable.ts')).rejects.toThrow('TEST_GEN_008');
     });
   });
 });

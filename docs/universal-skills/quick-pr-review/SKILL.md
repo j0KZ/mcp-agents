@@ -14,6 +14,7 @@ description: Universal pre-PR checklist that works in ANY project, with or witho
 ## 🎯 When to Use This Skill
 
 Use BEFORE creating a pull request in ANY project when:
+
 - Preparing code for review
 - Self-reviewing your changes
 - Ensuring quality standards
@@ -22,11 +23,13 @@ Use BEFORE creating a pull request in ANY project when:
 ## ⚡ Quick Start (30 seconds)
 
 ### With MCP Tools:
+
 ```
 "Run quick PR review on my staged changes"
 ```
 
 ### Without MCP Tools:
+
 ```bash
 # Quick self-review checklist
 git diff --staged            # Review changes
@@ -40,11 +43,13 @@ git grep "TODO\|FIXME\|XXX"  # Find unfinished work
 ### 1. Code Changes Review
 
 #### WITH MCP (Smart Reviewer):
+
 ```
 "Review my staged files for quality issues"
 ```
 
 #### WITHOUT MCP:
+
 ```bash
 # Self-review questions:
 # □ Do variable names clearly express intent?
@@ -60,11 +65,13 @@ git diff --staged | grep -E "console\.|debugger|TODO|FIXME"
 ### 2. Test Coverage Check
 
 #### WITH MCP (Test Generator):
+
 ```
 "Check test coverage and generate missing tests"
 ```
 
 #### WITHOUT MCP:
+
 ```bash
 # Check coverage (adjust for your test runner)
 npm test -- --coverage        # Jest/Vitest
@@ -82,11 +89,13 @@ mvn test jacoco:report         # Java
 ### 3. Security Scan
 
 #### WITH MCP (Security Scanner):
+
 ```
 "Scan my changes for security vulnerabilities"
 ```
 
 #### WITHOUT MCP:
+
 ```bash
 # Security checklist:
 # □ No hardcoded secrets/keys?
@@ -104,11 +113,13 @@ npm audit  # or: pip check, go mod tidy, etc.
 ### 4. Documentation Check
 
 #### WITH MCP (Doc Generator):
+
 ```
 "Check if my changes need documentation updates"
 ```
 
 #### WITHOUT MCP:
+
 ```bash
 # Documentation checklist:
 # □ README updated if needed?
@@ -124,11 +135,13 @@ grep -B2 "function\|class\|def" --include="*.js" | grep -v "//"
 ### 5. Performance Check
 
 #### WITH MCP (Architecture Analyzer):
+
 ```
 "Check for performance issues in my changes"
 ```
 
 #### WITHOUT MCP:
+
 ```bash
 # Performance checklist:
 # □ No N+1 queries?
@@ -147,6 +160,7 @@ git diff --staged | grep -E "await.*map|Promise\.all"    # Async patterns
 ### Optimal Flow (2-3 minutes):
 
 1. **Stage your changes:**
+
    ```bash
    git add -p  # Stage selectively
    ```
@@ -156,12 +170,14 @@ git diff --staged | grep -E "await.*map|Promise\.all"    # Async patterns
    - WITHOUT: Use the manual checklist above
 
 3. **Fix issues found:**
+
    ```bash
    # Fix issues
    git add -p  # Stage fixes
    ```
 
 4. **Final verification:**
+
    ```bash
    git diff --staged --stat  # Review scope
    git log --oneline -5      # Check commit context
@@ -172,6 +188,7 @@ git diff --staged | grep -E "await.*map|Promise\.all"    # Async patterns
 ## 💡 Pro Tips
 
 ### Universal Commit Message Check:
+
 ```bash
 # Ensure good commit messages
 git log --oneline -10  # Are they clear and consistent?
@@ -182,6 +199,7 @@ git log --oneline -10  # Are they clear and consistent?
 ```
 
 ### Quick Scope Check:
+
 ```bash
 # Is this PR doing too much?
 git diff --staged --stat
@@ -189,6 +207,7 @@ git diff --staged --stat
 ```
 
 ### Dependency Impact:
+
 ```bash
 # Check what you're affecting
 git diff --staged package.json Gemfile go.mod requirements.txt pom.xml
@@ -197,6 +216,7 @@ git diff --staged package.json Gemfile go.mod requirements.txt pom.xml
 ## 🎯 Success Metrics
 
 Your PR is ready when:
+
 - ✅ All tests pass
 - ✅ No linting errors
 - ✅ Security checklist complete
@@ -207,6 +227,7 @@ Your PR is ready when:
 ## 🔄 Quick Recovery
 
 If you find issues:
+
 ```bash
 # Unstage everything
 git reset HEAD

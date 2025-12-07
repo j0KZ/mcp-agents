@@ -7,6 +7,7 @@
 ## 📐 Pattern Language vs Rigid Cookbook
 
 ### What is Pattern Language?
+
 Instead of fixed recipes, we provide **building blocks** that can be combined infinitely:
 
 ```
@@ -16,6 +17,7 @@ PATTERNS (flexible) > RECIPES (rigid)
 ### Core Patterns (Combine These!)
 
 #### 🔍 Analysis Patterns
+
 - **Deep Scan:** Thorough investigation of specific aspect
 - **Quick Check:** Rapid validation of assumptions
 - **Comparative:** Compare against standards/other code
@@ -23,6 +25,7 @@ PATTERNS (flexible) > RECIPES (rigid)
 - **Predictive:** Anticipate future issues
 
 #### 🔧 Transformation Patterns
+
 - **Incremental:** Small, safe changes
 - **Radical:** Major restructuring
 - **Protective:** Add safety layers
@@ -30,6 +33,7 @@ PATTERNS (flexible) > RECIPES (rigid)
 - **Modernizing:** Update to new standards
 
 #### 🛡️ Validation Patterns
+
 - **Pre-Flight:** Before deployment/commit
 - **Post-Change:** After modifications
 - **Continuous:** Ongoing monitoring
@@ -41,6 +45,7 @@ PATTERNS (flexible) > RECIPES (rigid)
 ## 🎮 Pattern Combinations
 
 ### Instead of: "Use Pre-PR Recipe"
+
 ### Think: "I need Analysis + Validation patterns"
 
 ```
@@ -54,13 +59,13 @@ Transform.Radical + Validation.Regression = Safe refactoring
 ```javascript
 // Your unique workflow
 const myPattern = {
-  name: "Paranoid Feature Development",
+  name: 'Paranoid Feature Development',
   patterns: [
-    "Analysis.Predictive",    // What could go wrong?
-    "Transform.Protective",    // Add defensive code
-    "Validation.Continuous",   // Monitor constantly
-    "Analysis.Comparative"     // Compare with successful features
-  ]
+    'Analysis.Predictive', // What could go wrong?
+    'Transform.Protective', // Add defensive code
+    'Validation.Continuous', // Monitor constantly
+    'Analysis.Comparative', // Compare with successful features
+  ],
 };
 ```
 
@@ -69,26 +74,34 @@ const myPattern = {
 ## 🧩 Building Blocks
 
 ### Level 1: Atomic Actions
+
 Smallest units of work:
+
 - Scan a file
 - Fix an issue
 - Generate a test
 - Check a metric
 
 ### Level 2: Molecular Patterns
+
 Combinations of atoms:
+
 - Scan + Fix
 - Generate + Validate
 - Analyze + Document
 
 ### Level 3: Compound Workflows
+
 Complex combinations:
+
 - Full audit (many molecules)
 - Migration (sequence of patterns)
 - Optimization (iterative patterns)
 
 ### Level 4: Emergent Behaviors
+
 Unexpected capabilities:
+
 - Tools teaching you
 - Tools improving themselves
 - Tools discovering patterns
@@ -100,6 +113,7 @@ Unexpected capabilities:
 ### Express INTENT, not METHOD:
 
 #### Security Intent Patterns
+
 ```yaml
 Intent: "Protect user data"
 Patterns it might trigger:
@@ -117,6 +131,7 @@ Patterns it might trigger:
 ```
 
 #### Quality Intent Patterns
+
 ```yaml
 Intent: "Make this maintainable"
 Patterns it might trigger:
@@ -138,6 +153,7 @@ Patterns it might trigger:
 ## 🔄 Iterative Patterns
 
 ### The Conversation Pattern
+
 ```
 1. Express intent
 2. Receive suggestion
@@ -147,6 +163,7 @@ Patterns it might trigger:
 ```
 
 ### The Evolution Pattern
+
 ```
 1. Quick fix
 2. Measure impact
@@ -156,6 +173,7 @@ Patterns it might trigger:
 ```
 
 ### The Learning Pattern
+
 ```
 1. Try something
 2. Observe result
@@ -169,6 +187,7 @@ Patterns it might trigger:
 ## 🎨 Creative Patterns
 
 ### The "What If" Pattern
+
 ```
 "What if this was written in functional style?"
 "What if we had 10x more users?"
@@ -177,6 +196,7 @@ Patterns it might trigger:
 ```
 
 ### The "Show Me" Pattern
+
 ```
 "Show me the riskiest code"
 "Show me where time is wasted"
@@ -185,6 +205,7 @@ Patterns it might trigger:
 ```
 
 ### The "Teach Me" Pattern
+
 ```
 "Teach me why this is complex"
 "Teach me better patterns"
@@ -197,6 +218,7 @@ Patterns it might trigger:
 ## 🔬 Discovery Patterns
 
 ### Finding Capabilities
+
 1. **Exploratory:** "What can you do with this?"
 2. **Boundary:** "What's the limit of this feature?"
 3. **Combinatorial:** "What happens if we combine X and Y?"
@@ -204,6 +226,7 @@ Patterns it might trigger:
 5. **Meta:** "Analyze your own analysis"
 
 ### Example Discoveries:
+
 ```
 Discovery: "Security Scanner can generate attack vectors for testing"
 How: Asked "Create security tests that would break this"
@@ -223,11 +246,13 @@ How: Asked "Explain this like I'm in marketing"
 ## 📊 Metric Patterns
 
 ### Standard Metrics (Boring)
+
 - Lines of code
 - Test coverage
 - Complexity score
 
 ### Creative Metrics (Interesting)
+
 ```
 "Surprise factor" - How unexpected is this code?
 "Bus factor" - How many people understand this?
@@ -238,6 +263,7 @@ How: Asked "Explain this like I'm in marketing"
 ```
 
 ### Custom Metrics You Define
+
 ```
 "Calculate our 'technical debt interest rate'"
 "Measure 'developer happiness index'"
@@ -252,6 +278,7 @@ How: Asked "Explain this like I'm in marketing"
 ### Different Contexts, Different Patterns
 
 #### Startup Context
+
 ```yaml
 Patterns:
   - Speed over perfection
@@ -261,6 +288,7 @@ Patterns:
 ```
 
 #### Enterprise Context
+
 ```yaml
 Patterns:
   - Compliance first
@@ -270,6 +298,7 @@ Patterns:
 ```
 
 #### Open Source Context
+
 ```yaml
 Patterns:
   - Community friendly
@@ -279,6 +308,7 @@ Patterns:
 ```
 
 #### Educational Context
+
 ```yaml
 Patterns:
   - Learning focused
@@ -294,7 +324,9 @@ Patterns:
 ### Patterns for Using Patterns
 
 #### The Bootstrap Pattern
+
 Start simple, build complexity:
+
 ```
 1. Single tool, simple task
 2. Add validation
@@ -304,7 +336,9 @@ Start simple, build complexity:
 ```
 
 #### The Composition Pattern
+
 Build complex from simple:
+
 ```
 Small patterns + Small patterns = Medium patterns
 Medium patterns + Medium patterns = Large workflows
@@ -312,7 +346,9 @@ Large workflows + Intelligence = Autonomous systems
 ```
 
 #### The Discovery Pattern
+
 Find new capabilities:
+
 ```
 1. Hypothesize capability
 2. Test with creative prompt
@@ -326,18 +362,23 @@ Find new capabilities:
 ## 💡 Pattern Anti-Patterns (What NOT to Do)
 
 ### ❌ The Cookbook Prison
+
 Following recipes blindly without understanding
 
 ### ❌ The Tool Hammer
+
 Using same tool for everything ("when you have a hammer...")
 
 ### ❌ The Perfection Paralysis
+
 Trying to get everything perfect in one pass
 
 ### ❌ The Metric Obsession
+
 Optimizing metrics instead of solving problems
 
 ### ❌ The Pattern Collector
+
 Collecting patterns without applying them
 
 ---
@@ -374,22 +415,27 @@ Collecting patterns without applying them
 ## 🌟 Your Pattern Journey
 
 ### Stage 1: Pattern User
+
 - Recognizes existing patterns
 - Applies them appropriately
 
 ### Stage 2: Pattern Adapter
+
 - Modifies patterns for context
 - Combines simple patterns
 
 ### Stage 3: Pattern Creator
+
 - Discovers new patterns
 - Documents them clearly
 
 ### Stage 4: Pattern Teacher
+
 - Helps others see patterns
 - Builds pattern communities
 
 ### Stage 5: Pattern Philosopher
+
 - Sees patterns in patterns
 - Questions pattern existence
 - Transcends patterns
@@ -401,6 +447,7 @@ Collecting patterns without applying them
 **"There is no fixed pattern"**
 
 The most powerful pattern is the ability to:
+
 1. Understand the problem
 2. Imagine a solution
 3. Describe it clearly

@@ -22,21 +22,25 @@
 ## 🚀 Quick Installation Options
 
 ### Install MCP Tools (Automated AI Tools)
+
 ```bash
 npx @j0kz/mcp-agents@latest
 ```
 
 ### Install Universal Skills (Developer Guides)
+
 ```bash
 npx @j0kz/claude-skills
 ```
 
 ### Install Everything (Tools + Skills)
+
 ```bash
 npx @j0kz/mcp-agents install
 ```
 
 The installer automatically:
+
 - ✅ Detects your editor (Claude, Cursor, Windsurf, Qoder, VS Code, Roo, etc.)
 - ✅ Configures all 10 MCP tools with universal compatibility
 - ✅ Downloads 10 universal developer skills (optional)
@@ -128,6 +132,7 @@ After restarting your editor, try one of these commands:
 <summary><b>📚 View Universal Skills</b> (Click to expand)</summary>
 
 ### Installation
+
 ```bash
 # Install skills in any project
 npx @j0kz/claude-skills
@@ -138,20 +143,21 @@ npx @j0kz/mcp-agents install
 
 ### Available Skills
 
-| Skill | Purpose | Time to Apply |
-|-------|---------|---------------|
-| **quick-pr-review** | Pre-PR checklist | 30 seconds |
-| **debug-detective** | Systematic debugging | 5 minutes |
-| **performance-hunter** | Find bottlenecks | 10 minutes |
-| **legacy-modernizer** | Modernize old code | Incremental |
-| **zero-to-hero** | Master any codebase | 30 minutes |
-| **test-coverage-boost** | 0% to 80% coverage | 1-5 days |
-| **tech-debt-tracker** | Quantify technical debt | 1 hour |
-| **dependency-doctor** | Fix package issues | 30 minutes |
-| **security-first** | Security audit | 1 hour |
-| **api-integration** | Connect to any API | 2 hours |
+| Skill                   | Purpose                 | Time to Apply |
+| ----------------------- | ----------------------- | ------------- |
+| **quick-pr-review**     | Pre-PR checklist        | 30 seconds    |
+| **debug-detective**     | Systematic debugging    | 5 minutes     |
+| **performance-hunter**  | Find bottlenecks        | 10 minutes    |
+| **legacy-modernizer**   | Modernize old code      | Incremental   |
+| **zero-to-hero**        | Master any codebase     | 30 minutes    |
+| **test-coverage-boost** | 0% to 80% coverage      | 1-5 days      |
+| **tech-debt-tracker**   | Quantify technical debt | 1 hour        |
+| **dependency-doctor**   | Fix package issues      | 30 minutes    |
+| **security-first**      | Security audit          | 1 hour        |
+| **api-integration**     | Connect to any API      | 2 hours       |
 
 ### Usage Examples
+
 ```
 "Apply the debug-detective skill to find this bug"
 "Use quick-pr-review before creating my PR"
@@ -159,6 +165,7 @@ npx @j0kz/mcp-agents install
 ```
 
 Each skill includes:
+
 - ✅ Quick start (30-second value)
 - ✅ WITH MCP approach (automated)
 - ✅ WITHOUT MCP approach (manual)
@@ -847,6 +854,7 @@ npx @j0kz/auto-pilot
 ```
 
 That's it! Auto-Pilot will:
+
 - 🔍 Detect your project type automatically
 - 📦 Install git hooks for quality checks
 - 👀 Start watching files (auto-fix on save)
@@ -919,28 +927,31 @@ auto-pilot lazy         # Ultra lazy mode 🦥
 ### Git Hooks Installed
 
 **Pre-commit**:
+
 - Auto-fixes staged files
 - Removes console statements
 - Runs prettier & ESLint
 - Generates missing tests
 
 **Pre-push**:
+
 - Runs full test suite
 - Checks coverage (>55%)
 - Security audit
 - Build verification
 
 **Commit-msg**:
+
 - Enforces conventional commits
 - Auto-fixes commit messages
 
 ### The Laziness Scale
 
-- **Level 1**: You run tests manually → *Amateur*
-- **Level 2**: You have CI/CD → *Getting there*
-- **Level 3**: You use linters → *Decent*
-- **Level 4**: You have pre-commit hooks → *Good*
-- **Level 5**: You use Auto-Pilot → ***LEGENDARY LAZY*** 🦥
+- **Level 1**: You run tests manually → _Amateur_
+- **Level 2**: You have CI/CD → _Getting there_
+- **Level 3**: You use linters → _Decent_
+- **Level 4**: You have pre-commit hooks → _Good_
+- **Level 5**: You use Auto-Pilot → **_LEGENDARY LAZY_** 🦥
 
 </details>
 

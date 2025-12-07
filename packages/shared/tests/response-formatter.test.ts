@@ -66,7 +66,11 @@ describe('formatResponse', () => {
   });
 
   it('should mark detailed as not truncated', () => {
-    const result = formatResponse(mockResult, { format: 'detailed', includeMetadata: true }, formatters);
+    const result = formatResponse(
+      mockResult,
+      { format: 'detailed', includeMetadata: true },
+      formatters
+    );
     expect(result._meta?.truncated).toBe(false);
   });
 
@@ -84,7 +88,11 @@ describe('formatErrorResponse', () => {
   });
 
   it('should include metadata when requested', () => {
-    const result = formatErrorResponse('Error', { format: 'minimal', includeMetadata: true, duration: 50 });
+    const result = formatErrorResponse('Error', {
+      format: 'minimal',
+      includeMetadata: true,
+      duration: 50,
+    });
     expect(result._meta).toBeDefined();
     expect(result._meta?.format).toBe('minimal');
     expect(result._meta?.duration).toBe(50);
@@ -154,10 +162,7 @@ describe('filterBySeverity', () => {
   });
 
   it('should handle items without severity', () => {
-    const mixedItems = [
-      { message: 'A' },
-      { severity: 'critical', message: 'B' },
-    ];
+    const mixedItems = [{ message: 'A' }, { severity: 'critical', message: 'B' }];
     const result = filterBySeverity(mixedItems, 'concise');
     expect(result.some(i => i.severity === 'critical')).toBe(true);
   });

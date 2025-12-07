@@ -14,6 +14,7 @@ description: Increase test coverage from 0% to 80%+ in ANY project, ANY testing 
 ## 🎯 When to Use This Skill
 
 Use when you need to:
+
 - Add tests to untested code
 - Increase coverage for CI/CD requirements
 - Prepare for major refactoring
@@ -48,15 +49,21 @@ dotnet test /p:CollectCoverage=true
 ## 📊 The Coverage Ladder (0% → 80%)
 
 ### Level 0: No Tests (0% coverage)
+
 ### Level 1: Critical Path (20% coverage)
+
 ### Level 2: Happy Path (40% coverage)
+
 ### Level 3: Edge Cases (60% coverage)
+
 ### Level 4: Error Handling (80% coverage)
+
 ### Level 5: Full Coverage (95%+)
 
 ## 🎯 Strategic Test Writing (80/20 Rule)
 
 ### WITH MCP (Test Generator):
+
 ```
 "Generate tests for the most critical untested functions"
 "Create tests to reach 80% coverage for [module]"
@@ -70,8 +77,8 @@ dotnet test /p:CollectCoverage=true
 // Priority 1: Money/Payment handling
 test('calculateTotal should handle discounts correctly', () => {
   expect(calculateTotal(100, 0.2)).toBe(80); // 20% discount
-  expect(calculateTotal(100, 0)).toBe(100);   // No discount
-  expect(calculateTotal(100, 1)).toBe(0);     // 100% discount
+  expect(calculateTotal(100, 0)).toBe(100); // No discount
+  expect(calculateTotal(100, 1)).toBe(0); // 100% discount
 });
 
 // Priority 2: Authentication/Authorization
@@ -93,8 +100,12 @@ test('email validator should reject invalid emails', () => {
 // Universal Test Structure (AAA Pattern)
 test('should [expected behavior] when [condition]', () => {
   // Arrange - Set up test data
-  const input = { /* test data */ };
-  const expected = { /* expected result */ };
+  const input = {
+    /* test data */
+  };
+  const expected = {
+    /* expected result */
+  };
 
   // Act - Execute the function
   const result = functionUnderTest(input);
@@ -144,7 +155,7 @@ describe('fetchUser', () => {
   test('should fetch user successfully', async () => {
     // Mock the API
     api.get = jest.fn().mockResolvedValue({
-      data: { id: 1, name: 'John' }
+      data: { id: 1, name: 'John' },
     });
 
     const user = await fetchUser(1);
@@ -215,17 +226,13 @@ app.get('/api/users/:id', async (req, res) => {
 // Tests
 describe('GET /api/users/:id', () => {
   test('should return user when exists', async () => {
-    const response = await request(app)
-      .get('/api/users/1')
-      .expect(200);
+    const response = await request(app).get('/api/users/1').expect(200);
 
     expect(response.body).toHaveProperty('id', 1);
   });
 
   test('should return 404 when user not found', async () => {
-    const response = await request(app)
-      .get('/api/users/999')
-      .expect(404);
+    const response = await request(app).get('/api/users/999').expect(404);
 
     expect(response.body.error).toBe('Not found');
   });
@@ -235,6 +242,7 @@ describe('GET /api/users/:id', () => {
 ## 🚀 Rapid Coverage Improvement Strategy
 
 ### Day 1: Foundation (0% → 20%)
+
 ```bash
 # 1. Setup test infrastructure
 npm install --save-dev jest @types/jest
@@ -256,6 +264,7 @@ echo "describe('app', () => {
 ```
 
 ### Day 2: Critical Paths (20% → 40%)
+
 ```javascript
 // Test the money flow
 test('payment processing flow', async () => {
@@ -269,6 +278,7 @@ test('login flow', async () => {
 ```
 
 ### Day 3: Happy Paths (40% → 60%)
+
 ```javascript
 // Test successful scenarios
 test('user can create account', () => {});
@@ -277,6 +287,7 @@ test('user can delete account', () => {});
 ```
 
 ### Day 4: Edge Cases (60% → 70%)
+
 ```javascript
 // Test boundaries and limits
 test('handles maximum input size', () => {});
@@ -285,6 +296,7 @@ test('handles special characters', () => {});
 ```
 
 ### Day 5: Error Cases (70% → 80%)
+
 ```javascript
 // Test error handling
 test('handles network timeout', () => {});
@@ -295,6 +307,7 @@ test('handles concurrent access', () => {});
 ## 🎯 Coverage Improvement Techniques
 
 ### 1. Find Untested Code
+
 ```bash
 # Generate coverage report
 npm test -- --coverage
@@ -310,18 +323,19 @@ start coverage/index.html  # Windows
 ### 2. Test the Untestable
 
 **Mocking External Dependencies:**
+
 ```javascript
 // Mock database
 jest.mock('./database', () => ({
   query: jest.fn(),
-  connect: jest.fn()
+  connect: jest.fn(),
 }));
 
 // Mock file system
 jest.mock('fs', () => ({
   readFile: jest.fn((path, callback) => {
     callback(null, 'mock file content');
-  })
+  }),
 }));
 
 // Mock HTTP requests
@@ -330,11 +344,16 @@ axios.get.mockResolvedValue({ data: 'test' });
 ```
 
 **Testing Private Methods:**
+
 ```javascript
 // Option 1: Test through public interface
 class Calculator {
-  #privateMethod() { return 42; }
-  publicMethod() { return this.#privateMethod(); }
+  #privateMethod() {
+    return 42;
+  }
+  publicMethod() {
+    return this.#privateMethod();
+  }
 }
 
 test('private method via public', () => {
@@ -343,8 +362,10 @@ test('private method via public', () => {
 });
 
 // Option 2: Extract to separate testable function
-function complexLogic(input) { /* ... */ }
-export { complexLogic };  // Test directly
+function complexLogic(input) {
+  /* ... */
+}
+export { complexLogic }; // Test directly
 ```
 
 ### 3. Parameterized Tests (Test Multiple Cases)
@@ -372,6 +393,7 @@ def test_double(input, expected):
 ## 📊 Coverage Goals by Project Type
 
 ### Web Application
+
 - **Controllers/Routes**: 90%+ (critical paths)
 - **Business Logic**: 85%+ (core features)
 - **Utilities**: 95%+ (pure functions)
@@ -379,12 +401,14 @@ def test_double(input, expected):
 - **Database Models**: 80%+ (validations)
 
 ### API Service
+
 - **Endpoints**: 95%+ (all routes)
 - **Middleware**: 90%+ (auth, validation)
 - **Services**: 85%+ (business logic)
 - **Error Handlers**: 100% (critical)
 
 ### Library/Package
+
 - **Public API**: 100% (all exports)
 - **Core Logic**: 95%+ (main features)
 - **Edge Cases**: 90%+ (robustness)
@@ -393,6 +417,7 @@ def test_double(input, expected):
 ## 💡 Pro Tips
 
 ### Speed Up Test Writing:
+
 ```bash
 # Generate test boilerplate
 # VS Code: Install "Jest Snippets" extension
@@ -402,6 +427,7 @@ def test_double(input, expected):
 ```
 
 ### Test Data Builders:
+
 ```javascript
 // Create reusable test data
 class UserBuilder {
@@ -409,7 +435,7 @@ class UserBuilder {
     this.user = {
       id: 1,
       name: 'Test User',
-      email: 'test@example.com'
+      email: 'test@example.com',
     };
   }
 
@@ -429,13 +455,11 @@ class UserBuilder {
 }
 
 // Usage
-const user = new UserBuilder()
-  .withName('John')
-  .withEmail('john@example.com')
-  .build();
+const user = new UserBuilder().withName('John').withEmail('john@example.com').build();
 ```
 
 ### Coverage Exclusions:
+
 ```javascript
 // Istanbul ignore comments
 /* istanbul ignore next */  // Ignore next line
@@ -464,6 +488,7 @@ const user = new UserBuilder()
 ## 🎯 Success Checklist
 
 Your tests are good when:
+
 - ✅ Coverage > 80%
 - ✅ Tests run fast (< 1 minute)
 - ✅ Tests are deterministic (no flakiness)

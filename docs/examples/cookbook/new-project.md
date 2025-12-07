@@ -7,6 +7,7 @@
 ## The Complete New Project Setup
 
 ### What You Type
+
 ```
 "I'm starting a new Node.js API project. Set it up with best practices"
 ```
@@ -33,6 +34,7 @@ graph LR
 **You:** "Plan the architecture for an e-commerce API"
 
 **Architecture Analyzer suggests:**
+
 ```
 src/
 ├── controllers/       # HTTP layer
@@ -61,6 +63,7 @@ src/
 ```
 
 **Clean Architecture Validation:**
+
 - ✅ Controllers → Services → Repositories
 - ✅ No circular dependencies
 - ✅ Clear separation of concerns
@@ -195,45 +198,45 @@ CREATE INDEX idx_order_items_order ON order_items(order_id);
 ```javascript
 // security/config.js
 export const securityConfig = {
-    // Rate limiting
-    rateLimit: {
-        windowMs: 15 * 60 * 1000, // 15 minutes
-        max: 100, // limit each IP to 100 requests
-        message: 'Too many requests'
-    },
+  // Rate limiting
+  rateLimit: {
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests
+    message: 'Too many requests',
+  },
 
-    // CORS settings
-    cors: {
-        origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
-        credentials: true
-    },
+  // CORS settings
+  cors: {
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
+    credentials: true,
+  },
 
-    // JWT configuration
-    jwt: {
-        secret: process.env.JWT_SECRET,
-        expiresIn: '24h',
-        refreshExpiresIn: '7d'
-    },
+  // JWT configuration
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    expiresIn: '24h',
+    refreshExpiresIn: '7d',
+  },
 
-    // Input validation rules
-    validation: {
-        email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-        password: {
-            minLength: 8,
-            requireUppercase: true,
-            requireLowercase: true,
-            requireNumber: true,
-            requireSpecial: true
-        }
+  // Input validation rules
+  validation: {
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    password: {
+      minLength: 8,
+      requireUppercase: true,
+      requireLowercase: true,
+      requireNumber: true,
+      requireSpecial: true,
     },
+  },
 
-    // Security headers
-    headers: {
-        'X-Content-Type-Options': 'nosniff',
-        'X-Frame-Options': 'DENY',
-        'X-XSS-Protection': '1; mode=block',
-        'Strict-Transport-Security': 'max-age=31536000; includeSubDomains'
-    }
+  // Security headers
+  headers: {
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'X-XSS-Protection': '1; mode=block',
+    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  },
 };
 
 // middleware/security.js
@@ -241,21 +244,21 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
 
-export const setupSecurity = (app) => {
-    app.use(helmet());
-    app.use(rateLimit(securityConfig.rateLimit));
-    app.use(mongoSanitize());
+export const setupSecurity = app => {
+  app.use(helmet());
+  app.use(rateLimit(securityConfig.rateLimit));
+  app.use(mongoSanitize());
 
-    // Prevent SQL injection
-    app.use((req, res, next) => {
-        // Sanitize all inputs
-        Object.keys(req.body).forEach(key => {
-            if (typeof req.body[key] === 'string') {
-                req.body[key] = req.body[key].replace(/[<>'"]/g, '');
-            }
-        });
-        next();
+  // Prevent SQL injection
+  app.use((req, res, next) => {
+    // Sanitize all inputs
+    Object.keys(req.body).forEach(key => {
+      if (typeof req.body[key] === 'string') {
+        req.body[key] = req.body[key].replace(/[<>'"]/g, '');
+      }
     });
+    next();
+  });
 };
 ```
 
@@ -266,52 +269,48 @@ export const setupSecurity = (app) => {
 ```javascript
 // tests/setup.test.js
 describe('Project Setup Validation', () => {
-    it('should have all required environment variables', () => {
-        const required = ['DATABASE_URL', 'JWT_SECRET', 'PORT'];
-        required.forEach(key => {
-            expect(process.env[key]).toBeDefined();
-        });
+  it('should have all required environment variables', () => {
+    const required = ['DATABASE_URL', 'JWT_SECRET', 'PORT'];
+    required.forEach(key => {
+      expect(process.env[key]).toBeDefined();
     });
+  });
 
-    it('should connect to database', async () => {
-        const connection = await db.connect();
-        expect(connection).toBeDefined();
-        await connection.close();
-    });
+  it('should connect to database', async () => {
+    const connection = await db.connect();
+    expect(connection).toBeDefined();
+    await connection.close();
+  });
 
-    it('should have all required middleware', () => {
-        const app = createApp();
-        const middleware = app._router.stack.map(layer => layer.name);
+  it('should have all required middleware', () => {
+    const app = createApp();
+    const middleware = app._router.stack.map(layer => layer.name);
 
-        expect(middleware).toContain('helmet');
-        expect(middleware).toContain('cors');
-        expect(middleware).toContain('rateLimit');
-    });
+    expect(middleware).toContain('helmet');
+    expect(middleware).toContain('cors');
+    expect(middleware).toContain('rateLimit');
+  });
 });
 
 // tests/api/products.test.js
 describe('Product API', () => {
-    describe('GET /products', () => {
-        it('should return paginated products', async () => {
-            const response = await request(app)
-                .get('/products?page=1&limit=10')
-                .expect(200);
+  describe('GET /products', () => {
+    it('should return paginated products', async () => {
+      const response = await request(app).get('/products?page=1&limit=10').expect(200);
 
-            expect(response.body).toHaveProperty('products');
-            expect(response.body.products).toBeInstanceOf(Array);
-            expect(response.body.products.length).toBeLessThanOrEqual(10);
-        });
-
-        it('should filter by category', async () => {
-            const response = await request(app)
-                .get('/products?category=electronics')
-                .expect(200);
-
-            response.body.products.forEach(product => {
-                expect(product.category).toBe('electronics');
-            });
-        });
+      expect(response.body).toHaveProperty('products');
+      expect(response.body.products).toBeInstanceOf(Array);
+      expect(response.body.products.length).toBeLessThanOrEqual(10);
     });
+
+    it('should filter by category', async () => {
+      const response = await request(app).get('/products?category=electronics').expect(200);
+
+      response.body.products.forEach(product => {
+        expect(product.category).toBe('electronics');
+      });
+    });
+  });
 });
 ```
 
@@ -342,6 +341,7 @@ npm run dev
 ## Architecture
 
 This project follows Clean Architecture principles:
+
 - **Controllers**: Handle HTTP requests/responses
 - **Services**: Contain business logic
 - **Repositories**: Handle data persistence
@@ -352,12 +352,15 @@ This project follows Clean Architecture principles:
 Full API documentation available at `/api-docs` when running locally.
 
 ### Authentication
+
 All authenticated endpoints require a Bearer token:
+
 ```
 Authorization: Bearer <your-token>
 ```
 
 ### Main Endpoints
+
 - `GET /products` - List products
 - `GET /products/:id` - Get product details
 - `POST /orders` - Create order (authenticated)
@@ -383,6 +386,7 @@ npm run test:e2e   # End-to-end tests
 ## Database
 
 PostgreSQL with migrations:
+
 ```bash
 npm run migrate        # Run migrations
 npm run migrate:undo   # Rollback
@@ -566,21 +570,25 @@ jobs:
 ## Day 1: Project Setup ✅
 
 ### Structure
+
 - [x] Clean architecture folders created
 - [x] No circular dependencies
 - [x] Clear separation of concerns
 
 ### API Design
+
 - [x] OpenAPI specification
 - [x] RESTful endpoints defined
 - [x] Authentication strategy chosen
 
 ### Database
+
 - [x] Schema designed and normalized
 - [x] Migrations created
 - [x] Indexes optimized
 
 ### Security
+
 - [x] JWT authentication setup
 - [x] Rate limiting configured
 - [x] Input validation rules
@@ -588,18 +596,21 @@ jobs:
 - [x] SQL injection prevention
 
 ### Testing
+
 - [x] Test structure created
 - [x] Unit test examples
 - [x] Integration test setup
 - [x] Coverage reporting
 
 ### Documentation
+
 - [x] README with quick start
 - [x] API documentation
 - [x] Architecture explanation
 - [x] Environment variables documented
 
 ### Git & CI/CD
+
 - [x] Git repository initialized
 - [x] .gitignore configured
 - [x] GitHub Actions CI pipeline
@@ -613,18 +624,23 @@ jobs:
 ## Pro Tips for New Projects
 
 ### 1. Start with Architecture
+
 Don't jump into coding. Let Architecture Analyzer design your structure first.
 
 ### 2. Design API Before Implementation
+
 Use API Designer to create OpenAPI spec. Generate client code from it.
 
 ### 3. Security from Day One
+
 Run Security Scanner on your initial setup to catch issues early.
 
 ### 4. Test Infrastructure First
+
 Create test setup before writing features. Easier to maintain coverage.
 
 ### 5. Document as You Go
+
 Use Doc Generator after each feature. Don't leave it for the end.
 
 ---

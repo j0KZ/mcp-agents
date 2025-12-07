@@ -3,17 +3,21 @@
 ## Quick Install (Everything in One Command)
 
 ### Option 1: Install MCP Tools Only (Most Common)
+
 ```bash
 npx @j0kz/mcp-agents@latest
 ```
+
 - ✅ Installs 10 MCP tools in your AI editor
 - ✅ Works in ANY project after installation
 - ❌ Doesn't include skills documentation
 
 ### Option 2: Install Everything (Tools + Skills)
+
 ```bash
 npx @j0kz/mcp-agents install
 ```
+
 - ✅ Installs 10 MCP tools
 - ✅ Downloads 10 universal skill guides
 - ✅ Creates quick reference file
@@ -23,7 +27,9 @@ npx @j0kz/mcp-agents install
 ## 📦 What Gets Installed
 
 ### MCP Tools (Automated AI Tools)
+
 These are **actual tools** that integrate with your AI editor:
+
 - Smart Reviewer, Test Generator, Security Scanner
 - Architecture Analyzer, API Designer, DB Schema Designer
 - Doc Generator, Refactor Assistant, Orchestrator, Auto-Pilot
@@ -32,7 +38,9 @@ These are **actual tools** that integrate with your AI editor:
 **Usage**: Natural language commands in Claude/Cursor/Windsurf
 
 ### Universal Skills (Documentation/Guides)
+
 These are **markdown guides** for common development tasks:
+
 - Quick PR Review, Debug Detective, Performance Hunter
 - Legacy Modernizer, Zero to Hero, Test Coverage Boost
 - Tech Debt Tracker, Dependency Doctor, Security First, API Integration
@@ -45,6 +53,7 @@ These are **markdown guides** for common development tasks:
 ## 🎯 Installation Commands
 
 ### Full Suite Installation
+
 ```bash
 # Install everything (recommended for first-time users)
 npx @j0kz/mcp-agents install
@@ -56,6 +65,7 @@ npx @j0kz/mcp-agents install
 ```
 
 ### Individual Components
+
 ```bash
 # Just MCP tools (no skills documentation)
 npx @j0kz/mcp-agents tools
@@ -70,6 +80,7 @@ npx @j0kz/mcp-agents@latest
 ```
 
 ### Platform-Specific Scripts
+
 ```bash
 # Mac/Linux
 curl -sL https://raw.githubusercontent.com/j0KZ/mcp-agents/main/scripts/quick-setup.sh | bash
@@ -86,6 +97,7 @@ npx @j0kz/mcp-agents install
 ## 🔧 Manual Installation
 
 ### Install MCP Tools Manually
+
 ```bash
 # Step 1: Install globally
 npm install -g @j0kz/mcp-agents
@@ -95,6 +107,7 @@ npx @j0kz/mcp-agents@latest
 ```
 
 ### Download Skills Manually
+
 ```bash
 # Clone just the skills
 git clone --depth 1 --filter=blob:none --sparse \
@@ -113,7 +126,9 @@ rm skills.zip
 ## 🏃 Quick Start After Installation
 
 ### Test MCP Tools
+
 After restarting your editor:
+
 ```
 "Check MCP server status"
 "Review my package.json"
@@ -121,6 +136,7 @@ After restarting your editor:
 ```
 
 ### Use Universal Skills
+
 ```
 "Apply the quick-pr-review checklist"
 "Use debug-detective to find this bug"
@@ -131,19 +147,20 @@ After restarting your editor:
 
 ## 📊 Installation Options Comparison
 
-| Method | MCP Tools | Skills | Reference | Best For |
-|--------|-----------|---------|-----------|----------|
-| `npx @j0kz/mcp-agents@latest` | ✅ | ❌ | ❌ | Quick tool setup |
-| `npx @j0kz/mcp-agents install` | ✅ | ✅ | ✅ | Complete setup |
-| `npx @j0kz/mcp-agents tools` | ✅ | ❌ | ✅ | Tools only |
-| `npx @j0kz/mcp-agents skills` | ❌ | ✅ | ✅ | Skills only |
-| Manual install | Choose | Choose | DIY | Custom setup |
+| Method                         | MCP Tools | Skills | Reference | Best For         |
+| ------------------------------ | --------- | ------ | --------- | ---------------- |
+| `npx @j0kz/mcp-agents@latest`  | ✅        | ❌     | ❌        | Quick tool setup |
+| `npx @j0kz/mcp-agents install` | ✅        | ✅     | ✅        | Complete setup   |
+| `npx @j0kz/mcp-agents tools`   | ✅        | ❌     | ✅        | Tools only       |
+| `npx @j0kz/mcp-agents skills`  | ❌        | ✅     | ✅        | Skills only      |
+| Manual install                 | Choose    | Choose | DIY       | Custom setup     |
 
 ---
 
 ## 🛠️ Troubleshooting
 
 ### MCP Tools Not Working
+
 ```bash
 # 1. Clear npm cache
 npm cache clean --force
@@ -155,6 +172,7 @@ npx @j0kz/mcp-agents@latest
 ```
 
 ### Skills Not Downloading
+
 ```bash
 # Check network
 curl -I https://raw.githubusercontent.com/j0KZ/mcp-agents/main/.claude/universal-skills/INDEX.md
@@ -166,6 +184,7 @@ rm -rf temp
 ```
 
 ### Version Conflicts
+
 ```bash
 # Use specific version
 npx @j0kz/mcp-agents@1.1.0
@@ -179,6 +198,7 @@ npm update -g @j0kz/mcp-agents
 ## 🚀 Advanced Setup
 
 ### Add to Existing Project
+
 ```json
 // package.json
 {
@@ -191,6 +211,7 @@ npm update -g @j0kz/mcp-agents
 ```
 
 ### CI/CD Integration
+
 ```yaml
 # .github/workflows/setup.yml
 - name: Setup MCP Tools
@@ -201,6 +222,7 @@ npm update -g @j0kz/mcp-agents
 ```
 
 ### Docker Setup
+
 ```dockerfile
 FROM node:18-alpine
 RUN npx @j0kz/mcp-agents install
@@ -212,6 +234,7 @@ COPY . .
 ## 📚 What's Next?
 
 After installation:
+
 1. **Restart your AI editor** (required for MCP tools)
 2. **Read `MCP-REFERENCE.md`** (created during install)
 3. **Try a simple command**: "Review this file"
@@ -228,4 +251,4 @@ After installation:
 
 ---
 
-*Installation typically takes less than 1 minute!* 🚀
+_Installation typically takes less than 1 minute!_ 🚀

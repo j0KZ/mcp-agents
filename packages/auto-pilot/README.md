@@ -8,6 +8,7 @@
 ## 🦥 For the Laziest Developers
 
 Tired of:
+
 - Running linters? ✅ **Auto-Pilot fixes everything automatically**
 - Writing tests? ✅ **Auto-Pilot generates them for you**
 - Fixing security issues? ✅ **Auto-Pilot patches them instantly**
@@ -127,6 +128,7 @@ auto-pilot lazy
 Auto-Pilot installs these hooks automatically:
 
 ### Pre-commit
+
 - ✅ Auto-fixes all staged files
 - ✅ Removes console.log statements
 - ✅ Fixes linting issues
@@ -135,6 +137,7 @@ Auto-Pilot installs these hooks automatically:
 - ✅ Generates missing tests
 
 ### Pre-push
+
 - ✅ Runs full test suite
 - ✅ Checks test coverage (>55%)
 - ✅ Security audit
@@ -142,6 +145,7 @@ Auto-Pilot installs these hooks automatically:
 - ✅ Architecture analysis
 
 ### Commit-msg
+
 - ✅ Enforces conventional commits
 - ✅ Auto-fixes commit messages
 
@@ -150,6 +154,7 @@ Auto-Pilot installs these hooks automatically:
 ### Context Detection
 
 Auto-Pilot automatically detects:
+
 - Programming language (TypeScript, JavaScript, Python, etc.)
 - Framework (React, Vue, Next.js, Express, etc.)
 - Package manager (npm, yarn, pnpm)
@@ -161,6 +166,7 @@ Auto-Pilot automatically detects:
 ### Intelligent Auto-Fix
 
 Safe fixes applied automatically:
+
 - `console.log` removal
 - `var` → `let/const`
 - `==` → `===`
@@ -173,6 +179,7 @@ Safe fixes applied automatically:
 ### Smart File Watching
 
 Watches your files and:
+
 - Fixes issues as you type
 - Generates tests for new functions
 - Adds JSDoc comments
@@ -182,6 +189,7 @@ Watches your files and:
 ## 🤝 Integration with MCP Tools
 
 Auto-Pilot integrates with all @j0kz MCP tools:
+
 - **@j0kz/smart-reviewer** - Code review and auto-fix
 - **@j0kz/test-generator** - Automatic test generation
 - **@j0kz/security-scanner** - Security vulnerability detection
@@ -211,6 +219,7 @@ Auto-Pilot works with **zero configuration**, but you can customize it:
 ### VS Code Integration
 
 Auto-Pilot automatically creates VS Code tasks for you:
+
 - **Cmd+Shift+F** - Fix current file
 - Auto-fix on save
 
@@ -269,11 +278,11 @@ A: Try it. Run `npx @j0kz/auto-pilot` and see your code transform.
 
 ## 🏆 The Laziness Scale
 
-- **Level 1**: You run tests manually → *Amateur*
-- **Level 2**: You have CI/CD → *Getting there*
-- **Level 3**: You use linters → *Decent*
-- **Level 4**: You have pre-commit hooks → *Good*
-- **Level 5**: You use Auto-Pilot → ***LEGENDARY LAZY*** 🦥
+- **Level 1**: You run tests manually → _Amateur_
+- **Level 2**: You have CI/CD → _Getting there_
+- **Level 3**: You use linters → _Decent_
+- **Level 4**: You have pre-commit hooks → _Good_
+- **Level 5**: You use Auto-Pilot → **_LEGENDARY LAZY_** 🦥
 
 ## 📜 License
 
@@ -295,4 +304,4 @@ If you find a bug, Auto-Pilot probably already fixed it. If not, it will.
 npx @j0kz/auto-pilot
 ```
 
-*Now go take a nap. Auto-Pilot's got this.* 🦥
+_Now go take a nap. Auto-Pilot's got this._ 🦥

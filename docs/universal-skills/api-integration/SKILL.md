@@ -14,6 +14,7 @@ description: Master third-party API integration in ANY language with best practi
 ## 🎯 When to Use This Skill
 
 Use when you need to:
+
 - Integrate payment providers (Stripe, PayPal)
 - Connect social media APIs (Twitter, Facebook)
 - Use cloud services (AWS, Google Cloud)
@@ -25,6 +26,7 @@ Use when you need to:
 ## ⚡ Quick Integration (15 minutes)
 
 ### WITH MCP (API Designer):
+
 ```
 "Create integration client for [API name] with authentication and error handling"
 "Generate TypeScript types from this OpenAPI spec"
@@ -39,7 +41,7 @@ class APIClient {
     this.baseURL = config.baseURL;
     this.headers = {
       'Content-Type': 'application/json',
-      ...config.headers
+      ...config.headers,
     };
     this.timeout = config.timeout || 30000;
     this.retries = config.retries || 3;
@@ -55,12 +57,11 @@ class APIClient {
       // 2. Make request with timeout
       const response = await this.fetchWithTimeout(url, {
         ...options,
-        headers: { ...this.headers, ...headers }
+        headers: { ...this.headers, ...headers },
       });
 
       // 3. Handle response
       return await this.handleResponse(response);
-
     } catch (error) {
       // 4. Retry logic
       if (this.shouldRetry(error) && this.retries > 0) {
@@ -78,6 +79,7 @@ class APIClient {
 ### 1. Authentication Types
 
 #### API Key Authentication
+
 ```javascript
 class APIKeyClient {
   constructor(apiKey) {
@@ -99,6 +101,7 @@ const client = new APIKeyClient(process.env.API_KEY);
 ```
 
 #### OAuth 2.0 Flow
+
 ```javascript
 class OAuth2Client {
   constructor(config) {
@@ -115,7 +118,7 @@ class OAuth2Client {
       redirect_uri: this.redirectUri,
       response_type: 'code',
       state: state,
-      scope: 'read write'
+      scope: 'read write',
     });
 
     return `${this.authEndpoint}?${params}`;
@@ -133,15 +136,15 @@ class OAuth2Client {
         code: code,
         client_id: this.clientId,
         client_secret: this.clientSecret,
-        redirect_uri: this.redirectUri
-      })
+        redirect_uri: this.redirectUri,
+      }),
     });
 
     const data = await response.json();
     return {
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
-      expiresIn: data.expires_in
+      expiresIn: data.expires_in,
     };
   }
 
@@ -156,8 +159,8 @@ class OAuth2Client {
         grant_type: 'refresh_token',
         refresh_token: refreshToken,
         client_id: this.clientId,
-        client_secret: this.clientSecret
-      })
+        client_secret: this.clientSecret,
+      }),
     });
 
     return await response.json();
@@ -166,6 +169,7 @@ class OAuth2Client {
 ```
 
 #### JWT Bearer Token
+
 ```javascript
 class JWTClient {
   constructor(secret) {
@@ -176,18 +180,18 @@ class JWTClient {
     const jwt = require('jsonwebtoken');
     return jwt.sign(payload, this.secret, {
       expiresIn: '1h',
-      algorithm: 'HS256'
+      algorithm: 'HS256',
     });
   }
 
   async authenticate() {
     const token = this.generateToken({
       sub: this.userId,
-      iat: Math.floor(Date.now() / 1000)
+      iat: Math.floor(Date.now() / 1000),
     });
 
     return {
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     };
   }
 }
@@ -199,7 +203,7 @@ class JWTClient {
 class ResilientAPIClient {
   constructor() {
     this.maxRetries = 3;
-    this.baseDelay = 1000;  // 1 second
+    this.baseDelay = 1000; // 1 second
   }
 
   async requestWithRetry(fn, retries = this.maxRetries) {
@@ -242,9 +246,9 @@ class ResilientAPIClient {
       context: {
         endpoint: error.config?.url,
         method: error.config?.method,
-        requestId: error.config?.headers?.['X-Request-ID']
+        requestId: error.config?.headers?.['X-Request-ID'],
       },
-      suggestion: this.getErrorSuggestion(error)
+      suggestion: this.getErrorSuggestion(error),
     };
   }
 
@@ -255,7 +259,7 @@ class ResilientAPIClient {
       404: 'Check endpoint URL',
       429: 'Implement rate limiting',
       500: 'API server error - contact support',
-      ECONNREFUSED: 'Check if API is accessible'
+      ECONNREFUSED: 'Check if API is accessible',
     };
 
     return suggestions[error.code] || suggestions[error.statusCode] || 'Unknown error';
@@ -319,7 +323,7 @@ class RateLimitedClient {
 }
 
 // Usage
-const rateLimited = new RateLimitedClient(5);  // 5 requests per second
+const rateLimited = new RateLimitedClient(5); // 5 requests per second
 await rateLimited.request(() => fetch('/api/endpoint'));
 ```
 
@@ -334,8 +338,8 @@ class WebhookHandler {
 
   // Register webhook endpoint
   register(app) {
-    app.post('/webhooks/:provider', express.raw({ type: '*/*' }),
-      (req, res) => this.handle(req, res)
+    app.post('/webhooks/:provider', express.raw({ type: '*/*' }), (req, res) =>
+      this.handle(req, res)
     );
   }
 
@@ -361,7 +365,6 @@ class WebhookHandler {
       await this.storeEventId(event.id);
 
       res.status(200).json({ status: 'success' });
-
     } catch (error) {
       console.error('Webhook error:', error);
       res.status(500).json({ error: 'Processing failed' });
@@ -379,10 +382,7 @@ class WebhookHandler {
     hmac.update(payload);
     const expectedSignature = hmac.digest('hex');
 
-    return crypto.timingSafeEqual(
-      Buffer.from(signature),
-      Buffer.from(expectedSignature)
-    );
+    return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature));
   }
 
   async isDuplicate(eventId) {
@@ -393,7 +393,7 @@ class WebhookHandler {
 
   async storeEventId(eventId) {
     // Store with TTL to prevent infinite growth
-    await redis.setex(`webhook:${eventId}`, 86400, '1');  // 24 hours
+    await redis.setex(`webhook:${eventId}`, 86400, '1'); // 24 hours
   }
 
   async processEvent(event) {
@@ -413,7 +413,7 @@ class WebhookHandler {
 
 // Usage
 const webhook = new WebhookHandler(process.env.WEBHOOK_SECRET);
-webhook.on('payment.succeeded', async (event) => {
+webhook.on('payment.succeeded', async event => {
   await updateOrder(event.data.order_id, 'paid');
 });
 ```
@@ -422,7 +422,8 @@ webhook.on('payment.succeeded', async (event) => {
 
 ```javascript
 class CachedAPIClient {
-  constructor(ttl = 300000) {  // 5 minutes default
+  constructor(ttl = 300000) {
+    // 5 minutes default
     this.cache = new Map();
     this.ttl = ttl;
   }
@@ -442,7 +443,7 @@ class CachedAPIClient {
     // Cache response
     this.cache.set(cacheKey, {
       data,
-      expires: Date.now() + this.ttl
+      expires: Date.now() + this.ttl,
     });
 
     // Cleanup old entries
@@ -478,6 +479,7 @@ class CachedAPIClient {
 ## 🔄 Common API Integrations
 
 ### Stripe Payment Integration
+
 ```javascript
 class StripeIntegration {
   constructor(apiKey) {
@@ -487,19 +489,19 @@ class StripeIntegration {
   async createPaymentIntent(amount, currency = 'usd') {
     try {
       const paymentIntent = await this.stripe.paymentIntents.create({
-        amount: amount * 100,  // Convert to cents
+        amount: amount * 100, // Convert to cents
         currency,
         automatic_payment_methods: {
           enabled: true,
         },
         metadata: {
-          integration_version: '1.0.0'
-        }
+          integration_version: '1.0.0',
+        },
       });
 
       return {
         clientSecret: paymentIntent.client_secret,
-        paymentIntentId: paymentIntent.id
+        paymentIntentId: paymentIntent.id,
       };
     } catch (error) {
       throw this.handleStripeError(error);
@@ -511,19 +513,20 @@ class StripeIntegration {
       card_declined: 'Your card was declined',
       expired_card: 'Your card has expired',
       insufficient_funds: 'Insufficient funds',
-      processing_error: 'Processing error, please try again'
+      processing_error: 'Processing error, please try again',
     };
 
     return {
       message: errors[error.code] || 'Payment failed',
       code: error.code,
-      type: error.type
+      type: error.type,
     };
   }
 }
 ```
 
 ### OpenAI API Integration
+
 ```javascript
 class OpenAIIntegration {
   constructor(apiKey) {
@@ -536,14 +539,14 @@ class OpenAIIntegration {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.apiKey}`
+        Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify({
         model: options.model || 'gpt-3.5-turbo',
         messages: [{ role: 'user', content: prompt }],
         max_tokens: options.maxTokens || 150,
-        temperature: options.temperature || 0.7
-      })
+        temperature: options.temperature || 0.7,
+      }),
     });
 
     if (!response.ok) {
@@ -571,7 +574,7 @@ class MockAPIClient {
     this.responses.set(key, {
       response,
       delay: options.delay || 0,
-      error: options.error
+      error: options.error,
     });
   }
 
@@ -625,25 +628,27 @@ describe('API Integration', () => {
 ## 🎯 Integration Best Practices
 
 ### Environment Configuration
+
 ```javascript
 // config/api.js
 const config = {
   development: {
     baseURL: 'https://sandbox.api.example.com',
     timeout: 30000,
-    retries: 3
+    retries: 3,
   },
   production: {
     baseURL: 'https://api.example.com',
     timeout: 10000,
-    retries: 5
-  }
+    retries: 5,
+  },
 };
 
 export default config[process.env.NODE_ENV || 'development'];
 ```
 
 ### Logging & Monitoring
+
 ```javascript
 class MonitoredAPIClient {
   async request(endpoint, options) {
@@ -663,11 +668,10 @@ class MonitoredAPIClient {
         endpoint,
         duration,
         status: response.status,
-        success: true
+        success: true,
       });
 
       return response;
-
     } catch (error) {
       const duration = Date.now() - startTime;
       console.error(`[${requestId}] Error: ${error.message} (${duration}ms)`);
@@ -677,7 +681,7 @@ class MonitoredAPIClient {
         endpoint,
         duration,
         error: error.code,
-        success: false
+        success: false,
       });
 
       throw error;
@@ -697,12 +701,12 @@ class MonitoredAPIClient {
 const api = new APIClient({
   baseURL: process.env.API_BASE_URL,
   headers: {
-    'X-API-Version': '2.0'
+    'X-API-Version': '2.0',
   },
   timeout: 10000,
   retries: 3,
   cache: true,
-  rateLimit: 10  // requests per second
+  rateLimit: 10, // requests per second
 });
 
 // Make requests
@@ -712,7 +716,7 @@ const updated = await api.put('/users/1', { name: 'Jane' });
 const deleted = await api.delete('/users/1');
 
 // Handle webhooks
-api.onWebhook('user.created', async (event) => {
+api.onWebhook('user.created', async event => {
   await processNewUser(event.data);
 });
 ```

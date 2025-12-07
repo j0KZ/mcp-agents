@@ -7,6 +7,7 @@
 ## The Full Security Audit Pipeline
 
 ### What You Type
+
 ```
 "Run a comprehensive security audit on my entire project"
 ```
@@ -35,30 +36,36 @@ graph TD
 ### Initial Scan Results
 
 **Security Scanner Output:**
-```markdown
+
+````markdown
 # Security Audit Report 🔴
 
 ## Critical Issues (3) - MUST FIX
 
 ### 1. SQL Injection Vulnerability
+
 **Location:** src/api/transactions.js:45
+
 ```javascript
 // VULNERABLE CODE:
 const transactions = await db.query(
-    `SELECT * FROM transactions
+  `SELECT * FROM transactions
      WHERE user_id = ${userId}
      AND date >= '${startDate}'`
 );
 
 // FIXED CODE:
 const transactions = await db.query(
-    'SELECT * FROM transactions WHERE user_id = $1 AND date >= $2',
-    [userId, startDate]
+  'SELECT * FROM transactions WHERE user_id = $1 AND date >= $2',
+  [userId, startDate]
 );
 ```
+````
 
 ### 2. Hardcoded API Keys
+
 **Location:** src/services/payment.js:12
+
 ```javascript
 // VULNERABLE CODE:
 const stripe = new Stripe('sk_live_EXAMPLE_KEY_REPLACE_ME');
@@ -68,7 +75,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 ```
 
 ### 3. Weak Password Storage
+
 **Location:** src/auth/userService.js:89
+
 ```javascript
 // VULNERABLE CODE:
 const hashedPassword = crypto.createHash('md5').update(password).digest('hex');
@@ -80,60 +89,63 @@ const hashedPassword = await bcrypt.hash(password, 12);
 ## High Issues (5) - Should Fix
 
 ### 4. Missing Rate Limiting
+
 **Endpoints at risk:**
+
 - POST /api/login - Brute force attacks possible
 - POST /api/transfer - Transaction flooding possible
 
 **Solution:**
+
 ```javascript
 import rateLimit from 'express-rate-limit';
 
 const loginLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // 5 attempts
-    message: 'Too many login attempts'
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 attempts
+  message: 'Too many login attempts',
 });
 
 app.post('/api/login', loginLimiter, loginController);
 ```
 
 ### 5. Insufficient Input Validation
+
 **Locations:** Multiple endpoints
+
 ```javascript
 // BEFORE:
 app.post('/api/transfer', (req, res) => {
-    const { amount, recipient } = req.body;
-    // Direct use without validation
+  const { amount, recipient } = req.body;
+  // Direct use without validation
 });
 
 // AFTER:
 import Joi from 'joi';
 
 const transferSchema = Joi.object({
-    amount: Joi.number().positive().max(10000).required(),
-    recipient: Joi.string().email().required(),
-    description: Joi.string().max(200).optional()
+  amount: Joi.number().positive().max(10000).required(),
+  recipient: Joi.string().email().required(),
+  description: Joi.string().max(200).optional(),
 });
 
 app.post('/api/transfer', validate(transferSchema), (req, res) => {
-    // Safe to use validated data
+  // Safe to use validated data
 });
 ```
 
 ### 6. JWT Token Never Expires
+
 ```javascript
 // VULNERABLE:
 const token = jwt.sign({ userId }, secret);
 
 // FIXED:
-const token = jwt.sign(
-    { userId },
-    secret,
-    { expiresIn: '1h', issuer: 'api.yourapp.com' }
-);
+const token = jwt.sign({ userId }, secret, { expiresIn: '1h', issuer: 'api.yourapp.com' });
 ```
 
 ### 7. No CSRF Protection
+
 ```javascript
 // Add CSRF protection
 import csrf from 'csurf';
@@ -146,6 +158,7 @@ app.use(csrfProtection);
 ```
 
 ### 8. Sensitive Data in Logs
+
 ```javascript
 // VULNERABLE:
 logger.info('User login', { email, password });
@@ -153,7 +166,8 @@ logger.info('User login', { email, password });
 // FIXED:
 logger.info('User login', { email }); // Never log passwords
 ```
-```
+
+````
 
 ---
 
@@ -177,9 +191,10 @@ Moderate: Cross-Site Scripting
 Package: marked
 Version: 0.7.0
 Fix: npm update marked@4.3.0
-```
+````
 
 **Auto-fix command:**
+
 ```bash
 npm audit fix --force
 ```
@@ -192,19 +207,23 @@ npm audit fix --force
 ## Secrets Found 🔑
 
 ### Environment Files
+
 ✅ .env properly gitignored
 ⚠️ .env.example contains partial real key (sanitize)
 
 ### Source Code
+
 🔴 src/config/aws.js:15 - AWS Access Key exposed
 🔴 src/email/sendgrid.js:8 - SendGrid API key hardcoded
 🔴 tests/fixtures/users.js:34 - Real user password in test data
 
 ### Git History
+
 ⚠️ Commit a3f42b1 - Database password was committed (rotate immediately)
 ⚠️ Commit d7c91e2 - API key in deleted file (still in history)
 
 ### Recommended Actions:
+
 1. Rotate ALL exposed credentials immediately
 2. Use git-filter-branch to clean history
 3. Set up pre-commit hooks to prevent future leaks
@@ -218,48 +237,58 @@ npm audit fix --force
 ## OWASP Top 10 (2021) Assessment
 
 ### A01: Broken Access Control ⚠️
+
 - Missing role-based access control on /api/admin
 - Direct object references in /api/users/:id
 - **Fix:** Implement authorization middleware
 
 ### A02: Cryptographic Failures ✅
+
 - Using bcrypt for passwords ✅
 - TLS 1.3 configured ✅
 - Sensitive data encrypted at rest ✅
 
 ### A03: Injection 🔴
+
 - SQL injection vulnerability found (CRITICAL)
 - **Fix:** Use parameterized queries everywhere
 
 ### A04: Insecure Design ⚠️
+
 - No rate limiting on critical endpoints
 - Missing transaction limits
 - **Fix:** Add business logic security controls
 
 ### A05: Security Misconfiguration ⚠️
+
 - Default error messages expose stack traces
 - Unnecessary HTTP methods enabled
 - **Fix:** Harden configuration
 
 ### A06: Vulnerable Components 🔴
+
 - 7 vulnerable dependencies detected
 - **Fix:** Update all dependencies
 
 ### A07: Authentication Failures ⚠️
+
 - No account lockout after failed attempts
 - Weak password requirements
 - **Fix:** Implement proper auth controls
 
 ### A08: Software & Data Integrity ✅
+
 - Package-lock.json in use ✅
 - CI/CD pipeline secured ✅
 
 ### A09: Logging & Monitoring ⚠️
+
 - Sensitive data in logs
 - No alerting for security events
 - **Fix:** Implement security monitoring
 
 ### A10: Server-Side Request Forgery ✅
+
 - No SSRF vulnerabilities detected ✅
 
 ## Overall Score: 5/10 - Needs Improvement
@@ -269,54 +298,63 @@ npm audit fix --force
 
 ## Authentication & Session Security
 
-```markdown
+````markdown
 ## Authentication Security Review
 
 ### Password Policy ⚠️
+
 Current: No requirements
 Recommended:
+
 ```javascript
 const passwordPolicy = {
-    minLength: 12,
-    requireUppercase: true,
-    requireLowercase: true,
-    requireNumbers: true,
-    requireSpecialChars: true,
-    preventCommon: true, // Check against common passwords
-    preventReuse: 5, // Can't reuse last 5 passwords
+  minLength: 12,
+  requireUppercase: true,
+  requireLowercase: true,
+  requireNumbers: true,
+  requireSpecialChars: true,
+  preventCommon: true, // Check against common passwords
+  preventReuse: 5, // Can't reuse last 5 passwords
 };
 ```
+````
 
 ### Session Management ⚠️
+
 Issues Found:
+
 - Sessions never expire
 - No session invalidation on password change
 - Session fixation vulnerability
 
 Fixes:
+
 ```javascript
 // Configure secure sessions
-app.use(session({
+app.use(
+  session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: true, // HTTPS only
-        httpOnly: true, // No JS access
-        maxAge: 1000 * 60 * 30, // 30 minutes
-        sameSite: 'strict' // CSRF protection
+      secure: true, // HTTPS only
+      httpOnly: true, // No JS access
+      maxAge: 1000 * 60 * 30, // 30 minutes
+      sameSite: 'strict', // CSRF protection
     },
-    rolling: true // Reset expiry on activity
-}));
+    rolling: true, // Reset expiry on activity
+  })
+);
 
 // Invalidate sessions on password change
 async function changePassword(userId, newPassword) {
-    await updatePassword(userId, newPassword);
-    await invalidateAllSessions(userId);
+  await updatePassword(userId, newPassword);
+  await invalidateAllSessions(userId);
 }
 ```
 
 ### Multi-Factor Authentication ❌
+
 - Not implemented
 - Recommendation: Add TOTP-based 2FA
 
@@ -325,18 +363,19 @@ import speakeasy from 'speakeasy';
 
 // Generate secret for user
 const secret = speakeasy.generateSecret({
-    name: 'YourApp'
+  name: 'YourApp',
 });
 
 // Verify TOTP code
 const verified = speakeasy.totp.verify({
-    secret: user.totpSecret,
-    encoding: 'base32',
-    token: userProvidedCode,
-    window: 2
+  secret: user.totpSecret,
+  encoding: 'base32',
+  token: userProvidedCode,
+  window: 2,
 });
 ```
-```
+
+````
 
 ---
 
@@ -366,54 +405,57 @@ const payment = await stripe.charges.create({
 
 // Store only last 4 digits for display
 const maskedCard = `****${last4}`;
-```
+````
 
 ### Personal Data (PII) Flow ⚠️
+
 - Email addresses: ✅ Hashed for lookups
 - Phone numbers: ❌ Stored in plain text
 - Addresses: ❌ No encryption
 - SSN/Tax IDs: 🔴 CRITICAL - Found in plain text
 
 **GDPR/Privacy Fixes:**
+
 ```javascript
 // Encrypt PII at rest
 import crypto from 'crypto';
 
 class Encryption {
-    constructor() {
-        this.algorithm = 'aes-256-gcm';
-        this.key = Buffer.from(process.env.ENCRYPTION_KEY, 'hex');
-    }
+  constructor() {
+    this.algorithm = 'aes-256-gcm';
+    this.key = Buffer.from(process.env.ENCRYPTION_KEY, 'hex');
+  }
 
-    encrypt(text) {
-        const iv = crypto.randomBytes(16);
-        const cipher = crypto.createCipheriv(this.algorithm, this.key, iv);
+  encrypt(text) {
+    const iv = crypto.randomBytes(16);
+    const cipher = crypto.createCipheriv(this.algorithm, this.key, iv);
 
-        let encrypted = cipher.update(text, 'utf8', 'hex');
-        encrypted += cipher.final('hex');
+    let encrypted = cipher.update(text, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
 
-        const authTag = cipher.getAuthTag();
+    const authTag = cipher.getAuthTag();
 
-        return iv.toString('hex') + ':' + authTag.toString('hex') + ':' + encrypted;
-    }
+    return iv.toString('hex') + ':' + authTag.toString('hex') + ':' + encrypted;
+  }
 
-    decrypt(text) {
-        const parts = text.split(':');
-        const iv = Buffer.from(parts[0], 'hex');
-        const authTag = Buffer.from(parts[1], 'hex');
-        const encrypted = parts[2];
+  decrypt(text) {
+    const parts = text.split(':');
+    const iv = Buffer.from(parts[0], 'hex');
+    const authTag = Buffer.from(parts[1], 'hex');
+    const encrypted = parts[2];
 
-        const decipher = crypto.createDecipheriv(this.algorithm, this.key, iv);
-        decipher.setAuthTag(authTag);
+    const decipher = crypto.createDecipheriv(this.algorithm, this.key, iv);
+    decipher.setAuthTag(authTag);
 
-        let decrypted = decipher.update(encrypted, 'hex', 'utf8');
-        decrypted += decipher.final('utf8');
+    let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
 
-        return decrypted;
-    }
+    return decrypted;
+  }
 }
 ```
-```
+
+````
 
 ---
 
@@ -523,7 +565,7 @@ describe('Security Tests', () => {
         });
     });
 });
-```
+````
 
 ---
 
@@ -534,37 +576,39 @@ describe('Security Tests', () => {
 import helmet from 'helmet';
 
 export function setupSecurityHeaders(app) {
-    // Basic security headers
-    app.use(helmet({
-        contentSecurityPolicy: {
-            directives: {
-                defaultSrc: ["'self'"],
-                scriptSrc: ["'self'", "'unsafe-inline'", 'https://trusted-cdn.com'],
-                styleSrc: ["'self'", "'unsafe-inline'"],
-                imgSrc: ["'self'", 'data:', 'https:'],
-                connectSrc: ["'self'"],
-                fontSrc: ["'self'"],
-                objectSrc: ["'none'"],
-                mediaSrc: ["'self'"],
-                frameSrc: ["'none'"],
-            },
+  // Basic security headers
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'", 'https://trusted-cdn.com'],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          imgSrc: ["'self'", 'data:', 'https:'],
+          connectSrc: ["'self'"],
+          fontSrc: ["'self'"],
+          objectSrc: ["'none'"],
+          mediaSrc: ["'self'"],
+          frameSrc: ["'none'"],
         },
-        hsts: {
-            maxAge: 31536000,
-            includeSubDomains: true,
-            preload: true
-        }
-    }));
+      },
+      hsts: {
+        maxAge: 31536000,
+        includeSubDomains: true,
+        preload: true,
+      },
+    })
+  );
 
-    // Additional custom headers
-    app.use((req, res, next) => {
-        res.setHeader('X-Content-Type-Options', 'nosniff');
-        res.setHeader('X-Frame-Options', 'DENY');
-        res.setHeader('X-XSS-Protection', '1; mode=block');
-        res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-        res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
-        next();
-    });
+  // Additional custom headers
+  app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+    next();
+  });
 }
 ```
 
@@ -576,6 +620,7 @@ export function setupSecurityHeaders(app) {
 # Security Audit Summary
 
 ## Critical Findings
+
 - 3 Critical issues (MUST fix before production)
 - 5 High issues (Should fix)
 - 8 Medium issues (Plan to fix)
@@ -584,6 +629,7 @@ export function setupSecurityHeaders(app) {
 ## Risk Score: HIGH (7.5/10)
 
 ## Immediate Actions Required
+
 1. Fix SQL injection vulnerabilities
 2. Remove hardcoded secrets
 3. Update vulnerable dependencies
@@ -591,18 +637,21 @@ export function setupSecurityHeaders(app) {
 5. Add input validation
 
 ## Compliance Status
+
 - PCI DSS: ❌ Not Compliant (credit card handling issues)
 - GDPR: ⚠️ Partial (PII encryption needed)
 - OWASP Top 10: 5/10 coverage
 - SOC 2: ❌ Not Ready
 
 ## Timeline
+
 - Critical fixes: Within 24 hours
 - High priority: Within 1 week
 - Medium priority: Within 1 month
 - Low priority: Next quarter
 
 ## Automated Fixes Applied
+
 ✅ 12 dependencies updated
 ✅ Security headers configured
 ✅ HTTPS redirect enabled
@@ -610,6 +659,7 @@ export function setupSecurityHeaders(app) {
 ✅ Error messages sanitized
 
 ## Manual Fixes Required
+
 🔴 SQL injection fixes (3 files)
 🔴 Remove hardcoded secrets (5 locations)
 🔴 Implement authentication controls
@@ -617,6 +667,7 @@ export function setupSecurityHeaders(app) {
 🔴 Configure rate limiting
 
 ## Next Steps
+
 1. Apply critical fixes
 2. Re-run security audit
 3. Implement security tests
@@ -624,6 +675,7 @@ export function setupSecurityHeaders(app) {
 5. Set up security monitoring
 
 ## Resources
+
 - [OWASP Cheat Sheets](https://cheatsheetseries.owasp.org/)
 - [Security Headers](https://securityheaders.com/)
 - [SSL Labs](https://www.ssllabs.com/ssltest/)
@@ -696,51 +748,53 @@ jobs:
 import winston from 'winston';
 
 const securityLogger = winston.createLogger({
-    level: 'info',
-    format: winston.format.json(),
-    transports: [
-        new winston.transports.File({
-            filename: 'security.log',
-            level: 'warning'
-        })
-    ]
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.File({
+      filename: 'security.log',
+      level: 'warning',
+    }),
+  ],
 });
 
 // Log security events
 export function logSecurityEvent(event, details) {
-    securityLogger.warn({
-        timestamp: new Date().toISOString(),
-        event,
-        details,
-        // Add context
-        ip: details.ip,
-        userId: details.userId,
-        userAgent: details.userAgent
-    });
+  securityLogger.warn({
+    timestamp: new Date().toISOString(),
+    event,
+    details,
+    // Add context
+    ip: details.ip,
+    userId: details.userId,
+    userAgent: details.userAgent,
+  });
 
-    // Alert on critical events
-    if (event === 'MULTIPLE_FAILED_LOGINS' ||
-        event === 'SQL_INJECTION_ATTEMPT' ||
-        event === 'UNAUTHORIZED_ACCESS') {
-        sendSecurityAlert(event, details);
-    }
+  // Alert on critical events
+  if (
+    event === 'MULTIPLE_FAILED_LOGINS' ||
+    event === 'SQL_INJECTION_ATTEMPT' ||
+    event === 'UNAUTHORIZED_ACCESS'
+  ) {
+    sendSecurityAlert(event, details);
+  }
 }
 
 // Example usage
 app.post('/api/login', async (req, res) => {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    // Check for SQL injection attempts
-    if (email.includes("'") || email.includes('"')) {
-        logSecurityEvent('SQL_INJECTION_ATTEMPT', {
-            ip: req.ip,
-            email,
-            userAgent: req.headers['user-agent']
-        });
-        return res.status(400).json({ error: 'Invalid input' });
-    }
+  // Check for SQL injection attempts
+  if (email.includes("'") || email.includes('"')) {
+    logSecurityEvent('SQL_INJECTION_ATTEMPT', {
+      ip: req.ip,
+      email,
+      userAgent: req.headers['user-agent'],
+    });
+    return res.status(400).json({ error: 'Invalid input' });
+  }
 
-    // ... rest of login logic
+  // ... rest of login logic
 });
 ```
 
