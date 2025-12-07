@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ContextDetector } from '../src/context-detector.js';
 import * as fs from 'fs/promises';
-import path from 'path';
 
 vi.mock('fs/promises');
 
@@ -19,20 +18,22 @@ describe('ContextDetector', () => {
         'src/index.ts',
         'src/utils.ts',
         'package.json',
-        'tsconfig.json'
+        'tsconfig.json',
       ] as any);
 
-      vi.mocked(fs.stat).mockImplementation((filePath) => {
+      vi.mocked(fs.stat).mockImplementation(filePath => {
         if (filePath.toString().includes('tsconfig.json')) {
           return Promise.resolve({} as any);
         }
         return Promise.reject(new Error('Not found'));
       });
 
-      vi.mocked(fs.readFile).mockResolvedValue(JSON.stringify({
-        dependencies: { 'express': '^4.0.0' },
-        devDependencies: { 'typescript': '^5.0.0', 'vitest': '^1.0.0' }
-      }));
+      vi.mocked(fs.readFile).mockResolvedValue(
+        JSON.stringify({
+          dependencies: { express: '^4.0.0' },
+          devDependencies: { typescript: '^5.0.0', vitest: '^1.0.0' },
+        })
+      );
 
       const context = await detector.detect();
 
@@ -41,7 +42,7 @@ describe('ContextDetector', () => {
     });
 
     it('should detect package manager from lock files', async () => {
-      vi.mocked(fs.stat).mockImplementation((filePath) => {
+      vi.mocked(fs.stat).mockImplementation(filePath => {
         if (filePath.toString().includes('pnpm-lock.yaml')) {
           return Promise.resolve({} as any);
         }
@@ -57,12 +58,14 @@ describe('ContextDetector', () => {
     });
 
     it('should detect React framework', async () => {
-      vi.mocked(fs.readFile).mockResolvedValue(JSON.stringify({
-        dependencies: {
-          'react': '^18.0.0',
-          'react-dom': '^18.0.0'
-        }
-      }));
+      vi.mocked(fs.readFile).mockResolvedValue(
+        JSON.stringify({
+          dependencies: {
+            react: '^18.0.0',
+            'react-dom': '^18.0.0',
+          },
+        })
+      );
 
       vi.mocked(fs.readdir).mockResolvedValue([]);
       vi.mocked(fs.stat).mockRejectedValue(new Error('Not found'));
@@ -73,7 +76,7 @@ describe('ContextDetector', () => {
     });
 
     it('should detect monorepo structure', async () => {
-      vi.mocked(fs.stat).mockImplementation((filePath) => {
+      vi.mocked(fs.stat).mockImplementation(filePath => {
         if (filePath.toString().includes('lerna.json')) {
           return Promise.resolve({} as any);
         }
@@ -89,7 +92,7 @@ describe('ContextDetector', () => {
     });
 
     it('should detect git repository', async () => {
-      vi.mocked(fs.stat).mockImplementation((filePath) => {
+      vi.mocked(fs.stat).mockImplementation(filePath => {
         if (filePath.toString().includes('.git')) {
           return Promise.resolve({} as any);
         }
@@ -105,7 +108,7 @@ describe('ContextDetector', () => {
     });
 
     it('should detect CI/CD setup', async () => {
-      vi.mocked(fs.stat).mockImplementation((filePath) => {
+      vi.mocked(fs.stat).mockImplementation(filePath => {
         const pathStr = filePath.toString().replace(/\\/g, '/');
         if (pathStr.includes('.github/workflows')) {
           return Promise.resolve({} as any);
@@ -122,12 +125,14 @@ describe('ContextDetector', () => {
     });
 
     it('should detect MCP tools', async () => {
-      vi.mocked(fs.readFile).mockResolvedValue(JSON.stringify({
-        devDependencies: {
-          '@j0kz/smart-reviewer': '^1.0.0',
-          '@j0kz/test-generator': '^1.0.0'
-        }
-      }));
+      vi.mocked(fs.readFile).mockResolvedValue(
+        JSON.stringify({
+          devDependencies: {
+            '@j0kz/smart-reviewer': '^1.0.0',
+            '@j0kz/test-generator': '^1.0.0',
+          },
+        })
+      );
 
       vi.mocked(fs.readdir).mockResolvedValue([]);
       vi.mocked(fs.stat).mockRejectedValue(new Error('Not found'));
@@ -174,6 +179,201 @@ describe('ContextDetector', () => {
 
     it('should return unknown for unrecognized extensions', async () => {
       expect(await detector.getFileType('test.xyz')).toBe('unknown');
+    });
+
+    it('should detect yaml files', async () => {
+      expect(await detector.getFileType('config.yml')).toBe('yaml');
+      expect(await detector.getFileType('config.yaml')).toBe('yaml');
+    });
+
+    it('should detect css and scss files', async () => {
+      expect(await detector.getFileType('styles.css')).toBe('css');
+      expect(await detector.getFileType('styles.scss')).toBe('scss');
+    });
+
+    it('should detect html files', async () => {
+      expect(await detector.getFileType('index.html')).toBe('html');
+    });
+  });
+
+  describe('framework detection', () => {
+    it('should detect Next.js', async () => {
+      vi.mocked(fs.readFile).mockResolvedValue(
+        JSON.stringify({
+          dependencies: { next: '^14.0.0' },
+        })
+      );
+
+      vi.mocked(fs.readdir).mockResolvedValue([]);
+      vi.mocked(fs.stat).mockRejectedValue(new Error('Not found'));
+
+      const context = await detector.detect();
+
+      expect(context.framework).toBe('Next.js');
+    });
+
+    it('should detect Vue', async () => {
+      vi.mocked(fs.readFile).mockResolvedValue(
+        JSON.stringify({
+          dependencies: { vue: '^3.0.0' },
+        })
+      );
+
+      vi.mocked(fs.readdir).mockResolvedValue([]);
+      vi.mocked(fs.stat).mockRejectedValue(new Error('Not found'));
+
+      const context = await detector.detect();
+
+      expect(context.framework).toBe('Vue');
+    });
+
+    it('should detect Express', async () => {
+      vi.mocked(fs.readFile).mockResolvedValue(
+        JSON.stringify({
+          dependencies: { express: '^4.0.0' },
+        })
+      );
+
+      vi.mocked(fs.readdir).mockResolvedValue([]);
+      vi.mocked(fs.stat).mockRejectedValue(new Error('Not found'));
+
+      const context = await detector.detect();
+
+      expect(context.framework).toBe('Express');
+    });
+  });
+
+  describe('build tool detection', () => {
+    it('should detect webpack', async () => {
+      vi.mocked(fs.stat).mockImplementation(filePath => {
+        if (filePath.toString().includes('webpack.config.js')) {
+          return Promise.resolve({} as any);
+        }
+        return Promise.reject(new Error('Not found'));
+      });
+
+      vi.mocked(fs.readdir).mockResolvedValue([]);
+      vi.mocked(fs.readFile).mockResolvedValue('{}');
+
+      const context = await detector.detect();
+
+      expect(context.buildTool).toBe('webpack');
+    });
+
+    it('should detect vite', async () => {
+      vi.mocked(fs.stat).mockImplementation(filePath => {
+        if (filePath.toString().includes('vite.config.js')) {
+          return Promise.resolve({} as any);
+        }
+        return Promise.reject(new Error('Not found'));
+      });
+
+      vi.mocked(fs.readdir).mockResolvedValue([]);
+      vi.mocked(fs.readFile).mockResolvedValue('{}');
+
+      const context = await detector.detect();
+
+      expect(context.buildTool).toBe('vite');
+    });
+  });
+
+  describe('linter detection', () => {
+    it('should detect eslint from config file', async () => {
+      vi.mocked(fs.stat).mockImplementation(filePath => {
+        if (filePath.toString().includes('.eslintrc')) {
+          return Promise.resolve({} as any);
+        }
+        return Promise.reject(new Error('Not found'));
+      });
+
+      vi.mocked(fs.readdir).mockResolvedValue([]);
+      vi.mocked(fs.readFile).mockResolvedValue('{}');
+
+      const context = await detector.detect();
+
+      expect(context.linter).toBe('eslint');
+    });
+
+    it('should detect prettier from config file', async () => {
+      vi.mocked(fs.stat).mockImplementation(filePath => {
+        if (filePath.toString().includes('.prettierrc')) {
+          return Promise.resolve({} as any);
+        }
+        return Promise.reject(new Error('Not found'));
+      });
+
+      vi.mocked(fs.readdir).mockResolvedValue([]);
+      vi.mocked(fs.readFile).mockResolvedValue('{}');
+
+      const context = await detector.detect();
+
+      expect(context.formatter).toBe('prettier');
+    });
+  });
+
+  describe('docker detection', () => {
+    it('should detect Dockerfile', async () => {
+      vi.mocked(fs.stat).mockImplementation(filePath => {
+        if (filePath.toString().includes('Dockerfile')) {
+          return Promise.resolve({} as any);
+        }
+        return Promise.reject(new Error('Not found'));
+      });
+
+      vi.mocked(fs.readdir).mockResolvedValue([]);
+      vi.mocked(fs.readFile).mockResolvedValue('{}');
+
+      const context = await detector.detect();
+
+      expect(context.hasDocker).toBe(true);
+    });
+
+    it('should detect docker-compose', async () => {
+      vi.mocked(fs.stat).mockImplementation(filePath => {
+        if (filePath.toString().includes('docker-compose.yml')) {
+          return Promise.resolve({} as any);
+        }
+        return Promise.reject(new Error('Not found'));
+      });
+
+      vi.mocked(fs.readdir).mockResolvedValue([]);
+      vi.mocked(fs.readFile).mockResolvedValue('{}');
+
+      const context = await detector.detect();
+
+      expect(context.hasDocker).toBe(true);
+    });
+  });
+
+  describe('test runner detection', () => {
+    it('should detect jest', async () => {
+      vi.mocked(fs.readFile).mockResolvedValue(
+        JSON.stringify({
+          devDependencies: { jest: '^29.0.0' },
+        })
+      );
+
+      vi.mocked(fs.readdir).mockResolvedValue([]);
+      vi.mocked(fs.stat).mockRejectedValue(new Error('Not found'));
+
+      const context = await detector.detect();
+
+      expect(context.testRunner).toBe('jest');
+    });
+
+    it('should detect mocha', async () => {
+      vi.mocked(fs.readFile).mockResolvedValue(
+        JSON.stringify({
+          devDependencies: { mocha: '^10.0.0' },
+        })
+      );
+
+      vi.mocked(fs.readdir).mockResolvedValue([]);
+      vi.mocked(fs.stat).mockRejectedValue(new Error('Not found'));
+
+      const context = await detector.detect();
+
+      expect(context.testRunner).toBe('mocha');
     });
   });
 });

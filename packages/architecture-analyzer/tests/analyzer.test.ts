@@ -126,5 +126,92 @@ describe('ArchitectureAnalyzer', () => {
       });
       expect(result).toBeDefined();
     });
+
+    it('should detect layer violations', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        layerRules: {
+          generators: ['types'],
+          validators: ['types'],
+        },
+      });
+
+      expect(result.layerViolations).toBeDefined();
+      expect(Array.isArray(result.layerViolations)).toBe(true);
+    });
+  });
+
+  describe('metrics', () => {
+    it('should calculate architecture metrics', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {});
+
+      expect(result.metrics).toBeDefined();
+      expect(result.metrics.totalModules).toBeGreaterThanOrEqual(0);
+      expect(result.metrics.totalDependencies).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should include cohesion metric', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {});
+
+      expect(result.metrics.cohesion).toBeDefined();
+      expect(typeof result.metrics.cohesion).toBe('number');
+    });
+
+    it('should include coupling metric', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {});
+
+      expect(result.metrics.coupling).toBeDefined();
+      expect(typeof result.metrics.coupling).toBe('number');
+    });
+
+    it('should calculate average dependencies per module', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {});
+
+      expect(result.metrics.averageDependenciesPerModule).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should track max dependencies', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {});
+
+      expect(result.metrics.maxDependencies).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  describe('suggestions', () => {
+    it('should generate architecture suggestions', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {});
+
+      expect(result.suggestions).toBeDefined();
+      expect(Array.isArray(result.suggestions)).toBe(true);
+    });
+  });
+
+  describe('dependency graph', () => {
+    it('should generate Mermaid dependency graph', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        generateGraph: true,
+      });
+
+      expect(result.dependencyGraph).toBeDefined();
+      expect(result.dependencyGraph).toContain('graph TD');
+    });
+
+    it('should skip graph generation when disabled', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {
+        generateGraph: false,
+      });
+
+      expect(result.dependencyGraph).toBe('');
+    });
+  });
+
+  describe('timestamp', () => {
+    it('should include analysis timestamp', async () => {
+      const result = await analyzer.analyzeArchitecture(apiDesignerPath, {});
+
+      expect(result.timestamp).toBeDefined();
+      expect(typeof result.timestamp).toBe('string');
+      // Verify it's a valid ISO string
+      expect(new Date(result.timestamp).toISOString()).toBe(result.timestamp);
+    });
   });
 });

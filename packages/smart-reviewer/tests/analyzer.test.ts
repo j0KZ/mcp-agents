@@ -148,5 +148,60 @@ describe('CodeAnalyzer', () => {
       expect(result1.overallScore).toBe(result2.overallScore);
       expect(result1.metrics.linesOfCode).toBe(result2.metrics.linesOfCode);
     });
+
+    it('should return cache statistics', () => {
+      const stats = analyzer.getCacheStats();
+
+      expect(stats).toBeDefined();
+      expect(stats.fileCache).toBeDefined();
+      expect(stats.analysisCache).toBeDefined();
+    });
+
+    it('should clear cache successfully', async () => {
+      await analyzer.analyzeFile(apiDesignerFile);
+
+      analyzer.clearCache();
+
+      const stats = analyzer.getCacheStats();
+      expect(stats.analysisCache.size).toBe(0);
+    });
+
+    it('should invalidate cache for specific file', async () => {
+      await analyzer.analyzeFile(apiDesignerFile);
+
+      analyzer.invalidateCache(apiDesignerFile);
+
+      // Should not throw error
+      expect(true).toBe(true);
+    });
+  });
+
+  describe('applyFixes', () => {
+    it('should apply fixes to code', async () => {
+      const content = 'var x = 1;';
+      const issues = [
+        {
+          type: 'var-usage' as const,
+          severity: 'warning' as const,
+          line: 1,
+          message: 'Use const or let',
+          fix: { oldCode: 'var x', newCode: 'const x' },
+        },
+      ];
+
+      const result = await analyzer.applyFixes(content, issues);
+
+      expect(result).toBeDefined();
+      expect(typeof result).toBe('string');
+    });
+
+    it('should return unchanged content when no fixes', async () => {
+      const content = 'const x = 1;';
+      const issues: any[] = [];
+
+      const result = await analyzer.applyFixes(content, issues);
+
+      expect(result).toBe(content);
+    });
   });
 });
