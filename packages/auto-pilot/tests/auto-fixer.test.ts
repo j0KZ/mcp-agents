@@ -177,10 +177,10 @@ function calculate(a, b) {
 
       // Mock exec to simulate test-generator not available
       const execMock = vi.fn().mockRejectedValue(new Error('Command not found'));
-      vi.mocked(exec).mockImplementation(((cmd: any, cb: any) => {
+      vi.mocked(exec).mockImplementation(((cmd: unknown, cb: (err: Error) => void) => {
         execMock(cmd);
         cb(new Error('Command not found'));
-      }) as any);
+      }) as typeof exec);
 
       await fixer.generateTestsFor('src/utils.ts');
 
@@ -238,25 +238,19 @@ function calculate(a, b) {
   });
 
   describe('fixEverything', () => {
-    it('should run MCP auto-fix tool', async () => {
-      // The method uses execFileAsync which is promisified
-      vi.mocked(exec).mockImplementation(((
-        _cmd: string,
-        opts: unknown,
-        cb?: (err: Error | null, stdout: string, stderr: string) => void
-      ) => {
-        if (typeof opts === 'function') {
-          opts(null, '', '');
-        } else if (cb) {
-          cb(null, '', '');
-        }
-        return { stdout: '', stderr: '' };
-      }) as typeof exec);
+    it('should complete without throwing even when external tool fails', async () => {
+      // fixEverything catches errors from execFileAsync and falls back gracefully
+      // We verify it completes without throwing by checking console was called
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
       await fixer.fixEverything();
 
-      // Should complete without throwing
-      expect(true).toBe(true);
+      // Should have logged the start message
+      expect(consoleSpy).toHaveBeenCalledWith('🔧 Running auto-fix on entire project...');
+      // Should have either succeeded or fallen back (both log something)
+      expect(consoleSpy).toHaveBeenCalledTimes(2);
+
+      consoleSpy.mockRestore();
     });
   });
 
