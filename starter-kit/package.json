@@ -1,6 +1,6 @@
 {
   "name": "@j0kz/claude-starter",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Universal Claude Code starter kit with 10 developer skills",
   "bin": {
     "claude-starter": "./bin/install.js"
