@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@j0kz/shared": "^1.1.1",
-    "chokidar": "^3.5.3",
+    "chokidar": "^5.0.0",
     "commander": "^14.0.2"
   },
   "optionalDependencies": {
