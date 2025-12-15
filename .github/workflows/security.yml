@@ -60,7 +60,7 @@ jobs:
           node packages/security-scanner/dist/mcp-server.js report . > security-report.md || true
 
       - name: Upload security report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: security-reports
