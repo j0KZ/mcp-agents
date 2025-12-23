@@ -1,12 +1,6 @@
 ---
 name: api-integration
-version: 1.0.0
-type: integration
-tags: [api, integration, rest, graphql, webhooks, third-party]
-compatibility: any-project
-dependencies: optional
-language: any
-description: Master third-party API integration in ANY language with best practices and patterns
+description: "Master third-party API integration in ANY language with best practices and patterns"
 ---
 
 # API Integration - Connect to Any Service

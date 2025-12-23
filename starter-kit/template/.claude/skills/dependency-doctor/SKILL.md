@@ -1,12 +1,6 @@
 ---
 name: dependency-doctor
-version: 1.0.0
-type: maintenance
-tags: [dependencies, security, updates, vulnerabilities, package-management]
-compatibility: any-project
-dependencies: optional
-language: any
-description: Diagnose and heal dependency issues in ANY package manager, ANY language
+description: "Diagnose and heal dependency issues in ANY package manager, ANY language"
 ---
 
 # Dependency Doctor - Heal Your Package Problems

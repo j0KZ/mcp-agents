@@ -51,6 +51,10 @@ const VALID_CATEGORIES = [
   'standards',
   'release',
   'testing',
+  'planning',
+  'performance',
+  'security',
+  'workflow',
 ];
 
 // Validation results

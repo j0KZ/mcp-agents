@@ -84,6 +84,32 @@ function getFileStats(filePath) {
 }
 
 /**
+ * Recursively scan references directory for .md files
+ */
+function scanReferencesRecursively(dir, relativePath) {
+  const results = [];
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    const relPath = `${relativePath}/${entry.name}`;
+
+    if (entry.isDirectory()) {
+      // Recursively scan subdirectories
+      results.push(...scanReferencesRecursively(fullPath, relPath));
+    } else if (entry.isFile() && entry.name.endsWith('.md')) {
+      results.push({
+        name: entry.name,
+        path: relPath,
+        ...getFileStats(fullPath),
+      });
+    }
+  }
+
+  return results;
+}
+
+/**
  * Scan all skills
  */
 function scanSkills() {
@@ -106,20 +132,13 @@ function scanSkills() {
       const metadata = parseYamlFrontmatter(content);
       const stats = getFileStats(skillFile);
 
-      // Check for reference files
+      // Check for reference files (including subdirectories)
       const referencesDir = path.join(SKILLS_DIR, skillDir, 'references');
       const hasReferences = fs.existsSync(referencesDir);
       let referenceFiles = [];
 
       if (hasReferences) {
-        referenceFiles = fs
-          .readdirSync(referencesDir)
-          .filter(file => file.endsWith('.md'))
-          .map(file => ({
-            name: file,
-            path: `references/${file}`,
-            ...getFileStats(path.join(referencesDir, file)),
-          }));
+        referenceFiles = scanReferencesRecursively(referencesDir, 'references');
       }
 
       skills.push({

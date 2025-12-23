@@ -1,12 +1,6 @@
 ---
 name: zero-to-hero
-version: 1.0.0
-type: onboarding
-tags: [onboarding, codebase, exploration, learning, documentation]
-compatibility: any-project
-dependencies: optional
-language: any
-description: Go from zero knowledge to codebase expert in ANY project, ANY size, ANY language
+description: "Go from zero knowledge to codebase expert in ANY project, ANY size, ANY language"
 ---
 
 # Zero to Hero - Master Any Codebase Fast

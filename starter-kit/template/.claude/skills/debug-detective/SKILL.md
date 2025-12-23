@@ -1,12 +1,6 @@
 ---
 name: debug-detective
-version: 1.0.0
-type: problem-solving
-tags: [debugging, troubleshooting, systematic, universal]
-compatibility: any-project
-dependencies: optional
-language: any
-description: Systematic debugging approach for ANY codebase, ANY language, ANY bug type
+description: "Systematic debugging approach for ANY codebase, ANY language, ANY bug type"
 ---
 
 # Debug Detective - Systematic Bug Hunting

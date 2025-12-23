@@ -1,208 +1,169 @@
-# Universal Skills Index - Project-Agnostic Developer Skills
+# Skills Index - Complete Developer Toolkit
 
-**Created:** 2025-11-12
-**Total Skills:** 10
-**Compatibility:** ANY project, ANY language, ANY framework
-**MCP Tools:** Optional (works with or without)
-
----
-
-## 🌍 What Are Universal Skills?
-
-These are **project-agnostic skills** that work in ANY codebase, regardless of:
-- **Programming language** (JavaScript, Python, Java, Go, etc.)
-- **Framework** (React, Django, Spring, Rails, etc.)
-- **Project type** (Web, API, CLI, Mobile, Desktop)
-- **MCP tools** (Enhanced with MCP, but work without)
-
-Each skill provides:
-- ✅ **WITH MCP**: Automated solutions using MCP tools
-- ✅ **WITHOUT MCP**: Manual approaches and commands
-- ✅ **Language-agnostic** patterns and techniques
-- ✅ **Universal best practices** that apply everywhere
+**Created:** 2025-12-22
+**Total Skills:** 29
+**Categories:** Universal (12) + MCP-Enhanced (17)
 
 ---
 
-## 📚 Skills by Category
+## 🌍 Universal Skills (Work Anywhere)
 
-### 🎯 Development Workflow (5 skills)
+These skills work in ANY codebase, with or without MCP tools.
 
-#### 1. [Quick PR Review](quick-pr-review/SKILL.md)
-**Universal pre-PR checklist for ANY project**
-- Self-review before creating pull requests
-- Works with any version control system
-- Language-agnostic quality checks
-- 30-second to 3-minute workflow
+### Development Workflow
 
-#### 2. [Zero to Hero](zero-to-hero/SKILL.md)
-**Master any codebase from scratch**
-- Onboard to new projects quickly
-- Understand architecture patterns
-- Find core components
-- Contribute within hours, not days
+| Skill | Description | Use When |
+|-------|-------------|----------|
+| [quick-pr-review](quick-pr-review/SKILL.md) | Pre-PR checklist | Before creating PRs |
+| [zero-to-hero](zero-to-hero/SKILL.md) | Master any codebase | Joining new project |
+| [legacy-modernizer](legacy-modernizer/SKILL.md) | Safe modernization | Updating old code |
+| [tech-debt-tracker](tech-debt-tracker/SKILL.md) | Manage debt | Prioritizing fixes |
+| [api-integration](api-integration/SKILL.md) | Connect services | Adding 3rd party APIs |
 
-#### 3. [Legacy Modernizer](legacy-modernizer/SKILL.md)
-**Safely modernize old code without breaking**
-- Strangler Fig pattern
-- Characterization tests
-- Incremental refactoring
-- Works with 20-year-old code
+### Problem Solving
 
-#### 4. [Tech Debt Tracker](tech-debt-tracker/SKILL.md)
-**Manage technical debt like financial debt**
-- Quantify debt in hours/dollars
-- Prioritization matrix
-- ROI calculations
-- Convince management to invest
+| Skill | Description | Use When |
+|-------|-------------|----------|
+| [debug-detective](debug-detective/SKILL.md) | Systematic debugging | Hunting bugs |
+| [performance-hunter](performance-hunter/SKILL.md) | Find bottlenecks | Slow performance |
 
-#### 5. [API Integration](api-integration/SKILL.md)
-**Connect to any third-party service**
-- OAuth, JWT, API keys
-- Webhook handling
-- Rate limiting & retries
-- Universal client pattern
+### Quality & Security
 
-### 🔍 Problem Solving (2 skills)
+| Skill | Description | Use When |
+|-------|-------------|----------|
+| [test-coverage-boost](test-coverage-boost/SKILL.md) | 0% to 80% coverage | Improving tests |
+| [security-first](security-first/SKILL.md) | OWASP protection | Security audit |
+| [dependency-doctor](dependency-doctor/SKILL.md) | Package health | Dependency issues |
 
-#### 6. [Debug Detective](debug-detective/SKILL.md)
-**Systematic debugging for ANY bug type**
-- 5-step debug protocol
-- Works in any language
-- Find root cause fast
-- Emergency procedures included
+### Specialized
 
-#### 7. [Performance Hunter](performance-hunter/SKILL.md)
-**Find and fix bottlenecks anywhere**
-- Profile any language
-- Database optimization
-- Memory leak detection
-- 80/20 performance wins
-
-### 🛡️ Quality & Security (3 skills)
-
-#### 8. [Test Coverage Boost](test-coverage-boost/SKILL.md)
-**Go from 0% to 80% coverage systematically**
-- Priority-based test writing
-- Works with any test framework
-- Mocking strategies
-- Coverage goals by project type
-
-#### 9. [Security First](security-first/SKILL.md)
-**OWASP Top 10 protection checklist**
-- Find hardcoded secrets
-- SQL injection prevention
-- XSS protection
-- Universal security patterns
-
-#### 10. [Dependency Doctor](dependency-doctor/SKILL.md)
-**Heal package management problems**
-- Version conflict resolution
-- Security vulnerability fixes
-- Dependency bloat diet
-- Works with npm, pip, maven, etc.
+| Skill | Description | Use When |
+|-------|-------------|----------|
+| [brand-guidelines](brand-guidelines/SKILL.md) | Brand consistency | Marketing/design |
+| [competitive-ads-extractor](competitive-ads-extractor/SKILL.md) | Ad analysis | Competitor research |
 
 ---
 
-## 🚀 Quick Start Guide
+## 🔧 MCP-Enhanced Skills (Require @j0kz/mcp-agents)
 
-### Using Skills WITH MCP Tools
+These skills leverage MCP tools for automated workflows.
 
-If you have the MCP tools installed:
+### Code Quality
+
+| Skill | Description | MCP Tools |
+|-------|-------------|-----------|
+| [code-quality-pipeline](code-quality-pipeline/SKILL.md) | Systematic quality improvement | smart-reviewer, test-generator |
+| [testing-patterns-vitest](testing-patterns-vitest/SKILL.md) | Vitest testing patterns | test-generator |
+| [modular-refactoring-pattern](modular-refactoring-pattern/SKILL.md) | Keep files <300 LOC | architecture-analyzer |
+
+### Documentation & Git
+
+| Skill | Description | MCP Tools |
+|-------|-------------|-----------|
+| [documentation-generation](documentation-generation/SKILL.md) | README, CHANGELOG, API docs | doc-generator |
+| [git-pr-workflow](git-pr-workflow/SKILL.md) | Commit to PR workflow | smart-reviewer |
+
+### Architecture & Analysis
+
+| Skill | Description | MCP Tools |
+|-------|-------------|-----------|
+| [api-contract-validator](api-contract-validator/SKILL.md) | OpenAPI validation | - |
+| [caching-optimizer](caching-optimizer/SKILL.md) | Caching strategies | - |
+| [dependency-analyzer](dependency-analyzer/SKILL.md) | Dependency audit | architecture-analyzer |
+| [performance-profiler](performance-profiler/SKILL.md) | Profiling guide | - |
+| [security-scanner](security-scanner/SKILL.md) | Vulnerability scanning | security-scanner |
+
+### Workflow & Orchestration
+
+| Skill | Description | MCP Tools |
+|-------|-------------|-----------|
+| [mcp-workflow-composition](mcp-workflow-composition/SKILL.md) | Combine MCP tools | orchestrator-mcp |
+| [tool-discovery](tool-discovery/SKILL.md) | Find the right tool | orchestrator-mcp |
+| [mcp-troubleshooting](mcp-troubleshooting/SKILL.md) | Debug MCP issues | - |
+
+### Project Standards
+
+| Skill | Description | MCP Tools |
+|-------|-------------|-----------|
+| [project-standardization](project-standardization/SKILL.md) | Version & automation | - |
+| [monorepo-package-workflow](monorepo-package-workflow/SKILL.md) | Monorepo patterns | - |
+| [release-publishing-workflow](release-publishing-workflow/SKILL.md) | Release process | - |
+
+### Advanced
+
+| Skill | Description | MCP Tools |
+|-------|-------------|-----------|
+| [model-first-reasoning](model-first-reasoning/SKILL.md) | Reduce hallucinations | - |
+
+---
+
+## 🚀 Quick Start
+
+### Install Everything
 
 ```bash
-# Install MCP tools first (if not already)
+# Install starter kit with all skills
+npx @j0kz/mcp-agents@latest init
+
+# This copies:
+# - CLAUDE.md (project instructions)
+# - .claude/skills/ (all 29 skills)
+# - .claude/references/ (shared references)
+```
+
+### Install MCP Tools (Optional)
+
+```bash
+# For MCP-enhanced skills
 npx @j0kz/mcp-agents@latest
 ```
 
-Then use natural language:
-```
-"Run quick PR review on my staged changes"
-"Find performance bottlenecks in my application"
-"Generate tests to reach 80% coverage"
-```
+---
 
-### Using Skills WITHOUT MCP Tools
+## 📊 Skills by Use Case
 
-Each skill includes complete manual approaches:
+### Starting a New Project
+1. [security-first](security-first/SKILL.md) - Security from day 1
+2. [project-standardization](project-standardization/SKILL.md) - Set up standards
+3. [testing-patterns-vitest](testing-patterns-vitest/SKILL.md) - Test structure
 
-```bash
-# Example: Quick PR review without MCP
-git diff --staged            # Review changes
-npm test                      # Run tests
-npm run lint                  # Check linting
-grep -r "TODO\|FIXME"        # Find incomplete work
+### Joining Existing Project
+1. [zero-to-hero](zero-to-hero/SKILL.md) - Understand codebase
+2. [quick-pr-review](quick-pr-review/SKILL.md) - PR best practices
+3. [tool-discovery](tool-discovery/SKILL.md) - Find available tools
 
-# Example: Debug without MCP
-console.log('🔍 Checkpoint 1');  # Add breadcrumbs
-git bisect start              # Find breaking commit
-```
+### Code Review & Quality
+1. [code-quality-pipeline](code-quality-pipeline/SKILL.md) - Automated review
+2. [git-pr-workflow](git-pr-workflow/SKILL.md) - PR workflow
+3. [modular-refactoring-pattern](modular-refactoring-pattern/SKILL.md) - Refactoring
+
+### Debugging & Performance
+1. [debug-detective](debug-detective/SKILL.md) - Find bugs
+2. [performance-hunter](performance-hunter/SKILL.md) - Find bottlenecks
+3. [performance-profiler](performance-profiler/SKILL.md) - Deep profiling
+
+### Security & Dependencies
+1. [security-scanner](security-scanner/SKILL.md) - Scan vulnerabilities
+2. [dependency-analyzer](dependency-analyzer/SKILL.md) - Audit deps
+3. [dependency-doctor](dependency-doctor/SKILL.md) - Fix issues
+
+### Documentation
+1. [documentation-generation](documentation-generation/SKILL.md) - Generate docs
+2. [api-contract-validator](api-contract-validator/SKILL.md) - API docs
+
+### Releasing
+1. [release-publishing-workflow](release-publishing-workflow/SKILL.md) - Release process
+2. [git-pr-workflow](git-pr-workflow/SKILL.md) - PR workflow
 
 ---
 
-## 💡 Key Features
+## 📈 Skill Stats
 
-### Progressive Enhancement
-- **Basic**: Manual commands work everywhere
-- **Better**: Scripts and automation
-- **Best**: MCP tools for 10x speed
-
-### Language Agnostic
-Each skill shows examples in multiple languages:
-- JavaScript/Node.js
-- Python
-- Java
-- Go
-- Ruby
-- And adapts to others
-
-### Real-World Focus
-- Solve actual developer pain points
-- Based on common daily tasks
-- Time-saving techniques
-- Production-ready patterns
-
----
-
-## 📊 Skill Selection Guide
-
-### By Experience Level
-
-**Junior Developer:**
-1. Start with: [Zero to Hero](zero-to-hero/SKILL.md)
-2. Then: [Debug Detective](debug-detective/SKILL.md)
-3. Finally: [Test Coverage Boost](test-coverage-boost/SKILL.md)
-
-**Mid-Level Developer:**
-1. Focus on: [Quick PR Review](quick-pr-review/SKILL.md)
-2. Master: [Performance Hunter](performance-hunter/SKILL.md)
-3. Learn: [API Integration](api-integration/SKILL.md)
-
-**Senior Developer:**
-1. Use: [Legacy Modernizer](legacy-modernizer/SKILL.md)
-2. Track: [Tech Debt Tracker](tech-debt-tracker/SKILL.md)
-3. Enforce: [Security First](security-first/SKILL.md)
-
-### By Project Phase
-
-**Starting New Project:**
-- [Security First](security-first/SKILL.md)
-- [Dependency Doctor](dependency-doctor/SKILL.md)
-- [Test Coverage Boost](test-coverage-boost/SKILL.md)
-
-**Joining Existing Project:**
-- [Zero to Hero](zero-to-hero/SKILL.md)
-- [Debug Detective](debug-detective/SKILL.md)
-- [Quick PR Review](quick-pr-review/SKILL.md)
-
-**Maintaining Legacy Code:**
-- [Legacy Modernizer](legacy-modernizer/SKILL.md)
-- [Tech Debt Tracker](tech-debt-tracker/SKILL.md)
-- [Performance Hunter](performance-hunter/SKILL.md)
-
-**Integrating Services:**
-- [API Integration](api-integration/SKILL.md)
-- [Security First](security-first/SKILL.md)
-- [Debug Detective](debug-detective/SKILL.md)
+| Category | Count | Type |
+|----------|-------|------|
+| Universal | 12 | Works anywhere |
+| MCP-Enhanced | 17 | Requires MCP tools |
+| **Total** | **29** | |
 
 ---
 
@@ -215,73 +176,7 @@ You're using these skills effectively when:
 - ✅ Zero security vulnerabilities
 - ✅ Performance issues found before production
 - ✅ Technical debt tracked and prioritized
-- ✅ Legacy code safely modernized
+- ✅ Documentation always up-to-date
 - ✅ New codebases understood in hours
-- ✅ Dependencies always up-to-date
-- ✅ API integrations work first time
-
----
-
-## 📈 Skill Progression Path
-
-```mermaid
-graph LR
-    A[Beginner] --> B[Debug Detective]
-    B --> C[Test Coverage]
-    C --> D[Quick PR Review]
-
-    D --> E[Intermediate]
-    E --> F[Performance Hunter]
-    F --> G[API Integration]
-    G --> H[Security First]
-
-    H --> I[Advanced]
-    I --> J[Legacy Modernizer]
-    J --> K[Tech Debt Tracker]
-    K --> L[Dependency Doctor]
-
-    L --> M[Expert]
-```
-
----
-
-## 🔄 Continuous Improvement
-
-### Weekly Practice
-- **Monday**: Review PRs using [Quick PR Review](quick-pr-review/SKILL.md)
-- **Tuesday**: Hunt performance issues
-- **Wednesday**: Boost test coverage
-- **Thursday**: Track and document tech debt
-- **Friday**: Update dependencies and security scan
-
-### Monthly Goals
-- Increase test coverage by 10%
-- Reduce average debug time by 20%
-- Modernize one legacy module
-- Complete one API integration
-- Fix all high-priority security issues
-
----
-
-## 📝 Contributing
-
-Want to add a universal skill? It should be:
-1. **Language-agnostic** - Works in any programming language
-2. **Framework-independent** - Not tied to specific tools
-3. **Problem-focused** - Solves a real developer pain point
-4. **Dual-approach** - Works both with and without MCP tools
-5. **Time-saving** - Provides measurable efficiency gains
-
----
-
-## 🚀 Remember
-
-These skills are **universal** - learn them once, use them everywhere:
-- In your current job
-- In your next job
-- In open source projects
-- In personal projects
-- In any programming language
-- With or without AI tools
-
-**Master these 10 skills and become a truly versatile developer!** 🌟
+- ✅ Dependencies always secure
+- ✅ MCP workflows run automatically
