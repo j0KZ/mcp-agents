@@ -178,6 +178,61 @@ Each skill includes:
 
 ---
 
+## 🐳 Docker MCP Gateway (NEW - 95% Token Reduction)
+
+Run MCP tools in containers with **95% token savings** using Docker MCP Gateway:
+
+<details>
+<summary><b>🚀 Quick Start</b> (Click to expand)</summary>
+
+### Prerequisites
+
+- Docker Desktop 4.50+ installed
+
+### Start the Gateway
+
+```bash
+# Clone and start
+git clone https://github.com/j0KZ/mcp-agents.git
+cd mcp-agents
+docker compose -f docker-compose.mcp.yml up -d
+```
+
+### Token Savings
+
+| Mode | Context Tokens | Savings |
+|------|---------------|---------|
+| Standard (npm) | ~10,000 | 0% |
+| Docker Gateway | ~1,500 | **85%** |
+| Code-mode | ~500 | **95%** |
+
+### How It Works
+
+Instead of loading all 50 tool definitions (~10,000 tokens), the gateway provides:
+
+- **`mcp-find`** - Search tools by keyword (no loading)
+- **`mcp-add`** - Load specific tools on-demand
+- **`code-mode`** - Execute workflows in sandbox (only results return)
+
+### Configure Your Editor
+
+Copy the config for your editor from `examples/client-configs/`:
+
+```bash
+# Claude Desktop (macOS)
+cp examples/client-configs/claude-desktop.json \
+   ~/Library/Application\ Support/Claude/claude_desktop_config.json
+
+# VS Code
+cp examples/client-configs/vscode-mcp.json .vscode/mcp.json
+```
+
+📖 [Full Docker MCP Documentation](docs/docker-mcp-implementation-plan.md)
+
+</details>
+
+---
+
 ## 🔧 MCP Tools Usage Guide
 
 Each tool below includes **clear examples in English and Spanish** with expected outputs.
