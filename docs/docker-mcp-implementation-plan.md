@@ -4,7 +4,7 @@
 
 Migrate the `@j0kz/mcp-agents` monorepo to Docker MCP Gateway architecture to achieve **75-95% token reduction** while maintaining backward compatibility.
 
-**Current State**: 9 MCP servers as npm packages with stdio transport
+**Current State**: 10 MCP servers as npm packages with stdio transport
 **Target State**: Containerized MCP servers behind Docker MCP Gateway with dynamic tool discovery
 
 ---
@@ -83,7 +83,7 @@ Migrate the `@j0kz/mcp-agents` monorepo to Docker MCP Gateway architecture to ac
 
 ---
 
-## Phase 1: Containerization (Week 1-2)
+## Phase 1: Containerization
 
 ### 1.1 Create Base Dockerfile Template
 
@@ -110,22 +110,32 @@ FROM node:20-alpine AS runtime
 
 WORKDIR /app
 
+# ARG must be redeclared after FROM
+ARG PACKAGE_NAME
+
+# Copy built artifacts
 COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
 COPY --from=builder /app/packages/shared/package.json ./packages/shared/
 COPY --from=builder /app/packages/${PACKAGE_NAME}/dist ./packages/${PACKAGE_NAME}/dist
 COPY --from=builder /app/packages/${PACKAGE_NAME}/package.json ./packages/${PACKAGE_NAME}/
 
+# Copy root package.json for workspace resolution
+COPY --from=builder /app/package*.json ./
+
 # Install production deps only
 RUN npm ci --omit=dev --workspace=@j0kz/${PACKAGE_NAME}
 
 ENV NODE_ENV=production
+# Store package name as ENV for runtime access
+ENV MCP_PACKAGE=${PACKAGE_NAME}
 
-ENTRYPOINT ["node", "packages/${PACKAGE_NAME}/dist/index.js"]
+# Use shell form to expand ENV variable at runtime
+ENTRYPOINT ["sh", "-c", "node packages/${MCP_PACKAGE}/dist/index.js"]
 ```
 
 ### 1.2 Package-Specific Dockerfiles
 
-Create `Dockerfile` in each package directory:
+Create `Dockerfile` in each package directory (10 MCP servers):
 
 ```
 packages/
@@ -133,7 +143,7 @@ packages/
 │   └── Dockerfile
 ├── test-generator/
 │   └── Dockerfile
-├── code-analyzer/
+├── architecture-analyzer/
 │   └── Dockerfile
 ├── security-scanner/
 │   └── Dockerfile
@@ -145,7 +155,9 @@ packages/
 │   └── Dockerfile
 ├── doc-generator/
 │   └── Dockerfile
-└── orchestrator/
+├── orchestrator-mcp/
+│   └── Dockerfile
+└── auto-pilot/
     └── Dockerfile
 ```
 
@@ -153,8 +165,6 @@ packages/
 
 ```yaml
 # docker-compose.mcp.yml
-version: '3.8'
-
 services:
   mcp-gateway:
     image: docker/mcp-gateway:latest
@@ -183,13 +193,14 @@ services:
       - "mcp.server=true"
       - "mcp.name=test-generator"
 
-  code-analyzer:
+  architecture-analyzer:
     build:
       context: .
-      dockerfile: packages/code-analyzer/Dockerfile
+      dockerfile: packages/architecture-analyzer/Dockerfile
     labels:
       - "mcp.server=true"
-      - "mcp.name=code-analyzer"
+      - "mcp.name=architecture-analyzer"
+      - "mcp.description=Dependency analysis, circular detection, layer violations"
 
   security-scanner:
     build:
@@ -231,17 +242,27 @@ services:
       - "mcp.server=true"
       - "mcp.name=doc-generator"
 
-  orchestrator:
+  orchestrator-mcp:
     build:
       context: .
-      dockerfile: packages/orchestrator/Dockerfile
+      dockerfile: packages/orchestrator-mcp/Dockerfile
     labels:
       - "mcp.server=true"
       - "mcp.name=orchestrator"
+      - "mcp.description=Chain multiple MCP tools into workflows"
     depends_on:
       - smart-reviewer
       - test-generator
       - security-scanner
+
+  auto-pilot:
+    build:
+      context: .
+      dockerfile: packages/auto-pilot/Dockerfile
+    labels:
+      - "mcp.server=true"
+      - "mcp.name=auto-pilot"
+      - "mcp.description=Zero-effort automation for lazy developers"
 
 networks:
   default:
@@ -250,8 +271,9 @@ networks:
 
 ### 1.4 MCP Gateway Configuration
 
+Create file at `docker/mcp-config/servers.json`:
+
 ```json
-// docker/mcp-config/servers.json
 {
   "servers": {
     "smart-reviewer": {
@@ -259,46 +281,70 @@ networks:
       "container": "mcp-agents-smart-reviewer-1",
       "autoLoad": false,
       "categories": ["analysis", "review"],
-      "tools": [
-        "review_file",
-        "review_diff",
-        "analyze_architecture"
-      ]
+      "tools": ["review_file", "review_diff", "suggest_fixes"]
     },
     "test-generator": {
       "transport": "docker",
       "container": "mcp-agents-test-generator-1",
       "autoLoad": false,
       "categories": ["generation", "testing"],
-      "tools": [
-        "generate_tests",
-        "generate_test_suite",
-        "analyze_coverage"
-      ]
+      "tools": ["generate_tests", "generate_test_suite", "analyze_coverage"]
+    },
+    "architecture-analyzer": {
+      "transport": "docker",
+      "container": "mcp-agents-architecture-analyzer-1",
+      "autoLoad": false,
+      "categories": ["analysis"],
+      "tools": ["analyze_architecture", "detect_circular_deps", "generate_diagram"]
     },
     "security-scanner": {
       "transport": "docker",
       "container": "mcp-agents-security-scanner-1",
       "autoLoad": false,
       "categories": ["security"],
-      "tools": [
-        "scan_file",
-        "scan_secrets",
-        "scan_owasp",
-        "scan_dependencies"
-      ]
+      "tools": ["scan_file", "scan_secrets", "scan_owasp", "scan_dependencies"]
     },
-    "orchestrator": {
+    "refactor-assistant": {
       "transport": "docker",
-      "container": "mcp-agents-orchestrator-1",
+      "container": "mcp-agents-refactor-assistant-1",
+      "autoLoad": false,
+      "categories": ["refactoring"],
+      "tools": ["extract_function", "simplify_conditionals", "remove_dead_code"]
+    },
+    "api-designer": {
+      "transport": "docker",
+      "container": "mcp-agents-api-designer-1",
+      "autoLoad": false,
+      "categories": ["design"],
+      "tools": ["design_api", "generate_openapi", "generate_client"]
+    },
+    "db-schema": {
+      "transport": "docker",
+      "container": "mcp-agents-db-schema-1",
+      "autoLoad": false,
+      "categories": ["design"],
+      "tools": ["design_schema", "generate_migration", "generate_er_diagram"]
+    },
+    "doc-generator": {
+      "transport": "docker",
+      "container": "mcp-agents-doc-generator-1",
+      "autoLoad": false,
+      "categories": ["generation"],
+      "tools": ["generate_jsdoc", "generate_readme", "generate_changelog"]
+    },
+    "orchestrator-mcp": {
+      "transport": "docker",
+      "container": "mcp-agents-orchestrator-mcp-1",
       "autoLoad": true,
       "categories": ["orchestration"],
-      "tools": [
-        "run_workflow",
-        "search_tools",
-        "load_tool",
-        "list_capabilities"
-      ]
+      "tools": ["run_workflow", "search_tools", "load_tool", "list_capabilities"]
+    },
+    "auto-pilot": {
+      "transport": "docker",
+      "container": "mcp-agents-auto-pilot-1",
+      "autoLoad": false,
+      "categories": ["automation"],
+      "tools": ["auto_fix", "watch_files", "setup_hooks"]
     }
   },
   "gateway": {
@@ -311,7 +357,7 @@ networks:
 
 ---
 
-## Phase 2: Gateway Integration (Week 2-3)
+## Phase 2: Gateway Integration
 
 ### 2.1 Enhanced Orchestrator for Gateway Mode
 
@@ -473,7 +519,7 @@ return {
 
 ---
 
-## Phase 3: Client Configuration (Week 3)
+## Phase 3: Client Configuration
 
 ### 3.1 Claude Desktop Configuration
 
@@ -544,7 +590,7 @@ export async function createMCPConnection(
 
 ---
 
-## Phase 4: Publishing to Docker Hub (Week 4)
+## Phase 4: Publishing to Docker Hub
 
 ### 4.1 Build and Push Script
 
@@ -555,16 +601,18 @@ export async function createMCPConnection(
 VERSION=$(node -p "require('./package.json').version")
 REGISTRY="docker.io/j0kz"
 
+# All 10 MCP servers (matching packages/ directory)
 PACKAGES=(
   "smart-reviewer"
   "test-generator"
-  "code-analyzer"
+  "architecture-analyzer"
   "security-scanner"
   "refactor-assistant"
   "api-designer"
   "db-schema"
   "doc-generator"
-  "orchestrator"
+  "orchestrator-mcp"
+  "auto-pilot"
 )
 
 for pkg in "${PACKAGES[@]}"; do
@@ -601,13 +649,37 @@ servers:
     image: j0kz/mcp-test-generator
     categories: [generation, testing]
 
+  - name: architecture-analyzer
+    image: j0kz/mcp-architecture-analyzer
+    categories: [analysis]
+
   - name: security-scanner
     image: j0kz/mcp-security-scanner
     categories: [security]
 
-  - name: orchestrator
-    image: j0kz/mcp-orchestrator
+  - name: refactor-assistant
+    image: j0kz/mcp-refactor-assistant
+    categories: [refactoring]
+
+  - name: api-designer
+    image: j0kz/mcp-api-designer
+    categories: [design]
+
+  - name: db-schema
+    image: j0kz/mcp-db-schema
+    categories: [design]
+
+  - name: doc-generator
+    image: j0kz/mcp-doc-generator
+    categories: [generation]
+
+  - name: orchestrator-mcp
+    image: j0kz/mcp-orchestrator-mcp
     categories: [orchestration]
+
+  - name: auto-pilot
+    image: j0kz/mcp-auto-pilot
+    categories: [automation]
 
 features:
   dynamicDiscovery: true
@@ -626,7 +698,7 @@ features:
 
 ### Phase 1: Containerization
 - [ ] Base Dockerfile created and tested
-- [ ] All 9 packages containerized
+- [ ] All 10 packages containerized
 - [ ] docker-compose.mcp.yml working locally
 - [ ] Container health checks passing
 
