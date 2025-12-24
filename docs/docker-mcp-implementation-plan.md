@@ -490,7 +490,7 @@ const [review, tests, arch] = await Promise.all([
   mcp.call('test-generator', 'analyze_coverage', {
     filePath: params.filePath
   }),
-  mcp.call('code-analyzer', 'analyze_architecture', {
+  mcp.call('architecture-analyzer', 'analyze_architecture', {
     filePath: params.filePath,
     config: { response_format: 'minimal' }
   })
