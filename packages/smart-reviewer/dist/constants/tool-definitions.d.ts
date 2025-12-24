@@ -37,12 +37,7 @@ export declare const REVIEW_FILE_DEFINITION: {
                     };
                 };
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };
@@ -66,12 +61,7 @@ export declare const BATCH_REVIEW_DEFINITION: {
                 type: "object";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };
@@ -92,12 +82,7 @@ export declare const GENERATE_AUTO_FIXES_DEFINITION: {
                 type: "boolean";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };
@@ -118,12 +103,7 @@ export declare const APPLY_AUTO_FIXES_DEFINITION: {
                 type: "boolean";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };
@@ -140,12 +120,7 @@ export declare const APPLY_FIXES_DEFINITION: {
                 type: "string";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };
@@ -183,12 +158,7 @@ export declare const SMART_REVIEWER_TOOLS: ({
                 type: "object";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };
@@ -203,12 +173,7 @@ export declare const SMART_REVIEWER_TOOLS: ({
                 type: "string";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };

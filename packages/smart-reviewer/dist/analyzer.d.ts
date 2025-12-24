@@ -59,25 +59,8 @@ export declare class CodeAnalyzer {
      * Get cache statistics
      */
     getCacheStats(): {
-        fileCache: {
-            fileCache: {
-                hits: number;
-                misses: number;
-                hitRate: number;
-                size: number;
-                maxSize: number;
-            };
-            statsCache: {
-                size: number;
-            };
-        };
-        analysisCache: {
-            hits: number;
-            misses: number;
-            hitRate: number;
-            size: number;
-            maxSize: number;
-        };
+        fileCache: any;
+        analysisCache: any;
     };
     /**
      * Clear all caches

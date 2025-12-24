@@ -42,12 +42,7 @@ export declare const ORCHESTRATOR_TOOLS: ({
                 enum: string[];
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             steps?: undefined;
             query?: undefined;
             category?: undefined;
@@ -98,12 +93,7 @@ export declare const ORCHESTRATOR_TOOLS: ({
                 };
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             workflow?: undefined;
             focus?: undefined;
             files?: undefined;
@@ -125,12 +115,7 @@ export declare const ORCHESTRATOR_TOOLS: ({
     inputSchema: {
         type: "object";
         properties: {
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             workflow?: undefined;
             focus?: undefined;
             files?: undefined;
@@ -175,12 +160,7 @@ export declare const ORCHESTRATOR_TOOLS: ({
                 type: "number";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             workflow?: undefined;
             focus?: undefined;
             files?: undefined;
@@ -206,12 +186,7 @@ export declare const ORCHESTRATOR_TOOLS: ({
                 type: "string";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             workflow?: undefined;
             focus?: undefined;
             files?: undefined;
@@ -236,12 +211,7 @@ export declare const ORCHESTRATOR_TOOLS: ({
                 type: "string";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             workflow?: undefined;
             focus?: undefined;
             files?: undefined;

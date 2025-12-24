@@ -2,45 +2,18 @@
  * MCP Protocol Validation Layer
  * Ensures all MCP tools comply with protocol specifications
  */
-import { z } from 'zod';
 /**
  * MCP Tool Schema definition based on Model Context Protocol spec
  */
-export declare const MCPToolSchema: z.ZodObject<{
-    name: z.ZodString;
-    description: z.ZodString;
-    inputSchema: z.ZodObject<{
-        type: z.ZodLiteral<"object">;
-        properties: z.ZodRecord<z.ZodString, z.ZodAny>;
-        required: z.ZodOptional<z.ZodArray<z.ZodString>>;
-        additionalProperties: z.ZodOptional<z.ZodBoolean>;
-    }, z.core.$strip>;
-}, z.core.$strip>;
+export declare const MCPToolSchema: any;
 /**
  * MCP Request Schema
  */
-export declare const MCPRequestSchema: z.ZodObject<{
-    jsonrpc: z.ZodLiteral<"2.0">;
-    method: z.ZodString;
-    params: z.ZodObject<{
-        name: z.ZodString;
-        arguments: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
-    }, z.core.$strip>;
-    id: z.ZodUnion<readonly [z.ZodString, z.ZodNumber]>;
-}, z.core.$strip>;
+export declare const MCPRequestSchema: any;
 /**
  * MCP Response Schema
  */
-export declare const MCPResponseSchema: z.ZodObject<{
-    jsonrpc: z.ZodLiteral<"2.0">;
-    result: z.ZodOptional<z.ZodAny>;
-    error: z.ZodOptional<z.ZodObject<{
-        code: z.ZodNumber;
-        message: z.ZodString;
-        data: z.ZodOptional<z.ZodAny>;
-    }, z.core.$strip>>;
-    id: z.ZodUnion<readonly [z.ZodString, z.ZodNumber]>;
-}, z.core.$strip>;
+export declare const MCPResponseSchema: any;
 export interface MCPValidationResult {
     valid: boolean;
     errors?: string[];

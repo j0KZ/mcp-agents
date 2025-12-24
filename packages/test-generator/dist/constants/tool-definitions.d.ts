@@ -39,12 +39,7 @@ export declare const GENERATE_TESTS_DEFINITION: {
                     };
                 };
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };
@@ -69,12 +64,7 @@ export declare const WRITE_TEST_FILE_DEFINITION: {
                 type: "object";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };
@@ -98,12 +88,7 @@ export declare const BATCH_GENERATE_DEFINITION: {
                 type: "object";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };
@@ -142,12 +127,7 @@ export declare const TEST_GENERATOR_TOOLS: ({
                     };
                 };
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };
@@ -170,12 +150,7 @@ export declare const TEST_GENERATOR_TOOLS: ({
                 type: "object";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };
@@ -197,12 +172,7 @@ export declare const TEST_GENERATOR_TOOLS: ({
                 type: "object";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };

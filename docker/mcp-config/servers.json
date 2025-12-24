@@ -1,0 +1,79 @@
+{
+  "servers": {
+    "smart-reviewer": {
+      "transport": "docker",
+      "container": "mcp-agents-smart-reviewer-1",
+      "autoLoad": false,
+      "categories": ["analysis", "review"],
+      "tools": ["review_file", "review_diff", "suggest_fixes"]
+    },
+    "test-generator": {
+      "transport": "docker",
+      "container": "mcp-agents-test-generator-1",
+      "autoLoad": false,
+      "categories": ["generation", "testing"],
+      "tools": ["generate_tests", "generate_test_suite", "analyze_coverage"]
+    },
+    "architecture-analyzer": {
+      "transport": "docker",
+      "container": "mcp-agents-architecture-analyzer-1",
+      "autoLoad": false,
+      "categories": ["analysis"],
+      "tools": ["analyze_architecture", "detect_circular_deps", "generate_diagram"]
+    },
+    "security-scanner": {
+      "transport": "docker",
+      "container": "mcp-agents-security-scanner-1",
+      "autoLoad": false,
+      "categories": ["security"],
+      "tools": ["scan_file", "scan_secrets", "scan_owasp", "scan_dependencies"]
+    },
+    "refactor-assistant": {
+      "transport": "docker",
+      "container": "mcp-agents-refactor-assistant-1",
+      "autoLoad": false,
+      "categories": ["refactoring"],
+      "tools": ["extract_function", "simplify_conditionals", "remove_dead_code"]
+    },
+    "api-designer": {
+      "transport": "docker",
+      "container": "mcp-agents-api-designer-1",
+      "autoLoad": false,
+      "categories": ["design"],
+      "tools": ["design_api", "generate_openapi", "generate_client"]
+    },
+    "db-schema": {
+      "transport": "docker",
+      "container": "mcp-agents-db-schema-1",
+      "autoLoad": false,
+      "categories": ["design"],
+      "tools": ["design_schema", "generate_migration", "generate_er_diagram"]
+    },
+    "doc-generator": {
+      "transport": "docker",
+      "container": "mcp-agents-doc-generator-1",
+      "autoLoad": false,
+      "categories": ["generation"],
+      "tools": ["generate_jsdoc", "generate_readme", "generate_changelog"]
+    },
+    "orchestrator-mcp": {
+      "transport": "docker",
+      "container": "mcp-agents-orchestrator-mcp-1",
+      "autoLoad": true,
+      "categories": ["orchestration"],
+      "tools": ["run_workflow", "search_tools", "load_tool", "list_capabilities"]
+    },
+    "auto-pilot": {
+      "transport": "docker",
+      "container": "mcp-agents-auto-pilot-1",
+      "autoLoad": false,
+      "categories": ["automation"],
+      "tools": ["auto_fix", "watch_files", "setup_hooks"]
+    }
+  },
+  "gateway": {
+    "dynamicDiscovery": true,
+    "codeMode": true,
+    "defaultResponseFormat": "concise"
+  }
+}

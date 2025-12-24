@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vscode/main/extensions/mcp/schemas/mcp.json",
+  "servers": {
+    "j0kz-gateway": {
+      "type": "docker-mcp",
+      "gateway": {
+        "port": 8811,
+        "dynamicDiscovery": true,
+        "codeMode": true
+      }
+    }
+  }
+}
