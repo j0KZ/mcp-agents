@@ -41,12 +41,7 @@ export declare const REFACTOR_ASSISTANT_TOOLS: ({
                 type: "boolean";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             useTryCatch?: undefined;
             useGuardClauses?: undefined;
             useTernary?: undefined;
@@ -76,12 +71,7 @@ export declare const REFACTOR_ASSISTANT_TOOLS: ({
                 type: "boolean";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             functionName?: undefined;
             startLine?: undefined;
             endLine?: undefined;
@@ -119,12 +109,7 @@ export declare const REFACTOR_ASSISTANT_TOOLS: ({
                 type: "boolean";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             functionName?: undefined;
             startLine?: undefined;
             endLine?: undefined;
@@ -161,12 +146,7 @@ export declare const REFACTOR_ASSISTANT_TOOLS: ({
                 type: "boolean";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             functionName?: undefined;
             startLine?: undefined;
             endLine?: undefined;
@@ -204,12 +184,7 @@ export declare const REFACTOR_ASSISTANT_TOOLS: ({
                 type: "object";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             functionName?: undefined;
             startLine?: undefined;
             endLine?: undefined;
@@ -250,12 +225,7 @@ export declare const REFACTOR_ASSISTANT_TOOLS: ({
                 type: "boolean";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             functionName?: undefined;
             startLine?: undefined;
             endLine?: undefined;
@@ -287,12 +257,7 @@ export declare const REFACTOR_ASSISTANT_TOOLS: ({
                 type: "string";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             functionName?: undefined;
             startLine?: undefined;
             endLine?: undefined;
@@ -322,12 +287,7 @@ export declare const REFACTOR_ASSISTANT_TOOLS: ({
                 type: "string";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             functionName?: undefined;
             startLine?: undefined;
             endLine?: undefined;

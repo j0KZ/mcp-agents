@@ -44,12 +44,7 @@ export declare const DB_SCHEMA_TOOLS: ({
                 };
                 required: string[];
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             schema?: undefined;
             description?: undefined;
             recordsPerTable?: undefined;
@@ -71,12 +66,7 @@ export declare const DB_SCHEMA_TOOLS: ({
                 type: "string";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             requirements?: undefined;
             options?: undefined;
             recordsPerTable?: undefined;
@@ -114,12 +104,7 @@ export declare const DB_SCHEMA_TOOLS: ({
                 };
                 required?: undefined;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             requirements?: undefined;
             description?: undefined;
             recordsPerTable?: undefined;
@@ -137,12 +122,7 @@ export declare const DB_SCHEMA_TOOLS: ({
                 type: "object";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             requirements?: undefined;
             options?: undefined;
             description?: undefined;
@@ -165,12 +145,7 @@ export declare const DB_SCHEMA_TOOLS: ({
                 type: "number";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             requirements?: undefined;
             options?: undefined;
             description?: undefined;

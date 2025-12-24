@@ -57,12 +57,7 @@ export declare const DOC_GENERATOR_TOOLS: ({
                     writeFiles?: undefined;
                 };
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             projectPath?: undefined;
             sourceFiles?: undefined;
         };
@@ -123,12 +118,7 @@ export declare const DOC_GENERATOR_TOOLS: ({
                     writeFiles?: undefined;
                 };
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             filePath?: undefined;
             sourceFiles?: undefined;
         };
@@ -187,12 +177,7 @@ export declare const DOC_GENERATOR_TOOLS: ({
                     writeFiles?: undefined;
                 };
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             filePath?: undefined;
             sourceFiles?: undefined;
         };
@@ -251,12 +236,7 @@ export declare const DOC_GENERATOR_TOOLS: ({
                     writeFiles?: undefined;
                 };
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             filePath?: undefined;
             sourceFiles?: undefined;
         };
@@ -320,12 +300,7 @@ export declare const DOC_GENERATOR_TOOLS: ({
                     includeAuthors?: undefined;
                 };
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             filePath?: undefined;
         };
         required: string[];

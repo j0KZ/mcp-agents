@@ -45,12 +45,7 @@ export declare const ANALYZE_ARCHITECTURE_DEFINITION: {
                     };
                 };
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };
@@ -71,12 +66,7 @@ export declare const GET_MODULE_INFO_DEFINITION: {
                 type: "string";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };
@@ -93,12 +83,7 @@ export declare const FIND_CIRCULAR_DEPS_DEFINITION: {
                 type: "string";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };
@@ -114,12 +99,7 @@ export declare const ARCHITECTURE_ANALYZER_TOOLS: {
                 type: "string";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
         };
         required: string[];
     };

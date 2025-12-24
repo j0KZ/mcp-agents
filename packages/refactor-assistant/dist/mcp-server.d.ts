@@ -38,12 +38,7 @@ export declare const TOOLS: ({
                 type: "boolean";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             useTryCatch?: undefined;
             useGuardClauses?: undefined;
             useTernary?: undefined;
@@ -58,7 +53,7 @@ export declare const TOOLS: ({
         };
         required: string[];
     };
-    examples: import("@j0kz/shared").ToolExample[];
+    examples: ToolExample[];
 } | {
     name: string;
     description: string;
@@ -73,12 +68,7 @@ export declare const TOOLS: ({
                 type: "boolean";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             functionName?: undefined;
             startLine?: undefined;
             endLine?: undefined;
@@ -97,7 +87,7 @@ export declare const TOOLS: ({
         };
         required: string[];
     };
-    examples: import("@j0kz/shared").ToolExample[];
+    examples: ToolExample[];
 } | {
     name: string;
     description: string;
@@ -116,12 +106,7 @@ export declare const TOOLS: ({
                 type: "boolean";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             functionName?: undefined;
             startLine?: undefined;
             endLine?: undefined;
@@ -139,7 +124,7 @@ export declare const TOOLS: ({
         };
         required: string[];
     };
-    examples: import("@j0kz/shared").ToolExample[];
+    examples: ToolExample[];
 } | {
     name: string;
     description: string;
@@ -158,12 +143,7 @@ export declare const TOOLS: ({
                 type: "boolean";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             functionName?: undefined;
             startLine?: undefined;
             endLine?: undefined;
@@ -181,7 +161,7 @@ export declare const TOOLS: ({
         };
         required: string[];
     };
-    examples: import("@j0kz/shared").ToolExample[];
+    examples: ToolExample[];
 } | {
     name: string;
     description: string;
@@ -201,12 +181,7 @@ export declare const TOOLS: ({
                 type: "object";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             functionName?: undefined;
             startLine?: undefined;
             endLine?: undefined;
@@ -224,7 +199,7 @@ export declare const TOOLS: ({
         };
         required: string[];
     };
-    examples: import("@j0kz/shared").ToolExample[];
+    examples: ToolExample[];
 } | {
     name: string;
     description: string;
@@ -247,12 +222,7 @@ export declare const TOOLS: ({
                 type: "boolean";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             functionName?: undefined;
             startLine?: undefined;
             endLine?: undefined;
@@ -269,7 +239,7 @@ export declare const TOOLS: ({
         };
         required: string[];
     };
-    examples: import("@j0kz/shared").ToolExample[];
+    examples: ToolExample[];
 } | {
     name: string;
     description: string;
@@ -284,12 +254,7 @@ export declare const TOOLS: ({
                 type: "string";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             functionName?: undefined;
             startLine?: undefined;
             endLine?: undefined;
@@ -308,7 +273,7 @@ export declare const TOOLS: ({
         };
         required: string[];
     };
-    examples: import("@j0kz/shared").ToolExample[];
+    examples: ToolExample[];
 } | {
     name: string;
     description: string;
@@ -319,12 +284,7 @@ export declare const TOOLS: ({
                 type: "string";
                 description: string;
             };
-            response_format: {
-                type: "string";
-                enum: readonly ["minimal", "concise", "detailed"];
-                default: string;
-                description: string;
-            };
+            response_format: any;
             functionName?: undefined;
             startLine?: undefined;
             endLine?: undefined;
@@ -344,6 +304,6 @@ export declare const TOOLS: ({
         };
         required: string[];
     };
-    examples: import("@j0kz/shared").ToolExample[];
+    examples: ToolExample[];
 })[];
 //# sourceMappingURL=mcp-server.d.ts.map

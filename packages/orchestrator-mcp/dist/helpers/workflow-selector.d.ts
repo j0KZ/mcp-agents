@@ -27,11 +27,7 @@ export declare function selectWorkflowByFocus(focus: FocusArea): WorkflowName;
  * Get clarification options in specified language
  * Supports English and Spanish
  */
-export declare function getClarificationOptions(language?: Language): {
-    value: string;
-    label: string;
-    description: string;
-}[];
+export declare function getClarificationOptions(language?: Language): any;
 /**
  * Validate focus area
  * Type guard for FocusArea
