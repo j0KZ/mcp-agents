@@ -31,7 +31,7 @@ function copyDir(src, dest) {
 // Component definitions
 const COMPONENTS = {
   claude_md: { name: 'CLAUDE.md Template', desc: 'Starter template', def: true },
-  skills: { name: 'Universal Skills', desc: '31 developer skills', def: true },
+  skills: { name: 'Universal Skills', desc: '29 developer skills', def: true },
   commands: { name: 'Slash Commands', desc: '5 productivity commands (/setup, /optimize, etc.)', def: true },
   hooks: { name: 'Automation Hooks', desc: 'Security monitor, auto-format, test runner', def: true },
   mcp: { name: 'MCP Tools', desc: '@j0kz MCP tools', def: false },
@@ -246,7 +246,7 @@ async function main() {
 
   log('\n  Installation Plan:', BOLD);
   if (sel.claude_md) log('  - CLAUDE.md template', GREEN);
-  if (sel.skills) log('  - 31 Universal skills', GREEN);
+  if (sel.skills) log('  - 29 Universal skills', GREEN);
   if (sel.commands) log('  - 5 Slash commands', GREEN);
   if (sel.hooks) log('  - 3 Automation hooks', GREEN);
   if (sel.mcp_configs) log('  - MCP configs (Docker gateway)', GREEN);

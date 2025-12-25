@@ -1,7 +1,7 @@
 {
   "name": "@j0kz/claude-starter",
   "version": "1.2.0",
-  "description": "Universal Claude Code starter kit: 31 skills, 5 commands, 3 hooks, MCP configs (95% token savings)",
+  "description": "Universal Claude Code starter kit: 29 skills, 5 commands, 3 hooks, MCP configs (95% token savings)",
   "bin": {
     "claude-starter": "./bin/install.js"
   },
