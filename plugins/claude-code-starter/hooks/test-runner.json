@@ -1,0 +1,50 @@
+{
+  "name": "test-runner",
+  "description": "Run related tests after code changes",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": {
+          "tool": ["Edit", "Write"],
+          "file_pattern": "**/*.{ts,tsx,js,jsx}",
+          "excludes": ["**/*.test.*", "**/*.spec.*", "**/node_modules/**"]
+        },
+        "action": {
+          "type": "command",
+          "conditions": [
+            {
+              "file_exists": "package.json",
+              "command": "npm test -- --findRelatedTests ${file} --passWithNoTests 2>/dev/null || true"
+            }
+          ],
+          "timeout": 30000,
+          "silent": false,
+          "on_failure": "warn"
+        }
+      },
+      {
+        "matcher": {
+          "tool": ["Edit", "Write"],
+          "file_pattern": "**/*.py",
+          "excludes": ["**/test_*.py", "**/*_test.py"]
+        },
+        "action": {
+          "type": "command",
+          "conditions": [
+            {
+              "file_exists": "pytest.ini",
+              "command": "pytest ${file} -x -q 2>/dev/null || true"
+            },
+            {
+              "file_exists": "pyproject.toml",
+              "command": "pytest ${file} -x -q 2>/dev/null || true"
+            }
+          ],
+          "timeout": 30000,
+          "silent": false,
+          "on_failure": "warn"
+        }
+      }
+    ]
+  }
+}

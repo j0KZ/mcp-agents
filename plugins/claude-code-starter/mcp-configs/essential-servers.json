@@ -1,0 +1,42 @@
+{
+  "mcpServers": {
+    "smart-reviewer": {
+      "command": "npx",
+      "args": ["-y", "@j0kz/smart-reviewer-mcp"],
+      "description": "AI-powered code review with security analysis",
+      "autoLoad": false,
+      "category": "analysis"
+    },
+    "security-scanner": {
+      "command": "npx",
+      "args": ["-y", "@j0kz/security-scanner-mcp"],
+      "description": "OWASP Top 10 and vulnerability scanning",
+      "autoLoad": false,
+      "category": "security"
+    },
+    "test-generator": {
+      "command": "npx",
+      "args": ["-y", "@j0kz/test-generator-mcp"],
+      "description": "Generate comprehensive test suites",
+      "autoLoad": false,
+      "category": "testing"
+    },
+    "orchestrator-mcp": {
+      "command": "npx",
+      "args": ["-y", "@j0kz/orchestrator-mcp"],
+      "description": "Chain MCP tools into workflows",
+      "autoLoad": true,
+      "category": "orchestration"
+    }
+  },
+  "workflows": {
+    "pre-commit": {
+      "steps": ["smart-reviewer", "security-scanner"],
+      "parallel": true
+    },
+    "pre-merge": {
+      "steps": ["smart-reviewer", "security-scanner", "test-generator"],
+      "parallel": false
+    }
+  }
+}

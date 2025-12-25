@@ -1,0 +1,19 @@
+{
+  "name": "docker-gateway",
+  "description": "Docker MCP Gateway for 95% token savings",
+  "transport": "http",
+  "url": "http://localhost:8811",
+  "autoLoad": true,
+  "tools": ["mcp-find", "mcp-add", "code-mode"],
+  "setup": {
+    "requires": ["docker"],
+    "command": "docker compose -f docker-compose.mcp.yml up -d",
+    "verify": "curl -s http://localhost:8811/health"
+  },
+  "tokenSavings": {
+    "standard": 10000,
+    "gateway": 1500,
+    "codeMode": 500,
+    "savingsPercent": 95
+  }
+}

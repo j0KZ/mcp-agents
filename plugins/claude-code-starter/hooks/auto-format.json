@@ -1,0 +1,36 @@
+{
+  "name": "auto-format",
+  "description": "Auto-format code after edits using project's formatter",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": {
+          "tool": ["Edit", "Write"],
+          "result": "success"
+        },
+        "action": {
+          "type": "command",
+          "conditions": [
+            {
+              "file_exists": "package.json",
+              "command": "npx prettier --write ${file} 2>/dev/null || true"
+            },
+            {
+              "file_exists": "pyproject.toml",
+              "command": "black ${file} 2>/dev/null || ruff format ${file} 2>/dev/null || true"
+            },
+            {
+              "file_exists": "Cargo.toml",
+              "command": "rustfmt ${file} 2>/dev/null || true"
+            },
+            {
+              "file_exists": "go.mod",
+              "command": "gofmt -w ${file} 2>/dev/null || true"
+            }
+          ],
+          "silent": true
+        }
+      }
+    ]
+  }
+}

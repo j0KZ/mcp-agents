@@ -1,0 +1,63 @@
+{
+  "name": "security-monitor",
+  "description": "Block dangerous code patterns before they're written",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": {
+          "tool": ["Edit", "Write"]
+        },
+        "action": {
+          "type": "validate",
+          "patterns": [
+            {
+              "pattern": "eval\\s*\\(",
+              "message": "BLOCKED: eval() is dangerous. Use JSON.parse() or safer alternatives.",
+              "severity": "error"
+            },
+            {
+              "pattern": "exec\\s*\\(",
+              "message": "BLOCKED: exec() can lead to command injection. Use subprocess with shell=False.",
+              "severity": "error"
+            },
+            {
+              "pattern": "(password|secret|api_key|apikey|token)\\s*=\\s*['\"][^'\"]+['\"]",
+              "message": "WARNING: Possible hardcoded secret detected. Use environment variables.",
+              "severity": "warning"
+            },
+            {
+              "pattern": "innerHTML\\s*=",
+              "message": "WARNING: innerHTML can cause XSS. Use textContent or sanitize input.",
+              "severity": "warning"
+            },
+            {
+              "pattern": "SELECT.*\\+.*\\+|INSERT.*\\+.*\\+",
+              "message": "BLOCKED: SQL string concatenation detected. Use parameterized queries.",
+              "severity": "error"
+            },
+            {
+              "pattern": "pickle\\.loads?\\(",
+              "message": "WARNING: pickle.load is unsafe with untrusted data. Consider using JSON.",
+              "severity": "warning"
+            },
+            {
+              "pattern": "os\\.system\\s*\\(",
+              "message": "WARNING: os.system is vulnerable to injection. Use subprocess.run().",
+              "severity": "warning"
+            },
+            {
+              "pattern": "dangerouslySetInnerHTML",
+              "message": "WARNING: dangerouslySetInnerHTML can cause XSS. Ensure input is sanitized.",
+              "severity": "warning"
+            },
+            {
+              "pattern": "chmod\\s+777",
+              "message": "BLOCKED: chmod 777 is insecure. Use minimal permissions (644, 755).",
+              "severity": "error"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "claude-code-starter",
+  "version": "1.0.0",
+  "description": "Zero-config optimization kit for Claude Code. Includes security hooks, productivity commands, and MCP gateway setup for 95% token savings.",
+  "author": "j0kz",
+  "repository": "https://github.com/j0kz/mcp-agents",
+  "keywords": ["starter", "optimization", "security", "productivity", "mcp"],
+  "commands": ["setup", "optimize", "audit", "quick-review", "smart-commit"],
+  "hooks": ["security-monitor", "auto-format", "test-runner"],
+  "skills": ["project-optimizer"],
+  "mcpServers": ["docker-gateway"]
+}
