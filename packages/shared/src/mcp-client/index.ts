@@ -8,6 +8,9 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { readFileSync } from 'fs';
 
+// Re-export compatibility layer
+export * from './mcp-compat.js';
+
 export interface MCPRequest {
   jsonrpc: '2.0';
   id?: number | string;

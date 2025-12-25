@@ -39,7 +39,14 @@
     "skills:index": "node scripts/generate-skill-index.js",
     "skills:validate": "node scripts/validate-skills.js",
     "skills:validate:fix": "node scripts/validate-skills.js --fix",
-    "skills:validate:strict": "node scripts/validate-skills.js --strict"
+    "skills:validate:strict": "node scripts/validate-skills.js --strict",
+    "docker:build": "docker compose -f docker-compose.mcp.yml build",
+    "docker:up": "docker compose -f docker-compose.mcp.yml up -d",
+    "docker:down": "docker compose -f docker-compose.mcp.yml down",
+    "docker:logs": "docker compose -f docker-compose.mcp.yml logs -f",
+    "docker:ps": "docker compose -f docker-compose.mcp.yml ps",
+    "docker:publish": "bash scripts/docker-publish.sh",
+    "docker:publish:dry": "bash scripts/docker-publish.sh --dry-run"
   },
   "devDependencies": {
     "@types/node": "^24.6.2",
