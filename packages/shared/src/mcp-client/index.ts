@@ -103,6 +103,8 @@ export class MCPClient {
       'doc-generator': '@j0kz/doc-generator-mcp',
       'api-designer': '@j0kz/api-designer-mcp',
       'db-schema': '@j0kz/db-schema-mcp',
+      'orchestrator-mcp': '@j0kz/orchestrator-mcp',
+      'auto-pilot': '@j0kz/auto-pilot',
     };
 
     const packageName = packageMap[mcpName];
@@ -221,6 +223,8 @@ export class MCPClient {
       'doc-generator',
       'api-designer',
       'db-schema',
+      'orchestrator-mcp',
+      'auto-pilot',
     ];
 
     return allMCPs.filter(mcp => this.isInstalled(mcp));
