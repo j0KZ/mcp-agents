@@ -53,7 +53,20 @@ your-project/
 ├── CLAUDE.md                    # Universal template
 └── .claude/
     ├── settings.json            # MCP tools config (if selected)
-    └── skills/                  # 10 universal skills
+    ├── commands/                # 5 slash commands
+    │   ├── setup.md             # /setup - initialize project
+    │   ├── optimize.md          # /optimize - 95% token savings
+    │   ├── audit.md             # /audit - health scorecard
+    │   ├── quick-review.md      # /quick-review - 30-sec pre-commit
+    │   └── smart-commit.md      # /smart-commit - semantic commits
+    ├── hooks/                   # 3 automation hooks
+    │   ├── security-monitor.json  # Block dangerous patterns
+    │   ├── auto-format.json       # Auto-format on save
+    │   └── test-runner.json       # Run tests on change
+    ├── mcp-configs/             # MCP server configs
+    │   ├── docker-gateway.json    # Docker MCP Gateway (95% savings)
+    │   └── essential-servers.json # Core MCP servers
+    └── skills/                  # 10+ universal skills
         ├── quick-pr-review/
         ├── debug-detective/
         ├── performance-hunter/
@@ -122,9 +135,44 @@ Installs agent coordination layer with:
 3. **Restart Claude Code** if you installed MCP tools
 4. **Start dashboard** if installed: `claude-comms start`
 
+## Slash Commands
+
+| Command | Description | Time |
+|---------|-------------|------|
+| `/setup` | Initialize project with optimal config | 2 min |
+| `/optimize` | Configure for 95% token savings | 1 min |
+| `/audit` | Health scorecard (config, security, quality) | 30 sec |
+| `/quick-review` | Pre-commit review | 30 sec |
+| `/smart-commit` | Generate semantic commit message | 10 sec |
+
+## Security Hooks
+
+Automatically blocks dangerous patterns:
+
+| Pattern | Action |
+|---------|--------|
+| `eval()` / `exec()` | BLOCKED |
+| SQL string concatenation | BLOCKED |
+| `chmod 777` | BLOCKED |
+| Hardcoded secrets | WARNING |
+| `innerHTML` / `dangerouslySetInnerHTML` | WARNING |
+| `pickle.load` / `os.system` | WARNING |
+
+## Token Optimization (Docker MCP Gateway)
+
+| Mode | Context Tokens | Savings |
+|------|----------------|---------|
+| Standard (all tools) | ~10,000 | 0% |
+| Gateway (dynamic) | ~1,500 | 85% |
+| Code-mode (sandbox) | ~500 | **95%** |
+
+Enable with: `/optimize` or manually start Docker gateway.
+
 ## Design Principles
 
 - **Project-agnostic** - no specific tech stack assumptions
 - **Language-neutral** - works with any programming language
 - **Modular** - install only what you need
 - **Self-contained** - no external dependencies required
+- **Security-first** - dangerous patterns blocked by default
+- **Token-efficient** - 95% savings with Docker gateway
