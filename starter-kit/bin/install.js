@@ -31,8 +31,11 @@ function copyDir(src, dest) {
 // Component definitions
 const COMPONENTS = {
   claude_md: { name: 'CLAUDE.md Template', desc: 'Starter template', def: true },
-  skills: { name: 'Universal Skills', desc: '10 developer skills', def: true },
+  skills: { name: 'Universal Skills', desc: '31 developer skills', def: true },
+  commands: { name: 'Slash Commands', desc: '5 productivity commands (/setup, /optimize, etc.)', def: true },
+  hooks: { name: 'Automation Hooks', desc: 'Security monitor, auto-format, test runner', def: true },
   mcp: { name: 'MCP Tools', desc: '@j0kz MCP tools', def: false },
+  mcp_configs: { name: 'MCP Configs', desc: 'Docker gateway + essential servers (95% token savings)', def: true },
   agents: { name: 'hcom-agents', desc: 'Agent coordination + token efficiency', def: false },
   dashboard: { name: 'Dashboard', desc: 'claude-comms live events', def: false },
   references: { name: 'References', desc: 'Work logs, patterns guides', def: true },
@@ -129,6 +132,42 @@ function installReferences(targetDir, templateDir) {
   return cnt;
 }
 
+function installCommands(targetDir, templateDir) {
+  const src = path.join(templateDir, '.claude', 'commands');
+  if (!fs.existsSync(src)) {
+    log('  ! Commands not found', YELLOW);
+    return 0;
+  }
+  copyDir(src, path.join(targetDir, '.claude', 'commands'));
+  const cnt = fs.readdirSync(src).filter(f => f.endsWith('.md')).length;
+  log('  + ' + cnt + ' slash commands installed', GREEN);
+  return cnt;
+}
+
+function installHooks(targetDir, templateDir) {
+  const src = path.join(templateDir, '.claude', 'hooks');
+  if (!fs.existsSync(src)) {
+    log('  ! Hooks not found', YELLOW);
+    return 0;
+  }
+  copyDir(src, path.join(targetDir, '.claude', 'hooks'));
+  const cnt = fs.readdirSync(src).filter(f => f.endsWith('.json')).length;
+  log('  + ' + cnt + ' automation hooks installed', GREEN);
+  return cnt;
+}
+
+function installMcpConfigs(targetDir, templateDir) {
+  const src = path.join(templateDir, '.claude', 'mcp-configs');
+  if (!fs.existsSync(src)) {
+    log('  ! MCP configs not found', YELLOW);
+    return 0;
+  }
+  copyDir(src, path.join(targetDir, '.claude', 'mcp-configs'));
+  const cnt = fs.readdirSync(src).filter(f => f.endsWith('.json')).length;
+  log('  + ' + cnt + ' MCP config files installed', GREEN);
+  return cnt;
+}
+
 function installClaudeMd(targetDir, templateDir, force) {
   const dest = path.join(targetDir, 'CLAUDE.md');
   if (fs.existsSync(dest) && !force) {
@@ -207,7 +246,10 @@ async function main() {
 
   log('\n  Installation Plan:', BOLD);
   if (sel.claude_md) log('  - CLAUDE.md template', GREEN);
-  if (sel.skills) log('  - 10 Universal skills', GREEN);
+  if (sel.skills) log('  - 31 Universal skills', GREEN);
+  if (sel.commands) log('  - 5 Slash commands', GREEN);
+  if (sel.hooks) log('  - 3 Automation hooks', GREEN);
+  if (sel.mcp_configs) log('  - MCP configs (Docker gateway)', GREEN);
   if (sel.mcp) log('  - ' + mcpTools.length + ' MCP tools', GREEN);
   if (sel.references) log('  - Reference guides', GREEN);
   if (sel.agents) log('  - hcom-agents', GREEN);
@@ -222,6 +264,9 @@ async function main() {
   const inst = {
     claudeMd: false,
     skills: 0,
+    commands: 0,
+    hooks: 0,
+    mcpConfigs: 0,
     references: 0,
     mcp: [],
     agents: false,
@@ -229,6 +274,9 @@ async function main() {
   };
   if (sel.claude_md) inst.claudeMd = installClaudeMd(targetDir, templateDir, force);
   if (sel.skills) inst.skills = installSkills(targetDir, templateDir);
+  if (sel.commands) inst.commands = installCommands(targetDir, templateDir);
+  if (sel.hooks) inst.hooks = installHooks(targetDir, templateDir);
+  if (sel.mcp_configs) inst.mcpConfigs = installMcpConfigs(targetDir, templateDir);
   if (sel.references) inst.references = installReferences(targetDir, templateDir);
   if (sel.mcp && mcpTools.length) inst.mcp = installMcpConfig(targetDir, mcpTools);
   if (sel.agents) inst.agents = installHcomAgents(pyInstaller);
@@ -238,6 +286,9 @@ async function main() {
   log('  Installed:', BOLD);
   if (inst.claudeMd) log('    + CLAUDE.md', GREEN);
   if (inst.skills) log('    + ' + inst.skills + ' skills', GREEN);
+  if (inst.commands) log('    + ' + inst.commands + ' slash commands', GREEN);
+  if (inst.hooks) log('    + ' + inst.hooks + ' automation hooks', GREEN);
+  if (inst.mcpConfigs) log('    + ' + inst.mcpConfigs + ' MCP configs', GREEN);
   if (inst.references) log('    + ' + inst.references + ' references', GREEN);
   if (inst.mcp.length) log('    + ' + inst.mcp.length + ' MCP tools', GREEN);
   if (inst.agents) log('    + hcom-agents', GREEN);
@@ -245,9 +296,10 @@ async function main() {
 
   log('\n  Next steps:', BOLD);
   log('    1. Edit CLAUDE.md with your project details');
-  if (inst.skills) log('    2. Tell Claude: "Use debug-detective"');
-  if (inst.mcp.length) log('    3. Restart Claude Code to load MCP tools');
-  if (inst.dashboard) log('    4. Run: claude-comms start');
+  if (inst.commands) log('    2. Try: /setup or /optimize');
+  if (inst.skills) log('    3. Tell Claude: "Use debug-detective"');
+  if (inst.mcp.length) log('    4. Restart Claude Code to load MCP tools');
+  if (inst.dashboard) log('    5. Run: claude-comms start');
   console.log();
 }
 

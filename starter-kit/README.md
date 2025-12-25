@@ -39,10 +39,12 @@ The installer automatically detects uv and uses it for faster installs. Falls ba
 | Component              | Description                                              | Default |
 | ---------------------- | -------------------------------------------------------- | ------- |
 | **CLAUDE.md Template** | Universal starter template                               | Yes     |
-| **Universal Skills**   | 10 developer skills                                      | Yes     |
-| **MCP Tools**          | 9 @j0kz MCP tools (smart-reviewer, test-generator, etc.) | No      |
+| **Universal Skills**   | 31 developer skills                                      | Yes     |
+| **Slash Commands**     | 5 productivity commands (/setup, /optimize, etc.)        | Yes     |
+| **Automation Hooks**   | Security monitor, auto-format, test runner               | Yes     |
+| **MCP Configs**        | Docker gateway + essential servers (95% token savings)   | Yes     |
 | **References**         | Work logs, patterns, troubleshooting guides              | Yes     |
-| **MCP Tools**          | 9 @j0kz MCP tools                                        | No      |
+| **MCP Tools**          | 9 @j0kz MCP tools (smart-reviewer, test-generator, etc.) | No      |
 | **hcom-agents**        | Agent coordination + token efficiency                    | No      |
 | **Dashboard**          | claude-comms live events & visualization                 | No      |
 
@@ -66,7 +68,7 @@ your-project/
     ├── mcp-configs/             # MCP server configs
     │   ├── docker-gateway.json    # Docker MCP Gateway (95% savings)
     │   └── essential-servers.json # Core MCP servers
-    └── skills/                  # 10+ universal skills
+    └── skills/                  # 31 universal skills
         ├── quick-pr-review/
         ├── debug-detective/
         ├── performance-hunter/
