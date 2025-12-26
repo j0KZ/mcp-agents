@@ -72,7 +72,7 @@ Based on research, create a detailed plan:
 #### 2.1 Set Up Project Structure
 
 **For Python:**
-```
+```text
 service_mcp/
 ├── server.py           # Main entry point
 ├── models.py           # Pydantic models
@@ -81,7 +81,7 @@ service_mcp/
 ```
 
 **For TypeScript:**
-```
+```text
 service-mcp-server/
 ├── src/
 │   ├── index.ts        # Main entry point
