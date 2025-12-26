@@ -25,7 +25,8 @@ services:
       context: .
       dockerfile: docker/base.Dockerfile
       args:
-        PACKAGE_NAME: smart-reviewer
+        PACKAGE_DIR: smart-reviewer
+        PACKAGE_SCOPE: smart-reviewer-mcp
     labels:
       - "mcp.server=true"
       - "mcp.name=smart-reviewer"
@@ -39,7 +40,8 @@ services:
       context: .
       dockerfile: docker/base.Dockerfile
       args:
-        PACKAGE_NAME: test-generator
+        PACKAGE_DIR: test-generator
+        PACKAGE_SCOPE: test-generator-mcp
     labels:
       - "mcp.server=true"
       - "mcp.name=test-generator"
@@ -53,7 +55,8 @@ services:
       context: .
       dockerfile: docker/base.Dockerfile
       args:
-        PACKAGE_NAME: architecture-analyzer
+        PACKAGE_DIR: architecture-analyzer
+        PACKAGE_SCOPE: architecture-analyzer-mcp
     labels:
       - "mcp.server=true"
       - "mcp.name=architecture-analyzer"
@@ -67,7 +70,8 @@ services:
       context: .
       dockerfile: docker/base.Dockerfile
       args:
-        PACKAGE_NAME: security-scanner
+        PACKAGE_DIR: security-scanner
+        PACKAGE_SCOPE: security-scanner-mcp
     labels:
       - "mcp.server=true"
       - "mcp.name=security-scanner"
@@ -81,7 +85,8 @@ services:
       context: .
       dockerfile: docker/base.Dockerfile
       args:
-        PACKAGE_NAME: refactor-assistant
+        PACKAGE_DIR: refactor-assistant
+        PACKAGE_SCOPE: refactor-assistant-mcp
     labels:
       - "mcp.server=true"
       - "mcp.name=refactor-assistant"
@@ -95,7 +100,8 @@ services:
       context: .
       dockerfile: docker/base.Dockerfile
       args:
-        PACKAGE_NAME: api-designer
+        PACKAGE_DIR: api-designer
+        PACKAGE_SCOPE: api-designer-mcp
     labels:
       - "mcp.server=true"
       - "mcp.name=api-designer"
@@ -109,7 +115,8 @@ services:
       context: .
       dockerfile: docker/base.Dockerfile
       args:
-        PACKAGE_NAME: db-schema
+        PACKAGE_DIR: db-schema
+        PACKAGE_SCOPE: db-schema-mcp
     labels:
       - "mcp.server=true"
       - "mcp.name=db-schema"
@@ -123,7 +130,8 @@ services:
       context: .
       dockerfile: docker/base.Dockerfile
       args:
-        PACKAGE_NAME: doc-generator
+        PACKAGE_DIR: doc-generator
+        PACKAGE_SCOPE: doc-generator-mcp
     labels:
       - "mcp.server=true"
       - "mcp.name=doc-generator"
@@ -137,7 +145,8 @@ services:
       context: .
       dockerfile: docker/base.Dockerfile
       args:
-        PACKAGE_NAME: orchestrator-mcp
+        PACKAGE_DIR: orchestrator-mcp
+        PACKAGE_SCOPE: orchestrator-mcp
     labels:
       - "mcp.server=true"
       - "mcp.name=orchestrator"
@@ -155,7 +164,8 @@ services:
       context: .
       dockerfile: docker/base.Dockerfile
       args:
-        PACKAGE_NAME: auto-pilot
+        PACKAGE_DIR: auto-pilot
+        PACKAGE_SCOPE: auto-pilot
     labels:
       - "mcp.server=true"
       - "mcp.name=auto-pilot"
