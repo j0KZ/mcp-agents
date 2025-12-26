@@ -99,8 +99,9 @@ scripts/fix-*.js
 # Wiki (published separately)
 wiki/
 
-# Config (users create their own)
-.claude/
+# Config (users create their own, but references are shared)
+.claude/*
+!.claude/references/
 
 # Optional npm cache directory
 .npm

@@ -53,42 +53,6 @@ Instead of calling tools individually, use orchestrator workflows:
 - `pre-merge` - Full review + Architecture + Tests (saves ~4min)
 - `quality-audit` - Security report + Architecture + Docs
 
-### 🐳 Docker MCP Gateway (95% Token Reduction)
-
-For maximum token efficiency, use Docker MCP Gateway instead of loading all tools:
-
-```bash
-# Start the gateway (requires Docker Desktop 4.50+)
-docker compose -f docker-compose.mcp.yml up -d
-```
-
-**Token Savings Comparison:**
-
-| Mode | Context Tokens | Savings |
-|------|---------------|---------|
-| Standard (all tools) | ~10,000 | 0% |
-| Gateway (dynamic) | ~1,500 | **85%** |
-| Code-mode (sandbox) | ~500 | **95%** |
-
-**Gateway Tools:**
-- `mcp-find` - Search tools without loading them
-- `mcp-add` - Load specific tools on-demand
-- `code-mode` - Execute workflows in sandbox (only results return)
-
-**Usage in Code:**
-```typescript
-import { createOrchestrator } from '@j0kz/orchestrator-mcp/gateway';
-
-const orchestrator = await createOrchestrator();
-const result = await orchestrator.runWorkflow('pre-merge', {
-  files: ['src/index.ts'],
-  projectPath: '.'
-});
-// Automatically uses code-mode if available
-```
-
-**Client Configuration:** See [`examples/client-configs/`](examples/client-configs/) for Claude Desktop and VS Code setup.
-
 ---
 
 ## 🌍 NEW: Universal Skills for ANY Project
@@ -201,8 +165,6 @@ For ANY substantial work (research, prototypes, experiments, new features), you 
    - **STEP 5**: Document decisions when making architectural choices
    - **STEP 6**: Add verification steps as you test
    - **STEP 7**: Finalize with lessons learned before ending session
-
-**Example:** See [`logs/work-2025-10-12-bilingual-i18n.md`](logs/work-2025-10-12-bilingual-i18n.md) - comprehensive 503-line example
 
 **Full template:** [`.claude/references/work-log-template.md`](.claude/references/work-log-template.md)
 
