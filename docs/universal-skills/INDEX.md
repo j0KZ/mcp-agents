@@ -1,9 +1,10 @@
 # Universal Skills Index - Project-Agnostic Developer Skills
 
 **Created:** 2025-11-12
-**Total Skills:** 10
+**Total Skills:** 13
 **Compatibility:** ANY project, ANY language, ANY framework
 **MCP Tools:** Optional (works with or without)
+**Source:** Includes skills adapted from [awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills)
 
 ---
 
@@ -27,7 +28,7 @@ Each skill provides:
 
 ## 📚 Skills by Category
 
-### 🎯 Development Workflow (5 skills)
+### 🎯 Development Workflow (7 skills)
 
 #### 1. [Quick PR Review](quick-pr-review/SKILL.md)
 
@@ -74,9 +75,27 @@ Each skill provides:
 - Rate limiting & retries
 - Universal client pattern
 
-### 🔍 Problem Solving (2 skills)
+#### 6. [Changelog Generator](changelog-generator/SKILL.md)
 
-#### 6. [Debug Detective](debug-detective/SKILL.md)
+**Create user-facing changelogs from git commits**
+
+- Analyze commit history automatically
+- Transform technical to customer-friendly
+- Categorize by features, fixes, improvements
+- Filter out internal changes
+
+#### 7. [MCP Builder](mcp-builder/SKILL.md)
+
+**Build high-quality MCP servers for AI integration**
+
+- Design tools for LLM agents
+- Python (FastMCP) and TypeScript patterns
+- Response format optimization
+- Evaluation-driven development
+
+### 🔍 Problem Solving (3 skills)
+
+#### 8. [Debug Detective](debug-detective/SKILL.md)
 
 **Systematic debugging for ANY bug type**
 
@@ -85,7 +104,7 @@ Each skill provides:
 - Find root cause fast
 - Emergency procedures included
 
-#### 7. [Performance Hunter](performance-hunter/SKILL.md)
+#### 9. [Performance Hunter](performance-hunter/SKILL.md)
 
 **Find and fix bottlenecks anywhere**
 
@@ -94,9 +113,18 @@ Each skill provides:
 - Memory leak detection
 - 80/20 performance wins
 
+#### 10. [Webapp Testing](webapp-testing/SKILL.md)
+
+**Test web applications with Playwright**
+
+- Browser automation for testing
+- Screenshot capture and comparison
+- Form and flow testing
+- Console and network monitoring
+
 ### 🛡️ Quality & Security (3 skills)
 
-#### 8. [Test Coverage Boost](test-coverage-boost/SKILL.md)
+#### 11. [Test Coverage Boost](test-coverage-boost/SKILL.md)
 
 **Go from 0% to 80% coverage systematically**
 
@@ -105,7 +133,7 @@ Each skill provides:
 - Mocking strategies
 - Coverage goals by project type
 
-#### 9. [Security First](security-first/SKILL.md)
+#### 12. [Security First](security-first/SKILL.md)
 
 **OWASP Top 10 protection checklist**
 
@@ -114,7 +142,7 @@ Each skill provides:
 - XSS protection
 - Universal security patterns
 
-#### 10. [Dependency Doctor](dependency-doctor/SKILL.md)
+#### 13. [Dependency Doctor](dependency-doctor/SKILL.md)
 
 **Heal package management problems**
 
@@ -323,4 +351,10 @@ These skills are **universal** - learn them once, use them everywhere:
 - In any programming language
 - With or without AI tools
 
-**Master these 10 skills and become a truly versatile developer!** 🌟
+**Master these 13 skills and become a truly versatile developer!**
+
+---
+
+## 📖 Related Documentation
+
+- [MCP Reference](../mcp-reference/INDEX.md) - Best practices for building MCP servers

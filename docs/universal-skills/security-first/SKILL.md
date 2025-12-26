@@ -1,12 +1,6 @@
 ---
 name: security-first
-version: 1.0.0
-type: security
-tags: [security, vulnerabilities, owasp, authentication, encryption]
-compatibility: any-project
-dependencies: optional
-language: any
-description: Universal security checklist and fixes for ANY project type or language
+description: Universal security checklist based on OWASP Top 10 for ANY project type or language. Use before deploying to production, handling sensitive data, or processing user input.
 ---
 
 # Security First - Shield Your Code

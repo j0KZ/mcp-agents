@@ -1,12 +1,6 @@
 ---
 name: quick-pr-review
-version: 1.0.0
-type: workflow
-tags: [pr, review, quality, checklist, universal]
-compatibility: any-project
-dependencies: optional
-language: any
-description: Universal pre-PR checklist that works in ANY project, with or without MCP tools
+description: Universal pre-PR checklist that works in ANY project, with or without MCP tools. Use before creating a pull request to ensure quality standards and reduce review iterations.
 ---
 
 # Quick PR Review - Universal Pre-PR Checklist

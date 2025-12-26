@@ -1,12 +1,6 @@
 ---
 name: test-coverage-boost
-version: 1.0.0
-type: testing
-tags: [testing, coverage, quality, tdd, unit-tests]
-compatibility: any-project
-dependencies: optional
-language: any
-description: Increase test coverage from 0% to 80%+ in ANY project, ANY testing framework
+description: Increase test coverage from 0% to 80%+ in ANY project, ANY testing framework. Use when adding tests to untested code or preparing for major refactoring.
 ---
 
 # Test Coverage Boost - From Zero to Hero Testing

@@ -1,12 +1,6 @@
 ---
 name: tech-debt-tracker
-version: 1.0.0
-type: management
-tags: [technical-debt, refactoring, planning, prioritization, tracking]
-compatibility: any-project
-dependencies: optional
-language: any
-description: Track, prioritize, and pay down technical debt systematically in ANY project
+description: Track, prioritize, and pay down technical debt systematically in ANY project. Use when quantifying debt, prioritizing fixes, or convincing management to invest in improvements.
 ---
 
 # Tech Debt Tracker - Manage Technical Debt Like Financial Debt
