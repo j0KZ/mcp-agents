@@ -1,12 +1,6 @@
 ---
 name: legacy-modernizer
-version: 1.0.0
-type: refactoring
-tags: [legacy, modernization, refactoring, migration, technical-debt]
-compatibility: any-project
-dependencies: optional
-language: any
-description: Modernize legacy code safely in ANY project without breaking existing functionality
+description: Modernize legacy code safely in ANY project without breaking existing functionality. Use when working with old code that needs updating while maintaining stability.
 ---
 
 # Legacy Modernizer - Safe Legacy Code Evolution

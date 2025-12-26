@@ -1,12 +1,6 @@
 ---
 name: performance-hunter
-version: 1.0.0
-type: optimization
-tags: [performance, optimization, profiling, speed, universal]
-compatibility: any-project
-dependencies: optional
-language: any
-description: Find and fix performance bottlenecks in ANY language or framework
+description: Find and fix performance bottlenecks in ANY language or framework. Use when applications are slow, memory usage is high, or you need to optimize critical paths.
 ---
 
 # Performance Hunter - Universal Speed Optimization
