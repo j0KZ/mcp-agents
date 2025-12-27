@@ -19,8 +19,10 @@ Use BEFORE creating a pull request in ANY project when:
 ### With MCP Tools:
 
 ```
-"Run quick PR review on my staged changes"
+"Run quick PR review on my staged changes using concise format"
 ```
+
+**Optimization note:** Use `response_format: "concise"` (500 tokens) for quick PR reviews. Use `"minimal"` for batch operations or `"detailed"` when investigating specific issues.
 
 ### Without MCP Tools:
 
@@ -39,8 +41,11 @@ git grep "TODO\|FIXME\|XXX"  # Find unfinished work
 #### WITH MCP (Smart Reviewer):
 
 ```
-"Review my staged files for quality issues"
+"Review my staged files for quality issues using concise format"
 ```
+
+**Tool call:** `review_file({ filePath: "...", config: { response_format: "concise" } })`
+- Returns: Score + issue count + critical issues only (~500 tokens, 90% savings)
 
 #### WITHOUT MCP:
 
@@ -61,8 +66,11 @@ git diff --staged | grep -E "console\.|debugger|TODO|FIXME"
 #### WITH MCP (Test Generator):
 
 ```
-"Check test coverage and generate missing tests"
+"Check test coverage using concise format"
 ```
+
+**Tool call:** `generate_tests({ sourceFile: "...", config: { response_format: "concise" } })`
+- Returns: Test count + coverage estimate only (~500 tokens)
 
 #### WITHOUT MCP:
 
@@ -85,8 +93,11 @@ mvn test jacoco:report         # Java
 #### WITH MCP (Security Scanner):
 
 ```
-"Scan my changes for security vulnerabilities"
+"Scan my changes for security vulnerabilities using minimal format"
 ```
+
+**Tool call:** `scan_file({ filePath: "...", config: { response_format: "minimal" } })`
+- Returns: Pass/fail + vulnerability count only (~100 tokens)
 
 #### WITHOUT MCP:
 
@@ -109,8 +120,11 @@ npm audit  # or: pip check, go mod tidy, etc.
 #### WITH MCP (Doc Generator):
 
 ```
-"Check if my changes need documentation updates"
+"Check if my changes need documentation updates using concise format"
 ```
+
+**Tool call:** `generate_docs({ filePath: "...", config: { response_format: "concise" } })`
+- Returns: Documentation gaps summary only (~500 tokens)
 
 #### WITHOUT MCP:
 
@@ -131,8 +145,11 @@ grep -B2 "function\|class\|def" --include="*.js" | grep -v "//"
 #### WITH MCP (Architecture Analyzer):
 
 ```
-"Check for performance issues in my changes"
+"Check for performance issues in my changes using concise format"
 ```
+
+**Tool call:** `analyze_architecture({ projectPath: ".", config: { response_format: "concise" } })`
+- Returns: Performance issues summary only (~500 tokens)
 
 #### WITHOUT MCP:
 

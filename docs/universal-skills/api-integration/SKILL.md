@@ -716,3 +716,19 @@ api.onWebhook('user.created', async event => {
 ```
 
 Remember: Good API integration is invisible to users but crucial for developers! 🔌
+
+---
+
+## 💡 MCP Performance Optimization
+
+When using MCP tools with this skill, optimize context usage with `response_format` parameter:
+
+- **Use `concise` (default, recommended):** 500 tokens per tool call - perfect for daily workflow
+- **Use `minimal` for batch operations:** 100 tokens per tool call - ideal for quick checks
+- **Use `detailed` for deep investigation:** 5000 tokens per tool call - only when needed
+
+**Example:** `"Generate API integration tests using concise format"`
+
+**Tool call:** `generate_tests({ sourceFile: "...", config: { response_format: "concise" } })`
+
+**Token savings:** 90% reduction compared to default detailed mode (5000 → 500 tokens)

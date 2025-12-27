@@ -368,3 +368,19 @@ Keep a debug log for complex issues:
 ```
 
 Remember: Every bug is a learning opportunity! 🐛→📚
+
+---
+
+## 💡 MCP Performance Optimization
+
+When using MCP tools with this skill, optimize context usage with `response_format` parameter:
+
+- **Use `concise` (default, recommended):** 500 tokens per tool call - perfect for daily workflow
+- **Use `minimal` for batch operations:** 100 tokens per tool call - ideal for quick checks
+- **Use `detailed` for deep investigation:** 5000 tokens per tool call - only when needed
+
+**Example:** `"Review this code for bugs using concise format"`
+
+**Tool call:** `review_file({ filePath: "...", config: { response_format: "concise" } })`
+
+**Token savings:** 90% reduction compared to default detailed mode (5000 → 500 tokens)
