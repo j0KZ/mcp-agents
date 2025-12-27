@@ -1,0 +1,21 @@
+{
+  "name": "pre-merge",
+  "description": "Comprehensive PR validation with concise output",
+  "defaultConfig": {
+    "response_format": "concise"
+  },
+  "steps": [
+    {
+      "tool": "review_file",
+      "config": { "response_format": "concise" }
+    },
+    {
+      "tool": "analyze_architecture",
+      "config": { "response_format": "concise" }
+    },
+    {
+      "tool": "generate_tests",
+      "config": { "response_format": "concise" }
+    }
+  ]
+}

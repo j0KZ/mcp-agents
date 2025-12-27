@@ -1,0 +1,21 @@
+{
+  "name": "deep-audit",
+  "description": "Full project audit with detailed analysis",
+  "defaultConfig": {
+    "response_format": "detailed"
+  },
+  "steps": [
+    {
+      "tool": "review_file",
+      "config": { "response_format": "detailed" }
+    },
+    {
+      "tool": "analyze_architecture",
+      "config": { "response_format": "detailed" }
+    },
+    {
+      "tool": "scan_file",
+      "config": { "response_format": "detailed" }
+    }
+  ]
+}

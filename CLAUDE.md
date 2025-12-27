@@ -2,75 +2,24 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## 🔧 MCP Tool Discovery (Anthropic Advanced Tool Use - Nov 2025)
+## 🔧 MCP Tool Discovery
 
-**This monorepo has 50 MCP tools across 9 servers.** Use tool discovery instead of loading all definitions:
+**50 tools across 9 servers.** Use tool discovery instead of loading all definitions.
 
-### Available Tool Categories
+**Key commands:**
+- `search_tools({ query: "security" })` - Find tools by keyword
+- `load_tool({ toolName: "design_api" })` - Load deferred tools
+- `run_workflow({ workflow: "pre-commit", response_format: "concise" })` - Use workflows
 
-| Category          | Tools | Examples                                  |
-| ----------------- | ----- | ----------------------------------------- |
-| **analysis**      | 14    | `review_file`, `analyze_architecture`     |
-| **generation**    | 11    | `generate_tests`, `generate_docs`         |
-| **security**      | 5     | `scan_file`, `scan_secrets`, `scan_owasp` |
-| **refactoring**   | 8     | `extract_function`, `remove_dead_code`    |
-| **design**        | 14    | `design_api`, `design_schema`             |
-| **orchestration** | 6     | `run_workflow`, `search_tools`            |
+**Response formats:** `minimal` (100 tokens), `concise` (500 tokens), `detailed` (5000 tokens)
 
-### Tool Loading Strategy
-
-- **High-frequency (always loaded):** `review_file`, `generate_tests`, `analyze_architecture`, `run_workflow`
-- **Low-frequency (use `load_tool`):** All design tools (api-designer, db-schema), refactor-assistant tools
-
-### When to Use Tool Discovery
-
-```
-# Find tools by keyword
-search_tools({ query: "security vulnerability" })
-
-# Load a deferred tool
-load_tool({ toolName: "design_api", server: "api-designer" })
-
-# List all capabilities
-list_capabilities({})
-```
-
-### Response Format Optimization
-
-All tools support `response_format` parameter to reduce token usage:
-
-- `minimal` - Just success/fail + key metrics (~100 tokens)
-- `concise` - Summary without details (~500 tokens)
-- `detailed` - Full analysis (default, ~5000 tokens)
-
-**Example:** `review_file({ filePath: "src/index.ts", config: { response_format: "concise" } })`
-
-### Workflow Automation
-
-Instead of calling tools individually, use orchestrator workflows:
-
-- `pre-commit` - Review + Security scan (saves ~45s)
-- `pre-merge` - Full review + Architecture + Tests (saves ~4min)
-- `quality-audit` - Security report + Architecture + Docs
+**Full guide:** [`.claude/references/mcp-tools-guide.md`](.claude/references/mcp-tools-guide.md)
 
 ---
 
-## 🌍 NEW: Universal Skills for ANY Project
+## 🌍 Universal Skills
 
-**10 project-agnostic developer skills** are now available in [`docs/universal-skills/`](docs/universal-skills/INDEX.md). These work in ANY codebase, ANY language, with or without MCP tools:
-
-- **Quick PR Review** - Pre-PR checklist (30 seconds)
-- **Debug Detective** - Systematic debugging
-- **Performance Hunter** - Find bottlenecks
-- **Legacy Modernizer** - Safe refactoring
-- **Zero to Hero** - Master any codebase
-- **Test Coverage Boost** - 0% to 80% coverage
-- **Tech Debt Tracker** - Quantify and prioritize
-- **Dependency Doctor** - Fix package issues
-- **Security First** - OWASP protection
-- **API Integration** - Connect any service
-
-📖 **[View All Universal Skills →](docs/universal-skills/INDEX.md)**
+**10 project-agnostic developer skills** available in [`docs/universal-skills/INDEX.md`](docs/universal-skills/INDEX.md) - work with ANY codebase, ANY language.
 
 ## ⚠️ CRITICAL SAFETY RULES - READ FIRST
 
@@ -220,130 +169,19 @@ For ANY substantial work (research, prototypes, experiments, new features), you 
 
 **Full details:** [`.claude/references/project-specifics.md`](.claude/references/project-specifics.md)
 
-## Development Process & Best Practices
+## Development Workflow
 
-### Proactive Problem-Solving Mindset
+**Complete the entire job:** Audit → Fix → Document → Commit (don't wait to be asked multiple times)
 
-**CRITICAL: Complete the entire job, don't wait to be asked multiple times**
+**Before any task:**
+1. Understand current state (read existing code, check scripts/, search @j0kz/shared)
+2. Identify real gaps AND fixable issues
+3. Design complete solution (not just first step)
+4. Execute thoroughly (fix, document, verify, commit)
 
-When given a task, think through the COMPLETE workflow and execute all logical follow-up steps:
+**Feature checklist:** Does this solve a real problem? Does something already solve this? Is this the right place? What's the minimum version?
 
-#### The "Audit → Fix → Document" Pattern
-
-**❌ BAD (Requires Multiple Prompts):**
-
-```
-User: "audit the project"
-You: [runs audit, finds test count is wrong] "Test count is 366 but should be 388"
-User: "update the documentation"
-You: [updates README] "Updated README"
-User: "update the wiki too"
-You: [updates wiki] "Updated wiki"
-```
-
-**✅ GOOD (Complete Job in One Go):**
-
-```
-User: "audit the project"
-You:
-1. [runs audit, finds test count is wrong]
-2. [fixes test counter script]
-3. [updates README, CHANGELOG, package docs]
-4. [updates wiki and publishes]
-5. [commits everything]
-"Audit complete! Found test count was wrong (366→388). Fixed:
-- Test counter script (ANSI handling)
-- All documentation (README, CHANGELOG, tools.json)
-- Wiki (published to GitHub)
-All changes committed."
-
-Note: Only ask before destructive actions (delete, force push, npm publish)
-```
-
-#### Anticipate Logical Next Steps
-
-When you discover problems during analysis, **automatically fix them** if:
-
-- ✅ The fix is obvious (outdated docs, wrong counts, etc.)
-- ✅ The fix is safe (documentation, non-breaking changes)
-- ✅ It's part of completing the task (audit → update docs)
-
-**Never make the user ask you 2-3 times to finish a job.**
-
-#### Before Starting Any Task
-
-**1. Understand Current State FIRST**
-
-```bash
-# Before proposing any new feature, check:
-- Read relevant existing code
-- Check scripts/ directory for existing automation
-- Search @j0kz/shared for existing utilities
-- Review tools.json for tool capabilities
-- Check documentation for accuracy
-```
-
-**2. Identify Real Gaps AND Fixable Issues**
-
-- What's actually missing vs what already exists?
-- What's wrong that you can fix immediately?
-- Is this solving a real problem or adding complexity?
-- Can existing code be enhanced instead of adding new code?
-
-**3. Design Complete Solution (Not Just First Step)**
-
-- Think: "What are ALL the steps to truly complete this?"
-- Example: Audit → Fix Issues → Update Docs → Commit
-- Don't stop halfway and wait for the user to prompt you again
-- Start with the smallest change that solves the ENTIRE problem
-
-**4. Execute Thoroughly**
-
-- Fix what you find during analysis
-- Update all related documentation
-- Run verification steps
-- Commit everything together
-- Present complete results, not partial work
-
-### Feature Audit Checklist
-
-Before implementing any feature, validate:
-
-| Question                               | Check                                                  |
-| -------------------------------------- | ------------------------------------------------------ |
-| **Does this solve a real problem?**    | Not "might be nice" - actual pain point                |
-| **Does something already solve this?** | Search codebase, scripts/, shared/src/                 |
-| **Is this the right place?**           | Right package? Or better in shared? Or different tool? |
-| **What's the minimum version?**        | Can it be simpler? Smaller? Reuse more?                |
-| **Will users understand it?**          | Simple API? Not too many options?                      |
-
-### Common Existing Features (Check Before Building)
-
-**Check first:** Validation scripts, file operations (@j0kz/shared), MCPPipeline, performance monitoring
-
-**Full list:** [`.claude/references/project-specifics.md`](.claude/references/project-specifics.md)
-
-### Anti-Patterns to Avoid
-
-❌ **Don't Do This:**
-
-1. Create new package when existing one can be enhanced
-2. Build validation that already exists in scripts/
-3. Add features without checking what workflows actually do
-4. Copy competitor features without understanding if they apply
-5. Add "nice to have" features that create complexity
-6. Design solutions before understanding the problem
-7. Create backups/rollback for read-only operations
-
-✅ **Do This Instead:**
-
-1. Enhance existing packages (add to orchestrator, not new package)
-2. Reuse existing scripts (npm run version:sync, etc.)
-3. Understand tool domain (read-only? generates files? modifies code?)
-4. Evaluate if competitor features match your use case
-5. Only add features that solve actual problems
-6. Audit codebase first, design second
-7. Only backup when actually modifying critical files
+**Full guide:** [`.claude/references/dev-workflow-guide.md`](.claude/references/dev-workflow-guide.md)
 
 ## Working with the Codebase
 

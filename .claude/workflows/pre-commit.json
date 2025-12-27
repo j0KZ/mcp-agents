@@ -1,0 +1,17 @@
+{
+  "name": "pre-commit",
+  "description": "Quick pre-commit checks with minimal output",
+  "defaultConfig": {
+    "response_format": "minimal"
+  },
+  "steps": [
+    {
+      "tool": "review_file",
+      "config": { "response_format": "minimal" }
+    },
+    {
+      "tool": "scan_file",
+      "config": { "response_format": "minimal" }
+    }
+  ]
+}

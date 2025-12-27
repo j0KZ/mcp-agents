@@ -1,25 +1,16 @@
-# Docker Compose for MCP Agents with Docker MCP Gateway
-# Usage: docker compose -f docker-compose.mcp.yml up -d
+# Docker Compose for MCP Agents
 #
-# This configuration provides:
-# - Docker MCP Gateway for dynamic tool discovery
-# - All 10 MCP servers containerized
-# - Isolated network for secure communication
+# Usage:
+#   1. Build images: docker compose -f docker-compose.mcp.yml build
+#   2. The gateway launches containers on-demand (no need to run 'up')
+#   3. Configure Claude Code to use the gateway (see .mcp.json)
+#
+# The Docker MCP Gateway will automatically start/stop containers as needed.
 
 services:
-  # Docker MCP Gateway - single entry point for all MCP tools
-  mcp-gateway:
-    image: docker/mcp-gateway:latest
-    ports:
-      - "8811:8811"
-    volumes:
-      - ./docker/mcp-config:/config:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - MCP_CONFIG_PATH=/config/servers.json
-    restart: unless-stopped
+  # MCP Server Images - built but not run continuously
+  # The gateway launches these on-demand when tools are called
 
-  # Smart Reviewer - AI-powered code review
   smart-reviewer:
     build:
       context: .
@@ -27,14 +18,10 @@ services:
       args:
         PACKAGE_DIR: smart-reviewer
         PACKAGE_SCOPE: smart-reviewer-mcp
-    labels:
-      - "mcp.server=true"
-      - "mcp.name=smart-reviewer"
-      - "mcp.description=AI-powered code review with security analysis"
-      - "mcp.category=analysis"
-    restart: unless-stopped
+        MCP_DESCRIPTION: "AI-powered code review with security analysis"
+    image: mcp-agents-smart-reviewer:latest
+    profiles: ["build-only"]
 
-  # Test Generator - comprehensive test suite generation
   test-generator:
     build:
       context: .
@@ -42,14 +29,10 @@ services:
       args:
         PACKAGE_DIR: test-generator
         PACKAGE_SCOPE: test-generator-mcp
-    labels:
-      - "mcp.server=true"
-      - "mcp.name=test-generator"
-      - "mcp.description=Generate comprehensive test suites with edge cases"
-      - "mcp.category=generation"
-    restart: unless-stopped
+        MCP_DESCRIPTION: "Generate comprehensive test suites with edge cases"
+    image: mcp-agents-test-generator:latest
+    profiles: ["build-only"]
 
-  # Architecture Analyzer - dependency and structure analysis
   architecture-analyzer:
     build:
       context: .
@@ -57,14 +40,10 @@ services:
       args:
         PACKAGE_DIR: architecture-analyzer
         PACKAGE_SCOPE: architecture-analyzer-mcp
-    labels:
-      - "mcp.server=true"
-      - "mcp.name=architecture-analyzer"
-      - "mcp.description=Dependency analysis, circular detection, layer violations"
-      - "mcp.category=analysis"
-    restart: unless-stopped
+        MCP_DESCRIPTION: "Dependency analysis, circular detection, layer violations"
+    image: mcp-agents-architecture-analyzer:latest
+    profiles: ["build-only"]
 
-  # Security Scanner - OWASP and vulnerability scanning
   security-scanner:
     build:
       context: .
@@ -72,14 +51,10 @@ services:
       args:
         PACKAGE_DIR: security-scanner
         PACKAGE_SCOPE: security-scanner-mcp
-    labels:
-      - "mcp.server=true"
-      - "mcp.name=security-scanner"
-      - "mcp.description=OWASP Top 10, secret detection, vulnerability scanning"
-      - "mcp.category=security"
-    restart: unless-stopped
+        MCP_DESCRIPTION: "OWASP Top 10, secret detection, vulnerability scanning"
+    image: mcp-agents-security-scanner:latest
+    profiles: ["build-only"]
 
-  # Refactor Assistant - code transformation tools
   refactor-assistant:
     build:
       context: .
@@ -87,14 +62,10 @@ services:
       args:
         PACKAGE_DIR: refactor-assistant
         PACKAGE_SCOPE: refactor-assistant-mcp
-    labels:
-      - "mcp.server=true"
-      - "mcp.name=refactor-assistant"
-      - "mcp.description=Extract functions, simplify conditionals, apply design patterns"
-      - "mcp.category=refactoring"
-    restart: unless-stopped
+        MCP_DESCRIPTION: "Extract functions, simplify conditionals, apply design patterns"
+    image: mcp-agents-refactor-assistant:latest
+    profiles: ["build-only"]
 
-  # API Designer - REST/GraphQL API design
   api-designer:
     build:
       context: .
@@ -102,14 +73,10 @@ services:
       args:
         PACKAGE_DIR: api-designer
         PACKAGE_SCOPE: api-designer-mcp
-    labels:
-      - "mcp.server=true"
-      - "mcp.name=api-designer"
-      - "mcp.description=REST/GraphQL API design with OpenAPI generation"
-      - "mcp.category=design"
-    restart: unless-stopped
+        MCP_DESCRIPTION: "REST/GraphQL API design with OpenAPI generation"
+    image: mcp-agents-api-designer:latest
+    profiles: ["build-only"]
 
-  # DB Schema Designer - database schema design
   db-schema:
     build:
       context: .
@@ -117,14 +84,10 @@ services:
       args:
         PACKAGE_DIR: db-schema
         PACKAGE_SCOPE: db-schema-mcp
-    labels:
-      - "mcp.server=true"
-      - "mcp.name=db-schema"
-      - "mcp.description=Database schema design for PostgreSQL, MySQL, MongoDB"
-      - "mcp.category=design"
-    restart: unless-stopped
+        MCP_DESCRIPTION: "Database schema design for PostgreSQL, MySQL, MongoDB"
+    image: mcp-agents-db-schema:latest
+    profiles: ["build-only"]
 
-  # Doc Generator - documentation generation
   doc-generator:
     build:
       context: .
@@ -132,14 +95,10 @@ services:
       args:
         PACKAGE_DIR: doc-generator
         PACKAGE_SCOPE: doc-generator-mcp
-    labels:
-      - "mcp.server=true"
-      - "mcp.name=doc-generator"
-      - "mcp.description=JSDoc, README, API docs, and changelog generation"
-      - "mcp.category=generation"
-    restart: unless-stopped
+        MCP_DESCRIPTION: "JSDoc, README, API docs, and changelog generation"
+    image: mcp-agents-doc-generator:latest
+    profiles: ["build-only"]
 
-  # Orchestrator - workflow coordination
   orchestrator-mcp:
     build:
       context: .
@@ -147,31 +106,9 @@ services:
       args:
         PACKAGE_DIR: orchestrator-mcp
         PACKAGE_SCOPE: orchestrator-mcp
-    labels:
-      - "mcp.server=true"
-      - "mcp.name=orchestrator"
-      - "mcp.description=Chain multiple MCP tools into workflows"
-      - "mcp.category=orchestration"
-    depends_on:
-      - smart-reviewer
-      - test-generator
-      - security-scanner
-    restart: unless-stopped
-
-  # Auto-Pilot - zero-effort automation
-  auto-pilot:
-    build:
-      context: .
-      dockerfile: docker/base.Dockerfile
-      args:
-        PACKAGE_DIR: auto-pilot
-        PACKAGE_SCOPE: auto-pilot
-    labels:
-      - "mcp.server=true"
-      - "mcp.name=auto-pilot"
-      - "mcp.description=Zero-effort automation for lazy developers"
-      - "mcp.category=automation"
-    restart: unless-stopped
+        MCP_DESCRIPTION: "Chain multiple MCP tools into workflows"
+    image: mcp-agents-orchestrator-mcp:latest
+    profiles: ["build-only"]
 
 networks:
   default:

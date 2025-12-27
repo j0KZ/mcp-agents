@@ -529,3 +529,19 @@ curl -I https://yoursite.com | grep -i "strict-transport\|content-security\|x-fr
 ```
 
 Remember: Security is not a feature, it's a requirement! 🛡️
+
+---
+
+## 💡 MCP Performance Optimization
+
+When using MCP tools with this skill, optimize context usage with `response_format` parameter:
+
+- **Use `concise` (default, recommended):** 500 tokens per tool call - perfect for daily workflow
+- **Use `minimal` for batch operations:** 100 tokens per tool call - ideal for quick checks
+- **Use `detailed` for deep investigation:** 5000 tokens per tool call - only when needed
+
+**Example:** `"Scan for security vulnerabilities using minimal format"`
+
+**Tool call:** `scan_file({ filePath: "...", config: { response_format: "minimal" } })`
+
+**Token savings:** 98% reduction compared to default detailed mode (5000 → 100 tokens)

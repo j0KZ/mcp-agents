@@ -28,6 +28,8 @@ WORKDIR /app
 
 # ARG must be redeclared after FROM
 ARG PACKAGE_DIR
+ARG PACKAGE_SCOPE
+ARG MCP_DESCRIPTION="MCP Server"
 
 # Copy built artifacts from builder
 COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
@@ -48,9 +50,18 @@ ENV NODE_ENV=production
 # Store package dir as ENV for runtime access (ARG not available at runtime)
 ENV MCP_PACKAGE=${PACKAGE_DIR}
 
+# Docker MCP Gateway metadata label for server discovery
+# This allows the gateway to discover and run this container as an MCP server
+LABEL io.docker.server.metadata="{ \
+  \"name\": \"${PACKAGE_SCOPE}\", \
+  \"description\": \"${MCP_DESCRIPTION}\", \
+  \"command\": [\"node\", \"packages/${PACKAGE_DIR}/dist/mcp-server.js\"] \
+}"
+
 # Health check - verify node process is running
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD pgrep -x node || exit 1
 
 # Use shell form to expand ENV variable at runtime
-ENTRYPOINT ["sh", "-c", "node packages/${MCP_PACKAGE}/dist/index.js"]
+# MCP servers use mcp-server.js as entry point (not index.js which is library export)
+ENTRYPOINT ["sh", "-c", "node packages/${MCP_PACKAGE}/dist/mcp-server.js"]

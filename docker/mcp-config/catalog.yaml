@@ -1,0 +1,107 @@
+# J0KZ MCP Tools Catalog
+# Custom catalog for Docker MCP Gateway
+# The gateway will launch these containers on-demand
+
+name: j0kz-mcp-catalog
+displayName: J0KZ MCP Development Tools
+description: AI-powered development tools for code review, testing, security, and more
+
+registry:
+  smart-reviewer:
+    title: Smart Reviewer
+    description: AI-powered code review with security analysis and best practices
+    type: server
+    image: mcp-agents-smart-reviewer:latest
+    metadata:
+      category: analysis
+      tags:
+        - code-review
+        - security
+
+  test-generator:
+    title: Test Generator
+    description: Generate comprehensive test suites with edge cases and error handling
+    type: server
+    image: mcp-agents-test-generator:latest
+    metadata:
+      category: generation
+      tags:
+        - testing
+        - jest
+
+  architecture-analyzer:
+    title: Architecture Analyzer
+    description: Dependency analysis, circular detection, and layer violation checks
+    type: server
+    image: mcp-agents-architecture-analyzer:latest
+    metadata:
+      category: analysis
+      tags:
+        - architecture
+        - dependencies
+
+  security-scanner:
+    title: Security Scanner
+    description: OWASP Top 10, secret detection, and vulnerability scanning
+    type: server
+    image: mcp-agents-security-scanner:latest
+    metadata:
+      category: security
+      tags:
+        - security
+        - owasp
+
+  refactor-assistant:
+    title: Refactor Assistant
+    description: Extract functions, simplify conditionals, apply design patterns
+    type: server
+    image: mcp-agents-refactor-assistant:latest
+    metadata:
+      category: refactoring
+      tags:
+        - refactoring
+        - patterns
+
+  api-designer:
+    title: API Designer
+    description: REST/GraphQL API design with OpenAPI generation
+    type: server
+    image: mcp-agents-api-designer:latest
+    metadata:
+      category: design
+      tags:
+        - api
+        - openapi
+
+  db-schema:
+    title: DB Schema Designer
+    description: Database schema design for PostgreSQL, MySQL, MongoDB
+    type: server
+    image: mcp-agents-db-schema:latest
+    metadata:
+      category: design
+      tags:
+        - database
+        - schema
+
+  doc-generator:
+    title: Doc Generator
+    description: JSDoc, README, API docs, and changelog generation
+    type: server
+    image: mcp-agents-doc-generator:latest
+    metadata:
+      category: generation
+      tags:
+        - documentation
+        - jsdoc
+
+  orchestrator-mcp:
+    title: Orchestrator
+    description: Chain multiple MCP tools into workflows
+    type: server
+    image: mcp-agents-orchestrator-mcp:latest
+    metadata:
+      category: orchestration
+      tags:
+        - workflow
+        - automation
